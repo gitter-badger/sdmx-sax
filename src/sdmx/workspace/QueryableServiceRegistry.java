@@ -171,4 +171,5 @@ public class QueryableServiceRegistry implements Registry {
     public List<DataStructureReferenceType> listDataSets(){
         return queryable.listDataSets(getBaseHeader());
     }
+    public Queryable getQueryable(){ return queryable; }
 }

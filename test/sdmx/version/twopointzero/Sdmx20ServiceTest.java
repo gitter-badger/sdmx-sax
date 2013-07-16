@@ -211,6 +211,7 @@ public class Sdmx20ServiceTest {
             System.out.println(ref.getRef().getAgencyId()+":"+ref.getRef().getId()+":"+ref.getRef().getVersion());
         }
     }
+    /*
     @Test
     public void testIMFList() throws IOException {
         Sdmx20SOAPQueryable queryable = new Sdmx20SOAPQueryable("IMF", "http://sdmxws.imf.org/IMFStatWS_SDMX2/sdmx.asmx");
@@ -224,7 +225,7 @@ public class Sdmx20ServiceTest {
             ds.dump();
             System.out.println(ref.getRef().getAgencyId()+":"+ref.getRef().getId()+":"+ref.getRef().getVersion());
         }
-    }
+    }*/
     /*
     @Test
     public void testOECDList() throws IOException {

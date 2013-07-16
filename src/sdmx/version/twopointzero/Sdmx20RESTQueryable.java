@@ -96,5 +96,8 @@ public class Sdmx20RESTQueryable implements Queryable {
     public List<DataStructureReferenceType> listDataSets(BaseHeaderType header) {
         return Collections.EMPTY_LIST;
     }
-    
+    public String getSoapNamespace(){
+        return "";
+    }
+    public void setSoapNamespace(String s){}
 }

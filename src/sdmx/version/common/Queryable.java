@@ -47,4 +47,6 @@ public interface Queryable {
      * @param registry the registry to set
      */
     public void setRegistry(Registry registry);
+    public String getSoapNamespace();
+    public void setSoapNamespace(String s);
 }
