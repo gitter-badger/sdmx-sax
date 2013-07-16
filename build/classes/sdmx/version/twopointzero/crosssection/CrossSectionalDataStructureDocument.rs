@@ -1,0 +1,1 @@
+readsdmx.sdmx20.crosssection.CrossSectionalDataStructureDocument
