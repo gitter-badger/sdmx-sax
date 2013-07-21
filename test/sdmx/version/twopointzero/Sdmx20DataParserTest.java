@@ -59,6 +59,7 @@ public class Sdmx20DataParserTest {
         try {
             InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/StructureSample.xml");
             struct = SdmxIO.parseStructure(in);
+            LocalRegistry.getDefaultWorkspace().load(struct);
         } catch (IOException ex) {
             Logger.getLogger(Sdmx20DataParserTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -80,6 +81,7 @@ public class Sdmx20DataParserTest {
         try {
             InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/cpi-structure.xml");
             cpiStruct = SdmxIO.parseStructure(in);
+            LocalRegistry.getDefaultWorkspace().load(cpiStruct);
         } catch (IOException ex) {
             Logger.getLogger(Sdmx20DataParserTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -100,6 +102,7 @@ public class Sdmx20DataParserTest {
         try {
             InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/imf-20/PGIDSD.xml");
             pgiStruct = SdmxIO.parseStructure(in);
+            LocalRegistry.getDefaultWorkspace().load(pgiStruct);
         } catch (IOException ex) {
             Logger.getLogger(Sdmx20DataParserTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -121,6 +124,7 @@ public class Sdmx20DataParserTest {
         try {
             InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/alc-structure.xml");
             alcStruct = SdmxIO.parseStructure(in);
+            LocalRegistry.getDefaultWorkspace().load(alcStruct);
         } catch (IOException ex) {
             Logger.getLogger(Sdmx20DataParserTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -136,27 +140,28 @@ public class Sdmx20DataParserTest {
     /* 
        This test is quite long....
        * */
-    /*
+/*
     @Test
     public void testUISStruct() throws IOException {
+        StructureType uisStruct = null;
         try {
             InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/uis-20/structure.xml");
             uisStruct = SdmxIO.parseStructure(in);
+            LocalRegistry.getDefaultWorkspace().load(uisStruct);
         } catch (IOException ex) {
             Logger.getLogger(Sdmx20DataParserTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         long t1 = System.currentTimeMillis();
         InputStream in6 = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/uis-20/28b18979-129f-43bc-94ae-42f31add907a.xml");
-        DataMessage data6 = SdmxIO.parseData(registry,in6);
+        DataMessage data6 = SdmxIO.parseData(in6);
         long t2 = System.currentTimeMillis();
         System.out.println("Read:"+data6.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
-        ValueTypeResolver.resolveDataSet(registry, data6.getDataSets().get(0), uisStruct.getStructures().getDataStructures().getDataStructures().get(0));
+        ValueTypeResolver.resolveDataSet(LocalRegistry.getDefaultWorkspace(), data6.getDataSets().get(0), uisStruct.getStructures().getDataStructures().getDataStructures().get(0));
         long t3 = System.currentTimeMillis();
         System.out.println("Resolution:"+data6.getDataSets().get(0).size()+" Observations "+(t3-t2)+" ms");
         //data6.dump();
-    }
-    */
-    /*
+    }*/
+/*
     @Test
     public void testFAOCAPTURE() throws IOException {
         RESTServiceRegistry registry = new RESTServiceRegistry("FAO", "http://www.fao.org/figis/sdmx");
@@ -165,7 +170,7 @@ public class Sdmx20DataParserTest {
         long t2 = System.currentTimeMillis();
         System.out.println("Loaded FAO Capture Struct:"+(t2-t1)+" ms");
         InputStream in7 = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/fao-20/CAPTURE_DATA.xml");
-        DataMessage data7 = SdmxIO.parseData(registry,in7);
+        DataMessage data7 = SdmxIO.parseData(in7);
         long t3 = System.currentTimeMillis();
         System.out.println("Read:"+data7.getDataSets().get(0).size()+" Observations "+(t3-t2)+" ms");
         ValueTypeResolver.resolveDataSet(registry, data7.getDataSets().get(0), faoStruct);
@@ -173,5 +178,5 @@ public class Sdmx20DataParserTest {
         System.out.println("Resolution:"+data7.getDataSets().get(0).size()+" Observations "+(t4-t3)+" ms");
         data7.dump();
     }
-*/
+    */
 }

@@ -6,7 +6,9 @@ package sdmx.data;
 
 import sdmx.common.DataType;
 import sdmx.commonreferences.ConceptReferenceType;
+import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.NestedIDType;
+import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.structure.base.Component;
 import sdmx.structure.base.RepresentationType;
