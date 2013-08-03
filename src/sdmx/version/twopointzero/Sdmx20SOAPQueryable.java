@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.MalformedURLException;
@@ -16,7 +17,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
@@ -47,6 +50,7 @@ import sdmx.structure.concept.ConceptType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.version.common.Queryable;
 import sdmx.version.common.SdmxIO;
+import sdmx.version.common.SOAPStrippingInputStream;
 import sdmx.workspace.Registry;
 
 /**
@@ -117,7 +121,7 @@ public class Sdmx20SOAPQueryable implements Queryable {
         byte[] bytes = baos.toByteArray();
            // System.out.println(new String(bytes));
         ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        return SdmxIO.parseStructure(query("GetDataStructureDefinitionResult", bais, bytes.length));
+        return SdmxIO.parseStructure(query2("GetDataStructureDefinitionResult", bais, bytes.length));
     }
 
     public DataMessage getCompactData(DataQueryMessage message) throws MalformedURLException, IOException {
@@ -143,7 +147,7 @@ public class Sdmx20SOAPQueryable implements Queryable {
         System.out.println(new String(bytes));
         System.out.println("---------------------------------");
         ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        return SdmxIO.parseData(query("GetCompactDataResult", bais, bytes.length));
+        return SdmxIO.parseData(query2("GetCompactDataResult", bais, bytes.length));
     }
 
     public String getAgencyId() {
@@ -206,6 +210,34 @@ public class Sdmx20SOAPQueryable implements Queryable {
             //System.out.println("--------AFTER STRIP--------");
             StringReader reader = new StringReader(responseBody);
             return reader;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+    public Reader query2(String action, InputStream in, int length) {
+        HttpClient client = new DefaultHttpClient();
+        try {
+            HttpPost req = new HttpPost(getServiceURL());
+            req.setHeader("Content-Type", "application/soap+xml;charset=UTF-8");
+            HttpEntity entity = new InputStreamEntity(in, length);
+            req.setEntity(entity);
+            HttpResponse response = client.execute(req);
+            SOAPStrippingInputStream stripper = new SOAPStrippingInputStream(response.getEntity().getContent(),"<"+action+">","</"+action+">");
+            //System.out.println("--------RESPONSE BODY--------");
+            //System.out.println(responseBody);
+            //System.out.println("--------RESPONSE BODY--------");
+            /*
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            IOUtils.copy(stripper,baos);
+            System.out.println("Action="+action);
+            String responseBody = new String(baos.toByteArray());
+            System.out.println("--------AFTER STRIP--------");
+            System.out.println(responseBody);
+            System.out.println("--------AFTER STRIP--------");
+            */
+            InputStreamReader isr = new InputStreamReader(stripper);
+            return isr;
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
