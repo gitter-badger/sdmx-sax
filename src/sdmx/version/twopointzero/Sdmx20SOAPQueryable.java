@@ -60,6 +60,7 @@ import sdmx.workspace.Registry;
 public class Sdmx20SOAPQueryable implements Queryable {
 
     private String soapNamespace = "http://stats.oecd.org/OECDStatWS/SDMX/";
+    private String mediaType = "application/soap+xml;charset=UTF-8";
     
     private String agencyId = "";
     private String serviceURL = "";
@@ -121,7 +122,7 @@ public class Sdmx20SOAPQueryable implements Queryable {
         byte[] bytes = baos.toByteArray();
            // System.out.println(new String(bytes));
         ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        return SdmxIO.parseStructure(query2("GetDataStructureDefinitionResult", bais, bytes.length));
+        return SdmxIO.parseStructure(query("GetDataStructureDefinitionResult", bais, bytes.length));
     }
 
     public DataMessage getCompactData(DataQueryMessage message) throws MalformedURLException, IOException {
@@ -147,7 +148,7 @@ public class Sdmx20SOAPQueryable implements Queryable {
         System.out.println(new String(bytes));
         System.out.println("---------------------------------");
         ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        return SdmxIO.parseData(query2("GetCompactDataResult", bais, bytes.length));
+        return SdmxIO.parseData(query("GetCompactDataResult", bais, bytes.length));
     }
 
     public String getAgencyId() {
@@ -193,7 +194,8 @@ public class Sdmx20SOAPQueryable implements Queryable {
         HttpClient client = new DefaultHttpClient();
         try {
             HttpPost req = new HttpPost(getServiceURL());
-            req.setHeader("Content-Type", "application/soap+xml;charset=UTF-8");
+            req.setHeader("Content-Type", mediaType);
+            //req.setHeader("Accept","application/xml");
             HttpEntity entity = new InputStreamEntity(in, length);
             req.setEntity(entity);
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
@@ -219,10 +221,12 @@ public class Sdmx20SOAPQueryable implements Queryable {
         HttpClient client = new DefaultHttpClient();
         try {
             HttpPost req = new HttpPost(getServiceURL());
-            req.setHeader("Content-Type", "application/soap+xml;charset=UTF-8");
+            req.setHeader("Content-Type", mediaType);
+            //req.setHeader("Accept","application/xml");
             HttpEntity entity = new InputStreamEntity(in, length);
             req.setEntity(entity);
             HttpResponse response = client.execute(req);
+            
             SOAPStrippingInputStream stripper = new SOAPStrippingInputStream(response.getEntity().getContent(),"<"+action+">","</"+action+">");
             //System.out.println("--------RESPONSE BODY--------");
             //System.out.println(responseBody);
@@ -256,5 +260,19 @@ public class Sdmx20SOAPQueryable implements Queryable {
      */
     public void setSoapNamespace(String soapNamespace) {
         this.soapNamespace = soapNamespace;
+    }
+
+    /**
+     * @return the mediaType
+     */
+    public String getMediaType() {
+        return mediaType;
+    }
+
+    /**
+     * @param mediaType the mediaType to set
+     */
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
     }
 }

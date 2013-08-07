@@ -248,6 +248,7 @@ public class Sdmx20StructureReaderTools {
     }
 
     public sdmx.common.Description toDescription(org.sdmx.resources.sdmxml.schemas.v20.common.TextType tt) {
+        //System.out.println("ToDescription:"+tt.getLang()+":"+tt.getStringValue());
         Description tt1 = new Description(tt.getLang(), tt.getStringValue());
         return tt1;
 

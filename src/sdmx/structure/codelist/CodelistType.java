@@ -66,4 +66,12 @@ public class CodelistType extends ItemSchemeType {
     public CodeType findCode(IDType id) {
         return (CodeType)super.findItem(id);
     }
+    public String toHTMLString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("Codelist:"+super.getId().toString()+"<BR>");
+        for(int i=0;i<super.size();i++) {
+            sb.append(getCode(i).toHTMLString(0));
+        }
+        return sb.toString();
+    }
 }
