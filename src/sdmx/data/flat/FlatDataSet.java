@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import sdmx.data.DataSet;
 import sdmx.data.DataSetWriter;
+import sdmx.data.AttachmentLevel;
 import sdmx.message.StructureType;
 import sdmx.structure.codelist.CodeType;
 import sdmx.structure.datastructure.DataStructureType;
@@ -186,7 +187,7 @@ public class FlatDataSet implements DataSet {
     }
 
     public int registerColumn(String s) {
-        int col = mapper.registerColumn(s);
+        int col = mapper.registerColumn(s,AttachmentLevel.OBSERVATION);
         for (int i = 0; i < observations.size(); i++) {
             observations.get(i).setValue(col, null);
         }
@@ -211,7 +212,7 @@ public class FlatDataSet implements DataSet {
             for(int j=0;j<this.getColumnSize();j++) {
                 Object o = getValue(i,j);
                 if( o == null ) {
-                    //writer.writeObservationComponent(this.getColumnName(j), "");
+                    writer.writeObservationComponent(this.getColumnName(j), "");
                 } else if( o instanceof String ) {
                     writer.writeObservationComponent(this.getColumnName(j), (String)o);
                 } else if( o instanceof CodeType ) {

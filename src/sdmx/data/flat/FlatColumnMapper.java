@@ -5,15 +5,21 @@
 package sdmx.data.flat;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import sdmx.data.ColumnMapper;
+import sdmx.data.AttachmentLevel;
 
 /**
  *
  * @author James
  */
-public class FlatColumnMapper {
+public class FlatColumnMapper implements ColumnMapper {
     List<String> columns = new ArrayList<String>();
-    public int registerColumn(String s) {
+    public int registerColumn(String s,AttachmentLevel attach) {
+        if( attach!=AttachmentLevel.OBSERVATION) {
+            throw new RuntimeException("Attachment level is not OBSERVATION");
+        }
         columns.add(s);
         return columns.indexOf(s);
     }
@@ -31,5 +37,39 @@ public class FlatColumnMapper {
             if( columns.get(i).equals(name))return true;
         }
         return false;
+    }
+
+    @Override
+    public List<String> getAllColumns() {
+        List<String> result = new ArrayList<String>();
+        for(int i=0;i<columns.size();i++) {
+            result.add(columns.get(i));
+        }
+        return result;
+    }
+
+    @Override
+    public List<String> getObservationColumns() {
+        List<String> result = new ArrayList<String>();
+        for(int i=0;i<columns.size();i++) {
+            result.add(columns.get(i));
+        }
+        return result;
+
+    }
+
+    @Override
+    public List<String> getSeriesColumns() {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<String> getDataSetColumns() {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<String> getGroupColumns() {
+        return Collections.EMPTY_LIST;
     }
 }
