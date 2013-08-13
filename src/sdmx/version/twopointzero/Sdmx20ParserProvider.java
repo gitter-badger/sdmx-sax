@@ -11,12 +11,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.xmlbeans.XmlException;
 import org.xml.sax.SAXException;
+import sdmx.data.DataSetWriter;
 import sdmx.exception.TypeValueNotFoundException;
 import sdmx.message.StructureType;
 import sdmx.version.common.SdmxIO;
 import sdmx.version.common.SdmxParserProvider;
 import sdmx.version.twopointone.Sdmx21ParserProvider;
 import sdmx.data.flat.FlatDataSet;
+import sdmx.data.flat.FlatDataSetWriter;
+import sdmx.data.structured.StructuredDataWriter;
 import sdmx.message.DataMessage;
 import sdmx.version.twopointzero.compact.CompactDataContentHandler;
 import sdmx.version.twopointzero.compact.CompactDataEventHandler;
@@ -202,6 +205,35 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         }
         return null;
     }
+    public DataMessage parseCompactData(InputStream in,boolean flat) throws IOException {
+        DataSetWriter writer = flat?new FlatDataSetWriter():new StructuredDataWriter();
+        CompactDataEventHandler event = new CompactDataEventHandler(writer);
+        CompactDataContentHandler handler = new CompactDataContentHandler(in, event);
+        try {
+            return handler.parse();
+        } catch (SAXException ex) {
+            Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
+        return null;
+    }
+    
+    public DataMessage parseGenericData(InputStream in,boolean flat) throws IOException {
+        DataSetWriter writer = flat?new FlatDataSetWriter():new StructuredDataWriter();
+        GenericDataEventHandler event = new GenericDataEventHandler(writer);
+        GenericDataContentHandler handler = new GenericDataContentHandler(event,in);
+        try {
+            return handler.parse();
+        } catch (SAXException ex) {
+            Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
+        return null;
+    }
     public DataMessage parseCompactData(Reader in) throws IOException {
         CompactDataEventHandler event = new CompactDataEventHandler();
         CompactDataContentHandler handler = new CompactDataContentHandler(in, event);
@@ -228,11 +260,56 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         }
         return null;
     }
+    
+    public DataMessage parseCompactData(Reader in,boolean flat) throws IOException {
+        DataSetWriter writer = flat?new FlatDataSetWriter():new StructuredDataWriter();
+        CompactDataEventHandler event = new CompactDataEventHandler(writer);
+
+        CompactDataContentHandler handler = new CompactDataContentHandler(in, event);
+        try {
+            return handler.parse();
+        } catch (SAXException ex) {
+            Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
+        return null;
+    }
+    
+    public DataMessage parseGenericData(Reader in,boolean flat) throws IOException {
+        DataSetWriter writer = flat?new FlatDataSetWriter():new StructuredDataWriter();
+        GenericDataEventHandler event = new GenericDataEventHandler(writer);
+        GenericDataContentHandler handler = new GenericDataContentHandler(event,in);
+        try {
+            return handler.parse();
+        } catch (SAXException ex) {
+            Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
+        return null;
+    }
 
     @Override
     public DataMessage parseData(String header, Reader in) throws IOException {
        if( isCompactData(header))return parseCompactData(in);
        if( isGenericData(header))return parseGenericData(in);
+       return null;
+    }
+
+    @Override
+    public DataMessage parseData(String header, InputStream in, boolean flat) throws IOException {
+       if( isCompactData(header))return parseCompactData(in,flat);
+       if( isGenericData(header))return parseGenericData(in,flat);
+       return null;
+    }
+
+    @Override
+    public DataMessage parseData(String header, Reader in, boolean flat) throws IOException {
+       if( isCompactData(header))return parseCompactData(in,flat);
+       if( isGenericData(header))return parseGenericData(in,flat);
        return null;
     }
 }

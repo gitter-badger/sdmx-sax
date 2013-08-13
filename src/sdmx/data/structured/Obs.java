@@ -15,17 +15,20 @@ import sdmx.data.AttachmentLevel;
  */
 public class Obs implements Attachable {
     int rowId = 0;
-    StructuredColumnMapper columnMapper = null;
+    private StructuredColumnMapper columnMapper = null;
     List<Object> columnValues = new ArrayList<>();
 
     @Override
     public Object getValue(String s) {
-        return columnValues.get(columnMapper.getObservationIndex(s));
+        return columnValues.get(getColumnMapper().getObservationIndex(s));
     }
     
     @Override
     public void setValue(String s, Object val) {
-        setValue(columnMapper.getObservationIndex(s),val);
+        if( !columnMapper.containsColumn(s)){
+            columnMapper.registerColumn(s, AttachmentLevel.OBSERVATION);
+        }
+        setValue(getColumnMapper().getObservationIndex(s),val);
     }
 
     @Override
@@ -35,8 +38,8 @@ public class Obs implements Attachable {
 
     @Override
     public void setValue(int i, Object val) {
-        if( columnValues.size()<i) {
-            for(int j=columnValues.size();j<i;j++) {
+        if( columnValues.size()-1<i) {
+            for(int j=columnValues.size();j-1<i;j++) {
                 columnValues.add(null);
             }
         }
@@ -46,5 +49,19 @@ public class Obs implements Attachable {
     @Override
     public AttachmentLevel getAttachmentLevel() {
         return AttachmentLevel.OBSERVATION;
+    }
+
+    /**
+     * @return the columnMapper
+     */
+    public StructuredColumnMapper getColumnMapper() {
+        return columnMapper;
+    }
+
+    /**
+     * @param columnMapper the columnMapper to set
+     */
+    public void setColumnMapper(StructuredColumnMapper columnMapper) {
+        this.columnMapper = columnMapper;
     }
 }

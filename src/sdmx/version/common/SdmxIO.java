@@ -113,6 +113,18 @@ public class SdmxIO {
         SdmxParserProvider prov = findProvider(header);
         return prov.parseData(header,push);
     }
+    public static DataMessage parseData(InputStream in,boolean flat) throws IOException {
+        PushbackInputStream push = new PushbackInputStream(in,8192);
+        String header = getHeader(push);
+        SdmxParserProvider prov = findProvider(header);
+        return prov.parseData(header,push,flat);
+    }
+    public static DataMessage parseData(Reader in,boolean flat) throws IOException {
+        PushbackReader push = new PushbackReader(in,8192);
+        String header = getHeader(push);
+        SdmxParserProvider prov = findProvider(header);
+        return prov.parseData(header,push,flat);
+    }
     public static SdmxParserProvider findProvider(String header) throws IOException {
         for(int i=0;i<list.size();i++) {
             if( list.get(i).canParse(header))return list.get(i);

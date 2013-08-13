@@ -35,11 +35,13 @@ public class StructuredDataWriter implements DataSetWriter {
     public void newSeries() {
         series = new Series();
         in_series = true;
+        series.setMapper(dataSet.getColumnMapper());
     }
 
     @Override
     public void newObservation() {
         obs = new Obs();
+        obs.setColumnMapper(dataSet.getColumnMapper());
     }
 
     @Override
@@ -61,6 +63,7 @@ public class StructuredDataWriter implements DataSetWriter {
     public void finishSeries() {
         seriesList.add(series);
         in_series=false;
+        series = null;
     }
 
     @Override
@@ -80,4 +83,5 @@ public class StructuredDataWriter implements DataSetWriter {
         dataSet=null;
         return ds;
     }    
+    
 }

@@ -49,6 +49,17 @@ public class GenericDataContentHandler extends Sdmx20ContentHandler {
         this.eh = new GenericDataEventHandler();
     }
 
+    public GenericDataContentHandler(GenericDataEventHandler handler,Reader in) {
+        super();
+        this.in2 = in;
+        this.eh = handler;
+    }
+    public GenericDataContentHandler(GenericDataEventHandler handler,InputStream in) {
+        super();
+        this.in = in;
+        this.eh = handler;
+    }
+
     public DataMessage parse() throws SAXException, IOException {
         parsed = true;
         reader = XMLReaderFactory.createXMLReader();

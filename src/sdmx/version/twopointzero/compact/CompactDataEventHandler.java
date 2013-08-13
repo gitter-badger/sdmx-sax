@@ -101,6 +101,9 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
     
     public CompactDataEventHandler() {
     }
+    public CompactDataEventHandler(DataSetWriter writer) {
+        this.writer=writer;
+    }
 
     public DataMessage getDataMessage() {
         if (state != STATE_FINISH) {

@@ -82,6 +82,9 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
 
     public GenericDataEventHandler() {
     }
+    public GenericDataEventHandler(DataSetWriter writer) {
+        this.writer=writer;
+    }
 
     public DataMessage getDataMessage() {
         if (state != STATE_FINISH) {

@@ -12,6 +12,9 @@ import java.util.List;
  * @author James
  */
 public class AttachmentLevel {
+    private static final List<AttachmentLevel> LIST = new ArrayList<AttachmentLevel>();
+    
+    public static void main(String args[]) {}
     public static final int ATTACHMENT_DATASET = 0;
     public static final int ATTACHMENT_SERIES = 1;
     public static final int ATTACHMENT_OBSERVATION = 2;
@@ -28,7 +31,7 @@ public class AttachmentLevel {
     private String name = null;
     private int id = 0;
     
-    private static final List<AttachmentLevel> LIST = new ArrayList<AttachmentLevel>();
+    
     
     public AttachmentLevel(String s,int id) {
         this.name=s;

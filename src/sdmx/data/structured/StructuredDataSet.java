@@ -149,6 +149,9 @@ public class StructuredDataSet implements DataSet,Attachable {
 
     @Override
     public void setValue(String s, Object val) {
+        if( !columnMapper.containsColumn(s)){
+            columnMapper.registerColumn(s, AttachmentLevel.DATASET);
+        }
         setValue(columnMapper.getDataSetIndex(s),val);
     }
 

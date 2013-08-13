@@ -131,5 +131,15 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     public DataMessage parseData(String header, Reader in) throws IOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public DataMessage parseData(String header, InputStream in, boolean flat) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DataMessage parseData(String header, Reader in, boolean flat) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

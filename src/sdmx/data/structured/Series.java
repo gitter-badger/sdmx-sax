@@ -133,6 +133,9 @@ public class Series implements Attachable {
 
     @Override
     public void setValue(String s, Object val) {
+        if( !columnMapper.containsColumn(s)){
+            columnMapper.registerColumn(s, AttachmentLevel.SERIES);
+        }
         setValue(columnMapper.getSeriesIndex(s),val);
     }
 
@@ -143,12 +146,17 @@ public class Series implements Attachable {
 
     @Override
     public Object getValue(int i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return columnValues.get(i);
     }
 
     @Override
     public void setValue(int i, Object val) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if( columnValues.size()-1<i) {
+            for(int j=columnValues.size();j-1<i;j++) {
+                columnValues.add(null);
+            }
+        }
+        columnValues.set(i, val);
     }
 
 }
