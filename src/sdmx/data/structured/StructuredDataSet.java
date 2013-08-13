@@ -35,7 +35,7 @@ public class StructuredDataSet implements DataSet,Attachable {
     @Override
     public void dump() {
         for (int i = 0; i < columnMapper.size(); i++) {
-            System.out.print(columnMapper.getColumnName(i) + "\t");
+            System.out.print(columnMapper.getAttachmentLevel(i).getName()+":"+columnMapper.getColumnName(i) + "\t");
         }
         System.out.println();
         for (int i = 0; i < size(); i++) {
@@ -81,7 +81,13 @@ public class StructuredDataSet implements DataSet,Attachable {
         }
         else if (attach == AttachmentLevel.SERIES) {
             Series series = findSeries(row);
-            return null;
+            return series.getValue(columnMapper.getSeriesIndex(s));
+        }
+        else if (attach == AttachmentLevel.OBSERVATION) {
+            Series series = findSeries(row);
+            //System.out.println("Find Row:"+row+": Series="+series);
+            //System.out.println("Find Row:"+row+": Obs="+series.getObservationRow(row));
+            return series.getObservationRow(row).getValue(columnMapper.getObservationIndex(s));
         }
         else return null;
     }
@@ -101,7 +107,12 @@ public class StructuredDataSet implements DataSet,Attachable {
         }
         if (attach == AttachmentLevel.SERIES) {
             Series series = findSeries(row);
-            
+            series.setValue(columnMapper.getSeriesIndex(s), val);
+        }
+        if (attach == AttachmentLevel.OBSERVATION) {
+            Series series = findSeries(row);
+            Obs obs = series.getObservationRow(row);
+            obs.setValue(columnMapper.getObservationIndex(s), val);
         }
    }
 
@@ -127,18 +138,13 @@ public class StructuredDataSet implements DataSet,Attachable {
     }
 
     public int findSeriesIndex(int row, int from, int to) {
-        if (from > to) {
-            return -1;
+        //System.out.println("Find Row:"+row+": from:"+from+" to"+to);
+        for(int i=from;i<to;i++) {
+            if( series.get(i).contains(row)) {
+                return i;
+            }
         }
-        int index = ((to - from) / 2) + from;
-        Series middle = series.get(index);
-        if (middle.getStart() < row) {
-            return findSeriesIndex(row, from, index);
-        } else if (middle.getEnd() < row) {
-            return findSeriesIndex(row, index, to);
-        } else if (middle.getStart() > row && middle.getEnd() < row) {
-            return index;
-        }
+        System.out.println("Can't Find");
         return -1;
     }
 
@@ -168,5 +174,44 @@ public class StructuredDataSet implements DataSet,Attachable {
             }
         }
         columnValues.set(i, val);
+    }
+    public void updateIndexes() {
+        int start = 0;
+        int end = 0;
+        for(Series s:series){
+            s.updateIndexes(start);
+            end = end+s.size();
+            s.setEnd(end);
+            start=end;
+            //s.dump();
+        }
+    }
+
+    /**
+     * @return the series
+     */
+    public List<Series> getSeriesList() {
+        return series;
+    }
+
+    /**
+     * @param series the series to set
+     */
+    public void setSeriesList(List<Series> series) {
+        this.series = series;
+    }
+
+    /**
+     * @return the observations
+     */
+    public List<Obs> getObservations() {
+        return observations;
+    }
+
+    /**
+     * @param observations the observations to set
+     */
+    public void setObservations(List<Obs> observations) {
+        this.observations = observations;
     }
 }

@@ -14,7 +14,7 @@ import sdmx.data.AttachmentLevel;
  * @author James
  */
 public class Obs implements Attachable {
-    int rowId = 0;
+    private int rowId = 0;
     private StructuredColumnMapper columnMapper = null;
     List<Object> columnValues = new ArrayList<>();
 
@@ -63,5 +63,19 @@ public class Obs implements Attachable {
      */
     public void setColumnMapper(StructuredColumnMapper columnMapper) {
         this.columnMapper = columnMapper;
+    }
+
+    /**
+     * @return the rowId
+     */
+    public int getRowId() {
+        return rowId;
+    }
+
+    /**
+     * @param rowId the rowId to set
+     */
+    public void setRowId(int rowId) {
+        this.rowId = rowId;
     }
 }

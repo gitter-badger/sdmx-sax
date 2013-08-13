@@ -159,4 +159,27 @@ public class Series implements Attachable {
         columnValues.set(i, val);
     }
 
+    public void updateIndexes(int start) {
+        this.start=start;
+        for(Obs o:observations){
+            o.setRowId(this.start+observations.indexOf(o));
+            //System.out.println("RowId="+o.getRowId());
+        }
+    }
+    public boolean contains(int row) {
+        if( start <= row && end > row ) return true;
+        return false;
+    }
+    public void dump() {
+        System.out.println("Start:"+start);
+        System.out.println("End:"+end);
+        System.out.println("Size:"+observations.size());
+    }
+    public Obs getObservationRow(int row) {
+        for(int i=0;i<observations.size();i++) {
+            //System.out.println("SRowId="+observations.get(i).getRowId());
+            if( observations.get(i).getRowId()==row) return observations.get(i);
+        }
+        return null;
+    }
 }

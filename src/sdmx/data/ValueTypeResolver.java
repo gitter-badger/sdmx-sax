@@ -333,9 +333,12 @@ public class ValueTypeResolver {
         for (int i = 0; i < ds.size(); i++) {
             for (int j = 0; j < ds.getColumnSize(); j++) {
                 Object o1 = ds.getValue(i, j);
-                Object o2 = tr.resolve(ds.getColumnName(j), (String) o1);
+                if( o1 instanceof String ) {
+                   Object o2 = tr.resolve(ds.getColumnName(j), (String) o1);
                 //System.out.println("Start Val=" + o1 + ": res=" + o2);
-                ds.setValue(i, j, o2);
+                   ds.setValue(i, j, o2);
+                }
+
             }
         }
     }

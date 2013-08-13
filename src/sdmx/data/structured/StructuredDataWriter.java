@@ -28,11 +28,13 @@ public class StructuredDataWriter implements DataSetWriter {
     
     @Override
     public void newDataSet() {
+        //System.out.println("New DataSet");
         dataSet = new StructuredDataSet();
     }
 
     @Override
     public void newSeries() {
+        //System.out.println("New Series");
         series = new Series();
         in_series = true;
         series.setMapper(dataSet.getColumnMapper());
@@ -40,22 +42,26 @@ public class StructuredDataWriter implements DataSetWriter {
 
     @Override
     public void newObservation() {
+        //System.out.println("New Obs");
         obs = new Obs();
         obs.setColumnMapper(dataSet.getColumnMapper());
     }
 
     @Override
     public void writeDataSetComponent(String name, String val) {
+        //System.out.println("DS Name:"+name+":"+val);
         dataSet.setValue(name, val);
     }
 
     @Override
     public void writeSeriesComponent(String name, String val) {
+        //System.out.println("S Name:"+name+":"+val);
         series.setValue(name, val);
     }
 
     @Override
     public void writeObservationComponent(String name, String val) {
+        //System.out.println("O Name:"+name+":"+val);
         obs.setValue(name, val);
     }
 
@@ -80,6 +86,12 @@ public class StructuredDataWriter implements DataSetWriter {
     @Override
     public StructuredDataSet finishDataSet() {
         StructuredDataSet ds = dataSet;
+        if( seriesList.size()>0){
+            ds.setSeriesList(seriesList);
+        }else {
+            ds.setObservations(obsList);
+        }
+        ds.updateIndexes();
         dataSet=null;
         return ds;
     }    
