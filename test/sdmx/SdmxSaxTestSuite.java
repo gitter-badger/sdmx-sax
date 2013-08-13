@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import sdmx.data.StructuredDataTest;
 import sdmx.version.common.SOAPStripperInputStreamTest;
 import sdmx.version.common.SdmxIOTest;
 import sdmx.version.twopointone.Sdmx21StructureParserTest;
@@ -28,7 +29,8 @@ import sdmx.version.twopointzero.Sdmx20StructureParserTest;
     Sdmx20StructureParserTest.class,
     Sdmx20DataParserTest.class,
     Sdmx20ServiceTest.class,
-    SOAPStripperInputStreamTest.class
+    SOAPStripperInputStreamTest.class,
+    StructuredDataTest.class
 })
 public class SdmxSaxTestSuite {
     @BeforeClass
