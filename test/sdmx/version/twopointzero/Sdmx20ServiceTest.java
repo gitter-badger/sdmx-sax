@@ -51,15 +51,15 @@ public class Sdmx20ServiceTest {
         long t2 = System.currentTimeMillis();
         System.out.println("Loaded FAO Capture Struct:"+(t2-t1)+" ms");
         InputStream in8 = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/fao-20/RECOFI_CAPTURE.xml");
-        DataMessage data8 = SdmxIO.parseData(registry,in8);
-        data8.dump();
+        DataMessage data8 = SdmxIO.parseData(in8,true);
+        //data8.dump();
         long t3 = System.currentTimeMillis();
         System.out.println("Read:"+data8.getDataSets().get(0).size()+" Observations "+(t3-t2)+" ms");
         ValueTypeResolver.resolveDataSet(registry, data8.getDataSets().get(0), faoStruct);
         long t4 = System.currentTimeMillis();
         System.out.println("Resolution:"+data8.getDataSets().get(0).size()+" Observations "+(t4-t3)+" ms");
-        data8.dump();
-    }
+        //data8.dump();
+    }*//*
     @Test
     public void testFAOFAOSTAT() throws IOException {
         //RESTServiceRegistry registry = new RESTServiceRegistry("FAO", "http://data.fao.org/sdmx");
@@ -72,14 +72,14 @@ public class Sdmx20ServiceTest {
         long t2 = System.currentTimeMillis();
         System.out.println("Loaded FAOStat Struct:"+(t2-t1)+" ms");
         InputStream in9 = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/fao-20/CROP_PRODUCTION.xml");
-        DataMessage data9 = SdmxIO.parseData(registry,in9);
+        DataMessage data9 = SdmxIO.parseData(in9,true);
         //data9.dump();
         long t3 = System.currentTimeMillis();
         System.out.println("Read:"+data9.getDataSets().get(0).size()+" Observations "+(t3-t2)+" ms");
         ValueTypeResolver.resolveDataSet(registry, data9.getDataSets().get(0), faoStruct);
         long t4 = System.currentTimeMillis();
         System.out.println("Resolution:"+data9.getDataSets().get(0).size()+" Observations "+(t4-t3)+" ms");
-        data9.dump();
+        //data9.dump();
     }*/
     /*
     @Test
@@ -124,8 +124,9 @@ public class Sdmx20ServiceTest {
     }*/
     @Test
     public void testLoad() throws IOException {
-       
-        /*
+        Sdmx20SOAPQueryable queryable = new Sdmx20SOAPQueryable("ABS", "http://stat.abs.gov.au/sdmxws/sdmx.asmx");
+        QueryableServiceRegistry registry = new QueryableServiceRegistry(queryable);
+
         DataStructureType cpiStruct = null;
         long t1 = System.currentTimeMillis();
         try {
@@ -196,8 +197,9 @@ public class Sdmx20ServiceTest {
         ValueTypeResolver.resolveDataSet(registry, dm.getDataSets().get(0), cpiStruct);
         long t5 = System.currentTimeMillis();
         System.out.println("Resolution:"+dm.getDataSets().get(0).size()+" Observations "+(t5-t4)+" ms");
-        dm.dump();*/
+        dm.dump();
     }
+/*
     @Test
     public void testABSList() throws IOException {
         Sdmx20SOAPQueryable queryable = new Sdmx20SOAPQueryable("ABS", "http://stat.abs.gov.au/sdmxws/sdmx.asmx");
@@ -211,7 +213,7 @@ public class Sdmx20ServiceTest {
             System.out.println(ref.getRef().getAgencyId()+":"+ref.getRef().getId()+":"+ref.getRef().getVersion());
         }
     }
-
+*/
     /*
     @Test
     public void testIMFList() throws IOException {

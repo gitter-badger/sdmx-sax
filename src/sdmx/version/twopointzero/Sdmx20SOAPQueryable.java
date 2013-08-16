@@ -148,7 +148,7 @@ public class Sdmx20SOAPQueryable implements Queryable {
         System.out.println(new String(bytes));
         System.out.println("---------------------------------");
         ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        return SdmxIO.parseData(query("GetCompactDataResult", bais, bytes.length));
+        return SdmxIO.parseData(query("GetCompactDataResult", bais, bytes.length),false);
     }
 
     public String getAgencyId() {

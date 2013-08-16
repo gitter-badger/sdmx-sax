@@ -33,6 +33,15 @@ public class Obs implements Attachable {
 
     @Override
     public Object getValue(int i) {
+            /*
+             * Sometimes, if a data message has optional fields, 
+             * a value on an observation may not be set, so the 
+             * number of values in columnValues may not properly
+             * reflect the total number of fields (since there is an optional one at the end)
+             * in this case some observations may have the number of optional fields less
+             * elements in columnValues than an Obs with the optional field(s) set. 
+             */
+        if( i >= columnValues.size() ) return null;
         return columnValues.get(i);
     }
 
