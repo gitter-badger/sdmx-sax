@@ -23,7 +23,10 @@ public class StructuredColumnMapper implements ColumnMapper {
     }
 
     public int getColumnIndex(String s) {
-        return columns.indexOf(s);
+        for(int i=0;i<columns.size();i++) {
+           if( columns.get(i).getName().equals(s))return i;
+        }
+        return -1;
     }
 
     public String getColumnName(int i) {
@@ -144,5 +147,45 @@ public class StructuredColumnMapper implements ColumnMapper {
         for (int i = 0; i < columns.size(); i++) {
             System.out.println(columns.get(i).getName() + ":" + columns.get(i).getAttachment().getName());
         }
+    }
+
+    @Override
+    public boolean isAttachedToDataSet(String s) {
+        return getAttachmentLevel(s)==AttachmentLevel.DATASET;
+    }
+
+    @Override
+    public boolean isAttachedToDataSet(int i) {
+        return getAttachmentLevel(i)==AttachmentLevel.DATASET;
+    }
+
+    @Override
+    public boolean isAttachedToSeries(String s) {
+        return getAttachmentLevel(s)==AttachmentLevel.SERIES;
+    }
+
+    @Override
+    public boolean isAttachedToSeries(int i) {
+        return getAttachmentLevel(i)==AttachmentLevel.SERIES;
+    }
+
+    @Override
+    public boolean isAttachedToObservation(String s) {
+        return getAttachmentLevel(s)==AttachmentLevel.OBSERVATION;
+    }
+
+    @Override
+    public boolean isAttachedToObservation(int i) {
+        return getAttachmentLevel(i)==AttachmentLevel.OBSERVATION;
+    }
+
+    @Override
+    public boolean isAttachedToGroup(String s) {
+        return getAttachmentLevel(s)==AttachmentLevel.GROUP;
+    }
+
+    @Override
+    public boolean isAttachedToGroup(int i) {
+        return getAttachmentLevel(i)==AttachmentLevel.GROUP;
     }
 }

@@ -6,6 +6,7 @@ package sdmx.data.flat;
 
 import java.util.ArrayList;
 import java.util.List;
+import sdmx.data.ColumnMapper;
 import sdmx.data.DataSetWriter;
 
 /**
@@ -13,12 +14,18 @@ import sdmx.data.DataSetWriter;
  * @author James
  */
 public class FlatDataSetWriter implements DataSetWriter {
-
+    private ColumnMapper mapper = new FlatColumnMapper();
     private FlatDataSet dataSet = null;
     private List<Object> dataSetValues = null;
     private List<Object> seriesValues = null;
     private List<Object> obsValues = null;
 
+    public FlatDataSetWriter(){}
+    public FlatDataSetWriter(ColumnMapper mapper) {
+       this.mapper=(ColumnMapper) mapper;
+    }
+    
+    
     @Override
     public void newDataSet() {
         dataSet = new FlatDataSet();
@@ -41,7 +48,7 @@ public class FlatDataSetWriter implements DataSetWriter {
         }
 
     }
-
+    
     @Override
     public void writeDataSetComponent(String name, String val) {
         if (!dataSet.getColumnMapper().containsColumn(name)) {
@@ -105,5 +112,10 @@ public class FlatDataSetWriter implements DataSetWriter {
             }
         }
         obsValues.set(i,val);
+    }
+
+    @Override
+    public ColumnMapper getColumnMapper() {
+        return mapper;
     }
 }

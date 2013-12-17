@@ -46,6 +46,7 @@ public class StructuredDataTest {
         } catch (IOException ex) {
             Logger.getLogger(Sdmx20DataParserTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.out.println("Primary Measure="+struct.getStructures().getDataStructures().getDataStructures().get(0).getDataStructureComponents().getMeasureList().getPrimaryMeasure().getLocalRepresentation().getTextFormat().getTextType().toString());
         long t1= System.currentTimeMillis();
         InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/CompactSample.xml");
         DataMessage data = SdmxIO.parseData(in,true);
@@ -54,9 +55,7 @@ public class StructuredDataTest {
         ValueTypeResolver.resolveDataSet(registry, data.getDataSets().get(0), struct.getStructures().getDataStructures().getDataStructures().get(0));
         long t3 = System.currentTimeMillis();
         System.out.println("Resolution:"+data.getDataSets().get(0).size()+" Observations "+(t3-t2)+" ms");
-
-        data.dump();
-        
+        data.dump();        
     }
     @Test
     public void testCompactSample() throws IOException {

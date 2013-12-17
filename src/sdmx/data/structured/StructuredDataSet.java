@@ -11,20 +11,29 @@ import sdmx.data.AttachmentLevel;
 import sdmx.data.ColumnMapper;
 import sdmx.data.DataSet;
 import sdmx.data.DataSetWriter;
+import sdmx.data.flat.FlatDataSetWriter;
+import sdmx.query.data.DataQuery;
+import sdmx.structure.codelist.CodeType;
 
 /**
  *
  * @author James
  */
-public class StructuredDataSet implements DataSet,Attachable {
-    List<Object> columnValues = new ArrayList<Object>();
+public class StructuredDataSet implements DataSet, Attachable {
 
+    List<Object> columnValues = new ArrayList<Object>();
     private List<Series> series = new ArrayList<Series>();
     private List<Obs> observations = new ArrayList<Obs>();
-    
     private StructuredColumnMapper columnMapper = new StructuredColumnMapper();
 
-    public StructuredColumnMapper getColumnMapper() {
+    public StructuredDataSet() {
+    }
+
+    public StructuredDataSet(StructuredColumnMapper mapper) {
+        this.columnMapper = mapper;
+    }
+
+    public ColumnMapper getColumnMapper() {
         return columnMapper;
     }
 
@@ -35,7 +44,7 @@ public class StructuredDataSet implements DataSet,Attachable {
     @Override
     public void dump() {
         for (int i = 0; i < columnMapper.size(); i++) {
-            System.out.print(columnMapper.getAttachmentLevel(i).getName()+":"+columnMapper.getColumnName(i) + "\t");
+            System.out.print(columnMapper.getAttachmentLevel(i).getName() + ":" + columnMapper.getColumnName(i) + "\t");
         }
         System.out.println();
         for (int i = 0; i < size(); i++) {
@@ -78,23 +87,22 @@ public class StructuredDataSet implements DataSet,Attachable {
         String s = columnMapper.getColumnName(col);
         if (attach == AttachmentLevel.DATASET) {
             return columnValues.get(columnMapper.getDataSetIndex(s));
-        }
-        else if (attach == AttachmentLevel.SERIES) {
+        } else if (attach == AttachmentLevel.SERIES) {
             Series series = findSeries(row);
             return series.getValue(columnMapper.getSeriesIndex(s));
-        }
-        else if (attach == AttachmentLevel.OBSERVATION) {
+        } else if (attach == AttachmentLevel.OBSERVATION) {
             Series series = findSeries(row);
             //System.out.println("Find Row:"+row+": Series="+series);
             //System.out.println("Find Row:"+row+": Obs="+series.getObservationRow(row));
             return series.getObservationRow(row).getValue(columnMapper.getObservationIndex(s));
+        } else {
+            return null;
         }
-        else return null;
     }
 
     @Override
     public Object getValue(int row, String col) {
-        return getValue(row,columnMapper.getColumnIndex(col));
+        return getValue(row, columnMapper.getColumnIndex(col));
     }
 
     @Override
@@ -114,7 +122,7 @@ public class StructuredDataSet implements DataSet,Attachable {
             Obs obs = series.getObservationRow(row);
             obs.setValue(columnMapper.getObservationIndex(s), val);
         }
-   }
+    }
 
     @Override
     public void setValue(int row, String col, Object val) {
@@ -123,7 +131,6 @@ public class StructuredDataSet implements DataSet,Attachable {
     @Override
     public void writeTo(DataSetWriter writer) {
     }
-    
 
     public AttachmentLevel getAttachmentLevel() {
         return AttachmentLevel.DATASET;
@@ -134,20 +141,47 @@ public class StructuredDataSet implements DataSet,Attachable {
     }
 
     public int findSeriesIndex(int row) {
-        return findSeriesIndex(row, 0, series.size());
+        return findSeriesIndex(row, 0, series.size()-1);
     }
 
     public int findSeriesIndex(int row, int from, int to) {
         //System.out.println("Find Row:"+row+": from:"+from+" to"+to);
-        for(int i=from;i<to;i++) {
-            if( series.get(i).contains(row)) {
-                return i;
-            }
+        int half = ((to - from) / 2);
+
+        if (series.get(from + half).contains(row)) {
+            return from + half;
+        }
+        if (series.size()>to&&series.get(to).contains(row)) {
+            return to;
+        }
+        if (series.size()>from&&series.get(from).contains(row)) {
+            return from;
+        }
+/*
+        if( half == 0 ) {
+           System.out.println("From="+from);
+           System.out.println("To="+to);
+           System.out.println("Half="+half);
+           int actual = _findSeriesIndex(row);
+           System.out.println("Actual="+actual);
+           return actual;
+        }
+*/
+        if (series.get(from + half).getStart() > row) {
+            return findSeriesIndex(row, from, from+half);
+        }
+        if (series.get(from + half).getStart() < row) {
+            return findSeriesIndex(row, from + half, to);
         }
         System.out.println("Can't Find");
         return -1;
     }
-
+    public int _findSeriesIndex(int row) {
+       for(int i=0;i<series.size();i++) {
+          if( series.get(i).contains(row))return i;
+       }
+       return -1;
+    }
     @Override
     public Object getValue(String s) {
         return getValue(columnMapper.getDataSetIndex(s));
@@ -155,10 +189,10 @@ public class StructuredDataSet implements DataSet,Attachable {
 
     @Override
     public void setValue(String s, Object val) {
-        if( !columnMapper.containsColumn(s)){
+        if (!columnMapper.containsColumn(s)) {
             columnMapper.registerColumn(s, AttachmentLevel.DATASET);
         }
-        setValue(columnMapper.getDataSetIndex(s),val);
+        setValue(columnMapper.getDataSetIndex(s), val);
     }
 
     @Override
@@ -168,21 +202,22 @@ public class StructuredDataSet implements DataSet,Attachable {
 
     @Override
     public void setValue(int i, Object val) {
-        if( columnValues.size()<i) {
-            for(int j=columnValues.size();j<i;j++) {
+        if (columnValues.size() < i) {
+            for (int j = columnValues.size(); j < i; j++) {
                 columnValues.add(null);
             }
         }
         columnValues.set(i, val);
     }
+
     public void updateIndexes() {
         int start = 0;
         int end = 0;
-        for(Series s:series){
+        for (Series s : series) {
             s.updateIndexes(start);
-            end = end+s.size();
+            end = end + s.size();
             s.setEnd(end);
-            start=end;
+            start = end;
             //s.dump();
         }
     }
@@ -213,5 +248,56 @@ public class StructuredDataSet implements DataSet,Attachable {
      */
     public void setObservations(List<Obs> observations) {
         this.observations = observations;
+    }
+
+    public DataSet query(DataQuery query, DataSetWriter dsw) {
+        ColumnMapper mapper = this.columnMapper;
+        List<Integer> rows = new ArrayList<Integer>();
+        for (int i = 0; i < this.size(); i++) {
+            if (query.getDataWhere().match(mapper, this, i)) {
+                rows.add(new Integer(i));
+            }
+        }
+        dsw.newDataSet();
+        for (int i = 0; i < rows.size(); i++) {
+            int state = AttachmentLevel.ATTACHMENT_DATASET;
+            for (int j = 0; j < this.getColumnSize(); j++) {
+                Object val = getValue(i, j);
+                if (val instanceof CodeType) {
+                    val = ((CodeType) val).getId().toString();
+                }
+                if (mapper.isAttachedToDataSet(j)) {
+                    dsw.writeDataSetComponent(mapper.getColumnName(j), (String) val);
+                    state = AttachmentLevel.ATTACHMENT_DATASET;
+                }
+                if (mapper.isAttachedToSeries(j)) {
+                    if (state == AttachmentLevel.ATTACHMENT_DATASET) {
+                        dsw.newSeries();
+                    }
+                    dsw.writeSeriesComponent(mapper.getColumnName(j), (String) val);
+                    state = AttachmentLevel.ATTACHMENT_SERIES;
+                }
+                if (mapper.isAttachedToObservation(j)) {
+                    if (state == AttachmentLevel.ATTACHMENT_DATASET) {
+                        dsw.newSeries();
+                        dsw.finishSeries();
+                        dsw.newObservation();
+                    }
+                    if (state == AttachmentLevel.ATTACHMENT_SERIES) {
+                        dsw.finishSeries();
+                        dsw.newObservation();
+                    }
+                    dsw.writeObservationComponent(mapper.getColumnName(j), (String) val);
+                    state = AttachmentLevel.ATTACHMENT_OBSERVATION;
+                }
+            }
+            dsw.finishObservation();
+        }
+        return dsw.finishDataSet();
+    }
+
+    public DataSet query(DataQuery query) {
+        DataSetWriter dsw = new FlatDataSetWriter();
+        return query(query, dsw);
     }
 }

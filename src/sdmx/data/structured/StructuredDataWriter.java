@@ -7,6 +7,7 @@ package sdmx.data.structured;
 import java.util.ArrayList;
 import java.util.List;
 import sdmx.data.AttachmentLevel;
+import sdmx.data.ColumnMapper;
 import sdmx.data.DataSetWriter;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.data.flat.FlatObs;
@@ -16,7 +17,7 @@ import sdmx.data.flat.FlatObs;
  * @author James
  */
 public class StructuredDataWriter implements DataSetWriter {
-    
+    private StructuredColumnMapper mapper = new StructuredColumnMapper();
     private StructuredDataSet dataSet = null;
 
     private List<Series> seriesList = new ArrayList<Series>();
@@ -26,10 +27,15 @@ public class StructuredDataWriter implements DataSetWriter {
     private boolean in_series = false;
     private Obs obs = null;
     
+    public StructuredDataWriter() {}
+    public StructuredDataWriter(StructuredColumnMapper mapper) {
+        this.mapper=mapper;
+    }
+    
     @Override
     public void newDataSet() {
         //System.out.println("New DataSet");
-        dataSet = new StructuredDataSet();
+        dataSet = new StructuredDataSet(mapper);
     }
 
     @Override
@@ -37,16 +43,15 @@ public class StructuredDataWriter implements DataSetWriter {
         //System.out.println("New Series");
         series = new Series();
         in_series = true;
-        series.setMapper(dataSet.getColumnMapper());
+        series.setMapper(mapper);
     }
 
     @Override
     public void newObservation() {
         //System.out.println("New Obs");
         obs = new Obs();
-        obs.setColumnMapper(dataSet.getColumnMapper());
+        obs.setColumnMapper(mapper);
     }
-
     @Override
     public void writeDataSetComponent(String name, String val) {
         //System.out.println("DS Name:"+name+":"+val);
@@ -95,5 +100,11 @@ public class StructuredDataWriter implements DataSetWriter {
         dataSet=null;
         return ds;
     }    
-    
+
+    @Override
+    public ColumnMapper getColumnMapper() {
+        return mapper;
+    }
+
+  
 }

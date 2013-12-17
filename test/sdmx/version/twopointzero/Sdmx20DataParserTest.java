@@ -71,10 +71,30 @@ public class Sdmx20DataParserTest {
         ValueTypeResolver.resolveDataSet(registry, data.getDataSets().get(0), struct.getStructures().getDataStructures().getDataStructures().get(0));
         long t3 = System.currentTimeMillis();
         System.out.println("Resolution:"+data.getDataSets().get(0).size()+" Observations "+(t3-t2)+" ms");
-
         data.dump();
-        
     }
+    @Test
+    public void testGeneric() throws IOException {
+        System.out.println("Test Generic");
+        StructureType struct = null;
+        try {
+            InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/StructureSample.xml");
+            struct = SdmxIO.parseStructure(in);
+            LocalRegistry.getDefaultWorkspace().load(struct);
+        } catch (IOException ex) {
+            Logger.getLogger(Sdmx20DataParserTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        long t1= System.currentTimeMillis();
+        InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/GenericSample.xml");
+        DataMessage data = SdmxIO.parseData(in);
+        long t2 = System.currentTimeMillis();
+        System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
+        ValueTypeResolver.resolveDataSet(registry, data.getDataSets().get(0), struct.getStructures().getDataStructures().getDataStructures().get(0));
+        long t3 = System.currentTimeMillis();
+        System.out.println("Resolution:"+data.getDataSets().get(0).size()+" Observations "+(t3-t2)+" ms");
+        data.dump();
+    }
+
     @Test
     public void testABSCPI() throws IOException {
         StructureType cpiStruct = null;

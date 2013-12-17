@@ -15,6 +15,7 @@ import sdmx.version.common.SOAPStripperInputStreamTest;
 import sdmx.version.common.SdmxIOTest;
 import sdmx.version.twopointone.Sdmx21StructureParserTest;
 import sdmx.version.twopointzero.Sdmx20DataParserTest;
+import sdmx.version.twopointzero.Sdmx20DataQueryTest;
 import sdmx.version.twopointzero.Sdmx20ServiceTest;
 import sdmx.version.twopointzero.Sdmx20StructureParserTest;
 
@@ -30,7 +31,8 @@ import sdmx.version.twopointzero.Sdmx20StructureParserTest;
     Sdmx20DataParserTest.class,
     Sdmx20ServiceTest.class,
     SOAPStripperInputStreamTest.class,
-    StructuredDataTest.class
+    StructuredDataTest.class,
+    Sdmx20DataQueryTest.class
 })
 public class SdmxSaxTestSuite {
     @BeforeClass

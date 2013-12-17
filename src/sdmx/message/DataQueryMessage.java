@@ -4,6 +4,7 @@
  */
 package sdmx.message;
 
+import sdmx.query.data.DataQuery;
 import sdmx.query.data.DataQueryType;
 
 /**
@@ -12,7 +13,7 @@ import sdmx.query.data.DataQueryType;
  */
 public class DataQueryMessage extends QueryMessage {
     private BaseHeaderType header = null;
-    private DataQueryType query = null;
+    private DataQuery query = null;
 
     /**
      * @return the header
@@ -31,14 +32,14 @@ public class DataQueryMessage extends QueryMessage {
     /**
      * @return the query
      */
-    public DataQueryType getQuery() {
+    public DataQuery getQuery() {
         return query;
     }
 
     /**
      * @param query the query to set
      */
-    public void setQuery(DataQueryType query) {
+    public void setQuery(DataQuery query) {
         this.query = query;
     }
 }

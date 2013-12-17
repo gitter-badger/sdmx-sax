@@ -4,6 +4,8 @@
  */
 package sdmx.data;
 
+import sdmx.query.data.DataQuery;
+
 /**
  *
  * @author James
@@ -18,4 +20,6 @@ public interface DataSet {
     public void setValue(int row, int col,Object val);
     public void setValue(int row, String col,Object val);
     public void writeTo(DataSetWriter writer);
-}
+    public DataSet query(DataQuery query);
+    public DataSet query(DataQuery query,DataSetWriter dsw);
+   }

@@ -120,6 +120,7 @@ public class Sdmx20StructureReaderTools {
         mainAgencyId = new NestedNCNameIDType(structDoc.getStructure().getHeader().getSenderArray(0).getId());
         return parseStructure(structDoc);
     }
+
     public StructureType parseStructure(Reader in) throws XmlException, IOException, TypeValueNotFoundException {
         XmlOptions xmlOptions = new XmlOptions();
         xmlOptions.setCharacterEncoding("utf-16");
@@ -168,7 +169,9 @@ public class Sdmx20StructureReaderTools {
     }
 
     public CodelistType toCodelist(org.sdmx.resources.sdmxml.schemas.v20.structure.CodeListType cl1) throws URISyntaxException {
-        if( cl1==null ) return null;
+        if (cl1 == null) {
+            return null;
+        }
         CodelistType cl2 = new CodelistType();
         cl2.setId(toIDType(cl1.getId()));
         cl2.setAgencyID(toNestedNCNameIDType(cl1.getAgencyID()));
@@ -551,12 +554,11 @@ public class Sdmx20StructureReaderTools {
     }
 
     public RepresentationType toLocalRepresentation(CodelistType codelist, TextFormatType ttf) throws TypeValueNotFoundException, URISyntaxException {
-        if (codelist == null) {
-            return null;
-        }
         SimpleDataStructureRepresentationType lr2 = new SimpleDataStructureRepresentationType();
         lr2.setTextFormat(ttf);
-        lr2.setEnumeration(toItemSchemeReference(codelist));
+        if (codelist != null) {
+            lr2.setEnumeration(toItemSchemeReference(codelist));
+        }
         return lr2;
     }
 
@@ -720,7 +722,7 @@ public class Sdmx20StructureReaderTools {
         if (c == null) {
             return null;
         }
-        return new DateType(c.get(Calendar.YEAR),c.get(Calendar.MONTH)+1,c.get(Calendar.DATE));
+        return new DateType(c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DATE));
     }
 
     public HeaderTimeType toHeaderTimeType(Calendar c) {
@@ -813,9 +815,7 @@ public class Sdmx20StructureReaderTools {
         if (concept != null) {
             pm2.setConceptIdentity(toConceptReference(cscheme, concept));
         }
-        if (code != null) {
-            pm2.setLocalRepresentation(toLocalRepresentation(code, toTextFormatType(pm1.getTextFormat())));
-        }
+        pm2.setLocalRepresentation(toLocalRepresentation(code, toTextFormatType(pm1.getTextFormat())));
         return pm2;
     }
 
@@ -988,7 +988,7 @@ public class Sdmx20StructureReaderTools {
             code = registry.findCodelist(mainAgencyId, new IDType(dim.getCodelist()));
         } else if (dim.getCodelistAgency() != null && dim.getCodelistVersion() != null) {
             code = registry.findCodelist(new NestedNCNameIDType(dim.getCodelistAgency()), new IDType(dim.getCodelist()), new VersionType(dim.getCodelistVersion()));
-        } else if( dim.getCodelistAgency()!=null && dim.getCodelistVersion()==null) {
+        } else if (dim.getCodelistAgency() != null && dim.getCodelistVersion() == null) {
             // Only codelist and codelistAgency
             code = registry.findCodelist(new NestedNCNameIDType(dim.getCodelistAgency()), new IDType(dim.getCodelist()));
         }
@@ -1005,11 +1005,12 @@ public class Sdmx20StructureReaderTools {
             code = registry.findCodelist(mainAgencyId, new IDType(dim.getCodelist()));
         } else if (dim.getCodelistAgency() != null && dim.getCodelistVersion() != null) {
             code = registry.findCodelist(new NestedNCNameIDType(dim.getCodelistAgency()), new IDType(dim.getCodelist()), new VersionType(dim.getCodelistVersion()));
-        } else if( dim.getCodelistAgency()!=null && dim.getCodelistVersion()==null) {
+        } else if (dim.getCodelistAgency() != null && dim.getCodelistVersion() == null) {
             // Only codelist and codelistAgency
             code = registry.findCodelist(new NestedNCNameIDType(dim.getCodelistAgency()), new IDType(dim.getCodelist()));
         }
-        return code;    }
+        return code;
+    }
 
     public CodelistType getCodelist(org.sdmx.resources.sdmxml.schemas.v20.structure.TimeDimensionType dim) {
         if (dim.getCodelist() == null) {
@@ -1021,11 +1022,12 @@ public class Sdmx20StructureReaderTools {
             code = registry.findCodelist(mainAgencyId, new IDType(dim.getCodelist()));
         } else if (dim.getCodelistAgency() != null && dim.getCodelistVersion() != null) {
             code = registry.findCodelist(new NestedNCNameIDType(dim.getCodelistAgency()), new IDType(dim.getCodelist()), new VersionType(dim.getCodelistVersion()));
-        } else if( dim.getCodelistAgency()!=null && dim.getCodelistVersion()==null) {
+        } else if (dim.getCodelistAgency() != null && dim.getCodelistVersion() == null) {
             // Only codelist and codelistAgency
             code = registry.findCodelist(new NestedNCNameIDType(dim.getCodelistAgency()), new IDType(dim.getCodelist()));
         }
-        return code;    }
+        return code;
+    }
 
     public CodelistType getCodelist(org.sdmx.resources.sdmxml.schemas.v20.structure.PrimaryMeasureType dim) {
         if (dim.getCodelist() == null) {
@@ -1037,7 +1039,7 @@ public class Sdmx20StructureReaderTools {
             code = registry.findCodelist(mainAgencyId, new IDType(dim.getCodelist()));
         } else if (dim.getCodelistAgency() != null && dim.getCodelistVersion() != null) {
             code = registry.findCodelist(new NestedNCNameIDType(dim.getCodelistAgency()), new IDType(dim.getCodelist()), new VersionType(dim.getCodelistVersion()));
-        } else if( dim.getCodelistAgency()!=null && dim.getCodelistVersion()==null) {
+        } else if (dim.getCodelistAgency() != null && dim.getCodelistVersion() == null) {
             // Only codelist and codelistAgency
             code = registry.findCodelist(new NestedNCNameIDType(dim.getCodelistAgency()), new IDType(dim.getCodelist()));
         }

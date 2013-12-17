@@ -162,6 +162,13 @@ public class ValueTypeResolver {
                 if (rep.getTextFormat().getTextType() == DataType.DECIMAL) {
                     value = Double.parseDouble(svalue);
                 }
+                if (rep.getTextFormat().getTextType() == DataType.DOUBLE) {
+                    value = Double.parseDouble(svalue);
+                }
+                if (rep.getTextFormat().getTextType() == DataType.FLOAT) {
+                    value = Float.parseFloat(svalue);
+                }
+
                 if (rep.getTextFormat().getTextType() == DataType.INTEGER) {
                     value = Integer.parseInt(svalue);
                 }

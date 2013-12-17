@@ -11,6 +11,7 @@ import sdmx.data.flat.FlatDataSet;
  * @author James
  */
 public interface DataSetWriter {
+    public ColumnMapper getColumnMapper();
     public void newDataSet();
     public void newSeries();
     public void newObservation();

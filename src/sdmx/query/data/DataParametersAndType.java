@@ -12,6 +12,9 @@ import sdmx.commonreferences.DataProviderReferenceType;
 import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.DataflowReferenceType;
 import sdmx.commonreferences.ProvisionAgreementReferenceType;
+import sdmx.data.ColumnMapper;
+import sdmx.data.DataSet;
+import sdmx.data.flat.FlatObs;
 import sdmx.query.base.CodeValueType;
 import sdmx.query.base.QueryIDType;
 
@@ -259,5 +262,44 @@ public class DataParametersAndType {
      */
     public void setOr(List<DataParametersOrType> or) {
         this.or = or;
+    }
+    public boolean match(ColumnMapper mapper,DataSet set,int row) {
+       for(int i=0;i<attributeValue.size();i++) {
+           Object value = set.getValue(row, mapper.getColumnIndex(attributeValue.get(i).getId().toString()));
+           if( value instanceof String ) {
+               if( !attributeValue.get(i).match((String) value)) return false;
+           }
+           if( value instanceof CodeValueType ) {
+               if( !attributeValue.get(i).match(((CodeValueType)value).getValue())) return false;
+           }
+        }
+        for(int i=0;i<this.dimensionValue.size();i++) {
+           Object value = set.getValue(row, mapper.getColumnIndex(attributeValue.get(i).getId().toString()));
+           if( value instanceof String ) {
+               if( !dimensionValue.get(i).match((String) value)) return false;
+           }
+           if( value instanceof CodeValueType ) {
+               if( !dimensionValue.get(i).match(((CodeValueType)value).getValue())) return false;
+           }
+        }
+        for(int i=0;i<this.primaryMeasureValue.size();i++) {
+           Object value = set.getValue(row, mapper.getColumnIndex(attributeValue.get(i).getId().toString()));
+           if( value instanceof String ) {
+               if( !primaryMeasureValue.get(i).match((String) value)) return false;
+           }
+           if( value instanceof CodeValueType ) {
+               if( !primaryMeasureValue.get(i).match(((CodeValueType)value).getValue())) return false;
+           }
+        }
+        for(int i=0;i<this.timeDimensionValue.size();i++) {
+           Object value = set.getValue(row, mapper.getColumnIndex(attributeValue.get(i).getId().toString()));
+           if( value instanceof String ) {
+               if( !timeDimensionValue.get(i).match((String) value)) return false;
+           }
+           if( value instanceof CodeValueType ) {
+               if( !timeDimensionValue.get(i).match(((CodeValueType)value).getValue())) return false;
+           }
+        }
+        return true;
     }
 }

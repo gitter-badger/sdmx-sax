@@ -14,5 +14,9 @@ public class AttributeValueType extends DataStructureComponentValueQueryType {
     public AttributeValueType(String id, String val) {
         super.setId(new NCNameIDType(id));
         super.setValue(val);
-    }    
+    }
+    public boolean match(String value) {
+        if( getValue().equals(value))return true;
+        return false;
+    }
 }

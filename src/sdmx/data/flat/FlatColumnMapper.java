@@ -72,4 +72,53 @@ public class FlatColumnMapper implements ColumnMapper {
     public List<String> getGroupColumns() {
         return Collections.EMPTY_LIST;
     }
+
+    @Override
+    public boolean isAttachedToDataSet(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean isAttachedToDataSet(int i) {
+        return false;
+    }
+
+    @Override
+    public boolean isAttachedToSeries(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean isAttachedToSeries(int i) {
+        return false;
+    }
+
+    @Override
+    public boolean isAttachedToObservation(String s) {
+        return true;
+    }
+
+    @Override
+    public boolean isAttachedToObservation(int i) {
+        return true;
+    }
+
+    @Override
+    public boolean isAttachedToGroup(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean isAttachedToGroup(int i) {
+        return false;
+    }
+
+    @Override
+    public void dump() {
+        System.out.println("Column Mapper");
+       for(int i=0;i<size();i++) {
+          System.out.println(i+"="+getColumnName(i));
+       }
+       
+    }
 }

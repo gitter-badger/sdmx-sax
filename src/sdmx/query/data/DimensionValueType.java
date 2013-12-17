@@ -16,5 +16,9 @@ public class DimensionValueType extends DataStructureComponentValueQueryType {
         super.setId(new NCNameIDType(id));
         super.setValue(val);
     }
-    
+     public boolean match(String value) {
+        if( getValue().equals(value))return true;
+        return false;
+    }
+   
 }
