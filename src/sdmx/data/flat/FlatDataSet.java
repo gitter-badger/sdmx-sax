@@ -133,6 +133,9 @@ public class FlatDataSet implements DataSet {
     public FlatDataSet() {
     }
 
+    public int getColumnIndex(String name) {
+        return mapper.getColumnIndex(name);
+    }
     public Object getValue(int row, String col) {
         return getValue(row, mapper.getColumnIndex(col));
     }
@@ -230,14 +233,18 @@ public class FlatDataSet implements DataSet {
     public DataSet query(DataQuery query,DataSetWriter dsw) {
         List<Integer> rows = new ArrayList<Integer>();
         for(int i=0;i<this.size();i++) {
-            if( query.getDataWhere().match(mapper, this, i))rows.add(new Integer(i));
+            if( query.getDataWhere().match(mapper, this, i)){
+                rows.add(new Integer(i));
+                }
         }
         dsw.newDataSet();
         for(int i=0;i<rows.size();i++) {
             int state = AttachmentLevel.ATTACHMENT_DATASET;
             for(int j=0;j<this.getColumnSize();j++){
-                Object val = getValue(i,j);
+                Object val = getValue(rows.get(i),j);
                 if( val instanceof CodeType ) val = ((CodeType)val).getId().toString();
+                else if( val instanceof Double ) val = Double.toString((Double)val);
+                else if( val instanceof Integer ) val = Integer.toString((Integer)val);
                 if( mapper.isAttachedToDataSet(j)){
                    dsw.writeDataSetComponent(mapper.getColumnName(j), (String)val);
                    state=AttachmentLevel.ATTACHMENT_DATASET;
@@ -270,5 +277,8 @@ public class FlatDataSet implements DataSet {
     public DataSet query(DataQuery query) {
         DataSetWriter dsw = new FlatDataSetWriter();
         return query(query,dsw);
+    }
+    public FlatObs getFlatObs(int i) {
+        return observations.get(i);
     }
 }

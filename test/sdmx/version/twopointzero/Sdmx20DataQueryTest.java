@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.ZipInputStream;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -62,12 +63,13 @@ public class Sdmx20DataQueryTest {
             Logger.getLogger(Sdmx20DataParserTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         long t1 = System.currentTimeMillis();
-        InputStream in6 = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/uis-20/28b18979-129f-43bc-94ae-42f31add907a.xml");
+        ZipInputStream zip = new ZipInputStream(Sdmx20StructureParserTest.class.getResourceAsStream("/resources/uis-20/28b18979-129f-43bc-94ae-42f31add907a.zip"));
+        zip.getNextEntry();
+        InputStream in6 = zip;
         DataMessage data6 = SdmxIO.parseData(in6,true);
         long t2 = System.currentTimeMillis();
         System.out.println("Read:" + data6.getDataSets().get(0).size() + " Observations " + (t2 - t1) + " ms");
         
-        //ValueTypeResolver.resolveDataSet(LocalRegistry.getDefaultWorkspace(), data6.getDataSets().get(0), uisStruct.getStructures().getDataStructures().getDataStructures().get(0));
         long t3 = System.currentTimeMillis();
         System.out.println("Resolution:" + data6.getDataSets().get(0).size() + " Observations " + (t3 - t2) + " ms");
         DataQuery query = new DataQuery();
@@ -81,8 +83,8 @@ public class Sdmx20DataQueryTest {
         query.setDataWhere(where);
         DataSet d7 = data6.getDataSets().get(0).query(query);
         System.out.println("Size="+d7.size());
+        ValueTypeResolver.resolveDataSet(LocalRegistry.getDefaultWorkspace(), d7, uisStruct.getStructures().getDataStructures().getDataStructures().get(0));
         d7.dump();
         //data6.dump();
-
     }
 }

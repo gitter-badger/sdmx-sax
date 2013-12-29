@@ -42,4 +42,6 @@ public class DataQueryMessage extends QueryMessage {
     public void setQuery(DataQuery query) {
         this.query = query;
     }
+
+
 }

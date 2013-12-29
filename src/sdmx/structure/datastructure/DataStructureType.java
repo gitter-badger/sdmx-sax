@@ -4,6 +4,8 @@
  */
 package sdmx.structure.datastructure;
 
+import sdmx.commonreferences.IDType;
+import sdmx.structure.base.Component;
 import sdmx.structure.base.StructureType;
 
 /**
@@ -106,5 +108,21 @@ public class DataStructureType extends StructureType {
             }
             System.out.println();
         }
+    }
+    public Component findComponent(IDType col) {
+        for (DimensionType dim : components.getDimensionList().getDimensions()) {
+            if( dim.identifiesMe(col))return dim;
+        }
+        for (AttributeType dim : components.getAttributeList().getAttributes()) {
+            if( dim.identifiesMe(col))return dim;
+        }
+        for (MeasureDimensionType dim : components.getMeasureList().getMeasures()) {
+            if( dim.identifiesMe(col))return dim;
+        }
+        TimeDimensionType dim = components.getTimeDimension();
+        if( dim.identifiesMe(col))return dim;
+        PrimaryMeasure dim2 = components.getMeasureList().getPrimaryMeasure();
+        if( dim2.identifiesMe(col))return dim2;
+        return null;
     }
 }

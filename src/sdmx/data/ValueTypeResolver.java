@@ -225,6 +225,9 @@ public class ValueTypeResolver {
                 if (rep.getTextFormat().getTextType() == DataType.STRING) {
                     value = svalue;
                 }
+                if( rep.getTextFormat().getTimeInterval()!=null ) {
+                    System.out.println("Time Interval!!!");
+                }
             } else {
                 value = svalue;
             }

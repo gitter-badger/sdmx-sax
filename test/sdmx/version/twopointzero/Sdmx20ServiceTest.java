@@ -27,6 +27,7 @@ import sdmx.query.data.AttributeValueType;
 import sdmx.query.data.DataParametersAndType;
 import sdmx.query.data.DataParametersOrType;
 import sdmx.query.data.DataParametersType;
+import sdmx.query.data.DataQuery;
 import sdmx.query.data.DataQueryType;
 import sdmx.query.data.DimensionValueType;
 import sdmx.query.data.TimeDimensionValueType;
@@ -42,7 +43,7 @@ import sdmx.workspace.Registry;
  * @author James
  */
 public class Sdmx20ServiceTest {
-    /*
+/*
     @Test
     public void testFAOREGIONAL() throws IOException {
         RESTServiceRegistry registry = new RESTServiceRegistry("FAO", "http://www.fao.org/figis/sdmx");
@@ -59,7 +60,7 @@ public class Sdmx20ServiceTest {
         long t4 = System.currentTimeMillis();
         System.out.println("Resolution:"+data8.getDataSets().get(0).size()+" Observations "+(t4-t3)+" ms");
         //data8.dump();
-    }*//*
+    }
     @Test
     public void testFAOFAOSTAT() throws IOException {
         //RESTServiceRegistry registry = new RESTServiceRegistry("FAO", "http://data.fao.org/sdmx");
@@ -80,8 +81,8 @@ public class Sdmx20ServiceTest {
         long t4 = System.currentTimeMillis();
         System.out.println("Resolution:"+data9.getDataSets().get(0).size()+" Observations "+(t4-t3)+" ms");
         //data9.dump();
-    }*/
-    /*
+    }
+    */ /*
     @Test
     public void testServiceParse3() {
         QueryableServiceRegistry registry = new QueryableServiceRegistry(new Sdmx20SOAPQueryable("ABS", "http://stat.abs.gov.au/sdmxws/sdmx.asmx"));
@@ -99,9 +100,7 @@ public class Sdmx20ServiceTest {
         registry2.findDataStructure(new NestedNCNameIDType("OECD"), new IDType("AEO11_OVERVIEW_CHAPTER5_TAB3_EN"),null);
         QueryableServiceRegistry registry3 = new QueryableServiceRegistry(new Sdmx20SOAPQueryable("IMF", "http://sdmxws.imf.org/IMFStatWS_SDMX2/sdmx.asmx"));
          
-        }
-    */
-    /*
+        }*/
     @Test
     public void testABS8NR() throws IOException {
         QueryableServiceRegistry registry = new QueryableServiceRegistry(new Sdmx20SOAPQueryable("ABS", "http://stat.abs.gov.au/sdmxws/sdmx.asmx"));
@@ -114,15 +113,14 @@ public class Sdmx20ServiceTest {
         }
         long t1 = System.currentTimeMillis();
         InputStream in4 = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/8nrpver5-data.xml");
-        DataMessage data4 = SdmxIO.parseData(registry,in4);
+        DataMessage data4 = SdmxIO.parseData(in4);
         long t2 = System.currentTimeMillis();
         System.out.println("Read:"+data4.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
         ValueTypeResolver.resolveDataSet(registry, data4.getDataSets().get(0), nrpver5Struct);
         long t3 = System.currentTimeMillis();
         System.out.println("Resolution:"+data4.getDataSets().get(0).size()+" Observations "+(t3-t2)+" ms");
         //data4.dump();
-    }*/
-/*
+    }
     @Test
     public void testLoad() throws IOException {
         Sdmx20SOAPQueryable queryable = new Sdmx20SOAPQueryable("ABS", "http://stat.abs.gov.au/sdmxws/sdmx.asmx");
@@ -140,7 +138,7 @@ public class Sdmx20ServiceTest {
         System.out.println("Loaded Structure CPI "+(t2-t1)+" ms");
         DataQueryMessage query = new DataQueryMessage();
         query.setHeader(registry.getBaseHeader());
-        DataQueryType q = new DataQueryType();
+        DataQuery q = new DataQuery();
         DataParametersAndType dw = new DataParametersAndType();
         dw.setDataSetId(Collections.singletonList(new QueryIDType("CPI")));
         List<DimensionValueType> dims = new ArrayList<DimensionValueType>();
@@ -200,9 +198,6 @@ public class Sdmx20ServiceTest {
         System.out.println("Resolution:"+dm.getDataSets().get(0).size()+" Observations "+(t5-t4)+" ms");
         dm.dump();
     }
-*/
-    
-/*
     @Test
     public void testABSList() throws IOException {
         Sdmx20SOAPQueryable queryable = new Sdmx20SOAPQueryable("ABS", "http://stat.abs.gov.au/sdmxws/sdmx.asmx");
@@ -211,13 +206,11 @@ public class Sdmx20ServiceTest {
         Iterator<DataStructureReferenceType> it = list.iterator();
         while(it.hasNext()){
             DataStructureReferenceType ref = it.next();
+            System.out.println(ref.getRef().getAgencyId()+":"+ref.getRef().getId()+":"+ref.getRef().getVersion());
             DataStructureType ds = registry.findDataStructure(ref.getRef().getAgencyId(), new IDType(ref.getRef().getId().toString()),ref.getRef().getVersion());
             ds.dump();
-            System.out.println(ref.getRef().getAgencyId()+":"+ref.getRef().getId()+":"+ref.getRef().getVersion());
         }
     }
-*/
-    /*
     @Test
     public void testIMFList() throws IOException {
         Sdmx20SOAPQueryable queryable = new Sdmx20SOAPQueryable("IMF", "http://sdmxws.imf.org/IMFStatWS_SDMX2/sdmx.asmx");
@@ -227,11 +220,12 @@ public class Sdmx20ServiceTest {
         Iterator<DataStructureReferenceType> it = list.iterator();
         while(it.hasNext()){
             DataStructureReferenceType ref = it.next();
+            System.out.println(ref.getRef().getAgencyId()+":"+ref.getRef().getId()+":"+ref.getRef().getVersion());
             DataStructureType ds = registry.findDataStructure(ref.getRef().getAgencyId(), new IDType(ref.getRef().getId().toString()),ref.getRef().getVersion());
             ds.dump();
-            System.out.println(ref.getRef().getAgencyId()+":"+ref.getRef().getId()+":"+ref.getRef().getVersion());
+            
         }
-    }*/
+    }
     /*
     @Test
     public void testOECDList() throws IOException {
@@ -246,6 +240,4 @@ public class Sdmx20ServiceTest {
             System.out.println(ref.getRef().getAgencyId()+":"+ref.getRef().getId()+":"+ref.getRef().getVersion());
         }
     }*/
-    @Test
-    public void testDummyTest() throws IOException {}
 }

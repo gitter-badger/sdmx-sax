@@ -13,6 +13,7 @@ import sdmx.query.data.DataQuery;
 public interface DataSet {
     public void dump();
     public String getColumnName(int i);
+    public int getColumnIndex(String s);
     public int getColumnSize();
     public int size();
     public Object getValue(int row, int col);

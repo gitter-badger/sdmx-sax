@@ -28,7 +28,9 @@ public class StructuredDataSet implements DataSet, Attachable {
 
     public StructuredDataSet() {
     }
-
+    public int getColumnIndex(String name) {
+        return columnMapper.getColumnIndex(name);
+    }
     public StructuredDataSet(StructuredColumnMapper mapper) {
         this.columnMapper = mapper;
     }
@@ -262,10 +264,11 @@ public class StructuredDataSet implements DataSet, Attachable {
         for (int i = 0; i < rows.size(); i++) {
             int state = AttachmentLevel.ATTACHMENT_DATASET;
             for (int j = 0; j < this.getColumnSize(); j++) {
-                Object val = getValue(i, j);
+                Object val = getValue(rows.get(i), j);
                 if (val instanceof CodeType) {
                     val = ((CodeType) val).getId().toString();
                 }
+                if( val instanceof Double ) val = Double.toString((Double)val);
                 if (mapper.isAttachedToDataSet(j)) {
                     dsw.writeDataSetComponent(mapper.getColumnName(j), (String) val);
                     state = AttachmentLevel.ATTACHMENT_DATASET;

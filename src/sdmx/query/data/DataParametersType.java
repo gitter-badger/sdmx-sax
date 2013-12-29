@@ -314,6 +314,7 @@ public class DataParametersType  {
                if( !timeDimensionValue.get(i).match(((CodeValueType)value).getValue())) return false;
            }
         }
+        System.out.println("Matched!");
         return true;
     }   
 
