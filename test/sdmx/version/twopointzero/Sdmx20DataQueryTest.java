@@ -18,6 +18,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import sdmx.data.DataSet;
 import sdmx.data.ValueTypeResolver;
+import sdmx.data.flat.FlatObs;
+import sdmx.data.key.PartialKey;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
 import sdmx.query.data.DataParametersType;
@@ -72,19 +74,19 @@ public class Sdmx20DataQueryTest {
         
         long t3 = System.currentTimeMillis();
         System.out.println("Resolution:" + data6.getDataSets().get(0).size() + " Observations " + (t3 - t2) + " ms");
-        DataQuery query = new DataQuery();
-        DataParametersType where = new DataParametersType();
-        List<DimensionValueType> dims = new ArrayList<DimensionValueType>();
-        DimensionValueType d1 = new DimensionValueType("REF_AREA","ABW");
-        dims.add(d1);
-        DimensionValueType d2 = new DimensionValueType("UNIT","NUMBER");
-        dims.add(d2);
-        where.setDimensionValue(dims);
-        query.setDataWhere(where);
-        DataSet d7 = data6.getDataSets().get(0).query(query);
-        System.out.println("Size="+d7.size());
-        ValueTypeResolver.resolveDataSet(LocalRegistry.getDefaultWorkspace(), d7, uisStruct.getStructures().getDataStructures().getDataStructures().get(0));
-        d7.dump();
+        PartialKey key = new PartialKey();
+        key.setComponent("REF_AREA", "ABW");
+        key.setComponent("UNIT", "NUMBER");
+        List<FlatObs> list = data6.getDataSets().get(0).query(key);
+        System.out.println("Size="+list.size());
+        //ValueTypeResolver.resolveDataSet(LocalRegistry.getDefaultWorkspace(), d7, uisStruct.getStructures().getDataStructures().getDataStructures().get(0));
+        for(int i=0;i<list.size();i++) {
+            for(int j=0;j<list.get(i).size();j++) {
+                System.out.print(ValueTypeResolver.resolve(registry, uisStruct.getStructures().getDataStructures().getDataStructures().get(0), data6.getDataSets().get(0).getColumnName(j), list.get(i).getValue(j)));
+                if( j < list.get(i).size()-1)System.out.print(" ");
+                if( j==list.get(i).size()-1) System.out.println();
+            }
+        }
         //data6.dump();
     }
 }

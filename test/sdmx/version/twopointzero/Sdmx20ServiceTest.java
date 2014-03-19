@@ -101,6 +101,7 @@ public class Sdmx20ServiceTest {
         QueryableServiceRegistry registry3 = new QueryableServiceRegistry(new Sdmx20SOAPQueryable("IMF", "http://sdmxws.imf.org/IMFStatWS_SDMX2/sdmx.asmx"));
          
         }*/
+    /*
     @Test
     public void testABS8NR() throws IOException {
         QueryableServiceRegistry registry = new QueryableServiceRegistry(new Sdmx20SOAPQueryable("ABS", "http://stat.abs.gov.au/sdmxws/sdmx.asmx"));
@@ -120,7 +121,8 @@ public class Sdmx20ServiceTest {
         long t3 = System.currentTimeMillis();
         System.out.println("Resolution:"+data4.getDataSets().get(0).size()+" Observations "+(t3-t2)+" ms");
         //data4.dump();
-    }
+    }*/
+    /*
     @Test
     public void testLoad() throws IOException {
         Sdmx20SOAPQueryable queryable = new Sdmx20SOAPQueryable("ABS", "http://stat.abs.gov.au/sdmxws/sdmx.asmx");
@@ -197,9 +199,11 @@ public class Sdmx20ServiceTest {
         long t5 = System.currentTimeMillis();
         System.out.println("Resolution:"+dm.getDataSets().get(0).size()+" Observations "+(t5-t4)+" ms");
         dm.dump();
-    }
+    }*/
     @Test
     public void testABSList() throws IOException {
+        //System.out.println("Waiting 4 seconds");
+        //try{Thread.sleep(4000);}catch(InterruptedException io) {}
         Sdmx20SOAPQueryable queryable = new Sdmx20SOAPQueryable("ABS", "http://stat.abs.gov.au/sdmxws/sdmx.asmx");
         QueryableServiceRegistry registry = new QueryableServiceRegistry(queryable);
         List<DataStructureReferenceType> list = registry.listDataSets();
@@ -207,10 +211,14 @@ public class Sdmx20ServiceTest {
         while(it.hasNext()){
             DataStructureReferenceType ref = it.next();
             System.out.println(ref.getRef().getAgencyId()+":"+ref.getRef().getId()+":"+ref.getRef().getVersion());
+            try{Thread.sleep(4000);}catch(InterruptedException io) {}
+            try{
             DataStructureType ds = registry.findDataStructure(ref.getRef().getAgencyId(), new IDType(ref.getRef().getId().toString()),ref.getRef().getVersion());
             ds.dump();
+            }catch(Exception ie) {}
         }
     }
+    /*
     @Test
     public void testIMFList() throws IOException {
         Sdmx20SOAPQueryable queryable = new Sdmx20SOAPQueryable("IMF", "http://sdmxws.imf.org/IMFStatWS_SDMX2/sdmx.asmx");
@@ -226,6 +234,7 @@ public class Sdmx20ServiceTest {
             
         }
     }
+    */
     /*
     @Test
     public void testOECDList() throws IOException {
