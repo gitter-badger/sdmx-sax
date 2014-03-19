@@ -145,8 +145,8 @@ public class Sdmx20SOAPQueryable implements Queryable {
         baos.write(soapEnd.getBytes());
         // Create a response handler
         byte[] bytes = baos.toByteArray();
-        System.out.println(new String(bytes));
-        System.out.println("---------------------------------");
+        //System.out.println(new String(bytes));
+        //System.out.println("---------------------------------");
         ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         return SdmxIO.parseData(query("GetCompactDataResult", bais, bytes.length),false);
     }
@@ -190,7 +190,7 @@ public class Sdmx20SOAPQueryable implements Queryable {
         this.registry = registry;
     }
 
-    public Reader query(String action, InputStream in, int length) {
+    public Reader query2(String action, InputStream in, int length) {
         HttpClient client = new DefaultHttpClient();
         try {
             HttpPost req = new HttpPost(getServiceURL());
@@ -200,9 +200,9 @@ public class Sdmx20SOAPQueryable implements Queryable {
             req.setEntity(entity);
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             String responseBody = client.execute(req, responseHandler);
-            //System.out.println("--------RESPONSE BODY--------");
-            //System.out.println(responseBody);
-            //System.out.println("--------RESPONSE BODY--------");
+            System.out.println("--------RESPONSE BODY--------");
+            System.out.println(responseBody);
+            System.out.println("--------RESPONSE BODY--------");
             int fromIndex = responseBody.indexOf(action, 0);
             fromIndex = (responseBody.indexOf(">",fromIndex+action.length()))+1;
             int toIndex = responseBody.lastIndexOf("</" + action);
@@ -217,7 +217,7 @@ public class Sdmx20SOAPQueryable implements Queryable {
             return null;
         }
     }
-    public Reader query2(String action, InputStream in, int length) {
+    public Reader query(String action, InputStream in, int length) {
         HttpClient client = new DefaultHttpClient();
         try {
             HttpPost req = new HttpPost(getServiceURL());

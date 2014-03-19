@@ -12,6 +12,9 @@ import sdmx.data.ColumnMapper;
 import sdmx.data.DataSet;
 import sdmx.data.DataSetWriter;
 import sdmx.data.flat.FlatDataSetWriter;
+import sdmx.data.flat.FlatObs;
+import sdmx.data.key.FullKey;
+import sdmx.data.key.PartialKey;
 import sdmx.query.data.DataQuery;
 import sdmx.structure.codelist.CodeType;
 
@@ -252,55 +255,32 @@ public class StructuredDataSet implements DataSet, Attachable {
         this.observations = observations;
     }
 
-    public DataSet query(DataQuery query, DataSetWriter dsw) {
-        ColumnMapper mapper = this.columnMapper;
-        List<Integer> rows = new ArrayList<Integer>();
-        for (int i = 0; i < this.size(); i++) {
-            if (query.getDataWhere().match(mapper, this, i)) {
-                rows.add(new Integer(i));
-            }
+    public List<FlatObs> query(PartialKey key) {
+        List<FlatObs> result = new ArrayList<FlatObs>();
+        for(int i=0;i<this.size();i++) {
+            FlatObs flat = this.getFlatObs(i);
+            if( key.matches(flat,columnMapper)){
+                result.add(flat);
+                }
         }
-        dsw.newDataSet();
-        for (int i = 0; i < rows.size(); i++) {
-            int state = AttachmentLevel.ATTACHMENT_DATASET;
-            for (int j = 0; j < this.getColumnSize(); j++) {
-                Object val = getValue(rows.get(i), j);
-                if (val instanceof CodeType) {
-                    val = ((CodeType) val).getId().toString();
-                }
-                if( val instanceof Double ) val = Double.toString((Double)val);
-                if (mapper.isAttachedToDataSet(j)) {
-                    dsw.writeDataSetComponent(mapper.getColumnName(j), (String) val);
-                    state = AttachmentLevel.ATTACHMENT_DATASET;
-                }
-                if (mapper.isAttachedToSeries(j)) {
-                    if (state == AttachmentLevel.ATTACHMENT_DATASET) {
-                        dsw.newSeries();
-                    }
-                    dsw.writeSeriesComponent(mapper.getColumnName(j), (String) val);
-                    state = AttachmentLevel.ATTACHMENT_SERIES;
-                }
-                if (mapper.isAttachedToObservation(j)) {
-                    if (state == AttachmentLevel.ATTACHMENT_DATASET) {
-                        dsw.newSeries();
-                        dsw.finishSeries();
-                        dsw.newObservation();
-                    }
-                    if (state == AttachmentLevel.ATTACHMENT_SERIES) {
-                        dsw.finishSeries();
-                        dsw.newObservation();
-                    }
-                    dsw.writeObservationComponent(mapper.getColumnName(j), (String) val);
-                    state = AttachmentLevel.ATTACHMENT_OBSERVATION;
-                }
-            }
-            dsw.finishObservation();
+        return result;
+    }
+    
+    public FlatObs getFlatObs(int i) {
+        FlatObs flat = new FlatObs(columnMapper.size());
+        for(int j=0;j<columnMapper.size();j++) {
+            flat.setValue(i, getValue(i,j));
         }
-        return dsw.finishDataSet();
+        return flat;
     }
 
-    public DataSet query(DataQuery query) {
-        DataSetWriter dsw = new FlatDataSetWriter();
-        return query(query, dsw);
+    @Override
+    public FlatObs query(FullKey key) {
+        for (int i = 0; i < this.size(); i++) {
+            if (key.matches(getFlatObs(i),columnMapper)) {
+                return getFlatObs(i);
+            }
+        }
+        return null;
     }
 }

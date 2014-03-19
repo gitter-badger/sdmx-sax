@@ -225,7 +225,7 @@ public class ValueTypeResolver {
                 if (rep.getTextFormat().getTextType() == DataType.STRING) {
                     value = svalue;
                 }
-                if( rep.getTextFormat().getTimeInterval()!=null ) {
+                if (rep.getTextFormat().getTimeInterval() != null) {
                     System.out.println("Time Interval!!!");
                 }
             } else {
@@ -343,13 +343,22 @@ public class ValueTypeResolver {
         for (int i = 0; i < ds.size(); i++) {
             for (int j = 0; j < ds.getColumnSize(); j++) {
                 Object o1 = ds.getValue(i, j);
-                if( o1 instanceof String ) {
-                   Object o2 = tr.resolve(ds.getColumnName(j), (String) o1);
-                //System.out.println("Start Val=" + o1 + ": res=" + o2);
-                   ds.setValue(i, j, o2);
+                if (o1 instanceof String) {
+                    Object o2 = tr.resolve(ds.getColumnName(j), (String) o1);
+                    //System.out.println("Start Val=" + o1 + ": res=" + o2);
+                    ds.setValue(i, j, o2);
                 }
 
             }
+        }
+    }
+
+    public static Object resolve(Registry registry, DataStructureType struct, String col, Object val) {
+        if (val instanceof String) {
+            ValueTypeResolver tr = new ValueTypeResolver(registry, struct);
+            return tr.resolve(col, (String) val);
+        } else {
+            return val;
         }
     }
 }

@@ -4,6 +4,10 @@
  */
 package sdmx.data;
 
+import java.util.List;
+import sdmx.data.flat.FlatObs;
+import sdmx.data.key.FullKey;
+import sdmx.data.key.PartialKey;
 import sdmx.query.data.DataQuery;
 
 /**
@@ -21,6 +25,7 @@ public interface DataSet {
     public void setValue(int row, int col,Object val);
     public void setValue(int row, String col,Object val);
     public void writeTo(DataSetWriter writer);
-    public DataSet query(DataQuery query);
-    public DataSet query(DataQuery query,DataSetWriter dsw);
+    public List<FlatObs> query(PartialKey key);
+    public FlatObs query(FullKey key);
+    public ColumnMapper getColumnMapper();
    }

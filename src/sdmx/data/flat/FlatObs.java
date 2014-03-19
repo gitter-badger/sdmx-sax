@@ -31,4 +31,14 @@ public class FlatObs {
          if( i>=values.size() ) return null;
          return values.get(i);
      }
+     public void dump() {
+         for(int i=0;i<values.size();i++) {
+             System.out.print(values.get(i));
+             if( i<values.size())System.out.print(" ");
+         }
+     }
+     public int size() {
+         return values.size();
+     }
+     
 }
