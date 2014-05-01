@@ -205,6 +205,7 @@ public class Sdmx20ServiceTest {
         //System.out.println("Waiting 4 seconds");
         //try{Thread.sleep(4000);}catch(InterruptedException io) {}
         Sdmx20SOAPQueryable queryable = new Sdmx20SOAPQueryable("ABS", "http://stat.abs.gov.au/sdmxws/sdmx.asmx");
+        queryable.setSoapNamespace("http://stats.oecd.org/OECDStatWS/SDMX/");
         QueryableServiceRegistry registry = new QueryableServiceRegistry(queryable);
         List<DataStructureReferenceType> list = registry.listDataSets();
         Iterator<DataStructureReferenceType> it = list.iterator();

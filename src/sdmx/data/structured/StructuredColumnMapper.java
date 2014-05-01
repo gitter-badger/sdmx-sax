@@ -23,8 +23,10 @@ public class StructuredColumnMapper implements ColumnMapper {
     }
 
     public int getColumnIndex(String s) {
-        for(int i=0;i<columns.size();i++) {
-           if( columns.get(i).getName().equals(s))return i;
+        for (int i = 0; i < columns.size(); i++) {
+            if (columns.get(i).getName().equals(s)) {
+                return i;
+            }
         }
         return -1;
     }
@@ -108,6 +110,19 @@ public class StructuredColumnMapper implements ColumnMapper {
         return -1;
     }
 
+    public int getObservationIndex(int col) {
+        if (!isAttachedToObservation(col)) {
+            throw new RuntimeException("Not attached to obs");
+        }
+        List<String> cols = getObservationColumns();
+        for (int i = 0; i < cols.size(); i++) {
+            if (getColumnIndex(cols.get(i)) == col) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     @Override
     public List<String> getAllColumns() {
         List<String> result = new ArrayList<String>();
@@ -151,41 +166,41 @@ public class StructuredColumnMapper implements ColumnMapper {
 
     @Override
     public boolean isAttachedToDataSet(String s) {
-        return getAttachmentLevel(s)==AttachmentLevel.DATASET;
+        return getAttachmentLevel(s) == AttachmentLevel.DATASET;
     }
 
     @Override
     public boolean isAttachedToDataSet(int i) {
-        return getAttachmentLevel(i)==AttachmentLevel.DATASET;
+        return getAttachmentLevel(i) == AttachmentLevel.DATASET;
     }
 
     @Override
     public boolean isAttachedToSeries(String s) {
-        return getAttachmentLevel(s)==AttachmentLevel.SERIES;
+        return getAttachmentLevel(s) == AttachmentLevel.SERIES;
     }
 
     @Override
     public boolean isAttachedToSeries(int i) {
-        return getAttachmentLevel(i)==AttachmentLevel.SERIES;
+        return getAttachmentLevel(i) == AttachmentLevel.SERIES;
     }
 
     @Override
     public boolean isAttachedToObservation(String s) {
-        return getAttachmentLevel(s)==AttachmentLevel.OBSERVATION;
+        return getAttachmentLevel(s) == AttachmentLevel.OBSERVATION;
     }
 
     @Override
     public boolean isAttachedToObservation(int i) {
-        return getAttachmentLevel(i)==AttachmentLevel.OBSERVATION;
+        return getAttachmentLevel(i) == AttachmentLevel.OBSERVATION;
     }
 
     @Override
     public boolean isAttachedToGroup(String s) {
-        return getAttachmentLevel(s)==AttachmentLevel.GROUP;
+        return getAttachmentLevel(s) == AttachmentLevel.GROUP;
     }
 
     @Override
     public boolean isAttachedToGroup(int i) {
-        return getAttachmentLevel(i)==AttachmentLevel.GROUP;
+        return getAttachmentLevel(i) == AttachmentLevel.GROUP;
     }
 }

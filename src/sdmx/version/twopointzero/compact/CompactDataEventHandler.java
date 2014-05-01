@@ -25,9 +25,12 @@ import javax.xml.bind.JAXBException;
 import org.apache.xmlbeans.XmlObject;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import sdmx.common.ActionType;
 import sdmx.common.DataType;
 import sdmx.common.Name;
+import sdmx.common.ObservationalTimePeriodType;
 import sdmx.common.PayloadStructureType;
+import sdmx.common.TextType;
 import sdmx.commonreferences.ConceptReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.NestedIDType;
@@ -43,6 +46,7 @@ import sdmx.message.HeaderTimeType;
 import sdmx.message.PartyType;
 import sdmx.message.SenderType;
 import sdmx.message.StructureType;
+import sdmx.structure.base.Component;
 import sdmx.structure.base.RepresentationType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
@@ -50,12 +54,11 @@ import sdmx.structure.concept.ConceptType;
 import sdmx.structure.datastructure.AttributeListType;
 import sdmx.structure.datastructure.AttributeType;
 import sdmx.structure.datastructure.DataStructureComponents;
+import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionListType;
 import sdmx.structure.datastructure.DimensionType;
 import sdmx.structure.datastructure.MeasureListType;
 import sdmx.version.twopointzero.Sdmx20EventHandler;
-import sdmx.structure.base.Component;
-import sdmx.structure.datastructure.DataStructureType;
 import sdmx.workspace.LocalRegistry;
 import sdmx.workspace.Registry;
 import sdmx.xml.DateTime;
@@ -75,20 +78,34 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
     public static final int STATE_HEADERID = 2;
     public static final int STATE_HEADERTEST = 3;
     public static final int STATE_HEADERTRUNCATED = 4;
-    public static final int STATE_HEADERPREPARED = 5;
-    public static final int STATE_HEADERSENDER = 6;
-    public static final int STATE_HEADERNAME = 7;
-    public static final int STATE_HEADEREND = 8;
-    public static final int STATE_DATASET = 9;
-    public static final int STATE_DATASETEND = 10;
-    public static final int STATE_SERIES = 11;
-    public static final int STATE_SERIESEND = 12;
-    public static final int STATE_OBS = 13;
-    public static final int STATE_OBSEND = 14;
-    public static final int STATE_FINISH = 15;
-    public static final int STATE_GROUP = 16;
-    public static final int STATE_GROUPEND = 17;
-    //StructureType struct = null;
+    public static final int STATE_HEADERNAME = 5;
+    public static final int STATE_HEADERPREPARED = 6;
+    public static final int STATE_HEADERSENDER = 7;
+    public static final int STATE_SENDERNAME = 8;
+    public static final int STATE_SENDERNAMEEND = 9;
+    public static final int STATE_RECEIVERNAME = 10;
+    public static final int STATE_RECEIVERNAMEEND = 11;
+    public static final int STATE_DATASETACTION = 12;
+    public static final int STATE_DATASETACTIONEND = 13;
+    public static final int STATE_EXTRACTED = 14;
+    public static final int STATE_EXTRACTEDEND = 15;
+    public static final int STATE_REPORTINGBEGIN = 16;
+    public static final int STATE_REPORTINGBEGINEND = 17;
+    public static final int STATE_REPORTINGEND = 18;
+    public static final int STATE_REPORTINGENDEND = 19;
+    public static final int STATE_HEADEREND = 20;
+    public static final int STATE_DATASET = 21;
+    public static final int STATE_DATASETEND = 22;
+    public static final int STATE_SERIES = 23;
+    public static final int STATE_SERIESEND = 24;
+    public static final int STATE_OBS = 25;
+    public static final int STATE_OBSEND = 26;
+    public static final int STATE_FINISH = 27;
+    public static final int STATE_GROUP = 28;
+    public static final int STATE_GROUPEND = 29;
+    
+    String namespace = null;
+    String namespaceprefix = null;
     private BaseHeaderType header = new BaseHeaderType();
     private List<PayloadStructureType> payloads = new ArrayList<PayloadStructureType>();
     public int state = -1;
@@ -96,6 +113,13 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
     private boolean in_group = false;
     private boolean in_series = false;
     DataSetWriter writer = new FlatDataSetWriter();
+    
+    String xmlLang = null;
+    Name name = null; // Temp Name
+    TextType telephone = null;
+    TextType dept = null;
+    
+    
     
     DataStructureType keyFamily = null;
     
@@ -114,6 +138,8 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
         ArrayList<DataSet> dataSets = new ArrayList<DataSet>();
         dataSets.add(writer.finishDataSet());
         doc.setDataSets(dataSets);
+        doc.setNamespace(namespace);
+        doc.setNamespacePrefix(namespaceprefix);
         return doc;
     }
 
@@ -181,12 +207,14 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
         // Insert witty assertions here
     }
 
-    public void startDataSet(String uri, Attributes atts) throws URISyntaxException {
+    public void startDataSet(String uri,String qName, Attributes atts) throws URISyntaxException {
         state = STATE_DATASET;
         PayloadStructureType payload = new PayloadStructureType();
         if (atts.getValue("keyFamilyURI") != null) {
             payload.setStructureURL(new anyURI(atts.getValue("keyFamilyURI")));
         }
+        namespace = uri;
+        namespaceprefix = qName.substring(0,qName.lastIndexOf(":DataSet"));
         payload.setStructureID(new ID("STR1"));
         /*
         if( keyFamily==null ) {
@@ -212,7 +240,7 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
         state = STATE_SERIES;
         in_series = true;
         writer.newSeries();
-        for(int i=0;i<atts.getLength();i++) {
+        for(int i=atts.getLength()-1;i>=0;i--) {
             String name = atts.getLocalName(i);
             String val = atts.getValue(i);
             writer.writeSeriesComponent(name, val);
@@ -225,7 +253,7 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
         }
         state = STATE_OBS;
         writer.newObservation();
-        for(int i=0;i<atts.getLength();i++) {
+        for(int i=atts.getLength()-1;i>=0;i--) {
             String name = atts.getLocalName(i);
             String val = atts.getValue(i);
             writer.writeObservationComponent(name, val);
@@ -266,8 +294,9 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
         state = STATE_FINISH;
     }
 
-    public void startName() {
+    public void startName(String uri, Attributes atts) {
         state = STATE_HEADERNAME;
+        xmlLang = atts.getValue("xml:lang");
     }
 
     public void endName() {
@@ -296,11 +325,59 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
                 break;
             case STATE_HEADERNAME:
                 List<Name> names = new ArrayList<Name>();
-                Name name = new Name(null, new String(c));
+                Name name = new Name(xmlLang, new String(c));
                 names.add(name);
                 header.setNames(names);
                 this.state = STATE_HEADER;
                 break;
+            case STATE_DATASETACTION:
+                header.setDataSetAction(ActionType.fromString(new String(c)));
+                this.state = STATE_HEADER;
+                break;
+            case STATE_EXTRACTED:
+                header.setExtracted(DateTime.fromString(new String(c)));
+                this.state = STATE_HEADER;
+                break;
+            case STATE_REPORTINGBEGIN:
+                header.setReportingBegin(new ObservationalTimePeriodType(new String(c)));
+                this.state = STATE_HEADER;
+                break;
+            case STATE_REPORTINGEND:
+                header.setReportingEnd(new ObservationalTimePeriodType(new String(c)));
+                this.state = STATE_HEADER;
+                break;
         }
+    }
+
+    void startDataSetAction(Attributes atts) {
+        state = STATE_DATASETACTION;
+    }
+
+    void endDataSetAction() {
+        state = STATE_DATASETACTIONEND;
+    }
+
+    void startExtracted(Attributes atts) {
+        state = STATE_EXTRACTED;
+    }
+
+    void startReportingBegin(Attributes atts) {
+        state = STATE_REPORTINGBEGIN;
+    }
+
+    void startReportingEnd(Attributes atts) {
+        state = STATE_REPORTINGEND;
+    }
+
+    void endExtracted() {
+        state = STATE_EXTRACTEDEND;
+    }
+
+    void endReportingBegin() {
+        state = STATE_REPORTINGBEGINEND;
+    }
+
+    void endReportingEnd() {
+        state = STATE_REPORTINGENDEND;
     }
 }

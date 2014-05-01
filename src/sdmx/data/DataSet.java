@@ -5,6 +5,7 @@
 package sdmx.data;
 
 import java.util.List;
+import sdmx.common.ActionType;
 import sdmx.data.flat.FlatObs;
 import sdmx.data.key.FullKey;
 import sdmx.data.key.PartialKey;
@@ -28,4 +29,4 @@ public interface DataSet {
     public List<FlatObs> query(PartialKey key);
     public FlatObs query(FullKey key);
     public ColumnMapper getColumnMapper();
-   }
+    }

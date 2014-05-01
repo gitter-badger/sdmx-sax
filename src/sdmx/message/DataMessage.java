@@ -28,6 +28,9 @@ import sdmx.structure.StructuresType;
  * @author James
  */
 public class DataMessage extends MessageType {
+    private String namespace = null;
+    private String namespacePrefix = null;
+    
     private List<DataSet> dataSets = null;
     public DataMessage(){
     }
@@ -52,5 +55,33 @@ public class DataMessage extends MessageType {
         for(int i=0;i<dataSets.size();i++) {
             dataSets.get(i).dump();
         }
+    }
+
+    /**
+     * @return the namespace
+     */
+    public String getNamespace() {
+        return namespace;
+    }
+
+    /**
+     * @param namespace the namespace to set
+     */
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
+    }
+
+    /**
+     * @return the namespacePrefix
+     */
+    public String getNamespacePrefix() {
+        return namespacePrefix;
+    }
+
+    /**
+     * @param namespacePrefix the namespacePrefix to set
+     */
+    public void setNamespacePrefix(String namespacePrefix) {
+        this.namespacePrefix = namespacePrefix;
     }
 }

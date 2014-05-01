@@ -107,18 +107,26 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
             } else if ("Test".equals(localName)) {
                 eh.startHeaderTest();
             } else if ("Name".equals(localName)) {
-                eh.startName();
+                eh.startName(uri,atts);
             } else if ("Truncated".equals(localName)) {
                 eh.startHeaderTruncated();
             } else if ("Prepared".equals(localName)) {
                 eh.startHeaderPrepared();
             } else if ("Sender".equals(localName)) {
                 eh.startHeaderSender(atts);
+            } else if ("DataSetAction".equals(localName)) {
+                eh.startDataSetAction(atts);
+            } else if ("Extracted".equals(localName)) {
+                eh.startExtracted(atts);
+            } else if ("ReportingBegin".equals(localName)) {
+                eh.startReportingBegin(atts);
+            } else if ("ReportingEnd".equals(localName)) {
+                eh.startReportingEnd(atts);
             }
         }
         if ("DataSet".equals(localName)) {
             try {
-                eh.startDataSet(uri, atts);
+                eh.startDataSet(uri,qName, atts);
             } catch (URISyntaxException ex) {
                 Logger.getLogger(CompactDataContentHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -166,6 +174,14 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
                 eh.endHeaderPrepared();
             } else if ("Sender".equals(localName)) {
                 eh.endHeaderSender();
+            }else if ("DataSetAction".equals(localName)) {
+                eh.endDataSetAction();
+            }else if ("Extracted".equals(localName)) {
+                eh.endExtracted();
+            } else if ("ReportingBegin".equals(localName)) {
+                eh.endReportingBegin();
+            } else if ("ReportingEnd".equals(localName)) {
+                eh.endReportingEnd();
             }
         }
         if ("DataSet".equals(localName)) {

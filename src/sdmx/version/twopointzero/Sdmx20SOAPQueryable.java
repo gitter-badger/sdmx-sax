@@ -61,7 +61,7 @@ public class Sdmx20SOAPQueryable implements Queryable {
 
     private String soapNamespace = "http://stats.oecd.org/OECDStatWS/SDMX/";
     private String mediaType = "application/soap+xml;charset=UTF-8";
-    
+
     private String agencyId = "";
     private String serviceURL = "";
     private Registry registry = null;
@@ -84,10 +84,10 @@ public class Sdmx20SOAPQueryable implements Queryable {
         try {
             StructureType st = getDataStructure(qm);
             Iterator<DataStructureType> it = st.getStructures().getDataStructures().getDataStructures().iterator();
-            while(it.hasNext()) {
+            while (it.hasNext()) {
                 DataStructureType ds = it.next();
-                DataStructureRefType ref = new DataStructureRefType(ds.getAgencyID(),ds.getId(),ds.getVersion());
-                DataStructureReferenceType reference = new DataStructureReferenceType(ref,null);
+                DataStructureRefType ref = new DataStructureRefType(ds.getAgencyID(), ds.getId(), ds.getVersion());
+                DataStructureReferenceType reference = new DataStructureReferenceType(ref, null);
                 dataSetList.add(reference);
             }
         } catch (MalformedURLException ex) {
@@ -102,7 +102,7 @@ public class Sdmx20SOAPQueryable implements Queryable {
     public StructureType getDataStructure(DataStructureQueryMessage message) throws MalformedURLException, IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Document doc = Sdmx20QueryWriter.toDocument(message);
-        String soapStart = "<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:sdmx=\""+soapNamespace+"\">\n"
+        String soapStart = "<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:sdmx=\"" + soapNamespace + "\">\n"
                 + "   <soap:Header/>\n"
                 + "   <soap:Body>\n"
                 + "      <sdmx:GetDataStructureDefinition>\n"
@@ -120,7 +120,7 @@ public class Sdmx20SOAPQueryable implements Queryable {
         baos.write(soapEnd.getBytes());
         // Create a response handler
         byte[] bytes = baos.toByteArray();
-           // System.out.println(new String(bytes));
+        // System.out.println(new String(bytes));
         ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         return SdmxIO.parseStructure(query("GetDataStructureDefinitionResult", bais, bytes.length));
     }
@@ -130,7 +130,7 @@ public class Sdmx20SOAPQueryable implements Queryable {
         Document doc = Sdmx20QueryWriter.toDocument(message);
         String soapStart = "<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n"
                 + "  <soap12:Body>\n"
-                + "    <GetCompactData xmlns=\""+soapNamespace+"\">\n"
+                + "    <GetCompactData xmlns=\"" + soapNamespace + "\">\n"
                 + "      <QueryMessage>";
         baos.write(soapStart.getBytes());
         Format format = Format.getCompactFormat();
@@ -148,7 +148,7 @@ public class Sdmx20SOAPQueryable implements Queryable {
         //System.out.println(new String(bytes));
         //System.out.println("---------------------------------");
         ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        return SdmxIO.parseData(query("GetCompactDataResult", bais, bytes.length),false);
+        return SdmxIO.parseData(query("GetCompactDataResult", bais, bytes.length), false);
     }
 
     public String getAgencyId() {
@@ -204,7 +204,7 @@ public class Sdmx20SOAPQueryable implements Queryable {
             System.out.println(responseBody);
             System.out.println("--------RESPONSE BODY--------");
             int fromIndex = responseBody.indexOf(action, 0);
-            fromIndex = (responseBody.indexOf(">",fromIndex+action.length()))+1;
+            fromIndex = (responseBody.indexOf(">", fromIndex + action.length())) + 1;
             int toIndex = responseBody.lastIndexOf("</" + action);
             responseBody = responseBody.substring(fromIndex, toIndex);
             //System.out.println("--------AFTER STRIP--------");
@@ -217,6 +217,7 @@ public class Sdmx20SOAPQueryable implements Queryable {
             return null;
         }
     }
+
     public Reader query(String action, InputStream in, int length) {
         HttpClient client = new DefaultHttpClient();
         try {
@@ -226,22 +227,13 @@ public class Sdmx20SOAPQueryable implements Queryable {
             HttpEntity entity = new InputStreamEntity(in, length);
             req.setEntity(entity);
             HttpResponse response = client.execute(req);
-            
-            SOAPStrippingInputStream stripper = new SOAPStrippingInputStream(response.getEntity().getContent(),"<"+action+">","</"+action+">");
-            //System.out.println("--------RESPONSE BODY--------");
-            //System.out.println(responseBody);
-            //System.out.println("--------RESPONSE BODY--------");
-            /*
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            IOUtils.copy(stripper,baos);
-            System.out.println("Action="+action);
-            String responseBody = new String(baos.toByteArray());
-            System.out.println("--------AFTER STRIP--------");
-            System.out.println(responseBody);
-            System.out.println("--------AFTER STRIP--------");
-            */
-            InputStreamReader isr = new InputStreamReader(stripper);
-            return isr;
+            if (response.getStatusLine().getStatusCode() == 200) {
+                SOAPStrippingInputStream stripper = new SOAPStrippingInputStream(response.getEntity().getContent(), "<" + action + ">", "</" + action + ">");
+                InputStreamReader isr = new InputStreamReader(stripper);
+                return isr;
+            } else {
+                return null;
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;

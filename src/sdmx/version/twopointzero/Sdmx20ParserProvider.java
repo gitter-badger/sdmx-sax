@@ -6,25 +6,29 @@ package sdmx.version.twopointzero;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.stream.XMLStreamException;
 import org.apache.xmlbeans.XmlException;
+import org.jdom.Namespace;
 import org.xml.sax.SAXException;
 import sdmx.data.DataSetWriter;
+import sdmx.data.flat.FlatDataSet;
+import sdmx.data.flat.FlatDataSetWriter;
+import sdmx.data.structured.StructuredDataWriter;
 import sdmx.exception.TypeValueNotFoundException;
+import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
 import sdmx.version.common.SdmxIO;
 import sdmx.version.common.SdmxParserProvider;
 import sdmx.version.twopointone.Sdmx21ParserProvider;
-import sdmx.data.flat.FlatDataSet;
-import sdmx.data.flat.FlatDataSetWriter;
-import sdmx.data.structured.StructuredDataWriter;
-import sdmx.message.DataMessage;
 import sdmx.version.twopointzero.compact.CompactDataContentHandler;
 import sdmx.version.twopointzero.compact.CompactDataEventHandler;
 import sdmx.version.twopointzero.generic.GenericDataContentHandler;
 import sdmx.version.twopointzero.generic.GenericDataEventHandler;
+import sdmx.version.twopointzero.writer.CompactDataWriter;
 import sdmx.workspace.LocalRegistry;
 import sdmx.workspace.Registry;
 
@@ -311,5 +315,8 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
        if( isCompactData(header))return parseCompactData(in,flat);
        if( isGenericData(header))return parseGenericData(in,flat);
        return null;
+    }
+    public void writeDataMessage(DataMessage msg,OutputStream out) throws XMLStreamException {
+        CompactDataWriter.write(msg,out);
     }
 }

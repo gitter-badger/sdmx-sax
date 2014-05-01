@@ -52,7 +52,7 @@ public class SOAPStrippingInputStream extends FilterInputStream {
             //System.out.print((char)next);
             inQueue.offer(next);
             if (next == -1) {
-                return;
+                throw new IOException("Stream Closed");
             }
         }
     }

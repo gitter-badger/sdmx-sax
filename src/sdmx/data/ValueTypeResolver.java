@@ -361,4 +361,12 @@ public class ValueTypeResolver {
             return val;
         }
     }
+    public static String columnToString(Object o) {
+        if( o instanceof String ) return (String)o;
+        if( o instanceof CodeType ) return ((CodeType)o).getId().toString();
+        if( o instanceof Double ) return Double.toString((Double)o);
+        if( o instanceof Integer ) return Integer.toString((Integer)o);
+        System.out.println("Object :" + o.getClass()+" not in list of possible column values");
+        return "";
+    }
 }

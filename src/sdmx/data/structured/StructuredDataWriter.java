@@ -48,7 +48,6 @@ public class StructuredDataWriter implements DataSetWriter {
 
     @Override
     public void newObservation() {
-        //System.out.println("New Obs");
         obs = new Obs();
         obs.setColumnMapper(mapper);
     }
@@ -60,7 +59,7 @@ public class StructuredDataWriter implements DataSetWriter {
 
     @Override
     public void writeSeriesComponent(String name, String val) {
-        //System.out.println("S Name:"+name+":"+val);
+     //   System.out.println("S Name:"+name+":"+val);
         series.setValue(name, val);
     }
 
