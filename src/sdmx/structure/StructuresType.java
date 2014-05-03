@@ -4,14 +4,29 @@
  */
 package sdmx.structure;
 
+import java.util.Collections;
 import java.util.List;
+import sdmx.commonreferences.ConceptReferenceType;
+import sdmx.commonreferences.DataStructureReferenceType;
+import sdmx.commonreferences.IDType;
+import sdmx.commonreferences.ItemSchemeReferenceBaseType;
+import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.StructureOrUsageReferenceType;
+import sdmx.commonreferences.VersionType;
+import sdmx.message.DataStructure;
+import sdmx.message.StructureType;
+import sdmx.structure.codelist.CodelistType;
+import sdmx.structure.concept.ConceptSchemeType;
+import sdmx.structure.concept.ConceptType;
+import sdmx.structure.datastructure.DataStructureType;
+import sdmx.workspace.Registry;
 
 /**
  *
  * @author James
  */
-public class StructuresType {
+public class StructuresType implements Registry {
+
     private List<StructureOrUsageReferenceType> relatedStructure;
     private DataflowsType dataFlows = null;
     private MetadataflowsType metadataFlows = null;
@@ -21,7 +36,7 @@ public class StructuresType {
     private HierarchicalCodelistsType hierarchicalCodelists = null;
     private ConceptsType concepts = null;
     private MetadataStructuresType metadataStructures = null;
-    private DataStructuresType dataStructures=null;
+    private DataStructuresType dataStructures = null;
     private StructureSetsType structureSets = null;
     private ReportingTaxonomiesType reportingTaxonomies = null;
     private ProcessesType processes = null;
@@ -236,6 +251,142 @@ public class StructuresType {
      */
     public void setProvisionAgreements(ProvisionAgreementsType provisionAgreements) {
         this.provisionAgreements = provisionAgreements;
+    }
+
+    @Override
+    public void load(StructureType struct) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void unload(StructureType struct) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DataStructureType findDataStructure(NestedNCNameIDType agency, IDType id, VersionType version) {
+        DataStructureType found = getDataStructures().findDataStructure(agency, id, version);
+        if (found != null) {
+            return found;
+        }
+        return null;
+    }
+
+    @Override
+    public DataStructureType findDataStructure(NestedNCNameIDType agency, IDType id) {
+        DataStructureType found = getDataStructures().findDataStructure(agency, id);
+        if (found != null) {
+            return found;
+        }
+        return null;
+    }
+
+    @Override
+    public ConceptSchemeType findConceptScheme(NestedNCNameIDType agencyID, ConceptReferenceType conceptRef) {
+        ConceptsType ct = getConcepts();
+        ConceptSchemeType cs = null;
+        if (ct != null) {
+            cs = ct.findConceptScheme(agencyID, conceptRef);
+        }
+        if (cs != null) {
+            return cs;
+        }
+        return null;
+
+    }
+
+    @Override
+    public CodelistType findCodelist(ItemSchemeReferenceBaseType enumeration) {
+        CodelistType cs = getCodelists().findCodelist(enumeration);
+        if (cs != null) {
+            return cs;
+        }
+        return null;
+    }
+
+    @Override
+    public CodelistType findCodelistById(IDType id) {
+        CodelistType cl = getCodelists().findCodelistById(id);
+        if (cl != null) {
+            return cl;
+        }
+        return null;
+    }
+
+    @Override
+    public CodelistType findCodelist(NestedNCNameIDType codelistAgency, IDType codelist, VersionType codelistVersion) {
+        return findCodelist(codelistAgency.getString(), codelist.getString(), codelistVersion == null ? null : codelistVersion.getString());
+    }
+
+    @Override
+    public CodelistType findCodelist(NestedNCNameIDType codelistAgency, IDType codelist) {
+        CodelistType cl = getCodelists().findCodelist(codelistAgency, codelist);
+        if (cl != null) {
+            return cl;
+        }
+        return null;
+    }
+
+    @Override
+    public CodelistType findCodelist(String codelistAgency, String codelist, String codelistVersion) {
+        CodelistType cl = getCodelists().findCodelist(codelistAgency, codelist, codelistVersion);
+        if (cl != null) {
+            return cl;
+        }
+        return null;
+    }
+
+    @Override
+    public CodelistType findCodelist(String codelistAgency, String codelist) {
+        CodelistType cl = getCodelists().findCodelist(new NestedNCNameIDType(codelistAgency), new IDType(codelist));
+        if (cl != null) {
+            return cl;
+        }
+        return null;
+    }
+
+    @Override
+    public ConceptSchemeType findConceptScheme(NestedNCNameIDType csa, IDType csi) {
+        ConceptSchemeType cs = getConcepts().findConceptScheme(csa, csi);
+        if (cs != null) {
+            return cs;
+        }
+        return null;
+    }
+
+    @Override
+    public ConceptSchemeType findConceptSchemeById(IDType id) {
+        ConceptSchemeType cs = getConcepts().findConceptSchemeById(id);
+        if (cs != null) {
+            return cs;
+        }
+        return null;
+    }
+
+    public ConceptType findConcept(NestedNCNameIDType agency, IDType id) {
+        ConceptSchemeType cs = findConceptScheme(agency, id);
+        if (cs == null) {
+            // This is for ABS Data Structures -> the OBS_VALUE
+            // has an agency of 'OECD' and this agency can't be inferred from the
+            // keyfamily agency, or sender agency.
+            cs = findConceptSchemeById(id);
+            return cs.findConcept(id);
+        }
+        return cs.findConcept(id);
+    }
+
+    @Override
+    public ConceptType findConcept(IDType id) {
+            ConceptType ct = getConcepts().findConcept(id);
+            if (ct != null) {
+                return ct;
+            }
+            return null;
+    }
+
+    @Override
+    public List<DataStructureReferenceType> listDataSets() {
+        return Collections.EMPTY_LIST;
     }
 
 }

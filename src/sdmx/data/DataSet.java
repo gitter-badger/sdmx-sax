@@ -29,4 +29,6 @@ public interface DataSet {
     public List<FlatObs> query(PartialKey key);
     public FlatObs query(FullKey key);
     public ColumnMapper getColumnMapper();
+    public List<Group> getGroups();
+    public int groupSize();
     }

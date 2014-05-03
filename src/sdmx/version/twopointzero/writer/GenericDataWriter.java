@@ -22,6 +22,7 @@ import org.jdom.output.XMLOutputter;
 import sdmx.common.Name;
 import sdmx.data.DataSet;
 import sdmx.data.ValueTypeResolver;
+import sdmx.data.structured.Obs;
 import sdmx.data.structured.Series;
 import sdmx.data.structured.StructuredColumnMapper;
 import sdmx.data.structured.StructuredDataSet;
@@ -29,30 +30,32 @@ import sdmx.message.*;
 
 public class GenericDataWriter {
 
-    public static void write(DataMessage message, DataStructure dsd, Namespace name, OutputStream out) throws XMLStreamException {
+    public static void write(DataMessage message, OutputStream out) throws XMLStreamException {
         //setup this like outputDocument
         XMLOutputFactory factory = XMLOutputFactory.newInstance();
         XMLStreamWriter writer = factory.createXMLStreamWriter(out);
         //output to a file
+        writeDataMessage(message, writer);
         writer.close();
     }
 
     /**
      *
      */
-    public static void writeDataMessage(DataMessage msg, DataStructure dsd, XMLStreamWriter writer) throws XMLStreamException {
+    public static void writeDataMessage(DataMessage msg, XMLStreamWriter writer) throws XMLStreamException {
         // Create the root element
+        String namespace = msg.getNamespace();
+        String namespaceprefix = msg.getNamespacePrefix();
         writer.writeStartDocument();
         writer.writeStartElement("GenericData");
-        writer.writeNamespace("message", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message");
+        writer.writeDefaultNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message");
         writer.writeNamespace("message", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message");
         writer.writeNamespace("common", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/common");
         writer.writeNamespace("compact", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/compact");
         writer.writeNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
         writer.writeNamespace("schemaLocation", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message http://www.sdmx.org/docs/2_0/SDMXMessage.xsd");
-        writer.writeEndElement();
-        writer.writeStartElement(null, "Header");
-        Element header = new Element("Header");
+        writer.writeNamespace(namespaceprefix, namespace);
+        writer.writeStartElement("Header");
         if (msg.getHeader().getId() != null && !"".equals(msg.getHeader().getId())) {
             writer.writeStartElement("ID");
             writer.writeCharacters(msg.getHeader().getId());
@@ -64,13 +67,12 @@ public class GenericDataWriter {
             writer.writeEndElement();
         }
         if (msg.getHeader().getNames().size() > 0) {
-            writer.writeStartElement("Name");
-            writer.writeCharacters(msg.getHeader().getNames().get(0).getText());
-            writer.writeEndElement();
-        } else if (msg.getHeader().getNames().size() > 1) {
-            writer.writeStartElement("Name");
-            writer.writeCharacters(msg.getHeader().getNames().get(0).getText());
-            writer.writeEndElement();
+            for (int i = 0; i < msg.getHeader().getNames().size(); i++) {
+                writer.writeStartElement("Name");
+                writer.writeAttribute("xml:lang", msg.getHeader().getNames().get(i).getLang());
+                writer.writeCharacters(msg.getHeader().getNames().get(i).getText());
+                writer.writeEndElement();
+            }
         }
         if (msg.getHeader().getPrepared() != null && !"".equals(msg.getHeader().getPrepared())) {
             writer.writeStartElement("Prepared");
@@ -86,31 +88,58 @@ public class GenericDataWriter {
 
         if (msg.getHeader().getSender() != null && !"".equals(msg.getHeader().getSender())) {
             writer.writeStartElement("Sender");
-            writer.writeCharacters(msg.getHeader().getSender().getId().toString());
-            if (msg.getHeader().getSender().getContacts().size() > 0) {
+            writer.writeAttribute("id", msg.getHeader().getSender().getId().toString());
+            if (msg.getHeader().getSender().getContacts() != null && msg.getHeader().getSender().getContacts().size() > 0) {
                 writeContact(writer, msg.getHeader().getSender().getContacts().get(0));
             }
             writer.writeEndElement();
         }
-        writer.writeStartElement("DataSet");
+        if (msg.getHeader().getReceivers() != null && msg.getHeader().getReceivers().size() > 0) {
+            writer.writeStartElement("Receiver");
+            writer.writeAttribute("id", msg.getHeader().getReceivers().get(0).getId().toString());
+            if (msg.getHeader().getReceivers().get(0).getContacts() != null && msg.getHeader().getReceivers().get(0).getContacts().size() > 0) {
+                writeContact(writer, msg.getHeader().getReceivers().get(0).getContacts().get(0));
+            }
+            writer.writeEndElement();
+        }
+        if (msg.getHeader().getDataSetAction() != null && !"".equals(msg.getHeader().getDataSetAction())) {
+            writer.writeStartElement("DataSetAction");
+            writer.writeCharacters(msg.getHeader().getDataSetAction().getString());
+            writer.writeEndElement();
+        }
+        if (msg.getHeader().getExtracted() != null) {
+            writer.writeStartElement("Extracted");
+            writer.writeCharacters(msg.getHeader().getExtracted().toString());
+            writer.writeEndElement();
+        }
+        if (msg.getHeader().getReportingBegin() != null) {
+            writer.writeStartElement("ReportingBegin");
+            writer.writeCharacters(msg.getHeader().getReportingBegin().toString());
+            writer.writeEndElement();
+        }
+        if (msg.getHeader().getReportingEnd() != null) {
+            writer.writeStartElement("ReportingEnd");
+            writer.writeCharacters(msg.getHeader().getReportingEnd().toString());
+            writer.writeEndElement();
+        }
+        writer.writeEndElement();
+        writer.writeStartElement(namespaceprefix, "DataSet", namespace);
 
         DataSet ds = msg.getDataSets().get(0);
-        if (msg.getHeader().getDataSetAction() != null && !"".equals(msg.getHeader().getDataSetAction())) {
-            writer.writeAttribute("Action", msg.getHeader().getDataSetAction().getString());
-        }
-        if (msg.getHeader().getDataProvider().getRef().getAgencyId() != null) {
+
+        if (msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider().getRef() != null && msg.getHeader().getDataProvider().getRef().getAgencyId() != null) {
             writer.writeAttribute("DataFlowAgencyID", msg.getHeader().getDataProvider().getRef().getAgencyId().toString());
         }
         if (msg.getHeader().getDataSetID() != null && msg.getHeader().getDataSetID().size() > 0) {
             writer.writeAttribute("DataFlowID", msg.getHeader().getDataSetID().get(0).toString());
         }
-        if (msg.getHeader().getDataProvider().getRef().getAgencyId() != null) {
+        if (msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider().getRef() != null && msg.getHeader().getDataProvider().getRef().getAgencyId() != null) {
             writer.writeAttribute("DataProviderID", msg.getHeader().getDataProvider().getRef().getAgencyId().toString());
         }
-        if (msg.getHeader().getDataProvider().getRef().getAgencyId() != null) {
+        if (msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider().getRef() != null && msg.getHeader().getDataProvider().getRef().getAgencyId() != null) {
             writer.writeAttribute("DataProviderSchemeAgencyId", msg.getHeader().getDataProvider().getRef().getAgencyId().toString());
         }
-        if (msg.getHeader().getDataProvider().getRef().getAgencyId() != null) {
+        if (msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider().getRef() != null && msg.getHeader().getDataProvider().getRef().getAgencyId() != null) {
             writer.writeAttribute("DataProviderSchemeId", msg.getHeader().getDataProvider().getRef().getId().toString());
         }
         if (msg.getHeader().getDataSetID() != null && msg.getHeader().getDataSetID().size() > 0) {
@@ -136,25 +165,31 @@ public class GenericDataWriter {
             StructuredDataSet sds = (StructuredDataSet) ds;
             StructuredColumnMapper mapper = (StructuredColumnMapper) sds.getColumnMapper();
             for (int i = 0; i < sds.getSeriesList().size(); i++) {
-                writer.writeStartElement("Series");
+                writer.writeStartElement(namespaceprefix, "Series", namespace);
                 Series s = sds.getSeriesList().get(i);
                 for (int j = 0; j < mapper.size(); j++) {
                     if (mapper.isAttachedToSeries(j)) {
                         writer.writeAttribute(mapper.getColumnName(j), ValueTypeResolver.columnToString(s.getValue(j)));
                     }
                 }
-                for (int k = 0; k < sds.getSeriesList().size(); i++) {
-                    writer.writeStartElement("Observation");
+                for (int k = 0; k < s.getObservations().size(); k++) {
+                    writer.writeEmptyElement(namespaceprefix, "Obs", namespace);
+                    Obs o = s.getObservations().get(k);
                     for (int j = 0; j < mapper.size(); j++) {
-                        if (mapper.isAttachedToSeries(j)) {
-                            writer.writeAttribute(mapper.getColumnName(j), ValueTypeResolver.columnToString(sds.getSeries(i).getValue(j)));
+                        if (mapper.isAttachedToObservation(j)) {
+                            writer.writeAttribute(mapper.getColumnName(j), ValueTypeResolver.columnToString(o.getObservationValue(j)));
                         }
                     }
-
+                    writer.writeEndElement();
                 }
+                writer.writeEndElement();
             }
         }
+        writer.writeEndElement();
+        writer.writeEndElement();
+        writer.writeEndDocument();
     }
+
     private static boolean isStringInList(List<String> list, String id) {
         Iterator<String> it = list.iterator();
         while (it.hasNext()) {

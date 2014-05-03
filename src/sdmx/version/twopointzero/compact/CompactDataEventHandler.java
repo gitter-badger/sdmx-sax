@@ -72,7 +72,6 @@ import sdmx.xml.anyURI;
  */
 public class CompactDataEventHandler extends Sdmx20EventHandler {
 
-
     public static final int STATE_START = 0;
     public static final int STATE_HEADER = 1;
     public static final int STATE_HEADERID = 2;
@@ -103,7 +102,7 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
     public static final int STATE_FINISH = 27;
     public static final int STATE_GROUP = 28;
     public static final int STATE_GROUPEND = 29;
-    
+
     String namespace = null;
     String namespaceprefix = null;
     private BaseHeaderType header = new BaseHeaderType();
@@ -113,20 +112,19 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
     private boolean in_group = false;
     private boolean in_series = false;
     DataSetWriter writer = new FlatDataSetWriter();
-    
+
     String xmlLang = null;
     Name name = null; // Temp Name
     TextType telephone = null;
     TextType dept = null;
-    
-    
-    
+
     DataStructureType keyFamily = null;
-    
+
     public CompactDataEventHandler() {
     }
+
     public CompactDataEventHandler(DataSetWriter writer) {
-        this.writer=writer;
+        this.writer = writer;
     }
 
     public DataMessage getDataMessage() {
@@ -207,25 +205,32 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
         // Insert witty assertions here
     }
 
-    public void startDataSet(String uri,String qName, Attributes atts) throws URISyntaxException {
+    public void startDataSet(String uri, String qName, Attributes atts) throws URISyntaxException {
         state = STATE_DATASET;
         PayloadStructureType payload = new PayloadStructureType();
         if (atts.getValue("keyFamilyURI") != null) {
             payload.setStructureURL(new anyURI(atts.getValue("keyFamilyURI")));
         }
         namespace = uri;
-        namespaceprefix = qName.substring(0,qName.lastIndexOf(":DataSet"));
+        if (qName.indexOf(":") != -1) {
+            namespaceprefix = qName.substring(0, qName.lastIndexOf(":DataSet"));
+        }else {
+            namespace=null;
+            namespaceprefix = null;
+        }
         payload.setStructureID(new ID("STR1"));
         /*
-        if( keyFamily==null ) {
-            NestedNCNameIDType agency = new NestedNCNameIDType(atts.getValue("agencyID"));
-            IDType id = new IDType(atts.getValue("id"));
-            init(registry.findDataStructure(agency, id));
-        }*/
-        for(int i=0;i<atts.getLength();i++) {
+         if( keyFamily==null ) {
+         NestedNCNameIDType agency = new NestedNCNameIDType(atts.getValue("agencyID"));
+         IDType id = new IDType(atts.getValue("id"));
+         init(registry.findDataStructure(agency, id));
+         }*/
+        for (int i = 0; i < atts.getLength(); i++) {
             String name = atts.getLocalName(i);
             String val = atts.getValue(i);
-            writer.writeDataSetComponent(name, val);
+            if (!"keyFamilyURI".equals(name)) {
+                writer.writeDataSetComponent(name, val);
+            }
         }
         payloads.add(payload);
         writer.newDataSet();
@@ -240,7 +245,7 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
         state = STATE_SERIES;
         in_series = true;
         writer.newSeries();
-        for(int i=atts.getLength()-1;i>=0;i--) {
+        for (int i = atts.getLength() - 1; i >= 0; i--) {
             String name = atts.getLocalName(i);
             String val = atts.getValue(i);
             writer.writeSeriesComponent(name, val);
@@ -253,7 +258,7 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
         }
         state = STATE_OBS;
         writer.newObservation();
-        for(int i=atts.getLength()-1;i>=0;i--) {
+        for (int i = atts.getLength() - 1; i >= 0; i--) {
             String name = atts.getLocalName(i);
             String val = atts.getValue(i);
             writer.writeObservationComponent(name, val);
@@ -270,8 +275,8 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
     }
 
     public void endSeries() {
-        if (state != STATE_OBSEND&&state!=STATE_SERIES) {
-            throw new RuntimeException("SeriesEnd does not follow Series State="+state);
+        if (state != STATE_OBSEND && state != STATE_SERIES) {
+            throw new RuntimeException("SeriesEnd does not follow Series State=" + state);
         }
         state = STATE_SERIESEND;
         in_series = false;

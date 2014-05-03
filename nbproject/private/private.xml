@@ -3,11 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/James/Dropbox/git/sdmx-sax/test/sdmx/version/twopointzero/Sdmx20DataWriteTest.java</file>
-            <file>file:/C:/Users/James/Dropbox/git/sdmx-sax/src/sdmx/data/structured/Obs.java</file>
-            <file>file:/C:/Users/James/Dropbox/git/sdmx-sax/src/sdmx/version/twopointzero/writer/CompactDataWriter.java</file>
-            <file>file:/C:/Users/James/Dropbox/git/sdmx-sax/testOut/CompactSampleOut.xml</file>
-            <file>file:/C:/Users/James/Dropbox/git/sdmx-sax/src/sdmx/data/structured/StructuredDataSet.java</file>
+            <file>file:/C:/Users/James/Dropbox/git/sdmx-sax/src/sdmx/version/common/SdmxIO.java</file>
         </group>
     </open-files>
 </project-private>

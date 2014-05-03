@@ -67,5 +67,31 @@ public class Sdmx20DataWriteTest {
         out.close();
         data.dump();
     }
+    @Test
+    public void testCompactSample2() throws IOException, XMLStreamException {
+        long t1= System.currentTimeMillis();
+        InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/DSID1230571/DSID1230571 - CompactData.xml");
+        DataMessage data = SdmxIO.parseData(in,false);
+        long t2 = System.currentTimeMillis();
+        System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
+        long t3 = System.currentTimeMillis();
+        OutputStream out = new FileOutputStream("testOut/DSID1230571 - CompactDataOut.xml");
+        CompactDataWriter.write(data, out);
+        out.close();
+        data.dump();
+    }
+    @Test
+    public void testCompactSample3() throws IOException, XMLStreamException {
+        long t1= System.currentTimeMillis();
+        InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/DSID1230571/DSID1230571 - GenericData.xml");
+        DataMessage data = SdmxIO.parseData(in,false);
+        long t2 = System.currentTimeMillis();
+        System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
+        long t3 = System.currentTimeMillis();
+        OutputStream out = new FileOutputStream("testOut/DSID1230571 - GenericDataOut.xml");
+        CompactDataWriter.write(data, out);
+        out.close();
+        data.dump();
+    }
 
 }

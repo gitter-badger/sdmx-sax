@@ -10,6 +10,7 @@ import sdmx.data.AttachmentLevel;
 import sdmx.data.ColumnMapper;
 import sdmx.data.DataSet;
 import sdmx.data.DataSetWriter;
+import sdmx.data.Group;
 import sdmx.data.flat.FlatObs;
 import sdmx.data.key.FullKey;
 import sdmx.data.key.PartialKey;
@@ -128,7 +129,7 @@ import sdmx.workspace.Registry;
  * @author James
  */
 public class FlatDataSet implements DataSet {
-
+    List<Group> groups = null;
     FlatColumnMapper mapper = new FlatColumnMapper();
     List<FlatObs> observations = new ArrayList<FlatObs>();
 
@@ -252,6 +253,17 @@ public class FlatDataSet implements DataSet {
     }
     public FlatObs getFlatObs(int i) {
         return observations.get(i);
+    }
+
+    @Override
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    @Override
+    public int groupSize() {
+        if(groups==null)return 0;
+        else return groups.size();
     }
 
 }

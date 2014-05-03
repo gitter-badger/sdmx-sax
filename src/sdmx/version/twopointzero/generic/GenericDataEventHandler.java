@@ -265,13 +265,14 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
                 break;
             case STATE_HEADERNAME:
                 Name name = new Name(null,new String(c));
-                List<Name> names = new ArrayList<Name>();
+                List<Name> names = header.getNames();
+                if( names == null ) names = new ArrayList<Name>();
                 names.add(name);
                 header.setNames(names);
                 this.state = STATE_HEADER;
                 break;
             case STATE_TIME:
-                
+                writer.writeObservationComponent("TIME", new String(c));
                 break;
             case STATE_KEYFAMILYREF:
                 //dsheader.setKeyFamilyURI(new String(c));

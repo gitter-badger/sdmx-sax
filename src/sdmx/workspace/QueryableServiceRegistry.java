@@ -103,9 +103,9 @@ public class QueryableServiceRegistry implements Registry {
                 local.load(queryable.getDataStructure(queryMessage));
                 return local.findDataStructure(agency, id, version);
             } catch (MalformedURLException ex) {
-                Logger.getLogger(QueryableServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(QueryableServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(QueryableServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(QueryableServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return null;

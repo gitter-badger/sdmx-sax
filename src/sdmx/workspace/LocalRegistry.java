@@ -30,7 +30,9 @@ import sdmx.xml.anyURI;
  * @author James
  */
 public class LocalRegistry implements Registry {
-    public static void main(String args[]) {}
+
+    public static void main(String args[]) {
+    }
     /*
      * This contains all structures loaded by the workspace
      */
@@ -105,7 +107,7 @@ public class LocalRegistry implements Registry {
         DataStructureType found = null;
         for (int i = 0; i < structures.size(); i++) {
             if (structures.get(i).getStructures().getDataStructures() != null) {
-                found = structures.get(i).getStructures().getDataStructures().findDataStructure(agency, id, version);
+                found = structures.get(i).findDataStructure(agency, id, version);
                 if (found != null) {
                     return found;
                 }
@@ -120,10 +122,7 @@ public class LocalRegistry implements Registry {
     public ConceptSchemeType findConceptScheme(NestedNCNameIDType agencyID, ConceptReferenceType conceptRef) {
         ConceptSchemeType cs = null;
         for (int i = 0; i < structures.size(); i++) {
-            ConceptsType ct = structures.get(i).getStructures().getConcepts();
-            if (ct != null) {
-                cs = ct.findConceptScheme(agencyID, conceptRef);
-            }
+            cs = structures.get(i).findConceptScheme(agencyID, conceptRef);
             if (cs != null) {
                 return cs;
             }
@@ -133,11 +132,9 @@ public class LocalRegistry implements Registry {
 
     public CodelistType findCodelist(ItemSchemeReferenceBaseType enumeration) {
         for (int i = 0; i < structures.size(); i++) {
-            if (structures.get(i).getStructures().getCodelists() != null) {
-                CodelistType cs = structures.get(i).getStructures().getCodelists().findCodelist(enumeration);
-                if (cs != null) {
-                    return cs;
-                }
+            CodelistType cs = structures.get(i).findCodelist(enumeration);
+            if (cs != null) {
+                return cs;
             }
         }
         return null;
@@ -145,7 +142,7 @@ public class LocalRegistry implements Registry {
 
     public CodelistType findCodelistById(IDType id) {
         for (int i = 0; i < structures.size(); i++) {
-            CodelistType cl = structures.get(i).getStructures().getCodelists().findCodelistById(id);
+            CodelistType cl = structures.get(i).findCodelistById(id);
             if (cl != null) {
                 return cl;
             }
@@ -159,11 +156,9 @@ public class LocalRegistry implements Registry {
 
     public CodelistType findCodelist(String codelistAgency, String codelist, String codelistVersion) {
         for (int i = 0; i < structures.size(); i++) {
-            if (structures.get(i).getStructures().getCodelists() != null) {
-                CodelistType cl = structures.get(i).getStructures().getCodelists().findCodelist(codelistAgency, codelist, codelistVersion);
-                if (cl != null) {
-                    return cl;
-                }
+            CodelistType cl = structures.get(i).findCodelist(codelistAgency, codelist, codelistVersion);
+            if (cl != null) {
+                return cl;
             }
         }
         return null;
@@ -171,11 +166,9 @@ public class LocalRegistry implements Registry {
 
     public ConceptSchemeType findConceptScheme(NestedNCNameIDType csa, IDType csi) {
         for (int i = 0; i < structures.size(); i++) {
-            if (structures.get(i).getStructures().getConcepts() != null) {
-                ConceptSchemeType cs = structures.get(i).getStructures().getConcepts().findConceptScheme(csa, csi);
-                if (cs != null) {
-                    return cs;
-                }
+            ConceptSchemeType cs = structures.get(i).findConceptScheme(csa, csi);
+            if (cs != null) {
+                return cs;
             }
         }
         return null;
@@ -183,11 +176,9 @@ public class LocalRegistry implements Registry {
 
     public ConceptSchemeType findConceptSchemeById(IDType id) {
         for (int i = 0; i < structures.size(); i++) {
-            if (structures.get(i).getStructures().getConcepts() != null) {
-                ConceptSchemeType cs = structures.get(i).getStructures().getConcepts().findConceptSchemeById(id);
-                if (cs != null) {
-                    return cs;
-                }
+            ConceptSchemeType cs = structures.get(i).findConceptSchemeById(id);
+            if (cs != null) {
+                return cs;
             }
         }
         return null;
@@ -208,7 +199,7 @@ public class LocalRegistry implements Registry {
     public ConceptType findConcept(IDType id) {
         ConceptType ct = null;
         for (int i = 0; i < structures.size(); i++) {
-            ct = structures.get(i).getStructures().getConcepts().findConcept(id);
+            ct = structures.get(i).findConcept(id);
             if (ct != null) {
                 return ct;
             }
@@ -219,11 +210,9 @@ public class LocalRegistry implements Registry {
     @Override
     public CodelistType findCodelist(NestedNCNameIDType codelistAgency, IDType codelist) {
         for (int i = 0; i < structures.size(); i++) {
-            if (structures.get(i).getStructures().getCodelists() != null) {
-                CodelistType cl = structures.get(i).getStructures().getCodelists().findCodelist(codelistAgency, codelist);
-                if (cl != null) {
-                    return cl;
-                }
+            CodelistType cl = structures.get(i).findCodelist(codelistAgency, codelist);
+            if (cl != null) {
+                return cl;
             }
         }
         return null;
@@ -233,19 +222,19 @@ public class LocalRegistry implements Registry {
     public CodelistType findCodelist(String codelistAgency, String codelist) {
         return findCodelist(new NestedNCNameIDType(codelistAgency), new IDType(codelist));
     }
+
     public DataStructureType findDataStructure(NestedNCNameIDType agency, IDType id) {
         DataStructureType found = null;
         for (int i = 0; i < structures.size(); i++) {
-            if (structures.get(i).getStructures().getDataStructures() != null) {
-                found = structures.get(i).getStructures().getDataStructures().findDataStructure(agency, id);
-                if (found != null) {
-                    return found;
-                }
+            found = structures.get(i).findDataStructure(agency, id);
+            if (found != null) {
+                return found;
             }
         }
         return null;
     }
-    public List<DataStructureReferenceType> listDataSets(){
+
+    public List<DataStructureReferenceType> listDataSets() {
         return Collections.EMPTY_LIST;
     }
 }

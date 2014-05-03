@@ -11,6 +11,7 @@ import sdmx.data.AttachmentLevel;
 import sdmx.data.ColumnMapper;
 import sdmx.data.DataSet;
 import sdmx.data.DataSetWriter;
+import sdmx.data.Group;
 import sdmx.data.flat.FlatDataSetWriter;
 import sdmx.data.flat.FlatObs;
 import sdmx.data.key.FullKey;
@@ -24,6 +25,7 @@ import sdmx.structure.codelist.CodeType;
  */
 public class StructuredDataSet implements DataSet, Attachable {
 
+    List<Group> groups = null;
     List<Object> columnValues = new ArrayList<Object>();
     private List<Series> series = new ArrayList<Series>();
     private List<Obs> observations = new ArrayList<Obs>();
@@ -207,8 +209,8 @@ public class StructuredDataSet implements DataSet, Attachable {
 
     @Override
     public void setValue(int i, Object val) {
-        if (columnValues.size() < i) {
-            for (int j = columnValues.size(); j < i; j++) {
+        if (columnValues.size()-1 < i) {
+            for (int j = columnValues.size()-1; j < i; j++) {
                 columnValues.add(null);
             }
         }
@@ -282,5 +284,16 @@ public class StructuredDataSet implements DataSet, Attachable {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    @Override
+    public int groupSize() {
+        if( groups == null ) return 0;
+        return groups.size();
     }
 }

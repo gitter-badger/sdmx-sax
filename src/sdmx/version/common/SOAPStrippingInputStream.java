@@ -21,7 +21,7 @@ public class SOAPStrippingInputStream extends FilterInputStream {
         try {
             readToStart();
         } catch (IOException ex) {
-            Logger.getLogger(SOAPStrippingInputStream.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(SOAPStrippingInputStream.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

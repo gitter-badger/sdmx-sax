@@ -235,7 +235,7 @@ public class Sdmx20SOAPQueryable implements Queryable {
                 return null;
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            //ex.printStackTrace();
             return null;
         }
     }
