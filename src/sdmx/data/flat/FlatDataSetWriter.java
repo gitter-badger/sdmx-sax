@@ -5,9 +5,11 @@
 package sdmx.data.flat;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import sdmx.data.ColumnMapper;
 import sdmx.data.DataSetWriter;
+import sdmx.data.Group;
 
 /**
  *
@@ -16,9 +18,10 @@ import sdmx.data.DataSetWriter;
 public class FlatDataSetWriter implements DataSetWriter {
     private ColumnMapper mapper = new FlatColumnMapper();
     private FlatDataSet dataSet = null;
-    private List<Object> dataSetValues = null;
-    private List<Object> seriesValues = null;
-    private List<Object> obsValues = null;
+    private List<String> dataSetValues = null;
+    private List<String> seriesValues = null;
+    private List<String> obsValues = null;
+    List<Group> groups = null;
 
     public FlatDataSetWriter(){}
     public FlatDataSetWriter(ColumnMapper mapper) {
@@ -29,12 +32,12 @@ public class FlatDataSetWriter implements DataSetWriter {
     @Override
     public void newDataSet() {
         dataSet = new FlatDataSet();
-        dataSetValues = new ArrayList<Object>();
+        dataSetValues = new ArrayList<String>();
     }
 
     @Override
     public void newSeries() {
-        seriesValues = new ArrayList<Object>();
+        seriesValues = new ArrayList<String>();
         for (int i = 0; i < dataSetValues.size(); i++) {
             seriesValues.add(dataSetValues.get(i));
         }
@@ -42,7 +45,7 @@ public class FlatDataSetWriter implements DataSetWriter {
 
     @Override
     public void newObservation() {
-        obsValues = new ArrayList<Object>();
+        obsValues = new ArrayList<String>();
         for (int i = 0; i < seriesValues.size(); i++) {
             obsValues.add(seriesValues.get(i));
         }
@@ -86,6 +89,7 @@ public class FlatDataSetWriter implements DataSetWriter {
     @Override
     public FlatDataSet finishDataSet() {
         FlatDataSet ds = dataSet;
+        ds.setGroups(groups);
         dataSet=null;
         return ds;
     }
@@ -117,5 +121,15 @@ public class FlatDataSetWriter implements DataSetWriter {
     @Override
     public ColumnMapper getColumnMapper() {
         return mapper;
+    }
+
+    @Override
+    public void writeGroupValues(String name,HashMap<String, String> groupValues) {
+        Group group = new Group(groupValues);
+        group.setGroupName(name);
+        if(this.groups==null) {
+            this.groups = new ArrayList<Group>();
+        }
+        groups.add(group);
     }
 }

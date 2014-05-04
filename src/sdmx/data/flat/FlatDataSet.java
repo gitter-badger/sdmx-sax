@@ -5,6 +5,7 @@
 package sdmx.data.flat;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import sdmx.data.AttachmentLevel;
 import sdmx.data.ColumnMapper;
@@ -129,6 +130,7 @@ import sdmx.workspace.Registry;
  * @author James
  */
 public class FlatDataSet implements DataSet {
+
     List<Group> groups = null;
     FlatColumnMapper mapper = new FlatColumnMapper();
     List<FlatObs> observations = new ArrayList<FlatObs>();
@@ -139,22 +141,23 @@ public class FlatDataSet implements DataSet {
     public int getColumnIndex(String name) {
         return mapper.getColumnIndex(name);
     }
-    public Object getValue(int row, String col) {
+
+    public String getValue(int row, String col) {
         return getValue(row, mapper.getColumnIndex(col));
     }
 
-    public Object getValue(int row, int col) {
+    public String getValue(int row, int col) {
         if (observations.get(row) == null) {
-            System.out.println("NUll Obs");
+            System.out.println("Null Obs");
         }
         return observations.get(row).getValue(col);
     }
 
-    public void setValue(int row, String col, Object val) {
+    public void setValue(int row, String col, String val) {
         setValue(row, mapper.getColumnIndex(col), val);
     }
 
-    public void setValue(int row, int col, Object val) {
+    public void setValue(int row, int col, String val) {
         observations.get(row).setValue(col, val);
     }
 
@@ -195,7 +198,7 @@ public class FlatDataSet implements DataSet {
     }
 
     public int registerColumn(String s) {
-        int col = mapper.registerColumn(s,AttachmentLevel.OBSERVATION);
+        int col = mapper.registerColumn(s, AttachmentLevel.OBSERVATION);
         for (int i = 0; i < observations.size(); i++) {
             observations.get(i).setValue(col, null);
         }
@@ -215,42 +218,45 @@ public class FlatDataSet implements DataSet {
     @Override
     public void writeTo(DataSetWriter writer) {
         writer.newDataSet();
-        for(int i=0;i<observations.size();i++) {
+        for (int i = 0; i < observations.size(); i++) {
             writer.newObservation();
-            for(int j=0;j<this.getColumnSize();j++) {
-                Object o = getValue(i,j);
-                if( o == null ) {
+            for (int j = 0; j < this.getColumnSize(); j++) {
+                Object o = getValue(i, j);
+                if (o == null) {
                     writer.writeObservationComponent(this.getColumnName(j), "");
-                } else if( o instanceof String ) {
-                    writer.writeObservationComponent(this.getColumnName(j), (String)o);
-                } else if( o instanceof CodeType ) {
-                    writer.writeObservationComponent(this.getColumnName(j), ((CodeType)o).getId().getString());
-                } else if( o instanceof Double ) {
-                    writer.writeObservationComponent(this.getColumnName(j), ((Double)o).toString());
+                } else if (o instanceof String) {
+                    writer.writeObservationComponent(this.getColumnName(j), (String) o);
+                } else if (o instanceof CodeType) {
+                    writer.writeObservationComponent(this.getColumnName(j), ((CodeType) o).getId().getString());
+                } else if (o instanceof Double) {
+                    writer.writeObservationComponent(this.getColumnName(j), ((Double) o).toString());
                 }
             }
             writer.finishObservation();
         }
         writer.finishDataSet();
     }
+
     public List<FlatObs> query(PartialKey key) {
         List<FlatObs> result = new ArrayList<FlatObs>();
-        for(int i=0;i<this.size();i++) {
+        for (int i = 0; i < this.size(); i++) {
             FlatObs flat = this.getFlatObs(i);
-            if( key.matches(flat,mapper)){
+            if (key.matches(flat, mapper)) {
                 result.add(flat);
-                }
+            }
         }
         return result;
     }
+
     public FlatObs query(FullKey key) {
-        for(int i=0;i<this.size();i++) {
-            if( key.matches(this.getFlatObs(i),mapper)){
+        for (int i = 0; i < this.size(); i++) {
+            if (key.matches(this.getFlatObs(i), mapper)) {
                 return getFlatObs(i);
-                }
+            }
         }
         return null;
     }
+
     public FlatObs getFlatObs(int i) {
         return observations.get(i);
     }
@@ -262,8 +268,39 @@ public class FlatDataSet implements DataSet {
 
     @Override
     public int groupSize() {
-        if(groups==null)return 0;
-        else return groups.size();
+        if (groups == null) {
+            return 0;
+        } else {
+            return groups.size();
+        }
     }
 
+    public void applyGroupKey(PartialKey key, String column, String value) {
+        int indx = mapper.getColumnIndex(column);
+        for (int i = 0; i < this.size(); i++) {
+            FlatObs flat = this.getFlatObs(i);
+            if (key.matches(flat, mapper)) {
+                flat.setValue(indx, value);
+            } else {
+                flat.setValue(indx, null);
+            }
+        }
+    }
+
+    @Override
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
+        if( groups == null ) return;
+        for (int i = 0; i < groups.size(); i++) {
+            Group g = groups.get(i);
+            Iterator<String> it = g.getGroupAttributes().keySet().iterator();
+            while (it.hasNext()) {
+                String s = it.next();
+                getColumnMapper().registerColumn(it.next(), AttachmentLevel.GROUP);
+                int indx = getColumnIndex(s);
+                PartialKey key = new PartialKey(g.getGroupKey());
+                applyGroupKey(key, s, (String) g.getGroupAttributes().get(s));
+            }
+        }
+    }
 }

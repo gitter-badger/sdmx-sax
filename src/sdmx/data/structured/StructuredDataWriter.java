@@ -5,10 +5,13 @@
 package sdmx.data.structured;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import sdmx.data.AttachmentLevel;
 import sdmx.data.ColumnMapper;
 import sdmx.data.DataSetWriter;
+import sdmx.data.Group;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.data.flat.FlatObs;
 
@@ -22,6 +25,7 @@ public class StructuredDataWriter implements DataSetWriter {
 
     private List<Series> seriesList = new ArrayList<Series>();
     private List<Obs> obsList = new ArrayList<Obs>();
+    private List<Group> groups = null;
     
     private Series series = null;
     private boolean in_series = false;
@@ -96,6 +100,7 @@ public class StructuredDataWriter implements DataSetWriter {
             ds.setObservations(obsList);
         }
         ds.updateIndexes();
+        ds.setGroups(groups);
         dataSet=null;
         return ds;
     }    
@@ -103,6 +108,19 @@ public class StructuredDataWriter implements DataSetWriter {
     @Override
     public ColumnMapper getColumnMapper() {
         return mapper;
+    }
+
+    @Override
+    public void writeGroupValues(String name,HashMap<String, String> groupValues) {
+        Group g = new Group(groupValues);
+        g.setGroupName(name);
+        if( groups==null ) groups = new ArrayList<Group>();
+        groups.add(g);
+        //Iterator<String> it = groupValues.keySet().iterator();
+        //while(it.hasNext()) {
+        //    String s = it.next();
+        //    System.out.println("Value="+s+":"+groupValues.get(s));
+        //}
     }
 
   

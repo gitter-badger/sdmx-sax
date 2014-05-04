@@ -13,7 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
-import sdmx.version.common.SdmxIO;
+import sdmx.SdmxIO;
 import sdmx.version.twopointzero.Sdmx20DataParserTest;
 import sdmx.version.twopointzero.Sdmx20StructureParserTest;
 import sdmx.workspace.LocalRegistry;
@@ -52,9 +52,6 @@ public class StructuredDataTest {
         DataMessage data = SdmxIO.parseData(in,true);
         long t2 = System.currentTimeMillis();
         System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
-        ValueTypeResolver.resolveDataSet(registry, data.getDataSets().get(0), struct.getStructures().getDataStructures().getDataStructures().get(0));
-        long t3 = System.currentTimeMillis();
-        System.out.println("Resolution:"+data.getDataSets().get(0).size()+" Observations "+(t3-t2)+" ms");
         data.dump();        
     }
     @Test
@@ -73,10 +70,6 @@ public class StructuredDataTest {
         DataMessage data = SdmxIO.parseData(in,false);
         long t2 = System.currentTimeMillis();
         System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
-        ValueTypeResolver.resolveDataSet(registry, data.getDataSets().get(0), struct.getStructures().getDataStructures().getDataStructures().get(0));
-        long t3 = System.currentTimeMillis();
-        System.out.println("Resolution:"+data.getDataSets().get(0).size()+" Observations "+(t3-t2)+" ms");
-
         data.dump();
         
     }

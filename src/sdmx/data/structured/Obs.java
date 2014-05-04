@@ -16,15 +16,15 @@ import sdmx.data.AttachmentLevel;
 public class Obs implements Attachable {
     private int rowId = 0;
     private StructuredColumnMapper columnMapper = null;
-    List<Object> columnValues = new ArrayList<>();
+    List<String> columnValues = new ArrayList<>();
 
     @Override
-    public Object getValue(String s) {
+    public String getValue(String s) {
         return columnValues.get(getColumnMapper().getObservationIndex(s));
     }
     
     @Override
-    public void setValue(String s, Object val) {
+    public void setValue(String s, String val) {
         if( !columnMapper.containsColumn(s)){
             columnMapper.registerColumn(s, AttachmentLevel.OBSERVATION);
         }
@@ -32,7 +32,7 @@ public class Obs implements Attachable {
     }
 
     @Override
-    public Object getValue(int i) {
+    public String getValue(int i) {
             /*
              * Sometimes, if a data message has optional fields, 
              * a value on an observation may not be set, so the 
@@ -46,7 +46,7 @@ public class Obs implements Attachable {
     }
     
     
-    public Object getObservationValue(int i) {
+    public String getObservationValue(int i) {
             /*
              * Sometimes, if a data message has optional fields, 
              * a value on an observation may not be set, so the 
@@ -61,7 +61,7 @@ public class Obs implements Attachable {
     }
 
     @Override
-    public void setValue(int i, Object val) {
+    public void setValue(int i, String val) {
         if( columnValues.size()-1<i) {
             for(int j=columnValues.size();j-1<i;j++) {
                 columnValues.add(null);

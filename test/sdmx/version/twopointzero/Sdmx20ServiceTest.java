@@ -32,7 +32,7 @@ import sdmx.query.data.DataQueryType;
 import sdmx.query.data.DimensionValueType;
 import sdmx.query.data.TimeDimensionValueType;
 import sdmx.structure.datastructure.DataStructureType;
-import sdmx.version.common.SdmxIO;
+import sdmx.SdmxIO;
 import sdmx.workspace.LocalRegistry;
 import sdmx.workspace.QueryableServiceRegistry;
 import sdmx.workspace.RESTServiceRegistry;
@@ -212,7 +212,6 @@ public class Sdmx20ServiceTest {
         while(it.hasNext()){
             DataStructureReferenceType ref = it.next();
             System.out.println(ref.getRef().getAgencyId()+":"+ref.getRef().getId()+":"+ref.getRef().getVersion());
-            try{Thread.sleep(4000);}catch(InterruptedException io) {}
             try{
             DataStructureType ds = registry.findDataStructure(ref.getRef().getAgencyId(), new IDType(ref.getRef().getId().toString()),ref.getRef().getVersion());
             ds.dump();

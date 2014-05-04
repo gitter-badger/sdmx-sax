@@ -25,7 +25,7 @@ import sdmx.message.StructureType;
 import sdmx.query.data.DataParametersType;
 import sdmx.query.data.DataQuery;
 import sdmx.query.data.DimensionValueType;
-import sdmx.version.common.SdmxIO;
+import sdmx.SdmxIO;
 import sdmx.workspace.LocalRegistry;
 import sdmx.workspace.Registry;
 

@@ -41,16 +41,18 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
         this.in = in;
         this.eh = handler;
     }
+
     public CompactDataContentHandler(Reader in, CompactDataEventHandler handler) {
         super();
         this.in2 = in;
         this.eh = handler;
     }
 
-    public CompactDataContentHandler(Registry registry,InputStream in, StructureType struct) {
+    public CompactDataContentHandler(Registry registry, InputStream in, StructureType struct) {
         this(in, new CompactDataEventHandler());
     }
-    public CompactDataContentHandler(Registry registry,Reader in, StructureType struct) {
+
+    public CompactDataContentHandler(Registry registry, Reader in, StructureType struct) {
         this(in, new CompactDataEventHandler());
     }
 
@@ -59,10 +61,10 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
         reader = XMLReaderFactory.createXMLReader();
         reader.setContentHandler(this);
         reader.setErrorHandler(this);
-        if( in!=null ) {
-           reader.parse(new InputSource(in));
-        }else {
-           reader.parse(new InputSource(in2));
+        if (in != null) {
+            reader.parse(new InputSource(in));
+        } else {
+            reader.parse(new InputSource(in2));
         }
         DataMessage doc = eh.getDataMessage();
         return doc;
@@ -89,11 +91,11 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
          * This is really useful!!!
          */
         /*
-        System.out.println("localName=" + localName);
-        for (int i = 0; i < atts.getLength(); i++) {
-        System.out.println("Att=" + atts.getLocalName(i) + " val=" + atts.getValue(i));
-        }
-        System.out.println(groupNames);
+         System.out.println("localName=" + localName);
+         for (int i = 0; i < atts.getLength(); i++) {
+         System.out.println("Att=" + atts.getLocalName(i) + " val=" + atts.getValue(i));
+         }
+         System.out.println(groupNames);
          */
         if ("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message".equals(uri)) {
             if ("MessageGroup".equals(localName)) {
@@ -107,7 +109,7 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
             } else if ("Test".equals(localName)) {
                 eh.startHeaderTest();
             } else if ("Name".equals(localName)) {
-                eh.startName(uri,atts);
+                eh.startName(uri, atts);
             } else if ("Truncated".equals(localName)) {
                 eh.startHeaderTruncated();
             } else if ("Prepared".equals(localName)) {
@@ -123,22 +125,20 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
             } else if ("ReportingEnd".equals(localName)) {
                 eh.startReportingEnd(atts);
             }
-        }
-        if ("DataSet".equals(localName)) {
-            try {
-                eh.startDataSet(uri,qName, atts);
-            } catch (URISyntaxException ex) {
-                Logger.getLogger(CompactDataContentHandler.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else if ("Series".equals(localName)) {
-            eh.startSeries(uri, atts);
-        } else if ("Obs".equals(localName)) {
-            eh.startObs(uri, atts);
-        } else if (groupNames != null) {
-            if (isStringInList(groupNames, localName)) {
+        } else {
+            if ("DataSet".equals(localName)) {
+                try {
+                    eh.startDataSet(uri, qName, atts);
+                } catch (URISyntaxException ex) {
+                    Logger.getLogger(CompactDataContentHandler.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else if ("Series".equals(localName)) {
+                eh.startSeries(uri, atts);
+            } else if ("Obs".equals(localName)) {
+                eh.startObs(uri, atts);
+            } else if( localName.indexOf("Group")!=-1 ) {
                 eh.startGroup(localName, atts);
             }
-
         }
     }
 
@@ -174,27 +174,25 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
                 eh.endHeaderPrepared();
             } else if ("Sender".equals(localName)) {
                 eh.endHeaderSender();
-            }else if ("DataSetAction".equals(localName)) {
+            } else if ("DataSetAction".equals(localName)) {
                 eh.endDataSetAction();
-            }else if ("Extracted".equals(localName)) {
+            } else if ("Extracted".equals(localName)) {
                 eh.endExtracted();
             } else if ("ReportingBegin".equals(localName)) {
                 eh.endReportingBegin();
             } else if ("ReportingEnd".equals(localName)) {
                 eh.endReportingEnd();
             }
-        }
-        if ("DataSet".equals(localName)) {
-            eh.endDataSet();
-        } else if ("Series".equals(localName)) {
-            eh.endSeries();
-        } else if ("Obs".equals(localName)) {
-            eh.endObs();
-        } else if (groupNames != null) {
-            if (isStringInList(groupNames, localName)) {
+        } else {
+            if ("DataSet".equals(localName)) {
+                eh.endDataSet();
+            } else if ("Series".equals(localName)) {
+                eh.endSeries();
+            } else if ("Obs".equals(localName)) {
+                eh.endObs();
+            } else if( localName.indexOf("Group")!=-1 ) {
                 eh.endGroup();
             }
-
         }
     }
 

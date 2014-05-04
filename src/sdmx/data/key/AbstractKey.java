@@ -16,15 +16,20 @@ import sdmx.data.flat.FlatObs;
  */
 public class AbstractKey implements Key {
 
-    private HashMap map = new HashMap();
+    private HashMap<String,String> map = new HashMap<String,String>();
 
+    public AbstractKey(){}
+    public AbstractKey(HashMap<String,String> map){
+        this.map=map;
+    }
+    
     @Override
     public Object getComponent(String dim) {
         return map.get(dim);
     }
 
     @Override
-    public void setComponent(String dim, Object o) {
+    public void setComponent(String dim, String o) {
         map.put(dim, o);
     }
 

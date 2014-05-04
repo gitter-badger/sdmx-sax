@@ -21,14 +21,15 @@ public interface DataSet {
     public int getColumnIndex(String s);
     public int getColumnSize();
     public int size();
-    public Object getValue(int row, int col);
-    public Object getValue(int row, String col);
-    public void setValue(int row, int col,Object val);
-    public void setValue(int row, String col,Object val);
+    public String getValue(int row, int col);
+    public String getValue(int row, String col);
+    public void setValue(int row, int col,String val);
+    public void setValue(int row, String col,String val);
     public void writeTo(DataSetWriter writer);
     public List<FlatObs> query(PartialKey key);
     public FlatObs query(FullKey key);
     public ColumnMapper getColumnMapper();
+    public void setGroups(List<Group> groups);
     public List<Group> getGroups();
     public int groupSize();
     }

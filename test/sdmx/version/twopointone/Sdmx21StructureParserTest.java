@@ -36,7 +36,7 @@ import sdmx.structure.datastructure.AttributeType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionListType;
 import sdmx.structure.datastructure.DimensionType;
-import sdmx.version.common.SdmxIO;
+import sdmx.SdmxIO;
 import sdmx.version.twopointzero.Sdmx20StructureParserTest;
 
 /**

@@ -15,7 +15,7 @@ import sdmx.data.flat.FlatObs;
  */
 public interface Key {
     public Object getComponent(String dim);
-    public void setComponent(String dim, Object o);
+    public void setComponent(String dim, String o);
     public boolean equals(Key key);
     public int hashCode();
     public boolean matches(FlatObs obs,ColumnMapper mapper);

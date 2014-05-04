@@ -4,6 +4,7 @@
  */
 package sdmx.version.common;
 
+import sdmx.SdmxIO;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
 import org.junit.After;

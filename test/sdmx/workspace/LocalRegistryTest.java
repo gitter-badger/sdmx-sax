@@ -32,7 +32,7 @@ import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
 import sdmx.structure.datastructure.DataStructureType;
-import sdmx.version.common.SdmxIO;
+import sdmx.SdmxIO;
 import sdmx.version.twopointzero.Sdmx20StructureParserTest;
 import sdmx.xml.anyURI;
 
@@ -45,18 +45,10 @@ public class LocalRegistryTest {
     public LocalRegistryTest() {
     }
     
+    public static final Registry doc = LocalRegistry.getDefaultWorkspace();
+    
     @BeforeClass
     public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    Registry doc = LocalRegistry.getDefaultWorkspace();
-
-    @Before
-    public void setUp() {
         System.out.println("test registry interface on LocalRegistry");
         boolean expResult = false;
         InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/StructureSample.xml");
@@ -65,6 +57,17 @@ public class LocalRegistryTest {
         } catch (Exception ex) {
             Logger.getLogger(Sdmx20StructureParserTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    
+
+    @Before
+    public void setUp() {
+
     }
     
     @After

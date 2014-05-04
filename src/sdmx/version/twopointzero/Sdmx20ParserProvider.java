@@ -21,7 +21,7 @@ import sdmx.data.structured.StructuredDataWriter;
 import sdmx.exception.TypeValueNotFoundException;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
-import sdmx.version.common.SdmxIO;
+import sdmx.SdmxIO;
 import sdmx.version.common.SdmxParserProvider;
 import sdmx.version.twopointone.Sdmx21ParserProvider;
 import sdmx.version.twopointzero.compact.CompactDataContentHandler;

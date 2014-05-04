@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -129,6 +130,7 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
 
     public DataMessage getDataMessage() {
         if (state != STATE_FINISH) {
+            System.out.println("state="+state);
             throw new RuntimeException("You can't get the document before i've finished parsing!");
         }
         DataMessage doc = new DataMessage();
@@ -214,8 +216,8 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
         namespace = uri;
         if (qName.indexOf(":") != -1) {
             namespaceprefix = qName.substring(0, qName.lastIndexOf(":DataSet"));
-        }else {
-            namespace=null;
+        } else {
+            namespace = null;
             namespaceprefix = null;
         }
         payload.setStructureID(new ID("STR1"));
@@ -236,8 +238,15 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
         writer.newDataSet();
     }
 
-    public void startGroup(String uri, Attributes atts) {
+    public void startGroup(String name, Attributes atts) {
         state = STATE_GROUP;
+        HashMap<String,String> g = new HashMap<String,String>();
+        for (int i = atts.getLength() - 1; i >= 0; i--) {
+             String s = atts.getLocalName(i);
+             String v = atts.getValue(i);
+             g.put(s, v);
+        }
+        writer.writeGroupValues(name,g);
         in_group = true;
     }
 

@@ -337,7 +337,7 @@ public class ValueTypeResolver {
         }
 
     }
-
+/*
     public static void resolveDataSet(Registry registry, DataSet ds, DataStructureType struct) {
         ValueTypeResolver tr = new ValueTypeResolver(registry, struct);
         for (int i = 0; i < ds.size(); i++) {
@@ -352,7 +352,7 @@ public class ValueTypeResolver {
             }
         }
     }
-
+*/
     public static Object resolve(Registry registry, DataStructureType struct, String col, Object val) {
         if (val instanceof String) {
             ValueTypeResolver tr = new ValueTypeResolver(registry, struct);

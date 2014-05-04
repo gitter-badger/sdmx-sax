@@ -26,7 +26,7 @@ import sdmx.structure.codelist.CodeType;
 public class StructuredDataSet implements DataSet, Attachable {
 
     List<Group> groups = null;
-    List<Object> columnValues = new ArrayList<Object>();
+    List<String> columnValues = new ArrayList<String>();
     private List<Series> series = new ArrayList<Series>();
     private List<Obs> observations = new ArrayList<Obs>();
     private StructuredColumnMapper columnMapper = new StructuredColumnMapper();
@@ -89,7 +89,7 @@ public class StructuredDataSet implements DataSet, Attachable {
     }
 
     @Override
-    public Object getValue(int row, int col) {
+    public String getValue(int row, int col) {
         AttachmentLevel attach = columnMapper.getAttachmentLevel(col);
         String s = columnMapper.getColumnName(col);
         if (attach == AttachmentLevel.DATASET) {
@@ -102,18 +102,25 @@ public class StructuredDataSet implements DataSet, Attachable {
             //System.out.println("Find Row:"+row+": Series="+series);
             //System.out.println("Find Row:"+row+": Obs="+series.getObservationRow(row));
             return series.getObservationRow(row).getValue(columnMapper.getObservationIndex(s));
-        } else {
+        } else if( attach == AttachmentLevel.GROUP) {
+            FlatObs flat = getFlatObsSansGroups(row);
+            FullKey full = new FullKey(flat,columnMapper);
+            for(int i=0;i<groups.size();i++) {
+                if( groups.get(i).matches(full))return groups.get(i).getGroupValue(columnMapper.getColumnName(col));
+            }
+            return null;
+        }else {
             return null;
         }
     }
 
     @Override
-    public Object getValue(int row, String col) {
+    public String getValue(int row, String col) {
         return getValue(row, columnMapper.getColumnIndex(col));
     }
 
     @Override
-    public void setValue(int row, int col, Object val) {
+    public void setValue(int row, int col, String val) {
         AttachmentLevel attach = columnMapper.getAttachmentLevel(col);
         String s = columnMapper.getColumnName(col);
         if (attach == AttachmentLevel.DATASET) {
@@ -129,10 +136,17 @@ public class StructuredDataSet implements DataSet, Attachable {
             Obs obs = series.getObservationRow(row);
             obs.setValue(columnMapper.getObservationIndex(s), val);
         }
+        if( attach == AttachmentLevel.GROUP) {
+            FlatObs flat = getFlatObsSansGroups(row);
+            FullKey full = new FullKey(flat,columnMapper);
+            for(int i=0;i<groups.size();i++) {
+                if( groups.get(i).matches(full)) groups.get(i).setGroupValue(columnMapper.getColumnName(col),val);
+            }
+        }
     }
 
     @Override
-    public void setValue(int row, String col, Object val) {
+    public void setValue(int row, String col, String val) {
     }
 
     @Override
@@ -190,12 +204,12 @@ public class StructuredDataSet implements DataSet, Attachable {
        return -1;
     }
     @Override
-    public Object getValue(String s) {
+    public String getValue(String s) {
         return getValue(columnMapper.getDataSetIndex(s));
     }
 
     @Override
-    public void setValue(String s, Object val) {
+    public void setValue(String s, String val) {
         if (!columnMapper.containsColumn(s)) {
             columnMapper.registerColumn(s, AttachmentLevel.DATASET);
         }
@@ -203,12 +217,12 @@ public class StructuredDataSet implements DataSet, Attachable {
     }
 
     @Override
-    public Object getValue(int i) {
+    public String getValue(int i) {
         return columnValues.get(i);
     }
 
     @Override
-    public void setValue(int i, Object val) {
+    public void setValue(int i, String val) {
         if (columnValues.size()-1 < i) {
             for (int j = columnValues.size()-1; j < i; j++) {
                 columnValues.add(null);
@@ -271,7 +285,14 @@ public class StructuredDataSet implements DataSet, Attachable {
     public FlatObs getFlatObs(int i) {
         FlatObs flat = new FlatObs(columnMapper.size());
         for(int j=0;j<columnMapper.size();j++) {
-            flat.setValue(i, getValue(i,j));
+            flat.setValue(j, getValue(i,j));
+        }
+        return flat;
+    }
+    public FlatObs getFlatObsSansGroups(int i) {
+        FlatObs flat = new FlatObs(columnMapper.size());
+        for(int j=0;j<columnMapper.size()&&columnMapper.getAttachmentLevel(j)!=AttachmentLevel.GROUP;j++) {
+            flat.setValue(j, getValue(i,j));
         }
         return flat;
     }
@@ -295,5 +316,14 @@ public class StructuredDataSet implements DataSet, Attachable {
     public int groupSize() {
         if( groups == null ) return 0;
         return groups.size();
+    }
+
+    @Override
+    public void setGroups(List<Group> groups) {
+        this.groups=groups;
+        if( groups == null ) return;
+        for(int i=0;i<groups.size();i++) {
+            this.groups.get(i).processGroupValues(this);
+        }
     }
 }

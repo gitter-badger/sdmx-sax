@@ -12,14 +12,14 @@ import java.util.List;
  * @author James
  */
 public class FlatObs {
-     List<Object> values = null;
+     List<String> values = null;
      public FlatObs(int i){
-         values = new ArrayList<Object>(i);
+         values = new ArrayList<String>(i);
      }
-     public FlatObs(List<Object> vals){
+     public FlatObs(List<String> vals){
          values = vals;
      }
-     public void setValue(int i, Object o) {
+     public void setValue(int i, String o) {
          if( values.size()<=i) {
              for(int j=values.size();j<=i;j++) {
                  values.add(null);
@@ -27,7 +27,7 @@ public class FlatObs {
          }
          values.set(i,o);
      }
-     public Object getValue(int i) {
+     public String getValue(int i) {
          if( i>=values.size() ) return null;
          return values.get(i);
      }

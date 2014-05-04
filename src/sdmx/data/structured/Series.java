@@ -14,7 +14,7 @@ import sdmx.data.AttachmentLevel;
  * @author James
  */
 public class Series implements Attachable {
-    private List<Object> columnValues = new ArrayList<Object>();
+    private List<String> columnValues = new ArrayList<String>();
     private StructuredColumnMapper columnMapper = null;
     private int start = -1;
     private int end = -1;
@@ -65,7 +65,7 @@ public class Series implements Attachable {
         this.observations = observations;
     }
     
-    public Object getValue(int row, int col) {
+    public String getValue(int row, int col) {
         AttachmentLevel attach = columnMapper.getAttachmentLevel(col);
         String s = columnMapper.getColumnName(col);
         if (attach == AttachmentLevel.DATASET) {
@@ -77,12 +77,12 @@ public class Series implements Attachable {
     }
 
 
-    public Object getValue(int row, String col) {
+    public String getValue(int row, String col) {
         return getValue(row,columnMapper.getColumnIndex(col));
     }
 
 
-    public void setValue(int row, int col, Object val) {
+    public void setValue(int row, int col, String val) {
         AttachmentLevel attach = columnMapper.getAttachmentLevel(col);
         String s = columnMapper.getColumnName(col);
         if (attach == AttachmentLevel.DATASET) {
@@ -94,21 +94,21 @@ public class Series implements Attachable {
         }
    }
 
-    public void setValue(int row, String col, Object val) {
+    public void setValue(int row, String col, String val) {
         setValue(row,columnMapper.getSeriesIndex(col),val);
     }
 
     /**
      * @return the columnValues
      */
-    public List<Object> getColumnValues() {
+    public List<String> getColumnValues() {
         return columnValues;
     }
 
     /**
      * @param columnValues the columnValues to set
      */
-    public void setColumnValues(List<Object> columnValues) {
+    public void setColumnValues(List<String> columnValues) {
         this.columnValues = columnValues;
     }
 
@@ -127,12 +127,12 @@ public class Series implements Attachable {
     }
 
     @Override
-    public Object getValue(String s) {
+    public String getValue(String s) {
         return getValue(columnMapper.getSeriesIndex(s));
     }
 
     @Override
-    public void setValue(String s, Object val) {
+    public void setValue(String s, String val) {
         if( !columnMapper.containsColumn(s)){
             columnMapper.registerColumn(s, AttachmentLevel.SERIES);
         }
@@ -145,12 +145,12 @@ public class Series implements Attachable {
     }
 
     @Override
-    public Object getValue(int i) {
+    public String getValue(int i) {
         return columnValues.get(i);
     }
 
     @Override
-    public void setValue(int i, Object val) {
+    public void setValue(int i, String val) {
         if( columnValues.size()-1<i) {
             for(int j=columnValues.size();j-1<i;j++) {
                 columnValues.add(null);

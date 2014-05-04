@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sdmx.version.common;
+package sdmx;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +21,7 @@ import sdmx.version.twopointone.Sdmx21ParserProvider;
 import sdmx.version.twopointzero.Sdmx20ParserProvider;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.message.DataMessage;
+import sdmx.version.common.SdmxParserProvider;
 import sdmx.workspace.LocalRegistry;
 import sdmx.workspace.Registry;
 

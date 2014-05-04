@@ -9,9 +9,9 @@ package sdmx.data;
  * @author James
  */
 public interface Attachable {
-    public Object getValue(String s);
-    public void setValue(String s,Object val);
+    public String getValue(String s);
+    public void setValue(String s,String val);
     public AttachmentLevel getAttachmentLevel();
-    public Object getValue(int i);
-    public void setValue(int i,Object val);
+    public String getValue(int i);
+    public void setValue(int i,String val);
 }

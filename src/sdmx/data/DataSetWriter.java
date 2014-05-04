@@ -4,6 +4,7 @@
  */
 package sdmx.data;
 
+import java.util.HashMap;
 import sdmx.data.flat.FlatDataSet;
 
 /**
@@ -18,6 +19,7 @@ public interface DataSetWriter {
     public void writeDataSetComponent(String name,String val);
     public void writeSeriesComponent(String name,String val);
     public void writeObservationComponent(String name,String val);
+    public void writeGroupValues(String name,HashMap<String,String> group);
     public void finishObservation();
     public void finishSeries();
     public DataSet finishDataSet();

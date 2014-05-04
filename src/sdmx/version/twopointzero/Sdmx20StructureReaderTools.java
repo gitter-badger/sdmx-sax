@@ -97,7 +97,7 @@ import sdmx.xml.positiveInteger;
  */
 public class Sdmx20StructureReaderTools {
 
-    Registry registry = LocalRegistry.getDefaultWorkspace();
+    Registry registry = null;
 
     public Sdmx20StructureReaderTools() {
     }
@@ -134,11 +134,9 @@ public class Sdmx20StructureReaderTools {
 
     public StructureType parseStructure(org.sdmx.resources.sdmxml.schemas.v20.message.StructureDocument structDoc) throws TypeValueNotFoundException {
         StructureType sd = new StructureType();
+        registry = sd;
         StructuresType struct = new StructuresType();
         sd.setStructures(struct);
-        if (registry != null) {
-            registry.load(sd);
-        }
         try {
             struct.setCodelists(toCodelists(structDoc.getStructure().getCodeLists()));
             struct.setConcepts(toConcepts(structDoc.getStructure().getConcepts()));

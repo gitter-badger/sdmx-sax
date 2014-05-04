@@ -49,7 +49,7 @@ import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.version.common.Queryable;
-import sdmx.version.common.SdmxIO;
+import sdmx.SdmxIO;
 import sdmx.version.common.SOAPStrippingInputStream;
 import sdmx.workspace.Registry;
 
