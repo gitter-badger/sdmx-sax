@@ -19,8 +19,8 @@ import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.StructureType;
 import sdmx.version.common.Queryable;
 import sdmx.SdmxIO;
-import sdmx.workspace.RESTServiceRegistry;
-import sdmx.workspace.Registry;
+import sdmx.registry.RESTServiceRegistry;
+import sdmx.Registry;
 
 /**
  *

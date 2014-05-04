@@ -15,7 +15,7 @@ import sdmx.SdmxIO;
 import sdmx.version.common.SdmxParserProvider;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.message.DataMessage;
-import sdmx.workspace.Registry;
+import sdmx.Registry;
 
 /**
  *

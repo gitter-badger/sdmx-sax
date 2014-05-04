@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import sdmx.data.DataSet;
-import sdmx.data.ValueTypeResolver;
+import sdmx.combined.ValueTypeResolver;
 import sdmx.data.flat.FlatObs;
 import sdmx.data.key.PartialKey;
 import sdmx.message.DataMessage;
@@ -26,8 +26,8 @@ import sdmx.query.data.DataParametersType;
 import sdmx.query.data.DataQuery;
 import sdmx.query.data.DimensionValueType;
 import sdmx.SdmxIO;
-import sdmx.workspace.LocalRegistry;
-import sdmx.workspace.Registry;
+import sdmx.registry.LocalRegistry;
+import sdmx.Registry;
 
 /**
  *
@@ -82,7 +82,7 @@ public class Sdmx20DataQueryTest {
         //ValueTypeResolver.resolveDataSet(LocalRegistry.getDefaultWorkspace(), d7, uisStruct.getStructures().getDataStructures().getDataStructures().get(0));
         for(int i=0;i<list.size();i++) {
             for(int j=0;j<list.get(i).size();j++) {
-                System.out.print(ValueTypeResolver.resolve(registry, uisStruct.getStructures().getDataStructures().getDataStructures().get(0), data6.getDataSets().get(0).getColumnName(j), list.get(i).getValue(j)));
+                System.out.print(list.get(i).getValue(j));
                 if( j < list.get(i).size()-1)System.out.print(" ");
                 if( j==list.get(i).size()-1) System.out.println();
             }

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sdmx.version.common;
+package sdmx;
 
 import sdmx.SdmxIO;
 import java.io.InputStream;

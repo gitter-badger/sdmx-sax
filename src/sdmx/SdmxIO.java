@@ -22,8 +22,7 @@ import sdmx.version.twopointzero.Sdmx20ParserProvider;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.message.DataMessage;
 import sdmx.version.common.SdmxParserProvider;
-import sdmx.workspace.LocalRegistry;
-import sdmx.workspace.Registry;
+import sdmx.registry.LocalRegistry;
 
 /**
  *

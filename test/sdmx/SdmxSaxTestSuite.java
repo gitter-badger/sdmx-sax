@@ -13,7 +13,6 @@ import org.junit.runners.Suite;
 import sdmx.data.StructuredDataTest;
 import sdmx.message.StructureTypeTest;
 import sdmx.version.common.SOAPStripperInputStreamTest;
-import sdmx.version.common.SdmxIOTest;
 import sdmx.version.twopointone.Sdmx21StructureParserTest;
 import sdmx.version.twopointzero.Sdmx20DataParserTest;
 import sdmx.version.twopointzero.Sdmx20DataQueryTest;

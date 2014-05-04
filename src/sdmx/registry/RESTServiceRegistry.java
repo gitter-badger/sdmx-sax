@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sdmx.workspace;
+package sdmx.registry;
 
+import sdmx.Registry;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +23,7 @@ import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.ItemSchemeReferenceBaseType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.VersionType;
-import sdmx.data.ValueTypeResolver;
+import sdmx.combined.ValueTypeResolver;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
 import sdmx.structure.StructuresType;

@@ -33,7 +33,7 @@ import sdmx.version.twopointzero.Sdmx20EventHandler;
 import sdmx.version.twopointzero.compact.CompactDataEventHandler;
 import static sdmx.version.twopointzero.compact.CompactDataEventHandler.STATE_HEADER;
 import static sdmx.version.twopointzero.compact.CompactDataEventHandler.STATE_HEADERPREPARED;
-import sdmx.workspace.Registry;
+import sdmx.Registry;
 import sdmx.xml.DateTime;
 import sdmx.xml.DateType;
 
@@ -88,6 +88,7 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
 
     public DataMessage getDataMessage() {
         if (state != STATE_FINISH) {
+            System.out.println("State="+state);
             throw new RuntimeException("You can't get the document before i've finished parsing!");
         }
         DataMessage dm = new DataMessage();

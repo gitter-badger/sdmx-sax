@@ -17,7 +17,7 @@ import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.VersionType;
-import sdmx.data.ValueTypeResolver;
+import sdmx.combined.ValueTypeResolver;
 import sdmx.message.DataMessage;
 import sdmx.message.DataQueryMessage;
 import sdmx.message.StructureType;
@@ -33,10 +33,10 @@ import sdmx.query.data.DimensionValueType;
 import sdmx.query.data.TimeDimensionValueType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.SdmxIO;
-import sdmx.workspace.LocalRegistry;
-import sdmx.workspace.QueryableServiceRegistry;
-import sdmx.workspace.RESTServiceRegistry;
-import sdmx.workspace.Registry;
+import sdmx.registry.LocalRegistry;
+import sdmx.registry.QueryableServiceRegistry;
+import sdmx.registry.RESTServiceRegistry;
+import sdmx.Registry;
 
 /**
  *

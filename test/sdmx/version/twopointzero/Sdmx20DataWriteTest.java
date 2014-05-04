@@ -18,13 +18,13 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import sdmx.data.ValueTypeResolver;
+import sdmx.combined.ValueTypeResolver;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
 import sdmx.SdmxIO;
 import sdmx.version.twopointzero.writer.CompactDataWriter;
-import sdmx.workspace.LocalRegistry;
-import sdmx.workspace.Registry;
+import sdmx.registry.LocalRegistry;
+import sdmx.Registry;
 
 /**
  *

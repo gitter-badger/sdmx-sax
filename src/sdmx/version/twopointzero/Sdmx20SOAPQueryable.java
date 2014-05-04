@@ -51,7 +51,7 @@ import sdmx.structure.datastructure.DataStructureType;
 import sdmx.version.common.Queryable;
 import sdmx.SdmxIO;
 import sdmx.version.common.SOAPStrippingInputStream;
-import sdmx.workspace.Registry;
+import sdmx.Registry;
 
 /**
  *

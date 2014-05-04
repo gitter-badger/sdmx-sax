@@ -104,6 +104,8 @@ public class GenericDataContentHandler extends Sdmx20ContentHandler {
         if ("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message".equals(uri)) {
             if ("GenericData".equals(localName)) {
                 eh.startRootElement(atts);
+            }else if ("MessageGroup".equals(localName)) {
+                eh.startRootElement(atts);
             } else if ("Header".equals(localName)) {
                 eh.startHeader();
             } else if ("ID".equals(localName)) {
@@ -150,6 +152,8 @@ public class GenericDataContentHandler extends Sdmx20ContentHandler {
         //System.out.println("END" + localName);
         if ("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message".equals(uri)) {
             if ("GenericData".equals(localName)) {
+                eh.endRootElement();
+            } else if ("MessageGroup".equals(localName)) {
                 eh.endRootElement();
             } else if ("Header".equals(localName)) {
                 eh.endHeader();

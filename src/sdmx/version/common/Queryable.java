@@ -11,7 +11,7 @@ import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.message.BaseHeaderType;
 import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.StructureType;
-import sdmx.workspace.Registry;
+import sdmx.Registry;
 
 /**
  *

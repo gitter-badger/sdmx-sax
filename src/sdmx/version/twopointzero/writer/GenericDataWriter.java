@@ -21,7 +21,7 @@ import org.jdom.Namespace;
 import org.jdom.output.XMLOutputter;
 import sdmx.common.Name;
 import sdmx.data.DataSet;
-import sdmx.data.ValueTypeResolver;
+import sdmx.combined.ValueTypeResolver;
 import sdmx.data.structured.Obs;
 import sdmx.data.structured.Series;
 import sdmx.data.structured.StructuredColumnMapper;
@@ -169,7 +169,7 @@ public class GenericDataWriter {
                 Series s = sds.getSeriesList().get(i);
                 for (int j = 0; j < mapper.size(); j++) {
                     if (mapper.isAttachedToSeries(j)) {
-                        writer.writeAttribute(mapper.getColumnName(j), ValueTypeResolver.columnToString(s.getValue(j)));
+                        writer.writeAttribute(mapper.getColumnName(j), s.getValue(j));
                     }
                 }
                 for (int k = 0; k < s.getObservations().size(); k++) {
@@ -177,7 +177,7 @@ public class GenericDataWriter {
                     Obs o = s.getObservations().get(k);
                     for (int j = 0; j < mapper.size(); j++) {
                         if (mapper.isAttachedToObservation(j)) {
-                            writer.writeAttribute(mapper.getColumnName(j), ValueTypeResolver.columnToString(o.getObservationValue(j)));
+                            writer.writeAttribute(mapper.getColumnName(j), o.getObservationValue(j));
                         }
                     }
                     writer.writeEndElement();

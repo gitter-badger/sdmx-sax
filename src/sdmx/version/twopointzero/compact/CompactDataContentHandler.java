@@ -24,7 +24,7 @@ import sdmx.data.flat.FlatDataSet;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
 import sdmx.version.twopointzero.Sdmx20ContentHandler;
-import sdmx.workspace.Registry;
+import sdmx.Registry;
 
 public class CompactDataContentHandler extends Sdmx20ContentHandler implements ContentHandler, ErrorHandler {
 

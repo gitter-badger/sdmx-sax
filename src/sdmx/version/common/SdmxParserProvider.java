@@ -12,7 +12,7 @@ import sdmx.message.MetadataStructure;
 import sdmx.message.StructureType;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.message.DataMessage;
-import sdmx.workspace.Registry;
+import sdmx.Registry;
 
 /**
  *

@@ -6,6 +6,8 @@
 
 package sdmx.workspace;
 
+import sdmx.registry.LocalRegistry;
+import sdmx.Registry;
 import java.io.InputStream;
 import java.util.List;
 import java.util.logging.Level;

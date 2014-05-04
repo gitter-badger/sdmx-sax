@@ -16,8 +16,8 @@ import sdmx.message.StructureType;
 import sdmx.SdmxIO;
 import sdmx.version.twopointzero.Sdmx20DataParserTest;
 import sdmx.version.twopointzero.Sdmx20StructureParserTest;
-import sdmx.workspace.LocalRegistry;
-import sdmx.workspace.Registry;
+import sdmx.registry.LocalRegistry;
+import sdmx.Registry;
 
 /**
  *

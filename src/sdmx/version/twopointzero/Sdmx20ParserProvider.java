@@ -29,8 +29,8 @@ import sdmx.version.twopointzero.compact.CompactDataEventHandler;
 import sdmx.version.twopointzero.generic.GenericDataContentHandler;
 import sdmx.version.twopointzero.generic.GenericDataEventHandler;
 import sdmx.version.twopointzero.writer.CompactDataWriter;
-import sdmx.workspace.LocalRegistry;
-import sdmx.workspace.Registry;
+import sdmx.registry.LocalRegistry;
+import sdmx.Registry;
 
 /**
  *
@@ -44,6 +44,8 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
 
     public static boolean isSdmx20(String header) {
         if (header.indexOf("CompactData ") != -1) {
+            return true;
+        }else if (header.indexOf("MessageGroup") != -1) {
             return true;
         } else if (header.indexOf("GenericData") != -1) {
             return true;
@@ -121,6 +123,8 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
             return true;
         } else if (header.indexOf("CrossSectionalData") != -1) {
             return true;
+        } else if (header.indexOf("MessageGroup") != -1) {
+            return true;
         } else {
             return false;
         }
@@ -138,6 +142,8 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
     
     public boolean isGenericData(String header) {
         if (header.indexOf("GenericData ") != -1) {
+            return true;
+        }if (header.indexOf("MessageGroup ") != -1) {
             return true;
         } else {
             return false;

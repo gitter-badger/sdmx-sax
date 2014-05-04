@@ -10,7 +10,7 @@ import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.version.twopointzero.Sdmx20SOAPQueryable;
-import sdmx.workspace.QueryableServiceRegistry;
+import sdmx.registry.QueryableServiceRegistry;
 
 /**
  *

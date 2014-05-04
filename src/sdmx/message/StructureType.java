@@ -16,7 +16,7 @@ import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
 import sdmx.structure.datastructure.DataStructureType;
-import sdmx.workspace.Registry;
+import sdmx.Registry;
 
 /**
  * *	<xs:complexType name="StructureType">
