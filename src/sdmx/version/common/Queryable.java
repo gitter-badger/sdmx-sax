@@ -7,11 +7,13 @@ package sdmx.version.common;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
+import sdmx.Registry;
 import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.message.BaseHeaderType;
+import sdmx.message.DataMessage;
+import sdmx.message.DataQueryMessage;
 import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.StructureType;
-import sdmx.Registry;
 
 /**
  *
@@ -21,10 +23,9 @@ public interface Queryable {
 
     public String getAgencyId();
 
-    public StructureType getDataStructure(DataStructureQueryMessage message) throws MalformedURLException, IOException;
-
-    public List<DataStructureReferenceType> listDataSets(BaseHeaderType header);
-    
+    public StructureType query(DataStructureQueryMessage message) throws QueryableException;
+    public DataMessage query(DataQueryMessage message) throws QueryableException;
+    public List<DataStructureReferenceType> listDataSets() throws QueryableException;
 
     public void setAgencyId(String agencyId);
 
@@ -37,16 +38,6 @@ public interface Queryable {
      * @param serviceURL the serviceURL to set
      */
     public void setServiceURL(String serviceURL);
-
-    /**
-     * @return the registry
-     */
     public Registry getRegistry();
-
-    /**
-     * @param registry the registry to set
-     */
-    public void setRegistry(Registry registry);
-    public String getSoapNamespace();
-    public void setSoapNamespace(String s);
+    public void setRegistry(Registry r);
 }

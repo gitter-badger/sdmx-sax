@@ -218,13 +218,13 @@ public class Sdmx20ServiceTest {
             }catch(Exception ie) {}
         }
     }
-    /*
+/*
     @Test
     public void testIMFList() throws IOException {
         Sdmx20SOAPQueryable queryable = new Sdmx20SOAPQueryable("IMF", "http://sdmxws.imf.org/IMFStatWS_SDMX2/sdmx.asmx");
         queryable.setSoapNamespace("http://stats.imf.org/DotStatWS/SDMX/");
         QueryableServiceRegistry registry = new QueryableServiceRegistry(queryable);
-        List<DataStructureReferenceType> list = registry.listDataSets();
+        List<DataStructureReferenceType> list = registry.listDataStructures();
         Iterator<DataStructureReferenceType> it = list.iterator();
         while(it.hasNext()){
             DataStructureReferenceType ref = it.next();
@@ -233,8 +233,7 @@ public class Sdmx20ServiceTest {
             ds.dump();
             
         }
-    }
-    */
+    }*/
     /*
     @Test
     public void testOECDList() throws IOException {

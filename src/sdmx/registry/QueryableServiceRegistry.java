@@ -4,7 +4,6 @@
  */
 package sdmx.registry;
 
-import sdmx.Registry;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,6 +34,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.jdom.Document;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import sdmx.Registry;
+import sdmx.SdmxIO;
 import sdmx.common.TextOperatorType;
 import sdmx.commonreferences.ConceptReferenceType;
 import sdmx.commonreferences.DataStructureReferenceType;
@@ -60,7 +61,7 @@ import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.version.common.Queryable;
-import sdmx.SdmxIO;
+import sdmx.version.common.QueryableException;
 import sdmx.version.twopointone.Sdmx21StructureReaderTools;
 import sdmx.version.twopointzero.Sdmx20QueryWriter;
 import sdmx.xml.DateTime;
@@ -75,7 +76,6 @@ public class QueryableServiceRegistry implements Registry {
     Queryable queryable = null;
     public QueryableServiceRegistry(Queryable queryable) {
         this.queryable=queryable;
-        queryable.setRegistry(this);
     }
     public void load(StructureType struct) {
         local.load(struct);
@@ -101,12 +101,11 @@ public class QueryableServiceRegistry implements Registry {
                 }
                 queryMessage.setDataStructureWhereType(where);
                 queryMessage.setHeader(getBaseHeader());
-                local.load(queryable.getDataStructure(queryMessage));
+                local.load(queryable.query(queryMessage));
                 return local.findDataStructure(agency, id, version);
-            } catch (MalformedURLException ex) {
-                //Logger.getLogger(QueryableServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                //Logger.getLogger(QueryableServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (QueryableException ex) {
+                Logger.getLogger(QueryableServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                throw new RuntimeException("Error");
             }
         }
         return null;
@@ -154,6 +153,17 @@ public class QueryableServiceRegistry implements Registry {
     public CodelistType findCodelist(String codelistAgency, String codelist) {
         return local.findCodelist(codelistAgency,codelist);
     }
+
+    public List<DataStructureReferenceType> listDataStructures(){
+        try {
+            return queryable.listDataSets();
+        } catch (QueryableException ex) {
+            Logger.getLogger(QueryableServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Error");
+        }
+    }
+    public Queryable getQueryable(){ return queryable; }
+    
     public BaseHeaderType getBaseHeader() {
         BaseHeaderType header = new BaseHeaderType();
         header.setId("none");
@@ -169,8 +179,4 @@ public class QueryableServiceRegistry implements Registry {
         header.setPrepared(htt);
         return header;
     }
-    public List<DataStructureReferenceType> listDataStructures(){
-        return queryable.listDataSets(getBaseHeader());
-    }
-    public Queryable getQueryable(){ return queryable; }
 }

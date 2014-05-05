@@ -331,6 +331,7 @@ public class StructuresType implements Registry {
 
     @Override
     public CodelistType findCodelist(String codelistAgency, String codelist, String codelistVersion) {
+        if( getCodelists()==null ) return null;
         CodelistType cl = getCodelists().findCodelist(codelistAgency, codelist, codelistVersion);
         if (cl != null) {
             return cl;
@@ -349,6 +350,7 @@ public class StructuresType implements Registry {
 
     @Override
     public ConceptSchemeType findConceptScheme(NestedNCNameIDType csa, IDType csi) {
+        if( getConcepts()==null ) return null;
         ConceptSchemeType cs = getConcepts().findConceptScheme(csa, csi);
         if (cs != null) {
             return cs;

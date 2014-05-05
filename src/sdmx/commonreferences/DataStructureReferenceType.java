@@ -32,4 +32,5 @@ public class DataStructureReferenceType extends StructureReferenceBaseType {
     public DataStructureReferenceType(anyURI urn){
         super(urn);
     }
+    
 }

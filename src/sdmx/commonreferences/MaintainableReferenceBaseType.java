@@ -34,4 +34,18 @@ public class MaintainableReferenceBaseType extends ReferenceType {
      public MaintainableReferenceBaseType(anyURI urn){
          super(urn);
      }
+     public String toString() {
+         if( getRef()!=null ) {
+             StringBuilder builder = new StringBuilder();
+             if( getRef().getAgencyId()!=null ) builder.append(getRef().getAgencyId().toString());
+             if( getRef().getMaintainableParentId()!=null) builder.append(getRef().getMaintainableParentId().toString());
+             if( getRef().getId()!=null)builder.append(","+getRef().getId());
+             if( getRef().getVersion()!=null)builder.append(","+getRef().getVersion());
+             return builder.toString();
+         }
+         if( this.getUrn()!=null ) {
+             return this.getUrn().toString();
+         }
+         return "";
+     }
 }
