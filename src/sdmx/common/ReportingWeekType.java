@@ -19,6 +19,24 @@ import sdmx.xml.RegexXMLString;
 	</xs:simpleType>
  * @author James
  */
+/**
+ *  This file is part of SdmxSax.
+ *
+ *   SdmxSax is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ 
+ *   SdmxSax is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Copyright James Gardner 2014
+ */
 public class ReportingWeekType extends RegexXMLString {
     public static final String PATTERN = ".{5}W(0[1-9]|[1-4][0-9]|5[0-3]).*";
     public static final Pattern REGEX_PATTERN = Pattern.compile(PATTERN);
