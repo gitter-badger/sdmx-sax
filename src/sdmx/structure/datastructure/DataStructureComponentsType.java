@@ -112,6 +112,9 @@ public class DataStructureComponentsType extends DataStructureComponentsBaseType
         }
         if( timeDimension.getConceptIdentity().getRef().getId().equals(name))return timeDimension;
         if( measureList.getPrimaryMeasure().getConceptIdentity().getRef().getId().equals(name))return measureList.getPrimaryMeasure();
+        if( "TIME_PERIOD".equals(name)) {
+            return timeDimension;
+        }
         return null;
     }
 }

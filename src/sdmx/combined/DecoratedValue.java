@@ -5,7 +5,12 @@
  */
 package sdmx.combined;
 
+import java.util.Locale;
 import sdmx.Registry;
+import sdmx.common.Description;
+import sdmx.common.Name;
+import sdmx.structure.base.Component;
+import sdmx.structure.base.RepresentationType;
 import sdmx.structure.codelist.CodeType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.datastructure.DataStructureType;
@@ -28,6 +33,10 @@ public class DecoratedValue {
         this.structure=struct;
     }
     public boolean isCoded() {
+        Component comp = structure.getDataStructureComponents().findDimension(concept);
+        if( comp == null ) return false;
+        RepresentationType localRep = comp.getLocalRepresentation();
+        if( localRep == null ) return false;
         return structure.getDataStructureComponents().findDimension(concept).getLocalRepresentation().getEnumeration()!=null;
     }
     public CodeType getCode() {
@@ -35,5 +44,20 @@ public class DecoratedValue {
     }
     public CodelistType getCodelist() {
         return ValueTypeResolver.getPossibleCodes(registry, structure, value);
+    }
+    public String toString() {
+        Locale loc = Locale.getDefault();
+        if( isCoded() ) {
+            CodeType code = getCode();
+            if( code == null ) {
+                throw new RuntimeException("Null Code");
+            }
+            Name name = code.findName(loc.getLanguage());
+            Description desc = code.findDescription(loc.getLanguage());
+            if( name != null ) return name.getText();
+            if( desc!=null ) return desc.getText();
+            else return code.getId().toString();
+        }
+        return value;
     }
 }

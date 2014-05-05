@@ -43,5 +43,5 @@ public interface Registry {
     public ConceptSchemeType findConceptSchemeById(IDType id);
     public ConceptType findConcept(NestedNCNameIDType agency, IDType id);
     public ConceptType findConcept(IDType id);
-    public List<DataStructureReferenceType> listDataSets();
+    public List<DataStructureReferenceType> listDataStructures();
 }

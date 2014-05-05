@@ -6,6 +6,8 @@
 
 package sdmx.combined;
 
+import java.util.ArrayList;
+import java.util.List;
 import sdmx.Registry;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.NestedIDType;
@@ -21,8 +23,24 @@ import sdmx.structure.datastructure.DataStructureType;
 public class CombinedDataAndStructure {
     private DataMessage dataMessage = null;
     private Registry registry = null;
+    
+    
+    private List<DecoratedDataSet> list = new ArrayList<DecoratedDataSet>();
+    
+    public CombinedDataAndStructure(DataMessage dat,Registry reg) {
+        this.dataMessage=dat;
+        this.registry=reg;
+        for(int i=0;i<dataMessage.getDataSets().size();i++) {
+            list.add(buildDecoratedDataSet(i));
+        }
+    }
+    
+    
     public int size() { return dataMessage.getDataSets().size(); }
     public DecoratedDataSet getDecoratedDataSet(int i) {
+        return list.get(i);
+    }
+    public DecoratedDataSet buildDecoratedDataSet(int i) {
         NestedNCNameIDType agency = dataMessage.getHeader().getStructures().get(0).getStructure().getRef().getAgencyId();
         NestedIDType id = dataMessage.getHeader().getStructures().get(0).getStructure().getRef().getId();
         VersionType vers = dataMessage.getHeader().getStructures().get(0).getStructure().getRef().getVersion();

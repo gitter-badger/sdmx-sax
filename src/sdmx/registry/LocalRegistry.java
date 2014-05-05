@@ -235,7 +235,11 @@ public class LocalRegistry implements Registry {
         return null;
     }
 
-    public List<DataStructureReferenceType> listDataSets() {
-        return Collections.EMPTY_LIST;
+    public List<DataStructureReferenceType> listDataStructures() {
+        List<DataStructureReferenceType> result = new ArrayList<DataStructureReferenceType>();
+        for(int i=0;i<structures.size();i++) {
+            result.addAll(structures.get(i).listDataStructures());
+        }
+        return result;
     }
 }

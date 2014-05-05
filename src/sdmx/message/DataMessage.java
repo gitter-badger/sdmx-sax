@@ -4,7 +4,10 @@
  */
 package sdmx.message;
 
+import java.util.ArrayList;
 import java.util.List;
+import sdmx.common.PayloadStructureType;
+import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.data.DataSet;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.structure.StructuresType;
@@ -83,5 +86,19 @@ public class DataMessage extends MessageType {
      */
     public void setNamespacePrefix(String namespacePrefix) {
         this.namespacePrefix = namespacePrefix;
+    }
+    public void setDataStructure(DataStructureReferenceType ref) {
+        List<PayloadStructureType> structures = this.getHeader().getStructures();
+        if( structures == null ) {
+            structures = new ArrayList<PayloadStructureType>();
+        }
+        PayloadStructureType payload = null;
+        if( structures.size()>0)payload=structures.get(0);
+        if( payload == null ) {
+            payload = new PayloadStructureType();
+            structures.add(payload);
+        }
+        payload.setStructure(ref);
+        getHeader().setStructures(structures);
     }
 }

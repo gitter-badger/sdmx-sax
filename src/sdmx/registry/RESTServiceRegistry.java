@@ -210,7 +210,7 @@ public class RESTServiceRegistry implements Registry {
     }
 
     @Override
-    public List<DataStructureReferenceType> listDataSets() {
-        return Collections.EMPTY_LIST;
+    public List<DataStructureReferenceType> listDataStructures() {
+        return local.listDataStructures();
     }
 }

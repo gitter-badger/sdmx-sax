@@ -169,7 +169,7 @@ public class QueryableServiceRegistry implements Registry {
         header.setPrepared(htt);
         return header;
     }
-    public List<DataStructureReferenceType> listDataSets(){
+    public List<DataStructureReferenceType> listDataStructures(){
         return queryable.listDataSets(getBaseHeader());
     }
     public Queryable getQueryable(){ return queryable; }

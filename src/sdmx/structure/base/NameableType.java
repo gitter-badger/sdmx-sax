@@ -71,6 +71,7 @@ public class NameableType extends IdentifiableType {
             if( lang!=null&&lang.equals(names.get(i).getLang()))return names.get(i);
             if( names.get(i).getLang()==null)def=names.get(i);
         }
+        if( !"en".equals(lang) ) return findName("en");
         return def;
     }
     public Description findDescription(String lang) {
@@ -80,6 +81,7 @@ public class NameableType extends IdentifiableType {
             if( lang!=null&&lang.equals(descriptions.get(i).getLang()))return descriptions.get(i);
             if( descriptions.get(i).getLang()==null)def=descriptions.get(i);
         }
+        if( !"en".equals(lang) ) return findDescription("en");
         return def;
     }
 }

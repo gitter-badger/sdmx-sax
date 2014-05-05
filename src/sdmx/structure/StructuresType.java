@@ -4,9 +4,12 @@
  */
 package sdmx.structure;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import sdmx.Registry;
 import sdmx.commonreferences.ConceptReferenceType;
+import sdmx.commonreferences.DataStructureRefType;
 import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.ItemSchemeReferenceBaseType;
@@ -19,7 +22,6 @@ import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
 import sdmx.structure.datastructure.DataStructureType;
-import sdmx.Registry;
 
 /**
  *
@@ -385,8 +387,15 @@ public class StructuresType implements Registry {
     }
 
     @Override
-    public List<DataStructureReferenceType> listDataSets() {
-        return Collections.EMPTY_LIST;
+    public List<DataStructureReferenceType> listDataStructures() {
+        List<DataStructureReferenceType> result = new ArrayList<DataStructureReferenceType>();
+        for(int i=0;i<this.getDataStructures().getDataStructures().size();i++) {
+            DataStructureType dst = getDataStructures().getDataStructures().get(i);
+            DataStructureRefType ref = new DataStructureRefType(dst.getAgencyID(),dst.getId(),dst.getVersion());
+            DataStructureReferenceType dref = new DataStructureReferenceType(ref,dst.getUrn());
+            result.add(dref);
+        }
+        return result;
     }
 
 }

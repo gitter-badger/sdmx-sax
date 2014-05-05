@@ -260,7 +260,7 @@ public class StructureTypeTest {
     public void testListDataSets() {
         System.out.println("listDataSets");
         try {
-            assertEquals(0,doc.listDataSets().size());
+            assertEquals(1,doc.listDataStructures().size());
         } catch (Exception ex) {
         }
     }

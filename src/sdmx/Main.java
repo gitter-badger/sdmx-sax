@@ -25,7 +25,7 @@ public class Main {
         Sdmx20SOAPQueryable queryable = new Sdmx20SOAPQueryable("ABS", "http://stat.abs.gov.au/sdmxws/sdmx.asmx");
         queryable.setSoapNamespace("http://stats.oecd.org/OECDStatWS/SDMX/");
         QueryableServiceRegistry registry = new QueryableServiceRegistry(queryable);
-        List<DataStructureReferenceType> list = registry.listDataSets();
+        List<DataStructureReferenceType> list = registry.listDataStructures();
         Iterator<DataStructureReferenceType> it = list.iterator();
         int retries = 3;
         int retry = 0;

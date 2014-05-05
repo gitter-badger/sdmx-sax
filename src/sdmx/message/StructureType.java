@@ -134,7 +134,7 @@ public class StructureType extends MessageType implements Registry {
     }
 
     @Override
-    public List<DataStructureReferenceType> listDataSets() {
-        return structures.listDataSets();
+    public List<DataStructureReferenceType> listDataStructures() {
+        return structures.listDataStructures();
     }
 }
