@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sdmx.combined;
+package sdmx.structureddata;
 
 import java.util.Locale;
 import sdmx.Registry;
@@ -37,20 +37,20 @@ import sdmx.structure.datastructure.DataStructureType;
  *
  *  Copyright James Gardner 2014
  */
-public class DecoratedDataSet {
+public class StructuredDataSet {
 
     private DataSet dataSet = null;
     private Registry registry = null;
     private DataStructureType structure = null;
 
-    public DecoratedDataSet(DataSet ds, Registry reg, DataStructureType struct) {
+    public StructuredDataSet(DataSet ds, Registry reg, DataStructureType struct) {
         this.dataSet = ds;
         this.registry = reg;
         this.structure = struct;
     }
 
-    public DecoratedValue getDecoratedValue(int row, int column) {
-        return new DecoratedValue(dataSet.getColumnName(column), dataSet.getValue(row, column), registry, structure);
+    public StructuredValue getDecoratedValue(int row, int column) {
+        return new StructuredValue(dataSet.getColumnName(column), dataSet.getValue(row, column), registry, structure);
     }
 
     public String getColumnName(int i) {

@@ -16,7 +16,7 @@ import org.junit.Test;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.VersionType;
-import sdmx.combined.ValueTypeResolver;
+import sdmx.structureddata.ValueTypeResolver;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
 import sdmx.structure.datastructure.DataStructureType;
@@ -24,6 +24,7 @@ import sdmx.SdmxIO;
 import sdmx.registry.LocalRegistry;
 import sdmx.registry.RESTServiceRegistry;
 import sdmx.Registry;
+import sdmx.exception.ParseException;
 
 /**
  *
@@ -73,23 +74,29 @@ public class Sdmx20DataParserTest {
      */
     @Test
     public void testCompactSample() throws IOException {
-        StructureType struct = null;
         try {
-            InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/StructureSample.xml");
-            struct = SdmxIO.parseStructure(in);
-            LocalRegistry.getDefaultWorkspace().load(struct);
-        } catch (IOException ex) {
+            StructureType struct = null;
+            try {
+                InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/StructureSample.xml");
+                struct = SdmxIO.parseStructure(in);
+                LocalRegistry.getDefaultWorkspace().load(struct);
+            } catch (IOException ex) {
+                Logger.getLogger(Sdmx20DataParserTest.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(Sdmx20DataParserTest.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            long t1= System.currentTimeMillis();
+            InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/CompactSample.xml");
+            DataMessage data = SdmxIO.parseData(in);
+            long t2 = System.currentTimeMillis();
+            System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
+            data.dump();
+        } catch (ParseException ex) {
             Logger.getLogger(Sdmx20DataParserTest.class.getName()).log(Level.SEVERE, null, ex);
         }
-        long t1= System.currentTimeMillis();
-        InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/CompactSample.xml");
-        DataMessage data = SdmxIO.parseData(in);
-        long t2 = System.currentTimeMillis();
-        System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
-        data.dump();
     }
     @Test
-    public void testGeneric() throws IOException {
+    public void testGeneric() throws IOException, ParseException {
         System.out.println("Test Generic");
         StructureType struct = null;
         try {
@@ -108,7 +115,7 @@ public class Sdmx20DataParserTest {
     }
 
     @Test
-    public void testABSCPI() throws IOException {
+    public void testABSCPI() throws IOException, ParseException {
         StructureType cpiStruct = null;
         try {
             InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/cpi-structure.xml");
@@ -125,7 +132,7 @@ public class Sdmx20DataParserTest {
         data2.dump();
     }
     @Test
-    public void testIMFPGI() throws IOException {
+    public void testIMFPGI() throws IOException, ParseException {
         StructureType pgiStruct = null;
         try {
             InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/imf-20/PGIDSD.xml");
@@ -143,7 +150,7 @@ public class Sdmx20DataParserTest {
     }
 
     @Test
-    public void testABSALC() throws IOException {
+    public void testABSALC() throws IOException, ParseException {
         StructureType alcStruct = null;
         try {
             InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/alc-structure.xml");

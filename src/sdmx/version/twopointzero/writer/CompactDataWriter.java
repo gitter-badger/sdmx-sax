@@ -21,7 +21,7 @@ import org.jdom.Namespace;
 import org.jdom.output.XMLOutputter;
 import sdmx.common.Name;
 import sdmx.data.DataSet;
-import sdmx.combined.ValueTypeResolver;
+import sdmx.structureddata.ValueTypeResolver;
 import sdmx.data.structured.Obs;
 import sdmx.data.structured.Series;
 import sdmx.data.structured.StructuredColumnMapper;

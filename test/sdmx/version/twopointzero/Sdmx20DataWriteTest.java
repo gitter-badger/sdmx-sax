@@ -18,13 +18,14 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import sdmx.combined.ValueTypeResolver;
+import sdmx.structureddata.ValueTypeResolver;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
 import sdmx.SdmxIO;
 import sdmx.version.twopointzero.writer.CompactDataWriter;
 import sdmx.registry.LocalRegistry;
 import sdmx.Registry;
+import sdmx.exception.ParseException;
 
 /**
  *
@@ -73,7 +74,7 @@ public class Sdmx20DataWriteTest {
      * Test of isSdmx20 method, of class Sdmx20StructureParserProvider.
      */
     @Test
-    public void testCompactSample() throws IOException, XMLStreamException {
+    public void testCompactSample() throws IOException, XMLStreamException, ParseException {
         long t1= System.currentTimeMillis();
         InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/CompactSample.xml");
         DataMessage data = SdmxIO.parseData(in,false);
@@ -86,7 +87,7 @@ public class Sdmx20DataWriteTest {
         data.dump();
     }
     @Test
-    public void testCompactSample2() throws IOException, XMLStreamException {
+    public void testCompactSample2() throws IOException, XMLStreamException, ParseException {
         long t1= System.currentTimeMillis();
         InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/DSID1230571/DSID1230571 - CompactData.xml");
         DataMessage data = SdmxIO.parseData(in,false);
@@ -99,7 +100,7 @@ public class Sdmx20DataWriteTest {
         data.dump();
     }
     @Test
-    public void testCompactSample3() throws IOException, XMLStreamException {
+    public void testCompactSample3() throws IOException, XMLStreamException, ParseException {
         long t1= System.currentTimeMillis();
         InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/DSID1230571/DSID1230571 - GenericData.xml");
         DataMessage data = SdmxIO.parseData(in,false);

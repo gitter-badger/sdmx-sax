@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sdmx.combined;
+package sdmx.structureddata;
 
 import java.util.Locale;
 import sdmx.Registry;
@@ -33,14 +33,14 @@ import sdmx.structure.datastructure.DataStructureType;
  *
  *  Copyright James Gardner 2014
  */
-public class DecoratedValue {
+public class StructuredValue {
 
     private String concept = null;
     private String value = null;
     private Registry registry = null;
     private DataStructureType structure = null;
 
-    public DecoratedValue(String concept, String value, Registry registry,DataStructureType struct) {
+    public StructuredValue(String concept, String value, Registry registry,DataStructureType struct) {
         this.concept=concept;
         this.value=value;
         this.registry=registry;

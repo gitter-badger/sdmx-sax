@@ -49,7 +49,7 @@ import sdmx.workspace.LocalRegistryTest;
     Sdmx21StructureParserTest.class,
     Sdmx20StructureParserTest.class,
     Sdmx20DataParserTest.class,
-    Sdmx20ServiceTest.class,
+    //Sdmx20ServiceTest.class,
     SOAPStripperInputStreamTest.class,
     StructuredDataTest.class,
     Sdmx20DataQueryTest.class,

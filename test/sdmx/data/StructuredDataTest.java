@@ -18,6 +18,7 @@ import sdmx.version.twopointzero.Sdmx20DataParserTest;
 import sdmx.version.twopointzero.Sdmx20StructureParserTest;
 import sdmx.registry.LocalRegistry;
 import sdmx.Registry;
+import sdmx.exception.ParseException;
 
 /**
  *
@@ -54,7 +55,7 @@ public class StructuredDataTest {
         System.out.println("Finish Test Structured Data");
     }
     @Test
-    public void testCompactSampleFlat() throws IOException {
+    public void testCompactSampleFlat() throws IOException, ParseException {
         System.out.println("Start Flat Benchmark");
         StructureType struct = null;
         try {
@@ -73,7 +74,7 @@ public class StructuredDataTest {
         data.dump();        
     }
     @Test
-    public void testCompactSample() throws IOException {
+    public void testCompactSample() throws IOException, ParseException {
         System.out.println("Start Structured Test");
         StructureType struct = null;
         try {

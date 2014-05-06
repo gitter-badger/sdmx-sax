@@ -139,7 +139,7 @@ public class LocalRegistryTest {
      */
     @Test
     public void testFindConceptScheme_NestedNCNameIDType_ConceptReferenceType() {
-        ConceptRefType ref = new ConceptRefType(new IDType("STOCKS"), new VersionType("1.0"), new IDType("STOCKS"));
+        ConceptRefType ref = new ConceptRefType(new IDType("STANDALONE_CONCEPT_SCHEME"), new VersionType("1.0"), new IDType("STOCKS"));
         ConceptReferenceType cref = new ConceptReferenceType(ref, null);
         ConceptSchemeType cs = doc.findConceptScheme(new NestedNCNameIDType("BIS"), cref);
         assertNotNull(cs);
@@ -215,7 +215,7 @@ public class LocalRegistryTest {
     public void testFindConceptScheme_NestedNCNameIDType_IDType() {
         System.out.println("findConceptScheme");
         NestedNCNameIDType csa = new NestedNCNameIDType("BIS");
-        IDType csi = new IDType("JD_CATEGORY");
+        IDType csi = new IDType("STANDALONE_CONCEPT_SCHEME");
         ConceptSchemeType result = doc.findConceptScheme(csa, csi);
         assertNotNull(result);
     }

@@ -460,7 +460,7 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample65() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "TIME", "1.0").findConcept("TIME");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("TIME");
 
         assertEquals("http://www.bis.org/structure/concepts/VIS_CTY.xml", cs.getUri().getString());
     }
@@ -468,7 +468,7 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample66() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "TIME", "1.0").findConcept("TIME");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("TIME");
 
         assertEquals("Time", cs.findName("en").toString());
     }
@@ -476,35 +476,35 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample67() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "FREQ", "1.0").findConcept("FREQ");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("FREQ");
         assertEquals("http://www.bis.org/structure/concepts/FREQ.xml", cs.getUri().getString());
     }
 
     @Test
     public void testStructureSample68() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "FREQ", "1.0").findConcept("FREQ");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("FREQ");
         assertEquals("Frequency", cs.findName("en").toString());
     }
 
     @Test
     public void testStructureSample69() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "JD_TYPE", "1.0").findConcept("JD_TYPE");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("JD_TYPE");
         assertEquals("http://www.bis.org/structure/concepts/JD_TYPE.xml", cs.getUri().getString());
     }
 
     @Test
     public void testStructureSample70() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "JD_TYPE", "1.0").findConcept("JD_TYPE");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("JD_TYPE");
         assertEquals("Data Type (amounts outstanding, net disbursement or changes)", cs.findName("en").toString());
     }
 
     @Test
     public void testStructureSample71() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "JD_CATEGORY", "1.0").findConcept("JD_CATEGORY");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("JD_CATEGORY");
 
         assertEquals("http://www.bis.org/structure/concepts/JD_CATEGORY.xml", cs.getUri().getString());
     }
@@ -512,14 +512,14 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample72() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "JD_CATEGORY", "1.0").findConcept("JD_CATEGORY");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("JD_CATEGORY");
         assertEquals("Debt category", cs.findName("en").toString());
     }
 
     @Test
     public void testStructureSample73() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "VIS_CTY", "1.0").findConcept("VIS_CTY");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("VIS_CTY");
 
         assertEquals("http://www.bis.org/structure/concepts/VIS_CTY.xml", cs.getUri().getString());
     }
@@ -527,28 +527,28 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample74() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "VIS_CTY", "1.0").findConcept("VIS_CTY");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("VIS_CTY");
         assertEquals("Vis-a-vis country", cs.findName("en").toString());
     }
 
     @Test
     public void testStructureSample75() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "AVAILABILITY", "1.0").findConcept("AVAILABILITY");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("AVAILABILITY");
         assertEquals("http://www.bis.org/structure/concepts/AVAILABILITY.xml", cs.getUri().getString());
     }
 
     @Test
     public void testStructureSample76() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "AVAILABILITY", "1.0").findConcept("AVAILABILITY");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("AVAILABILITY");
         assertEquals("Availability", cs.findName("en").toString());
     }
 
     @Test
     public void testStructureSample77() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "COLLECTION", "1.0").findConcept("COLLECTION");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("COLLECTION");
 
         assertEquals("http://www.bis.org/structure/concepts/COLLECTION.xml", cs.getUri().getString());
     }
@@ -556,56 +556,56 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample78() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "COLLECTION", "1.0").findConcept("COLLECTION");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("COLLECTION");
         assertEquals("Collection indicator", cs.findName("en").toString());
     }
 
     @Test
     public void testStructureSample79() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "DECIMALS", "1.0").findConcept("DECIMALS");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("DECIMALS");
         assertEquals("http://www.bis.org/structure/concepts/DECIMALS.xml", cs.getUri().getString());
     }
 
     @Test
     public void testStructureSample80() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "DECIMALS", "1.0").findConcept("DECIMALS");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("DECIMALS");
         assertEquals("Decimals", cs.findName("en").toString());
     }
 
     @Test
     public void testStructureSample81() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "OBS_CONF", "1.0").findConcept("OBS_CONF");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("OBS_CONF");
         assertEquals("http://www.bis.org/structure/concepts/OBS_CONF.xml", cs.getUri().getString());
     }
 
     @Test
     public void testStructureSample82() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "OBS_CONF", "1.0").findConcept("OBS_CONF");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("OBS_CONF");
         assertEquals("Observation confidentiality", cs.findName("en").toString());
     }
 
     @Test
     public void testStructureSample83() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "TIME_FORMAT", "1.0").findConcept("TIME_FORMAT");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("TIME_FORMAT");
         assertEquals("http://www.bis.org/structure/concepts/TIME_FORMAT.xml", cs.getUri().getString());
     }
 
     @Test
     public void testStructureSample84() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "TIME_FORMAT", "1.0").findConcept("TIME_FORMAT");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("TIME_FORMAT");
         assertEquals("Time Format", cs.findName("en").toString());
     }
 
     @Test
     public void testStructureSample85() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "OBS_STATUS", "1.0").findConcept("OBS_STATUS");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("OBS_STATUS");
 
         assertEquals("http://www.bis.org/structure/concepts/OBS_STATUS.xml", cs.getUri().getString());
     }
@@ -613,42 +613,42 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample86() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "OBS_STATUS", "1.0").findConcept("OBS_STATUS");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("OBS_STATUS");
         assertEquals("Observation status", cs.findName("en").toString());
     }
 
     @Test
     public void testStructureSample87() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "OBS_PRE_BREAK", "1.0").findConcept("OBS_PRE_BREAK");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("OBS_PRE_BREAK");
         assertEquals("http://www.bis.org/structure/concepts/OBS_PRE_BREAK.xml", cs.getUri().getString());
     }
 
     @Test
     public void testStructureSample88() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "OBS_PRE_BREAK", "1.0").findConcept("OBS_PRE_BREAK");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("OBS_PRE_BREAK");
         assertEquals("Pre-break observation", cs.findName("en").toString());
     }
 
     @Test
     public void testStructureSample89() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "BIS_UNIT", "1.0").findConcept("BIS_UNIT");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("BIS_UNIT");
         assertEquals("http://www.bis.org/structure/concepts/UNIT.xml", cs.getUri().getString());
     }
 
     @Test
     public void testStructureSample90() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "BIS_UNIT", "1.0").findConcept("BIS_UNIT");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("BIS_UNIT");
         assertEquals("Unit", cs.findName("en").toString());
     }
 
     @Test
     public void testStructureSample91() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cs = cons.findConceptScheme("BIS", "UNIT_MULT", "1.0").findConcept("UNIT_MULT");
+        ConceptType cs = cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("UNIT_MULT");
 
         assertEquals("http://www.bis.org/structure/concepts/UNIT_MULT.xml", cs.getUri().getString());
     }
@@ -656,7 +656,7 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample92() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cs = cons.findConceptScheme("BIS", "UNIT_MULT", "1.0").findConcept("UNIT_MULT");
+        ConceptType cs = cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("UNIT_MULT");
 
         assertEquals("Unit multiplier", cs.findName("en").toString());
     }
@@ -664,42 +664,42 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample93() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "OBS_VALUE", "1.0").findConcept("OBS_VALUE");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("OBS_VALUE");
         assertEquals("http://www.bis.org/structure/concepts/OBS_VALUE.xml", cs.getUri().getString());
     }
 
     @Test
     public void testStructureSample94() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "OBS_VALUE", "1.0").findConcept("OBS_VALUE");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("OBS_VALUE");
         assertEquals("Observation value", cs.findName("en").toString());
     }
 
     @Test
     public void testStructureSample95() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "STOCKS", "1.0").findConcept("STOCKS");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("STOCKS");
         assertEquals("http://www.bis.org/structure/concepts/STOCKS.xml", cs.getUri().getString());
     }
 
     @Test
     public void testStructureSample96() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "STOCKS", "1.0").findConcept("STOCKS");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("STOCKS");
         assertEquals("Stocks as measure", cs.findName("en").toString());
     }
 
     @Test
     public void testStructureSample97() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "FLOWS", "1.0").findConcept("FLOWS");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("FLOWS");
         assertEquals("http://www.bis.org/structure/concepts/FLOWS.xml", cs.getUri().getString());
     }
 
     @Test
     public void testStructureSample98() {
         ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "FLOWS", "1.0").findConcept("FLOWS");
+        ConceptType cs = cons.findConceptScheme("BIS", "STANDALONE_CONCEPT_SCHEME", "1.0").findConcept("FLOWS");
         assertEquals("Flows as measure", cs.findName("en").toString());
     }
 

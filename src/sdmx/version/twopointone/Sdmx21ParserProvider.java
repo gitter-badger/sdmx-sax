@@ -48,17 +48,15 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
         return SdmxIO.VERSION21;
     }
     public static boolean isSdmx21(String header) {
-        if (header.indexOf("<StructureSpecificTimeSeriesData") != -1) {
+        if (header.indexOf("StructureSpecificTimeSeriesData ") != -1) {
             return true;
-        } else if (header.indexOf("<message:StructureSpecificTimeSeriesData") != -1) {
+        } else if (header.indexOf("StructureSpecificTimeSeriesData ") != -1) {
             return true;
-        } else if (header.indexOf("<StructureSpecificData") != -1) {
+        } else if (header.indexOf("StructureSpecificData ") != -1) {
             return true;
-        } else if (header.indexOf("<message:StructureSpecificData") != -1) {
+        } else if (header.indexOf("StructureSpecificData ") != -1) {
             return true;
-        } else if (header.indexOf("<message:Structure xmlns:message=\"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message\"") != -1) {
-            return true;
-        } else if (header.indexOf("<Structure xmlns=\"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/") != -1) {
+        } else if (header.indexOf("Structure ")!=-1&&header.indexOf("\"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message\"") != -1) {
             return true;
         }else {
             return false;

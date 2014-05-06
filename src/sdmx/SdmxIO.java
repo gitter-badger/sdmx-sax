@@ -16,13 +16,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
 import org.xml.sax.SAXException;
+import sdmx.data.flat.FlatDataSet;
+import sdmx.exception.ParseException;
+import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
+import sdmx.registry.LocalRegistry;
+import sdmx.version.common.SdmxParserProvider;
 import sdmx.version.twopointone.Sdmx21ParserProvider;
 import sdmx.version.twopointzero.Sdmx20ParserProvider;
-import sdmx.data.flat.FlatDataSet;
-import sdmx.message.DataMessage;
-import sdmx.version.common.SdmxParserProvider;
-import sdmx.registry.LocalRegistry;
 
 /**
  *  This file is part of SdmxSax.
@@ -95,56 +96,74 @@ public class SdmxIO {
         }
         return UNKNOWN;
     }
-    public static StructureType parseStructure(InputStream in) throws IOException {
+    public static StructureType parseStructure(InputStream in) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         return parseStructure(new LocalRegistry(),in);
     }
-    public static StructureType parseStructure(Reader in) throws IOException {
+    public static StructureType parseStructure(Reader in) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         return parseStructure(new LocalRegistry(),in);
     }
-    public static StructureType parseStructure(Registry registry,InputStream in) throws IOException {
+    public static StructureType parseStructure(Registry registry,InputStream in) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackInputStream push = new PushbackInputStream(in,8192);
         String header = getHeader(push);
         SdmxParserProvider prov = findProvider(header);
+        if( prov==null ) {
+            throw new ParseException("Unable to find Parser provider");
+        }
         StructureType struct =  prov.parseStructure(registry,push);
         return struct;
     }
-    public static StructureType parseStructure(Registry registry,Reader in) throws IOException {
+    public static StructureType parseStructure(Registry registry,Reader in) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackReader push = new PushbackReader(in,8192);
         String header = getHeader(push);
         SdmxParserProvider prov = findProvider(header);
-        StructureType struct =  prov.parseStructure(registry,push);
+        if( prov==null ) {
+            throw new ParseException("Unable to find Parser provider");
+        }
+        StructureType struct =  prov.parseStructure(push);
         return struct;
     }
-    public static DataMessage parseData(InputStream in) throws IOException {
+    public static DataMessage parseData(InputStream in) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackInputStream push = new PushbackInputStream(in,8192);
         String header = getHeader(push);
         SdmxParserProvider prov = findProvider(header);
+        if( prov==null ) {
+            throw new ParseException("Unable to find Parser provider");
+        }
         return prov.parseData(header,push);
     }
-    public static DataMessage parseData(Reader in) throws IOException {
+    public static DataMessage parseData(Reader in) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackReader push = new PushbackReader(in,8192);
         String header = getHeader(push);
         SdmxParserProvider prov = findProvider(header);
+        if( prov==null ) {
+            throw new ParseException("Unable to find Parser provider");
+        }
         return prov.parseData(header,push);
     }
-    public static DataMessage parseData(InputStream in,boolean flat) throws IOException {
+    public static DataMessage parseData(InputStream in,boolean flat) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackInputStream push = new PushbackInputStream(in,8192);
         String header = getHeader(push);
         SdmxParserProvider prov = findProvider(header);
+        if( prov==null ) {
+            throw new ParseException("Unable to find Parser provider");
+        }
         return prov.parseData(header,push,flat);
     }
-    public static DataMessage parseData(Reader in,boolean flat) throws IOException {
+    public static DataMessage parseData(Reader in,boolean flat) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackReader push = new PushbackReader(in,8192);
         String header = getHeader(push);
         SdmxParserProvider prov = findProvider(header);
+        if( prov==null ) {
+            throw new ParseException("Unable to find Parser provider");
+        }
         return prov.parseData(header,push,flat);
     }
     public static SdmxParserProvider findProvider(String header) throws IOException {

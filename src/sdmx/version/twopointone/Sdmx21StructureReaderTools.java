@@ -42,7 +42,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.ext.LexicalHandler;
 import sdmx.common.ActionType;
 import sdmx.common.AnnotationType;
-import sdmx.structure.datastructure.DataStructureType;
 import sdmx.common.DataType;
 import sdmx.common.Description;
 import sdmx.common.DimensionTypeType;
@@ -52,7 +51,6 @@ import sdmx.common.ObservationDimensionType;
 import sdmx.common.ObservationalTimePeriodType;
 import sdmx.common.OccurenceType;
 import sdmx.common.PayloadStructureType;
-import sdmx.commonreferences.ProvisionAgreementReferenceType;
 import sdmx.common.StandardTimePeriodType;
 import sdmx.common.TextType;
 import sdmx.common.TimezoneType;
@@ -88,6 +86,7 @@ import sdmx.commonreferences.NestedIDType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.ObjectReferenceType;
 import sdmx.commonreferences.ProvisionAgreementRefType;
+import sdmx.commonreferences.ProvisionAgreementReferenceType;
 import sdmx.commonreferences.RefBaseType;
 import sdmx.commonreferences.SetReferenceType;
 import sdmx.commonreferences.StructureRefBaseType;
@@ -136,12 +135,14 @@ import sdmx.structure.datastructure.AttributeListType;
 import sdmx.structure.datastructure.AttributeRelationshipType;
 import sdmx.structure.datastructure.AttributeType;
 import sdmx.structure.datastructure.DataStructureComponents;
+import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionListType;
 import sdmx.structure.datastructure.DimensionType;
 import sdmx.structure.datastructure.MeasureDimensionType;
 import sdmx.structure.datastructure.MeasureListType;
 import sdmx.structure.datastructure.PrimaryMeasure;
 import sdmx.structure.datastructure.SimpleDataStructureRepresentationType;
+import sdmx.structure.datastructure.TimeDimensionType;
 import sdmx.structure.metadatastructure.ConstraintContentTarget;
 import sdmx.structure.metadatastructure.DataSetTarget;
 import sdmx.structure.metadatastructure.DataSetTargetType;
@@ -166,22 +167,21 @@ import sdmx.xml.positiveInteger;
  * @todo Need sdmx 2.1 file with constraints to test with..
  */
 /**
- *  This file is part of SdmxSax.
+ * This file is part of SdmxSax.
  *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *   SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * SdmxSax is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ * SdmxSax is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  Copyright James Gardner 2014
+ * You should have received a copy of the GNU General Public License along with
+ * SdmxSax. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright James Gardner 2014
  */
 public class Sdmx21StructureReaderTools {
 
@@ -245,7 +245,9 @@ public class Sdmx21StructureReaderTools {
     }
 
     public static ActionType toActionType(org.sdmx.resources.sdmxml.schemas.v21.common.ActionType.Enum at) {
-        if( at == null ) return null;
+        if (at == null) {
+            return null;
+        }
         return ActionType.fromString(at.toString());
     }
 
@@ -271,6 +273,7 @@ public class Sdmx21StructureReaderTools {
         }
         return new IDType(s);
     }
+
     public static ID toID(String s) {
         if (s == null) {
             return null;
@@ -437,7 +440,7 @@ public class Sdmx21StructureReaderTools {
         if (c == null) {
             return null;
         }
-        return new DateType(c.get(Calendar.YEAR),c.get(Calendar.MONTH)+1,c.get(Calendar.DATE));
+        return new DateType(c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DATE));
     }
 
     public static ItemTypeCodelistType toItemTypeCodelistType(Enum class1) throws TypeValueNotFoundException {
@@ -849,6 +852,10 @@ public class Sdmx21StructureReaderTools {
         List<AttributeType> atts = new ArrayList<AttributeType>();
         for (int i = 0; i < ds1.getAttributeList().getAttributeArray().length; i++) {
             atts.add(toAttribute(ds1.getAttributeList().getAttributeArray(i)));
+        }
+        if( ds1.getDimensionList().getTimeDimensionArray().length>0) {
+            TimeDimensionType time = toTimeDimension(ds1.getDimensionList().getTimeDimensionArray()[0]);
+            ds2.setTimeDimension(time);
         }
         atl.setAttributes(atts);
         ds2.setDimensionList(dimList);
@@ -1459,7 +1466,7 @@ public class Sdmx21StructureReaderTools {
             return null;
         }
         if (provisionAgrement.getRef() != null) {
-            ProvisionAgreementReferenceType part = new ProvisionAgreementReferenceType(toProvisionAgreementRefType(provisionAgrement.getRef()),toAnyURI(provisionAgrement.getURN()));
+            ProvisionAgreementReferenceType part = new ProvisionAgreementReferenceType(toProvisionAgreementRefType(provisionAgrement.getRef()), toAnyURI(provisionAgrement.getURN()));
             return part;
         } else {
             ProvisionAgreementReferenceType part = new ProvisionAgreementReferenceType(toAnyURI(provisionAgrement.getURN()));
@@ -1469,17 +1476,19 @@ public class Sdmx21StructureReaderTools {
     }
 
     public static ProvisionAgreementRefType toProvisionAgreementRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref) {
-        if( ref==null ) return null;
+        if (ref == null) {
+            return null;
+        }
         ProvisionAgreementRefType pref = new ProvisionAgreementRefType();
         return pref;
     }
 
     public static StructureUsageReferenceBaseType toStructureUsage(org.sdmx.resources.sdmxml.schemas.v21.common.StructureUsageReferenceBaseType structureUsage) throws URISyntaxException {
-        if( structureUsage==null ) {
+        if (structureUsage == null) {
             return null;
         }
         if (structureUsage.getRef() != null) {
-            StructureUsageReferenceBaseType part = new StructureUsageReferenceBaseType(toStructureUsageRefType(structureUsage.getRef()),toAnyURI(structureUsage.getURN()));
+            StructureUsageReferenceBaseType part = new StructureUsageReferenceBaseType(toStructureUsageRefType(structureUsage.getRef()), toAnyURI(structureUsage.getURN()));
             return part;
         } else {
             StructureUsageReferenceBaseType part = new StructureUsageReferenceBaseType(toAnyURI(structureUsage.getURN()));
@@ -1488,8 +1497,23 @@ public class Sdmx21StructureReaderTools {
     }
 
     public static StructureUsageRefBaseType toStructureUsageRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref) {
-        if( ref == null ) return null;
-        StructureUsageRefBaseType ref2 = new StructureUsageRefBaseType(toNestedNCNameIDType(ref.getAgencyID()),toIDType(ref.getId()),toVersionType(ref.getVersion()),ObjectTypeCodelistType.fromString(ref.getClass1().toString()),PackageTypeCodelistType.fromString(ref.getPackage().toString()));
+        if (ref == null) {
+            return null;
+        }
+        StructureUsageRefBaseType ref2 = new StructureUsageRefBaseType(toNestedNCNameIDType(ref.getAgencyID()), toIDType(ref.getId()), toVersionType(ref.getVersion()), ObjectTypeCodelistType.fromString(ref.getClass1().toString()), PackageTypeCodelistType.fromString(ref.getPackage().toString()));
         return ref2;
+    }
+
+    public static TimeDimensionType toTimeDimension(org.sdmx.resources.sdmxml.schemas.v21.structure.TimeDimensionType time1) throws TypeValueNotFoundException, URISyntaxException {
+        TimeDimensionType time2 = new TimeDimensionType();
+        time2.setId(toIDType(time1.getId()));
+        time2.setAnnotations(toAnnotations(time1.getAnnotations()));
+        time2.setConceptIdentity(toConceptReference(time1.getConceptIdentity()));
+        time2.setPosition(time1.getPosition());
+        time2.setType(DimensionTypeType.fromStringWithException(time1.getType().toString()));
+        time2.setLocalRepresentation(toLocalRepresentation(time1.getLocalRepresentation()));
+        time2.setUri(toAnyURI((time1.getUri())));
+        time2.setUrn(toAnyURI((time1.getUrn())));        
+        return time2;
     }
 }

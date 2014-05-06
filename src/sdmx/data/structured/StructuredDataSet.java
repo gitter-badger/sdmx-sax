@@ -6,6 +6,7 @@ package sdmx.data.structured;
 
 import java.util.ArrayList;
 import java.util.List;
+import sdmx.cube.Cube;
 import sdmx.data.Attachable;
 import sdmx.data.AttachmentLevel;
 import sdmx.data.ColumnMapper;
@@ -289,17 +290,6 @@ public class StructuredDataSet implements DataSet, Attachable {
         this.observations = observations;
     }
 
-    public List<FlatObs> query(PartialKey key) {
-        List<FlatObs> result = new ArrayList<FlatObs>();
-        for(int i=0;i<this.size();i++) {
-            FlatObs flat = this.getFlatObs(i);
-            if( key.matches(flat,columnMapper)){
-                result.add(flat);
-                }
-        }
-        return result;
-    }
-    
     public FlatObs getFlatObs(int i) {
         FlatObs flat = new FlatObs(columnMapper.size());
         for(int j=0;j<columnMapper.size();j++) {
@@ -313,16 +303,6 @@ public class StructuredDataSet implements DataSet, Attachable {
             flat.setValue(j, getValue(i,j));
         }
         return flat;
-    }
-
-    @Override
-    public FlatObs query(FullKey key) {
-        for (int i = 0; i < this.size(); i++) {
-            if (key.matches(getFlatObs(i),columnMapper)) {
-                return getFlatObs(i);
-            }
-        }
-        return null;
     }
 
     @Override
@@ -343,5 +323,10 @@ public class StructuredDataSet implements DataSet, Attachable {
         for(int i=0;i<groups.size();i++) {
             this.groups.get(i).processGroupValues(this);
         }
+    }
+
+    @Override
+    public Cube query(DataQuery query) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

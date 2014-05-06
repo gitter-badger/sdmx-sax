@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package sdmx.combined;
+package sdmx.structureddata;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +34,14 @@ import sdmx.structure.datastructure.DataStructureType;
  *
  *  Copyright James Gardner 2014
  */
-public class CombinedDataAndStructure {
+public class StructuredDataMessage {
     private DataMessage dataMessage = null;
     private Registry registry = null;
     
     
-    private List<DecoratedDataSet> list = new ArrayList<DecoratedDataSet>();
+    private List<StructuredDataSet> list = new ArrayList<StructuredDataSet>();
     
-    public CombinedDataAndStructure(DataMessage dat,Registry reg) {
+    public StructuredDataMessage(DataMessage dat,Registry reg) {
         this.dataMessage=dat;
         this.registry=reg;
         for(int i=0;i<dataMessage.getDataSets().size();i++) {
@@ -51,15 +51,15 @@ public class CombinedDataAndStructure {
     
     
     public int size() { return dataMessage.getDataSets().size(); }
-    public DecoratedDataSet getDecoratedDataSet(int i) {
+    public StructuredDataSet getDecoratedDataSet(int i) {
         return list.get(i);
     }
-    public DecoratedDataSet buildDecoratedDataSet(int i) {
+    public StructuredDataSet buildDecoratedDataSet(int i) {
         NestedNCNameIDType agency = dataMessage.getHeader().getStructures().get(0).getStructure().getRef().getAgencyId();
         NestedIDType id = dataMessage.getHeader().getStructures().get(0).getStructure().getRef().getId();
         VersionType vers = dataMessage.getHeader().getStructures().get(0).getStructure().getRef().getVersion();
         IDType idtype = new IDType(id.toString());
         DataStructureType structure = registry.findDataStructure(agency, idtype, vers);
-        return new DecoratedDataSet(dataMessage.getDataSets().get(i),registry,structure);
+        return new StructuredDataSet(dataMessage.getDataSets().get(i),registry,structure);
     }
 }

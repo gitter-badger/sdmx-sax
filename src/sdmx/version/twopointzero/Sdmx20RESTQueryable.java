@@ -19,6 +19,7 @@ import sdmx.Registry;
 import sdmx.SdmxIO;
 import sdmx.commonreferences.DataStructureRefType;
 import sdmx.commonreferences.DataStructureReferenceType;
+import sdmx.exception.ParseException;
 import sdmx.message.BaseHeaderType;
 import sdmx.message.DataMessage;
 import sdmx.message.DataQueryMessage;
@@ -30,7 +31,7 @@ import sdmx.registry.QueryableServiceRegistry;
 import sdmx.registry.RESTServiceRegistry;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.version.common.Queryable;
-import sdmx.version.common.QueryableException;
+import sdmx.exception.QueryableException;
 
 /**
  *
@@ -82,6 +83,8 @@ public class Sdmx20RESTQueryable implements Queryable {
             Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(Sdmx20RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -90,7 +93,7 @@ public class Sdmx20RESTQueryable implements Queryable {
         return null;
     }
 
-    private StructureType retrieve(String urlString) throws MalformedURLException, IOException {
+    private StructureType retrieve(String urlString) throws MalformedURLException, IOException, ParseException {
         System.out.println("REST Queryable Retrieve:" + urlString);
         URL url = new URL(urlString);
         HttpURLConnection conn
@@ -141,6 +144,8 @@ public class Sdmx20RESTQueryable implements Queryable {
             Logger.getLogger(Sdmx20SOAPQueryable.class.getName()).log(Level.SEVERE, null, ex);
             dataSetList = null;
             throw new QueryableException("Network Error");
+        } catch (ParseException ex) {
+            Logger.getLogger(Sdmx20RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
         }
         return dataSetList;
     }

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package sdmx.version.common;
+package sdmx.exception;
 
 /**
  *

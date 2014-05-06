@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import sdmx.commonreferences.IDType;
 import sdmx.data.DataSet;
-import sdmx.combined.ValueTypeResolver;
+import sdmx.structureddata.ValueTypeResolver;
 import sdmx.structure.base.Component;
 import sdmx.structure.base.ComponentList;
 import sdmx.structure.datastructure.DataStructureType;

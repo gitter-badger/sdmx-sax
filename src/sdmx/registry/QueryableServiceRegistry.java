@@ -61,7 +61,7 @@ import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.version.common.Queryable;
-import sdmx.version.common.QueryableException;
+import sdmx.exception.QueryableException;
 import sdmx.version.twopointone.Sdmx21StructureReaderTools;
 import sdmx.version.twopointzero.Sdmx20QueryWriter;
 import sdmx.xml.DateTime;

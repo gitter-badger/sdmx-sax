@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import sdmx.data.DataSet;
-import sdmx.combined.ValueTypeResolver;
+import sdmx.structureddata.ValueTypeResolver;
 import sdmx.data.flat.FlatObs;
 import sdmx.data.key.PartialKey;
 import sdmx.message.DataMessage;
@@ -28,6 +28,7 @@ import sdmx.query.data.DimensionValueType;
 import sdmx.SdmxIO;
 import sdmx.registry.LocalRegistry;
 import sdmx.Registry;
+import sdmx.exception.ParseException;
 
 /**
  *
@@ -73,7 +74,7 @@ public class Sdmx20DataQueryTest {
     }
 
     @Test
-    public void testQuery() throws IOException {
+    public void testQuery() throws IOException, ParseException {
         StructureType uisStruct = null;
         try {
             InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/uis-20/structure.xml");

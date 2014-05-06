@@ -391,7 +391,12 @@ public class StructuresType implements Registry {
             // This is for ABS Data Structures -> the OBS_VALUE
             // has an agency of 'OECD' and this agency can't be inferred from the
             // keyfamily agency, or sender agency.
-            cs = findConceptSchemeById(id);
+            //System.out.println("Agency="+agency.toString()+": id="+id.toString());
+            cs = findConceptScheme(agency,new IDType("STANDALONE_CONCEPT_SCHEME"));
+            //System.out.println("Cs="+cs);
+            //for(int i=0;i<concepts.getConceptSchemes().size();i++) {
+            //    System.out.println("Cs="+concepts.getConceptSchemes().get(i).getId().toString());
+            //}
             return cs.findConcept(id);
         }
         return cs.findConcept(id);

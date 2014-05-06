@@ -23,7 +23,7 @@ import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.ItemSchemeReferenceBaseType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.VersionType;
-import sdmx.combined.ValueTypeResolver;
+import sdmx.structureddata.ValueTypeResolver;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
 import sdmx.structure.StructuresType;
@@ -33,6 +33,7 @@ import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.SdmxIO;
+import sdmx.exception.ParseException;
 import sdmx.xml.anyURI;
 
 /**
@@ -90,6 +91,8 @@ public class RESTServiceRegistry implements Registry {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return dst;
@@ -105,6 +108,8 @@ public class RESTServiceRegistry implements Registry {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return dst;
@@ -119,6 +124,8 @@ public class RESTServiceRegistry implements Registry {
             } catch (MalformedURLException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
+                Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -139,6 +146,8 @@ public class RESTServiceRegistry implements Registry {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return dst;
@@ -157,6 +166,8 @@ public class RESTServiceRegistry implements Registry {
             } catch (MalformedURLException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
+                Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -177,7 +188,7 @@ public class RESTServiceRegistry implements Registry {
         return local.findConcept(id);
     }
 
-    private StructureType retrieve(String urlString) throws MalformedURLException, IOException {
+    private StructureType retrieve(String urlString) throws MalformedURLException, IOException, ParseException {
         System.out.println("Retrieve:" + urlString);
         URL url = new URL(urlString);
         HttpURLConnection conn =
@@ -201,6 +212,8 @@ public class RESTServiceRegistry implements Registry {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return dst;
@@ -221,6 +234,8 @@ public class RESTServiceRegistry implements Registry {
             } catch (MalformedURLException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
+                Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

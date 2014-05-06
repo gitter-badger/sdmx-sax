@@ -209,8 +209,7 @@ public class LocalRegistry implements Registry {
             // This is for ABS Data Structures -> the OBS_VALUE
             // has an agency of 'OECD' and this agency can't be inferred from the
             // keyfamily agency, or sender agency.
-            cs = findConceptSchemeById(id);
-            return cs.findConcept(id);
+            return findConcept(id);
         }
         return cs.findConcept(id);
     }

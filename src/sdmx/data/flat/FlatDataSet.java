@@ -20,6 +20,7 @@ import sdmx.query.data.DataQuery;
 import sdmx.structure.codelist.CodeType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.Registry;
+import sdmx.cube.Cube;
 
 /**
  * <xs:attributeGroup name="SetAttributeGroup">
@@ -255,26 +256,6 @@ public class FlatDataSet implements DataSet {
         writer.finishDataSet();
     }
 
-    public List<FlatObs> query(PartialKey key) {
-        List<FlatObs> result = new ArrayList<FlatObs>();
-        for (int i = 0; i < this.size(); i++) {
-            FlatObs flat = this.getFlatObs(i);
-            if (key.matches(flat, mapper)) {
-                result.add(flat);
-            }
-        }
-        return result;
-    }
-
-    public FlatObs query(FullKey key) {
-        for (int i = 0; i < this.size(); i++) {
-            if (key.matches(this.getFlatObs(i), mapper)) {
-                return getFlatObs(i);
-            }
-        }
-        return null;
-    }
-
     public FlatObs getFlatObs(int i) {
         return observations.get(i);
     }
@@ -320,5 +301,10 @@ public class FlatDataSet implements DataSet {
                 applyGroupKey(key, s, (String) g.getGroupAttributes().get(s));
             }
         }
+    }
+
+    @Override
+    public Cube query(DataQuery query) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

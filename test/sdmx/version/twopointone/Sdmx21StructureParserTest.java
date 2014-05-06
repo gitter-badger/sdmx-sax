@@ -37,6 +37,7 @@ import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionListType;
 import sdmx.structure.datastructure.DimensionType;
 import sdmx.SdmxIO;
+import sdmx.exception.ParseException;
 import sdmx.version.twopointzero.Sdmx20StructureParserTest;
 
 /**
@@ -77,7 +78,7 @@ public class Sdmx21StructureParserTest {
     StructureType doc2 = null;
 
     @Before
-    public void setUp() {
+    public void setUp() throws ParseException {
         try {
             InputStream in = Sdmx21StructureParserTest.class.getResourceAsStream("/resources/sdmx21-samples/demography/demography.xml");
             doc1 = SdmxIO.parseStructure(in);

@@ -128,10 +128,14 @@ public class DataStructureComponentsType extends DataStructureComponentsBaseType
         for(int i=0;i<measureList.size();i++) {
             if( measureList.getMeasure(i).getConceptIdentity().getRef().getId().equals(name))return measureList.getComponent(i);
         }
-        if( timeDimension.getConceptIdentity().getRef().getId().equals(name))return timeDimension;
-        if( measureList.getPrimaryMeasure().getConceptIdentity().getRef().getId().equals(name))return measureList.getPrimaryMeasure();
+        if( timeDimension!=null&& timeDimension.getConceptIdentity().getRef().getId().equals(name))return timeDimension;
+        if( measureList.getPrimaryMeasure()!=null&&measureList.getPrimaryMeasure().getConceptIdentity().getRef().getId().equals(name))return measureList.getPrimaryMeasure();
+        // These are the 2 hard coded values in the Sdmx Specification
         if( "TIME_PERIOD".equals(name)) {
             return timeDimension;
+        }
+        if( "OBS_VALUE".equals(name) ) {
+            return measureList.getPrimaryMeasure();
         }
         return null;
     }

@@ -4,6 +4,7 @@
  */
 package sdmx.data;
 
+import sdmx.cube.Cube;
 import java.util.List;
 import sdmx.common.ActionType;
 import sdmx.data.flat.FlatObs;
@@ -44,8 +45,7 @@ public interface DataSet {
     public void setValue(int row, int col,String val);
     public void setValue(int row, String col,String val);
     public void writeTo(DataSetWriter writer);
-    public List<FlatObs> query(PartialKey key);
-    public FlatObs query(FullKey key);
+    public Cube query(DataQuery query);
     public ColumnMapper getColumnMapper();
     public void setGroups(List<Group> groups);
     public List<Group> getGroups();
