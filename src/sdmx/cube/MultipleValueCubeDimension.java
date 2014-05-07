@@ -6,6 +6,11 @@
 
 package sdmx.cube;
 
+import java.util.List;
+import sdmx.structure.base.Component;
+import sdmx.structure.codelist.CodelistType;
+import sdmx.structure.concept.ConceptType;
+
 /**
  *  This file is part of SdmxSax.
  *
@@ -24,6 +29,25 @@ package sdmx.cube;
  *
  *  Copyright James Gardner 2014
  */
-public class MultipleValueCubeDimension implements CubeDimension {
+public class MultipleValueCubeDimension extends CubeDimension {
 
+    public MultipleValueCubeDimension(Component comp, ConceptType concept, CodelistType code,String value){
+        super(comp,concept,code,value);
+    }
+    
+    @Override
+    public CubeDimension getSubDimension(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void putSubDimension(CubeDimension sub) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<CubeDimension> listSubDimensions() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }

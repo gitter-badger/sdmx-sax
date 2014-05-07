@@ -15,7 +15,6 @@ import sdmx.message.StructureTypeTest;
 import sdmx.version.common.SOAPStripperInputStreamTest;
 import sdmx.version.twopointone.Sdmx21StructureParserTest;
 import sdmx.version.twopointzero.Sdmx20DataParserTest;
-import sdmx.version.twopointzero.Sdmx20DataQueryTest;
 import sdmx.version.twopointzero.Sdmx20DataWriteTest;
 import sdmx.version.twopointzero.Sdmx20ServiceTest;
 import sdmx.version.twopointzero.Sdmx20StructureParserTest;
@@ -52,7 +51,6 @@ import sdmx.workspace.LocalRegistryTest;
     //Sdmx20ServiceTest.class,
     SOAPStripperInputStreamTest.class,
     StructuredDataTest.class,
-    Sdmx20DataQueryTest.class,
     Sdmx20DataWriteTest.class,
     LocalRegistryTest.class,
     StructureTypeTest.class

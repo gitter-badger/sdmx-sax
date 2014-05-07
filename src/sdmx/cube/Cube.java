@@ -3,27 +3,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package sdmx.cube;
 
 /**
- *  This file is part of SdmxSax.
+ * This file is part of SdmxSax.
  *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *   SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * SdmxSax is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ * SdmxSax is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  Copyright James Gardner 2014
+ * You should have received a copy of the GNU General Public License along with
+ * SdmxSax. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright James Gardner 2014
  */
 public class Cube {
 
+    private CubeDimension root = null;
+
+    public CubeDimension getRootCubeDimension() {
+        return root;
+    }
 }

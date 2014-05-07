@@ -7,9 +7,6 @@
 package sdmx.cube;
 
 import java.util.List;
-import java.util.Locale;
-import sdmx.common.Description;
-import sdmx.common.Name;
 import sdmx.structure.base.Component;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptType;
@@ -32,13 +29,14 @@ import sdmx.structure.concept.ConceptType;
  *
  *  Copyright James Gardner 2014
  */
-public class SingleValueCubeDimension extends CubeDimension {
+public class TimeCubeDimension extends CubeDimension {
 
-    public SingleValueCubeDimension(Component comp, ConceptType concept, CodelistType code,String value){
-        super(comp,concept,code,value);
+    public TimeCubeDimension(Component comp, ConceptType concept, CodelistType code, String value) {
+        super(comp, concept, code, value);
     }
+
     @Override
-    public CubeDimension getSubDimension(String id) {
+    public List<CubeDimension> listSubDimensions() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -48,7 +46,7 @@ public class SingleValueCubeDimension extends CubeDimension {
     }
 
     @Override
-    public List<CubeDimension> listSubDimensions() {
+    public CubeDimension getSubDimension(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
