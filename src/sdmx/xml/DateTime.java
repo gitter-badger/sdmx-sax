@@ -61,7 +61,7 @@ public class DateTime {
         return date;
     }
 
-    public static DateTime fromString(String s) {
+    public static DateTime fromString(String s) throws ParseException {
         if (s == null || "".equals(s)) {
             return null;
         }

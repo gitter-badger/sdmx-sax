@@ -72,22 +72,21 @@ import sdmx.xml.anyURI;
  * @author James
  */
 /**
- *  This file is part of SdmxSax.
+ * This file is part of SdmxSax.
  *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *   SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * SdmxSax is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ * SdmxSax is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  Copyright James Gardner 2014
+ * You should have received a copy of the GNU General Public License along with
+ * SdmxSax. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright James Gardner 2014
  */
 public class CompactDataEventHandler extends Sdmx20EventHandler {
 
@@ -148,7 +147,7 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
 
     public DataMessage getDataMessage() {
         if (state != STATE_FINISH) {
-            System.out.println("state="+state);
+            System.out.println("state=" + state);
             throw new RuntimeException("You can't get the document before i've finished parsing!");
         }
         DataMessage doc = new DataMessage();
@@ -245,26 +244,27 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
          IDType id = new IDType(atts.getValue("id"));
          init(registry.findDataStructure(agency, id));
          }*/
+        writer.newDataSet();
         for (int i = 0; i < atts.getLength(); i++) {
             String name = atts.getLocalName(i);
             String val = atts.getValue(i);
-            if (!"keyFamilyURI".equals(name)) {
+            if (!"keyFamilyURI".equals(name)&&!"datasetID".equals(name)) {
                 writer.writeDataSetComponent(name, val);
             }
         }
         payloads.add(payload);
-        writer.newDataSet();
+        
     }
 
     public void startGroup(String name, Attributes atts) {
         state = STATE_GROUP;
-        HashMap<String,String> g = new HashMap<String,String>();
+        HashMap<String, String> g = new HashMap<String, String>();
         for (int i = atts.getLength() - 1; i >= 0; i--) {
-             String s = atts.getLocalName(i);
-             String v = atts.getValue(i);
-             g.put(s, v);
+            String s = atts.getLocalName(i);
+            String v = atts.getValue(i);
+            g.put(s, v);
         }
-        writer.writeGroupValues(name,g);
+        writer.writeGroupValues(name, g);
         in_group = true;
     }
 
@@ -349,12 +349,18 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
                 //header.setTruncated(Boolean.parseBoolean(new String(c)));
                 this.state = STATE_HEADER;
                 break;
-            case STATE_HEADERPREPARED:
-                HeaderTimeType htt = new HeaderTimeType();
-                htt.setDate(DateTime.fromString(new String(c)));
-                header.setPrepared(htt);
+            case STATE_HEADERPREPARED:{
+                try {
+                    HeaderTimeType htt = new HeaderTimeType();
+                    htt.setDate(DateTime.fromString(new String(c)));
+                    header.setPrepared(htt);
+                } catch (java.text.ParseException pex) {
+                    HeaderTimeType htt2 = new HeaderTimeType();
+                    htt2.setDate(new DateTime(new Date()));
+                    header.setPrepared(htt2);
+                }
                 this.state = STATE_HEADER;
-                break;
+            }break;
             case STATE_HEADERNAME:
                 List<Name> names = new ArrayList<Name>();
                 Name name = new Name(xmlLang, new String(c));
@@ -367,7 +373,11 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
                 this.state = STATE_HEADER;
                 break;
             case STATE_EXTRACTED:
+                try{
                 header.setExtracted(DateTime.fromString(new String(c)));
+                }catch(java.text.ParseException ex) {
+                    header.setExtracted(new DateTime(new Date()));
+                }
                 this.state = STATE_HEADER;
                 break;
             case STATE_REPORTINGBEGIN:

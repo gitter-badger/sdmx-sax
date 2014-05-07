@@ -449,6 +449,7 @@ public class Sdmx21StructureReaderTools {
     }
 
     public static CodelistsType toCodelistsType(org.sdmx.resources.sdmxml.schemas.v21.structure.CodelistsType cl1) throws URISyntaxException {
+        if( cl1 == null ) return null;
         List<CodelistType> codelists = new ArrayList<CodelistType>();
         for (int i = 0; i < cl1.getCodelistArray().length; i++) {
             codelists.add(toCodelist(cl1.getCodelistArray(i)));

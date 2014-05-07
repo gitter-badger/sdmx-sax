@@ -77,7 +77,7 @@ public class Sdmx20RESTQueryable implements Queryable {
     public StructureType query(DataStructureQueryMessage message) throws QueryableException {
         DataStructureWhereType where = message.getDataStructureWhereType();
         try {
-            StructureType st = retrieve(serviceURL + "/registry/datastructure/" + message.getDataStructureWhereType().getAgencyId().getString() + "/" + message.getDataStructureWhereType().getId().toString() + "/" + message.getDataStructureWhereType().getVersion().toString());
+            StructureType st = retrieve(serviceURL + "/datastructure/" + message.getDataStructureWhereType().getAgencyId().getString() + "/" + message.getDataStructureWhereType().getId().toString() + "/" + message.getDataStructureWhereType().getVersion().toString());
             return st;
         } catch (MalformedURLException ex) {
             Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
@@ -128,7 +128,7 @@ public class Sdmx20RESTQueryable implements Queryable {
         }
         dataSetList = new ArrayList<DataStructureReferenceType>();
         try {
-            StructureType st = retrieve(serviceURL + "/registry/datastructure/all/all/all");
+            StructureType st = retrieve(serviceURL + "/datastructure/"+agencyId+"/all/all/");
             Iterator<DataStructureType> it = st.getStructures().getDataStructures().getDataStructures().iterator();
             while (it.hasNext()) {
                 DataStructureType ds = it.next();

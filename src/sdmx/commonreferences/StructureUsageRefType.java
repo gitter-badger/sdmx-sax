@@ -7,6 +7,8 @@ package sdmx.commonreferences;
 
 import sdmx.commonreferences.types.PackageTypeCodelistType;
 import sdmx.commonreferences.types.ObjectTypeCodelistType;
+import sdmx.commonreferences.types.StructurePackageTypeCodelistType;
+import sdmx.commonreferences.types.StructureUsageTypeCodelistType;
 
 /**
  *	<xs:complexType name="StructureUsageRefType">
@@ -41,7 +43,11 @@ import sdmx.commonreferences.types.ObjectTypeCodelistType;
  *  Copyright James Gardner 2014
  */
 public class StructureUsageRefType extends StructureUsageRefBaseType {
-   public StructureUsageRefType(ObjectTypeCodelistType obs,PackageTypeCodelistType pack) {
+   public StructureUsageRefType(StructureUsageTypeCodelistType obs,StructurePackageTypeCodelistType pack) {
        super(null,null,null,obs,pack);
    }
+
+    public StructureUsageRefType() {
+       super(null,null,null,StructureUsageTypeCodelistType.DATASTRUCTURE,StructurePackageTypeCodelistType.DATASTRUCTURE);
+    }
 }

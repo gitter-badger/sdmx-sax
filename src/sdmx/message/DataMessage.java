@@ -7,10 +7,18 @@ package sdmx.message;
 import java.util.ArrayList;
 import java.util.List;
 import sdmx.common.PayloadStructureType;
+import sdmx.common.StructureUsage;
 import sdmx.commonreferences.DataStructureReferenceType;
+import sdmx.commonreferences.StructureUsageRefType;
+import sdmx.commonreferences.StructureUsageReferenceBaseType;
+import sdmx.commonreferences.StructureUsageReferenceType;
+import sdmx.commonreferences.types.StructurePackageTypeCodelistType;
+import sdmx.commonreferences.types.StructureUsageTypeCodelistType;
 import sdmx.data.DataSet;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.structure.StructuresType;
+import sdmx.structure.base.StructureUsageType;
+import sdmx.xml.anyURI;
 
 /**
 	<xs:complexType name="GenericDataType">
@@ -105,18 +113,21 @@ public class DataMessage extends MessageType {
     public void setNamespacePrefix(String namespacePrefix) {
         this.namespacePrefix = namespacePrefix;
     }
-    public void setDataStructure(DataStructureReferenceType ref) {
+    public void setDataStructure(DataStructureReferenceType ref,anyURI uri) {
         List<PayloadStructureType> structures = this.getHeader().getStructures();
         if( structures == null ) {
             structures = new ArrayList<PayloadStructureType>();
         }
-        PayloadStructureType payload = null;
-        if( structures.size()>0)payload=structures.get(0);
-        if( payload == null ) {
-            payload = new PayloadStructureType();
+        PayloadStructureType payload = structures.size()==0?null:structures.get(0);
+        StructureUsageRefType ref2 = new StructureUsageRefType(StructureUsageTypeCodelistType.DATASTRUCTURE,StructurePackageTypeCodelistType.DATASTRUCTURE);
+        ref2.setAgencyId(ref.getRef().getAgencyId());
+        ref2.setId(ref.getRef().getId());
+        ref2.setVersion(ref.getRef().getVersion());
+        payload = new PayloadStructureType();
+        payload.setStructureUsage(new StructureUsageReferenceBaseType(ref2,uri));
+        if( !structures.contains(payload) ) {
             structures.add(payload);
         }
-        payload.setStructure(ref);
         getHeader().setStructures(structures);
     }
 }

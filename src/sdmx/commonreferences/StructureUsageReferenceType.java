@@ -52,4 +52,5 @@ public class StructureUsageReferenceType extends StructureUsageReferenceBaseType
     public StructureUsageReferenceType(anyURI urn) {
         super(urn);
     }
+
 }

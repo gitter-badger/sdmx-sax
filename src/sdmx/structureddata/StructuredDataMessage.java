@@ -55,9 +55,9 @@ public class StructuredDataMessage {
         return list.get(i);
     }
     public StructuredDataSet buildDecoratedDataSet(int i) {
-        NestedNCNameIDType agency = dataMessage.getHeader().getStructures().get(0).getStructure().getRef().getAgencyId();
-        NestedIDType id = dataMessage.getHeader().getStructures().get(0).getStructure().getRef().getId();
-        VersionType vers = dataMessage.getHeader().getStructures().get(0).getStructure().getRef().getVersion();
+        NestedNCNameIDType agency = dataMessage.getHeader().getStructures().get(0).getStructureUsage().getRef().getAgencyId();
+        NestedIDType id = dataMessage.getHeader().getStructures().get(0).getStructureUsage().getRef().getId();
+        VersionType vers = dataMessage.getHeader().getStructures().get(0).getStructureUsage().getRef().getVersion();
         IDType idtype = new IDType(id.toString());
         DataStructureType structure = registry.findDataStructure(agency, idtype, vers);
         return new StructuredDataSet(dataMessage.getDataSets().get(i),registry,structure);

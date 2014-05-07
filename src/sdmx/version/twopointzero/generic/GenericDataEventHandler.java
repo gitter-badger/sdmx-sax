@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -20,6 +21,7 @@ import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import sdmx.Registry;
 import sdmx.common.Name;
 import sdmx.commonreferences.IDType;
 import sdmx.data.DataSet;
@@ -33,7 +35,6 @@ import sdmx.version.twopointzero.Sdmx20EventHandler;
 import sdmx.version.twopointzero.compact.CompactDataEventHandler;
 import static sdmx.version.twopointzero.compact.CompactDataEventHandler.STATE_HEADER;
 import static sdmx.version.twopointzero.compact.CompactDataEventHandler.STATE_HEADERPREPARED;
-import sdmx.Registry;
 import sdmx.xml.DateTime;
 import sdmx.xml.DateType;
 
@@ -42,25 +43,24 @@ import sdmx.xml.DateType;
  * @author James
  */
 /**
- *  This file is part of SdmxSax.
+ * This file is part of SdmxSax.
  *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *   SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * SdmxSax is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ * SdmxSax is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  Copyright James Gardner 2014
+ * You should have received a copy of the GNU General Public License along with
+ * SdmxSax. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright James Gardner 2014
  */
 public class GenericDataEventHandler extends Sdmx20EventHandler {
-    
+
     public static final int STATE_START = 0;
     public static final int STATE_HEADER = 1;
     public static final int STATE_HEADERID = 2;
@@ -88,7 +88,7 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
     public static final int STATE_OBSATTRIBUTES = 24;
     public static final int STATE_TIME = 25;
     public static final int STATE_DATASETATTRIBUTES = 26;
-    
+
     BaseHeaderType header = new BaseHeaderType();
     List<DataSet> datasets = new ArrayList<DataSet>();
     String crossSection = null;
@@ -100,13 +100,14 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
 
     public GenericDataEventHandler() {
     }
+
     public GenericDataEventHandler(DataSetWriter writer) {
-        this.writer=writer;
+        this.writer = writer;
     }
 
     public DataMessage getDataMessage() {
         if (state != STATE_FINISH) {
-            System.out.println("State="+state);
+            System.out.println("State=" + state);
             throw new RuntimeException("You can't get the document before i've finished parsing!");
         }
         DataMessage dm = new DataMessage();
@@ -121,35 +122,35 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
         }
         state = STATE_START;
         /*
-        if (atts.getValue("xsi:schemaLocation") != null || atts.getValue("schemaLocation") != null) {
-            // ABS Data has this, UIS Does Not
-            //throw new SAXException("Root Element does not have schema location!");
-            if (atts.getValue("xsi:schemaLocation") != null) {
-                header.setSchemaLocation(atts.getValue("xsi:schemaLocation"));
-            }
-            if (atts.getValue("schemaLocation") != null) {
-                header.setSchemaLocation(atts.getValue("schemaLocation"));
-            }
-            if (docStruct == null) {
-                StringTokenizer st = new StringTokenizer(header.getSchemaLocation());
-                while (st.hasMoreTokens()) {
-                    String tk = st.nextToken();
-                    if (!"http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message".equals(tk)
-                            && !"http://www.sdmx.org/docs/2_0/SDMXMessage.xsd".equals(tk)) {
-                        try {
-                            URL url = new URL(tk);
-                            InputStream in = url.openStream();
-                            this.docStruct = new GenericDataStructureDocument(in);
-                        } catch (JAXBException ex) {
-                            System.out.println("JAXBException reading MSD");
-                        } catch (IOException io) {
-                            System.out.println("IOException reading MSD");
-                        }
-                    }
-                }
-            }
-        }
-        */
+         if (atts.getValue("xsi:schemaLocation") != null || atts.getValue("schemaLocation") != null) {
+         // ABS Data has this, UIS Does Not
+         //throw new SAXException("Root Element does not have schema location!");
+         if (atts.getValue("xsi:schemaLocation") != null) {
+         header.setSchemaLocation(atts.getValue("xsi:schemaLocation"));
+         }
+         if (atts.getValue("schemaLocation") != null) {
+         header.setSchemaLocation(atts.getValue("schemaLocation"));
+         }
+         if (docStruct == null) {
+         StringTokenizer st = new StringTokenizer(header.getSchemaLocation());
+         while (st.hasMoreTokens()) {
+         String tk = st.nextToken();
+         if (!"http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message".equals(tk)
+         && !"http://www.sdmx.org/docs/2_0/SDMXMessage.xsd".equals(tk)) {
+         try {
+         URL url = new URL(tk);
+         InputStream in = url.openStream();
+         this.docStruct = new GenericDataStructureDocument(in);
+         } catch (JAXBException ex) {
+         System.out.println("JAXBException reading MSD");
+         } catch (IOException io) {
+         System.out.println("IOException reading MSD");
+         }
+         }
+         }
+         }
+         }
+         */
     }
 
     public void startHeader() {
@@ -204,12 +205,15 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
         writer.newDataSet();
 
     }
-    public void startKeyFamilyRef(String ui,Attributes atts) {
-        state= STATE_KEYFAMILYREF;
+
+    public void startKeyFamilyRef(String ui, Attributes atts) {
+        state = STATE_KEYFAMILYREF;
     }
+
     public void endKeyFamilyRef() {
-        state=STATE_KEYFAMILYREFEND;
+        state = STATE_KEYFAMILYREFEND;
     }
+
     public void startGroup(String uri, Attributes atts) {
         state = STATE_GROUP;
         in_group = true;
@@ -276,16 +280,25 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
                 //header.setTruncated(Boolean.parseBoolean(new String(c)));
                 this.state = STATE_HEADER;
                 break;
-            case STATE_HEADERPREPARED:
-                HeaderTimeType htt = new HeaderTimeType();
-                htt.setDate(DateTime.fromString(new String(c)));
-                header.setPrepared(htt);
+            case STATE_HEADERPREPARED: {
+                try {
+                    HeaderTimeType htt = new HeaderTimeType();
+                    htt.setDate(DateTime.fromString(new String(c)));
+                    header.setPrepared(htt);
+                } catch (java.text.ParseException ex) {
+                    HeaderTimeType htt2 = new HeaderTimeType();
+                    htt2.setDate(new DateTime(new Date()));
+                    header.setPrepared(htt2);
+                }
                 this.state = STATE_HEADER;
-                break;
+            }
+            break;
             case STATE_HEADERNAME:
-                Name name = new Name(null,new String(c));
+                Name name = new Name(null, new String(c));
                 List<Name> names = header.getNames();
-                if( names == null ) names = new ArrayList<Name>();
+                if (names == null) {
+                    names = new ArrayList<Name>();
+                }
                 names.add(name);
                 header.setNames(names);
                 this.state = STATE_HEADER;
@@ -325,24 +338,30 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
 
     void startTime(String uri, Attributes atts) {
         //System.out.println("stime");
-        state=STATE_TIME;
+        state = STATE_TIME;
     }
 
     void startAttributes(String uri, Attributes atts) {
         //System.out.println("startattributes");
         switch (state) {
             case STATE_GROUPKEY:
-                state = STATE_GROUPATTRIBUTES;break;
+                state = STATE_GROUPATTRIBUTES;
+                break;
             case STATE_GROUP:
-                state = STATE_GROUPATTRIBUTES;break;
+                state = STATE_GROUPATTRIBUTES;
+                break;
             case STATE_SERIESKEY:
-                state = STATE_SERIESATTRIBUTES;break;
+                state = STATE_SERIESATTRIBUTES;
+                break;
             case STATE_SERIES:
-                state = STATE_SERIESATTRIBUTES;break;
+                state = STATE_SERIESATTRIBUTES;
+                break;
             case STATE_OBS:
-                state = STATE_OBSATTRIBUTES;break;
+                state = STATE_OBSATTRIBUTES;
+                break;
             case STATE_DATASET:
-                state = STATE_DATASETATTRIBUTES;break;
+                state = STATE_DATASETATTRIBUTES;
+                break;
         }
     }
 
@@ -366,7 +385,7 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
     }
 
     void endTime() {
-        state=STATE_OBS;
+        state = STATE_OBS;
 
     }
 
