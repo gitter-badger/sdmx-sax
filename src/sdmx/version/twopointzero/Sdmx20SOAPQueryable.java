@@ -148,6 +148,7 @@ public class Sdmx20SOAPQueryable implements Queryable {
             ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
             return SdmxIO.parseStructure(query("GetDataStructureDefinitionResult", bais, bytes.length));
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new QueryableException("Error");
         }
     }
@@ -178,6 +179,7 @@ public class Sdmx20SOAPQueryable implements Queryable {
             ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
             return SdmxIO.parseData(query("GetCompactDataResult", bais, bytes.length), false);
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new QueryableException("Error");
         }
     }

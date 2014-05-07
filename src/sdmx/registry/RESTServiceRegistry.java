@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,7 +34,11 @@ import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.SdmxIO;
+import sdmx.commonreferences.DataStructureRefType;
 import sdmx.exception.ParseException;
+import sdmx.exception.QueryableException;
+import sdmx.version.twopointzero.Sdmx20RESTQueryable;
+import sdmx.version.twopointzero.Sdmx20SOAPQueryable;
 import sdmx.xml.anyURI;
 
 /**
@@ -68,6 +73,8 @@ public class RESTServiceRegistry implements Registry {
     String serviceURL = "";
     Registry local = new LocalRegistry();
 
+    private List<DataStructureReferenceType> dataSetList = null;
+    
     public RESTServiceRegistry(String agency, String service) {
         this.serviceURL = service;
         this.agency = agency;
@@ -85,14 +92,18 @@ public class RESTServiceRegistry implements Registry {
         DataStructureType dst = local.findDataStructure(agency, id, version);
         if (dst == null) {
             try {
-                StructureType st = retrieve(serviceURL + "/registry/datastructure/" + agency.getString() + "/" + id.getString() + "/" + version.getString());
+                StructureType st = retrieve(serviceURL + "/datastructure/" + agency.getString() + "/" + id.getString() + "/" + version.getString());
+                load(st);
                 return local.findDataStructure(agency, id, version);
             } catch (MalformedURLException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
             } catch (IOException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
             } catch (ParseException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
             }
         }
         return dst;
@@ -102,7 +113,8 @@ public class RESTServiceRegistry implements Registry {
         ConceptSchemeType dst = local.findConceptScheme(agencyID, conceptRef);
         if (dst == null) {
             try {
-                retrieve(serviceURL + "/registry/conceptscheme/" + agencyID.getString() + "/" + conceptRef.getRef().getMaintainableParentId() + "/" + conceptRef.getRef().getMaintainableParentVersion());
+                StructureType st = retrieve(serviceURL + "/conceptscheme/" + agencyID.getString() + "/" + conceptRef.getRef().getMaintainableParentId() + "/" + conceptRef.getRef().getMaintainableParentVersion());
+                load(st);
                 return local.findConceptScheme(agencyID, conceptRef);
             } catch (MalformedURLException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
@@ -119,7 +131,8 @@ public class RESTServiceRegistry implements Registry {
         CodelistType dst = local.findCodelist(enumeration);
         if (dst == null) {
             try {
-                retrieve(serviceURL + "/registry/codelist/" + enumeration.getRef().getAgencyId() + "/" + enumeration.getRef().getId() + "/" + enumeration.getRef().getVersion());
+                StructureType st = retrieve(serviceURL + "/codelist/" + enumeration.getRef().getAgencyId() + "/" + enumeration.getRef().getId() + "/" + enumeration.getRef().getVersion());
+                load(st);
                 return local.findCodelist(enumeration);
             } catch (MalformedURLException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
@@ -140,7 +153,8 @@ public class RESTServiceRegistry implements Registry {
         CodelistType dst = local.findCodelist(codelistAgency, codelist, codelistVersion);
         if (dst == null) {
             try {
-                retrieve(serviceURL + "/registry/codelist/" + codelistAgency.getString() + "/" + codelist.getString() + "/" + codelistVersion.getString());
+                StructureType st = retrieve(serviceURL + "/codelist/" + codelistAgency.getString() + "/" + codelist.getString() + "/" + codelistVersion.getString());
+                load(st);
                 return local.findCodelist(codelistAgency, codelist, codelistVersion);
             } catch (MalformedURLException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
@@ -161,7 +175,9 @@ public class RESTServiceRegistry implements Registry {
         ConceptSchemeType dst = local.findConceptScheme(csa, csi);
         if (dst == null) {
             try {
-                retrieve(serviceURL + "/registry/conceptscheme/" + csa.getString() + "/" + csi.getString() + "/latest");
+                StructureType st = retrieve(serviceURL + "/conceptscheme/" + csa.getString() + "/" + csi.getString() + "/latest");
+                System.out.println("Loaded CSA/CSI struc:"+st.findConceptScheme(csa, csi));
+                load(st);
                 return local.findConceptScheme(csa, csi);
             } catch (MalformedURLException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
@@ -197,7 +213,11 @@ public class RESTServiceRegistry implements Registry {
             throw new IOException(conn.getResponseMessage());
         }
         InputStream in = conn.getInputStream();
+        System.out.println("Parsing!");
         StructureType st = SdmxIO.parseStructure(this, in);
+        if( st == null ) {
+            System.out.println("St is null!");
+        }
         return st;
     }
 
@@ -206,7 +226,8 @@ public class RESTServiceRegistry implements Registry {
         CodelistType dst = local.findCodelist(codelistAgency, codelist);
         if (dst == null) {
             try {
-                retrieve(serviceURL + "/registry/codelist/" + codelistAgency.getString() + "/" + codelist.getString() + "/latest");
+                StructureType st = retrieve(serviceURL + "/registry/codelist/" + codelistAgency.getString() + "/" + codelist.getString() + "/latest");
+                load(st);
                 return local.findCodelist(codelistAgency, codelist);
             } catch (MalformedURLException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
@@ -230,6 +251,7 @@ public class RESTServiceRegistry implements Registry {
         if (dst == null) {
             try {
                 StructureType st = retrieve(serviceURL + "/registry/datastructure/" + agency.getString() + "/" + id.getString() + "/latest");
+                load(st);
                 return local.findDataStructure(agency, id);
             } catch (MalformedURLException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
@@ -237,13 +259,37 @@ public class RESTServiceRegistry implements Registry {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
                 Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
             }
         }
         return dst;
     }
 
-    @Override
     public List<DataStructureReferenceType> listDataStructures() {
-        return local.listDataStructures();
+        if (dataSetList != null) {
+            return dataSetList;
+        }
+        dataSetList = new ArrayList<DataStructureReferenceType>();
+        try {
+            StructureType st = retrieve(serviceURL + "/datastructure/"+this.agency+"/all/all/");
+            Iterator<DataStructureType> it = st.getStructures().getDataStructures().getDataStructures().iterator();
+            while (it.hasNext()) {
+                DataStructureType ds = it.next();
+                DataStructureRefType ref = new DataStructureRefType(ds.getAgencyID(), ds.getId(), ds.getVersion());
+                DataStructureReferenceType reference = new DataStructureReferenceType(ref, null);
+                dataSetList.add(reference);
+            }
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(Sdmx20SOAPQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            dataSetList = null;
+        } catch (IOException ex) {
+            Logger.getLogger(Sdmx20SOAPQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            dataSetList = null;
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(Sdmx20RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return dataSetList;
     }
+
 }

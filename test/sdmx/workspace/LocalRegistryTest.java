@@ -65,7 +65,7 @@ public class LocalRegistryTest {
     public LocalRegistryTest() {
     }
     
-    public static final Registry doc = LocalRegistry.getDefaultWorkspace();
+    public static final Registry doc = new LocalRegistry();
     
     @BeforeClass
     public static void setUpClass() {

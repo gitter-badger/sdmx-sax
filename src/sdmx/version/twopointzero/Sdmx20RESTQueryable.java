@@ -76,16 +76,21 @@ public class Sdmx20RESTQueryable implements Queryable {
     @Override
     public StructureType query(DataStructureQueryMessage message) throws QueryableException {
         DataStructureWhereType where = message.getDataStructureWhereType();
+        System.out.println("DSW="+message.getDataStructureWhereType().getVersion().toString());
         try {
-            StructureType st = retrieve(serviceURL + "/datastructure/" + message.getDataStructureWhereType().getAgencyId().getString() + "/" + message.getDataStructureWhereType().getId().toString() + "/" + message.getDataStructureWhereType().getVersion().toString());
+            StructureType st = retrieve(serviceURL + "/datastructure/" + message.getDataStructureWhereType().getAgencyId().getString() + "/" + message.getDataStructureWhereType().getId().get(0).toString() + "/" + message.getDataStructureWhereType().getVersion().getString());
             return st;
         } catch (MalformedURLException ex) {
             Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } catch (IOException ex) {
             Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } catch (ParseException ex) {
             Logger.getLogger(Sdmx20RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
+        System.out.println("Returning null Structure File");
         return null;
     }
     @Override
@@ -103,6 +108,9 @@ public class Sdmx20RESTQueryable implements Queryable {
         }
         InputStream in = conn.getInputStream();
         StructureType st = SdmxIO.parseStructure(registry, in);
+        if( st == null ) {
+            System.out.println("Retrieve fetched a null Structure");
+        }
         return st;
     }
 
@@ -132,6 +140,7 @@ public class Sdmx20RESTQueryable implements Queryable {
             Iterator<DataStructureType> it = st.getStructures().getDataStructures().getDataStructures().iterator();
             while (it.hasNext()) {
                 DataStructureType ds = it.next();
+                System.out.println("vers="+ds.getVersion());
                 DataStructureRefType ref = new DataStructureRefType(ds.getAgencyID(), ds.getId(), ds.getVersion());
                 DataStructureReferenceType reference = new DataStructureReferenceType(ref, null);
                 dataSetList.add(reference);

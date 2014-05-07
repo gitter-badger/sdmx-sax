@@ -317,6 +317,7 @@ public class StructuresType implements Registry {
 
     @Override
     public CodelistType findCodelist(ItemSchemeReferenceBaseType enumeration) {
+        if( getCodelists()==null ) return null;
         CodelistType cs = getCodelists().findCodelist(enumeration);
         if (cs != null) {
             return cs;

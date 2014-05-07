@@ -64,14 +64,8 @@ public class SdmxIO {
     public static final int VERSION21 = 2;
 
     public static String getHeader(PushbackInputStream pushback) throws IOException {
-        int want = 200;
         byte[] buf = new byte[8192];
-        try{Thread.sleep(300);}catch(InterruptedException ie) {}
         int read = pushback.read(buf);
-        while(read<2000){
-            read+=pushback.read(buf,read,8192-read);
-            System.out.print(".");
-        }
         pushback.unread(buf, 0, read);
         byte[] buf2 = new byte[read];
         System.arraycopy(buf, 0, buf2, 0, read);
@@ -82,7 +76,6 @@ public class SdmxIO {
         char[] buf = new char[8192];
         int read = pushback.read(buf);
         pushback.unread(buf, 0, read);
-        
         char[] buf2 = new char[read];
         System.arraycopy(buf, 0, buf2, 0, read);
         String header = new String(buf2);
