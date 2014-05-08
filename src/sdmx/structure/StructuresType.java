@@ -16,7 +16,10 @@ import sdmx.commonreferences.ItemSchemeReferenceBaseType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.StructureOrUsageReferenceType;
 import sdmx.commonreferences.VersionType;
+import sdmx.message.DataMessage;
+import sdmx.message.DataQueryMessage;
 import sdmx.message.DataStructure;
+import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.StructureType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
@@ -422,6 +425,21 @@ public class StructuresType implements Registry {
             result.add(dref);
         }
         return result;
+    }
+
+    @Override
+    public StructureType query(DataStructureQueryMessage message) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DataMessage query(DataQueryMessage message) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<DataStructureReferenceType> listDataSets() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

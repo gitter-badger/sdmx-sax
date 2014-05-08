@@ -20,6 +20,7 @@ import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
 import sdmx.structure.datastructure.DataStructureType;
+import sdmx.version.common.Queryable;
 import sdmx.version.twopointone.Sdmx21StructureReaderTools;
 import sdmx.xml.anyURI;
 /**
@@ -40,7 +41,7 @@ import sdmx.xml.anyURI;
  *
  *  Copyright James Gardner 2014
  */
-public interface Registry {
+public interface Registry extends Queryable {
     public void load(StructureType struct);
     public void unload(StructureType struct);
 //    public IdentifiableType findIdentifiable(String agency, String id, String version);

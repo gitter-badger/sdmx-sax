@@ -19,19 +19,22 @@ import sdmx.Registry;
 import sdmx.SdmxIO;
 import sdmx.commonreferences.DataStructureRefType;
 import sdmx.commonreferences.DataStructureReferenceType;
+import sdmx.commonreferences.IDType;
+import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.exception.ParseException;
+import sdmx.exception.QueryableException;
 import sdmx.message.BaseHeaderType;
 import sdmx.message.DataMessage;
 import sdmx.message.DataQueryMessage;
+import sdmx.message.DataStructure;
 import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.StructureType;
 import sdmx.query.datastructure.DataStructureWhereType;
 import sdmx.registry.LocalRegistry;
-import sdmx.registry.QueryableServiceRegistry;
 import sdmx.registry.RESTServiceRegistry;
 import sdmx.structure.datastructure.DataStructureType;
+import sdmx.structure.datastructure.DimensionType;
 import sdmx.version.common.Queryable;
-import sdmx.exception.QueryableException;
 
 /**
  *
@@ -60,7 +63,7 @@ public class Sdmx20RESTQueryable implements Queryable {
     private String agencyId = "";
     private String serviceURL = "";
     // Temporary Registry
-    Registry registry = new QueryableServiceRegistry(this);
+    Registry registry = null;
     List<DataStructureReferenceType> dataSetList = null;
 
     public Sdmx20RESTQueryable(String agencyId, String serviceURL) {
@@ -68,37 +71,48 @@ public class Sdmx20RESTQueryable implements Queryable {
         this.serviceURL = serviceURL;
     }
 
-    @Override
     public String getAgencyId() {
         return agencyId;
     }
 
     @Override
-    public StructureType query(DataStructureQueryMessage message) throws QueryableException {
+    public StructureType query(DataStructureQueryMessage message) {
         DataStructureWhereType where = message.getDataStructureWhereType();
-        System.out.println("DSW="+message.getDataStructureWhereType().getVersion().toString());
         try {
-            StructureType st = retrieve(serviceURL + "/datastructure/" + message.getDataStructureWhereType().getAgencyId().getString() + "/" + message.getDataStructureWhereType().getId().get(0).toString() + "/" + message.getDataStructureWhereType().getVersion().getString());
+            StructureType st = retrieveStructure(serviceURL + "/datastructure/" + message.getDataStructureWhereType().getAgencyId().getString() + "/" + message.getDataStructureWhereType().getId().get(0).toString() + "/" + message.getDataStructureWhereType().getVersion().getString());
             return st;
         } catch (MalformedURLException ex) {
             Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace();
         } catch (IOException ex) {
             Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace();
         } catch (ParseException ex) {
             Logger.getLogger(Sdmx20RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace();
         }
         System.out.println("Returning null Structure File");
         return null;
     }
-    @Override
-    public DataMessage query(DataQueryMessage message) throws QueryableException {
+    public DataMessage query(DataQueryMessage message) {
+        IDType structid = message.getQuery().getDataWhere().getDataSetId().get(0);
+        NestedNCNameIDType agency = new NestedNCNameIDType(agencyId);
+        DataStructureType structure = registry.findDataStructure(agency, structid);
+        StringBuilder q = new StringBuilder();
+        for(int i=0;i<structure.getDataStructureComponents().getDimensionList().size();i++) {
+            DimensionType dim = structure.getDataStructureComponents().getDimensionList().getDimension(i);
+            String concept = dim.getConceptIdentity().getRef().getId().toString();
+            List<String> params = message.getQuery().getDataWhere().getDimensionParameters(concept);
+            if( params.size()>0) {
+                for(int j=0;j<params.size();j++) {
+                    q.append(params.get(j));
+                    if( j<params.size()-1)q.append("+");
+                }
+            }
+            if(i<structure.getDataStructureComponents().getDimensionList().size()-1)q.append(".");
+        }
+        
         return null;
     }
 
-    private StructureType retrieve(String urlString) throws MalformedURLException, IOException, ParseException {
+    private StructureType retrieveStructure(String urlString) throws MalformedURLException, IOException, ParseException {
         System.out.println("REST Queryable Retrieve:" + urlString);
         URL url = new URL(urlString);
         HttpURLConnection conn
@@ -114,33 +128,30 @@ public class Sdmx20RESTQueryable implements Queryable {
         return st;
     }
 
-    @Override
     public void setAgencyId(String agencyId) {
         this.agencyId = agencyId;
     }
 
-    @Override
     public String getServiceURL() {
         return serviceURL;
     }
 
-    @Override
     public void setServiceURL(String serviceURL) {
         this.serviceURL = serviceURL;
     }
 
     @Override
-    public List<DataStructureReferenceType> listDataSets() throws QueryableException {
+    public List<DataStructureReferenceType> listDataSets() {
         if (dataSetList != null) {
             return dataSetList;
         }
         dataSetList = new ArrayList<DataStructureReferenceType>();
         try {
-            StructureType st = retrieve(serviceURL + "/datastructure/"+agencyId+"/all/all/");
+            StructureType st = retrieveStructure(serviceURL + "/datastructure/"+agencyId+"/all/all/");
+            registry.load(st);
             Iterator<DataStructureType> it = st.getStructures().getDataStructures().getDataStructures().iterator();
             while (it.hasNext()) {
                 DataStructureType ds = it.next();
-                System.out.println("vers="+ds.getVersion());
                 DataStructureRefType ref = new DataStructureRefType(ds.getAgencyID(), ds.getId(), ds.getVersion());
                 DataStructureReferenceType reference = new DataStructureReferenceType(ref, null);
                 dataSetList.add(reference);
@@ -148,11 +159,9 @@ public class Sdmx20RESTQueryable implements Queryable {
         } catch (MalformedURLException ex) {
             Logger.getLogger(Sdmx20SOAPQueryable.class.getName()).log(Level.SEVERE, null, ex);
             dataSetList = null;
-            throw new QueryableException("Malformed URL Exception");
         } catch (IOException ex) {
             Logger.getLogger(Sdmx20SOAPQueryable.class.getName()).log(Level.SEVERE, null, ex);
             dataSetList = null;
-            throw new QueryableException("Network Error");
         } catch (ParseException ex) {
             Logger.getLogger(Sdmx20RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -19,16 +19,17 @@ import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
 import org.sdmx.resources.sdmxml.schemas.v20.structure.ComponentsType;
 import org.sdmx.resources.sdmxml.schemas.v20.structure.PrimaryMeasureType;
+import sdmx.Registry;
 import sdmx.common.ActionType;
 import sdmx.common.AnnotationType;
 import sdmx.common.DataType;
 import sdmx.common.Description;
-import sdmx.common.Name;
-import sdmx.common.StandardTimePeriodType;
-import sdmx.common.TextType;
 import sdmx.common.DimensionTypeType;
+import sdmx.common.Name;
 import sdmx.common.ObservationalTimePeriodType;
 import sdmx.common.PayloadStructureType;
+import sdmx.common.StandardTimePeriodType;
+import sdmx.common.TextType;
 import sdmx.common.TimezoneType;
 import sdmx.commonreferences.ConceptRefType;
 import sdmx.commonreferences.ConceptReferenceType;
@@ -54,6 +55,8 @@ import sdmx.message.HeaderTimeType;
 import sdmx.message.PartyType;
 import sdmx.message.SenderType;
 import sdmx.message.StructureType;
+import sdmx.registry.DoubleRegistry;
+import sdmx.registry.LocalRegistry;
 import sdmx.structure.CodelistsType;
 import sdmx.structure.ConceptsType;
 import sdmx.structure.DataStructuresType;
@@ -82,8 +85,6 @@ import static sdmx.version.twopointone.Sdmx21StructureReaderTools.toIDType;
 import static sdmx.version.twopointone.Sdmx21StructureReaderTools.toNames;
 import static sdmx.version.twopointone.Sdmx21StructureReaderTools.toTextType;
 import static sdmx.version.twopointone.Sdmx21StructureReaderTools.toTimezoneType;
-import sdmx.registry.LocalRegistry;
-import sdmx.Registry;
 import sdmx.xml.DateTime;
 import sdmx.xml.DateType;
 import sdmx.xml.ID;
@@ -152,6 +153,9 @@ public class Sdmx20StructureReaderTools {
     public StructureType parseStructure(org.sdmx.resources.sdmxml.schemas.v20.message.StructureDocument structDoc) throws TypeValueNotFoundException {
         StructureType sd = new StructureType();
         StructuresType struct = new StructuresType();
+        if( !(registry instanceof DoubleRegistry) ) {
+            registry = new DoubleRegistry(struct,registry);
+        }
         sd.setStructures(struct);
         try {
             struct.setCodelists(toCodelists(structDoc.getStructure().getCodeLists()));

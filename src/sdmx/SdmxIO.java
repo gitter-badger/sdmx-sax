@@ -73,6 +73,7 @@ public class SdmxIO {
         return header;
     }    
     public static String getHeader(PushbackReader pushback) throws IOException {
+        try{Thread.sleep(300);}catch(InterruptedException ie) {}
         char[] buf = new char[8192];
         int read = pushback.read(buf);
         pushback.unread(buf, 0, read);

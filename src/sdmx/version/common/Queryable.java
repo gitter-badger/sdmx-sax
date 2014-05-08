@@ -39,24 +39,7 @@ import sdmx.message.StructureType;
  *  Copyright James Gardner 2014
  */
 public interface Queryable {
-
-    public String getAgencyId();
-
-    public StructureType query(DataStructureQueryMessage message) throws QueryableException;
-    public DataMessage query(DataQueryMessage message) throws QueryableException;
-    public List<DataStructureReferenceType> listDataSets() throws QueryableException;
-
-    public void setAgencyId(String agencyId);
-
-    /**
-     * @return the serviceURL
-     */
-    public String getServiceURL();
-
-    /**
-     * @param serviceURL the serviceURL to set
-     */
-    public void setServiceURL(String serviceURL);
-    public Registry getRegistry();
-    public void setRegistry(Registry r);
+    public StructureType query(DataStructureQueryMessage message);
+    public DataMessage query(DataQueryMessage message);
+    public List<DataStructureReferenceType> listDataSets();
 }

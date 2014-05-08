@@ -55,6 +55,7 @@ public class StructuredDataSet {
 
     public String getColumnName(int i) {
         String conceptString = dataSet.getColumnName(i);
+        //System.out.println("ds="+structure);
         Component c = structure.getDataStructureComponents().findDimension(conceptString);
         // * Fixed in DataStructureComponentsType.findDimension
         //if( "TIME_PERIOD".equals(conceptString)&&c == null ) {

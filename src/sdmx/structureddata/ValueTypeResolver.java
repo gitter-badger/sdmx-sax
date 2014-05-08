@@ -4,9 +4,12 @@
  */
 package sdmx.structureddata;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import sdmx.Registry;
 import sdmx.common.DataType;
+import sdmx.common.Name;
 import sdmx.commonreferences.ConceptReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.NestedIDType;
@@ -378,7 +381,14 @@ public class ValueTypeResolver {
                 CodelistType codelist = registry.findCodelist(rep.getEnumeration());
                 CodeType ct = codelist.findCode(value);
                 if (ct == null) {
-                    throw new RuntimeException(value + " not found in Codelist:" + codelist.getAgencyID().toString() + ":" + codelist.getId().toString() + ":" + codelist.getVersion().toString());
+                    CodeType ct2 = new CodeType();
+                    ct2.setId(new IDType(value));
+                    Locale loc = Locale.getDefault();
+                    Name name = new Name("en","Missing Code:"+value);
+                    ArrayList<Name> names = new ArrayList<Name>();
+                    names.add(name);
+                    ct2.setNames(names);
+                    return ct2;
                 } else {
                     return ct;
                 }

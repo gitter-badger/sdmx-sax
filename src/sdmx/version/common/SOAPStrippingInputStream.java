@@ -67,6 +67,7 @@ public class SOAPStrippingInputStream extends FilterInputStream {
         while (inQueue.size() < stripEnd.length) {
             int next = super.read();
             //System.out.print((char)next);
+            //System.out.print((char)next);
             inQueue.offer(next);
             if (next == -1) {
                 throw new IOException("Stream Closed");

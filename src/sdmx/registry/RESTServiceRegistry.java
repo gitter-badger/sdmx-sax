@@ -37,6 +37,9 @@ import sdmx.SdmxIO;
 import sdmx.commonreferences.DataStructureRefType;
 import sdmx.exception.ParseException;
 import sdmx.exception.QueryableException;
+import sdmx.message.DataQueryMessage;
+import sdmx.message.DataStructureQueryMessage;
+import sdmx.structure.datastructure.DimensionType;
 import sdmx.version.twopointzero.Sdmx20RESTQueryable;
 import sdmx.version.twopointzero.Sdmx20SOAPQueryable;
 import sdmx.xml.anyURI;
@@ -73,6 +76,8 @@ public class RESTServiceRegistry implements Registry {
     String serviceURL = "";
     Registry local = new LocalRegistry();
 
+    
+    
     private List<DataStructureReferenceType> dataSetList = null;
     
     public RESTServiceRegistry(String agency, String service) {
@@ -220,6 +225,28 @@ public class RESTServiceRegistry implements Registry {
         }
         return st;
     }
+    /*
+       This function retrieves and uses the local registry 
+       instead of this when we call SdmxIO.parse(registry,in)
+       this means that if the sdmx service sends sdmx 2.0 data structures
+       the codelists dont have to be loaded.
+    */
+    private StructureType retrieve2(String urlString) throws MalformedURLException, IOException, ParseException {
+        System.out.println("Retrieve:" + urlString);
+        URL url = new URL(urlString);
+        HttpURLConnection conn =
+                (HttpURLConnection) url.openConnection();
+        if (conn.getResponseCode() != 200) {
+            throw new IOException(conn.getResponseMessage());
+        }
+        InputStream in = conn.getInputStream();
+        System.out.println("Parsing!");
+        StructureType st = SdmxIO.parseStructure(local, in);
+        if( st == null ) {
+            System.out.println("St is null!");
+        }
+        return st;
+    }
 
     @Override
     public CodelistType findCodelist(NestedNCNameIDType codelistAgency, IDType codelist) {
@@ -271,7 +298,7 @@ public class RESTServiceRegistry implements Registry {
         }
         dataSetList = new ArrayList<DataStructureReferenceType>();
         try {
-            StructureType st = retrieve(serviceURL + "/datastructure/"+this.agency+"/all/all/");
+            StructureType st = retrieve2(serviceURL + "/datastructure/"+this.agency+"/all/all/");
             Iterator<DataStructureType> it = st.getStructures().getDataStructures().getDataStructures().iterator();
             while (it.hasNext()) {
                 DataStructureType ds = it.next();
@@ -292,4 +319,34 @@ public class RESTServiceRegistry implements Registry {
         return dataSetList;
     }
 
+    @Override
+    public StructureType query(DataStructureQueryMessage message) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DataMessage query(DataQueryMessage message) {
+        IDType structid = message.getQuery().getDataWhere().getDataSetId().get(0);
+        NestedNCNameIDType agency = new NestedNCNameIDType(this.agency);
+        DataStructureType structure = findDataStructure(agency, structid);
+        StringBuilder q = new StringBuilder();
+        for(int i=0;i<structure.getDataStructureComponents().getDimensionList().size();i++) {
+            DimensionType dim = structure.getDataStructureComponents().getDimensionList().getDimension(i);
+            String concept = dim.getConceptIdentity().getRef().getId().toString();
+            List<String> params = message.getQuery().getDataWhere().getDimensionParameters(concept);
+            if( params.size()>0) {
+                for(int j=0;j<params.size();j++) {
+                    q.append(params.get(j));
+                    if( j<params.size()-1)q.append("+");
+                }
+            }
+            if(i<structure.getDataStructureComponents().getDimensionList().size()-1)q.append(".");
+        }
+        return null;
+    }
+
+    @Override
+    public List<DataStructureReferenceType> listDataSets() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

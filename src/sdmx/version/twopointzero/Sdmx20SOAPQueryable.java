@@ -64,22 +64,21 @@ import sdmx.xml.DateTime;
  * @author James
  */
 /**
- *  This file is part of SdmxSax.
+ * This file is part of SdmxSax.
  *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *   SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * SdmxSax is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ * SdmxSax is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  Copyright James Gardner 2014
+ * You should have received a copy of the GNU General Public License along with
+ * SdmxSax. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright James Gardner 2014
  */
 public class Sdmx20SOAPQueryable implements Queryable {
 
@@ -96,33 +95,29 @@ public class Sdmx20SOAPQueryable implements Queryable {
         this.serviceURL = serviceURL;
     }
 
-    public List<DataStructureReferenceType> listDataSets() throws QueryableException {
-        try {
-            if (dataSetList != null) {
-                return dataSetList;
-            }
-            dataSetList = new ArrayList<DataStructureReferenceType>();
-            DataStructureQueryMessage qm = new DataStructureQueryMessage();
-            qm.setHeader(getBaseHeader());
-            DataStructureWhereType dsw = new DataStructureWhereType();
-            qm.setDataStructureWhereType(dsw);
-            StructureType st = query(qm);
-            Iterator<DataStructureType> it = st.getStructures().getDataStructures().getDataStructures().iterator();
-            while (it.hasNext()) {
-                DataStructureType ds = it.next();
-                DataStructureRefType ref = new DataStructureRefType(ds.getAgencyID(), ds.getId(), ds.getVersion());
-                DataStructureReferenceType reference = new DataStructureReferenceType(ref, null);
-                dataSetList.add(reference);
-            }
+    public List<DataStructureReferenceType> listDataSets() {
+        if (dataSetList != null) {
             return dataSetList;
-        } catch (Exception ex) {
-            dataSetList=null;
-            throw new QueryableException("Error");
         }
+        dataSetList = new ArrayList<DataStructureReferenceType>();
+        DataStructureQueryMessage qm = new DataStructureQueryMessage();
+        qm.setHeader(getBaseHeader());
+        DataStructureWhereType dsw = new DataStructureWhereType();
+        qm.setDataStructureWhereType(dsw);
+        StructureType st = query(qm);
+        Iterator<DataStructureType> it = st.getStructures().getDataStructures().getDataStructures().iterator();
+        while (it.hasNext()) {
+            DataStructureType ds = it.next();
+            DataStructureRefType ref = new DataStructureRefType(ds.getAgencyID(), ds.getId(), ds.getVersion());
+            DataStructureReferenceType reference = new DataStructureReferenceType(ref, null);
+            dataSetList.add(reference);
+        }
+        return dataSetList;
     }
 
     @Override
-    public StructureType query(DataStructureQueryMessage message) throws QueryableException {
+    public StructureType query(DataStructureQueryMessage message) {
+        message.setHeader(getBaseHeader());
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Document doc = Sdmx20QueryWriter.toDocument(message);
@@ -149,11 +144,12 @@ public class Sdmx20SOAPQueryable implements Queryable {
             return SdmxIO.parseStructure(query("GetDataStructureDefinitionResult", bais, bytes.length));
         } catch (Exception ex) {
             ex.printStackTrace();
-            throw new QueryableException("Error");
         }
+        return null;
     }
 
-    public DataMessage query(DataQueryMessage message) throws QueryableException {
+    public DataMessage query(DataQueryMessage message) {
+        message.setHeader(getBaseHeader());
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Document doc = Sdmx20QueryWriter.toDocument(message);
@@ -180,8 +176,8 @@ public class Sdmx20SOAPQueryable implements Queryable {
             return SdmxIO.parseData(query("GetCompactDataResult", bais, bytes.length), false);
         } catch (Exception ex) {
             ex.printStackTrace();
-            throw new QueryableException("Error");
         }
+        return null;
     }
 
     public String getAgencyId() {
@@ -288,12 +284,10 @@ public class Sdmx20SOAPQueryable implements Queryable {
         this.mediaType = mediaType;
     }
 
-    @Override
     public Registry getRegistry() {
         return registry;
     }
 
-    @Override
     public void setRegistry(Registry r) {
         registry = r;
     }

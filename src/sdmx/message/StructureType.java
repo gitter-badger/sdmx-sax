@@ -155,4 +155,20 @@ public class StructureType extends MessageType implements Registry {
     public List<DataStructureReferenceType> listDataStructures() {
         return structures.listDataStructures();
     }
+
+    @Override
+    public StructureType query(DataStructureQueryMessage message) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DataMessage query(DataQueryMessage message) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<DataStructureReferenceType> listDataSets() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

@@ -64,7 +64,7 @@ public class StructuredValue {
         if( isCoded() ) {
             CodeType code = getCode();
             if( code == null ) {
-                throw new RuntimeException("Null Code");
+                return value;
             }
             Name name = code.findName(loc.getLanguage());
             Description desc = code.findDescription(loc.getLanguage());

@@ -316,9 +316,9 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
     }
 
     public void endDataSet() {
-        if (state != STATE_SERIESEND) {
-            throw new RuntimeException("DataSet does not Series End!");
-        }
+        //if (state != STATE_SERIESEND||state!=STATE_DATASET||state!=STATE_OBSEND) {
+        //    throw new RuntimeException("DataSet does not Series End!");
+        //}
         state = STATE_DATASETEND;
     }
 
