@@ -13,18 +13,19 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import sdmx.Registry;
+import sdmx.SdmxIO;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.VersionType;
-import sdmx.structureddata.ValueTypeResolver;
+import sdmx.exception.ParseException;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
-import sdmx.structure.datastructure.DataStructureType;
-import sdmx.SdmxIO;
 import sdmx.registry.LocalRegistry;
 import sdmx.registry.RESTServiceRegistry;
-import sdmx.Registry;
-import sdmx.exception.ParseException;
+import sdmx.structure.base.Component;
+import sdmx.structure.datastructure.DataStructureType;
+import sdmx.structureddata.ValueTypeResolver;
 
 /**
  *
@@ -164,6 +165,19 @@ public class Sdmx20DataParserTest {
         DataMessage data5 = SdmxIO.parseData(in5);
         long t2 = System.currentTimeMillis();
         System.out.println("Read:"+data5.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
+    }
+    @Test
+    public void testABSCensus() throws IOException, ParseException {
+        StructureType cenStruct = null;
+        try {
+            InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/abs_census2011_t33.xml");
+            cenStruct = SdmxIO.parseStructure(in);
+            LocalRegistry.getDefaultWorkspace().load(cenStruct);
+        } catch (IOException ex) {
+            Logger.getLogger(Sdmx20DataParserTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Component c = cenStruct.getStructures().getDataStructures().getDataStructures().get(0).getDataStructureComponents().findDimension("INDP");
+        System.out.println("Component="+c);
     }
     /* 
        This test is quite long....
