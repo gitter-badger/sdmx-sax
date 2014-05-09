@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -177,7 +178,33 @@ public class Sdmx20DataParserTest {
             Logger.getLogger(Sdmx20DataParserTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         Component c = cenStruct.getStructures().getDataStructures().getDataStructures().get(0).getDataStructureComponents().findDimension("INDP");
+        assertNotNull(c);
+    }
+    @Test
+    public void testABSCensus2() throws IOException, ParseException {
+        StructureType cenStruct = null;
+        try {
+            InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/abs_census2011_b01.xml");
+            cenStruct = SdmxIO.parseStructure(in);
+            LocalRegistry.getDefaultWorkspace().load(cenStruct);
+        } catch (IOException ex) {
+            Logger.getLogger(Sdmx20DataParserTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Component c = cenStruct.getStructures().getDataStructures().getDataStructures().get(0).getDataStructureComponents().findDimension("INDP");
         System.out.println("Component="+c);
+    }
+    @Test
+    public void testABSCensus3() throws IOException, ParseException {
+        StructureType cenStruct = null;
+        try {
+            InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/abs_census2011_b03.xml");
+            cenStruct = SdmxIO.parseStructure(in);
+            LocalRegistry.getDefaultWorkspace().load(cenStruct);
+        } catch (IOException ex) {
+            Logger.getLogger(Sdmx20DataParserTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Component c = cenStruct.getStructures().getDataStructures().getDataStructures().get(0).getDataStructureComponents().findDimension("INDP");
+        //System.out.println("Component="+c);
     }
     /* 
        This test is quite long....

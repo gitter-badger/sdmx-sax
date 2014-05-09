@@ -11767,7 +11767,7 @@ ABS.Stat beta is continuing to be developed.  Data will be updated as soon as po
                   </Concept>
                   <Concept id="REFERENCEPERIOD" agencyID="ABS">
                      <Name xml:lang="en">Unit multplier</Name>
-                     <Name xml:lang="fr">Unité multiplicateur</Name>
+                     <Name xml:lang="fr">Unite multiplicateur</Name>
                   </Concept>
                   <Concept id="OBS_VALUE" agencyID="OECD">
                      <Name xml:lang="en">Observation Value</Name>

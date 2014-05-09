@@ -96,15 +96,17 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public StructureType parseStructure(InputStream in) {
+    public StructureType parseStructure(InputStream in) throws IOException {
         try {
             StructureType doc;
             doc = new Sdmx20StructureReaderTools(LocalRegistry.getDefaultWorkspace()).parseStructure(in);
             return doc;
         } catch (XmlException | IOException ex) {
             Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } catch (TypeValueNotFoundException ex) {
             Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         return null;
     }
@@ -116,8 +118,10 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
             return doc;
         } catch (XmlException | IOException ex) {
             Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } catch (TypeValueNotFoundException ex) {
             Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         return null;
     }

@@ -76,6 +76,11 @@ public class DataStructureType extends StructureType {
             if (dim.getLocalRepresentation().getEnumeration() != null) {
                 System.out.print(" Codelist:" + dim.getLocalRepresentation().getEnumeration().getRef().getAgencyId() + ":" + dim.getLocalRepresentation().getEnumeration().getRef().getId() + ":" + dim.getLocalRepresentation().getEnumeration().getRef().getVersion());
             }
+            if (dim.getConceptIdentity()!=null ) {
+                System.out.print(" Concept Identity:" + dim.getConceptIdentity().getRef().getAgencyId()+":"+dim.getConceptIdentity().getRef().getId()+":"+dim.getConceptIdentity().getRef().getVersion());
+            }else {
+                System.out.println("***** NULL CONCEPT IDENTITY ******");
+            }
             if (dim.getLocalRepresentation()!=null&&dim.getLocalRepresentation().getTextFormat() != null) {
                 System.out.print(" Text Format:" + dim.getLocalRepresentation().getTextFormat().getTextType());
             }
@@ -87,6 +92,11 @@ public class DataStructureType extends StructureType {
             if (dim.getLocalRepresentation()!=null&&dim.getLocalRepresentation().getEnumeration() != null) {
                 System.out.print(" Codelist:" + dim.getLocalRepresentation().getEnumeration().getRef().getAgencyId() + ":" + dim.getLocalRepresentation().getEnumeration().getRef().getId() + ":" + dim.getLocalRepresentation().getEnumeration().getRef().getVersion());
             }
+            if (dim.getConceptIdentity()!=null ) {
+                System.out.print(" Concept Identity:" + dim.getConceptIdentity().getRef().getAgencyId()+":"+dim.getConceptIdentity().getRef().getId()+":"+dim.getConceptIdentity().getRef().getVersion());
+            }else {
+                System.out.println("***** NULL CONCEPT IDENTITY ******");
+            }
             if (dim.getLocalRepresentation()!=null&&dim.getLocalRepresentation().getTextFormat() != null) {
                 System.out.print(" Text Format:" + dim.getLocalRepresentation().getTextFormat().getTextType());
             }
@@ -97,6 +107,11 @@ public class DataStructureType extends StructureType {
             System.out.print(dim.getConceptIdentity().getRef().getId());
             if (dim.getLocalRepresentation()!=null&&dim.getLocalRepresentation().getEnumeration() != null) {
                 System.out.print(" Codelist:" + dim.getLocalRepresentation().getEnumeration().getRef().getAgencyId() + ":" + dim.getLocalRepresentation().getEnumeration().getRef().getId() + ":" + dim.getLocalRepresentation().getEnumeration().getRef().getVersion());
+            }
+            if (dim.getConceptIdentity()!=null ) {
+                System.out.print(" Concept Identity:" + dim.getConceptIdentity().getRef().getAgencyId()+":"+dim.getConceptIdentity().getRef().getId()+":"+dim.getConceptIdentity().getRef().getVersion());
+            }else {
+                System.out.println("***** NULL CONCEPT IDENTITY ******");
             }
             if (dim.getLocalRepresentation()!=null&&dim.getLocalRepresentation().getTextFormat() != null) {
                 System.out.print(" Text Format:" + dim.getLocalRepresentation().getTextFormat().getTextType());
@@ -110,6 +125,11 @@ public class DataStructureType extends StructureType {
             if (dim.getLocalRepresentation()!=null&&dim.getLocalRepresentation().getEnumeration() != null) {
                 System.out.print(" Codelist:" + dim.getLocalRepresentation().getEnumeration().getRef().getAgencyId() + ":" + dim.getLocalRepresentation().getEnumeration().getRef().getId() + ":" + dim.getLocalRepresentation().getEnumeration().getRef().getVersion());
             }
+            if (dim.getConceptIdentity()!=null ) {
+                System.out.print(" Concept Identity:" + dim.getConceptIdentity().getRef().getAgencyId()+":"+dim.getConceptIdentity().getRef().getId()+":"+dim.getConceptIdentity().getRef().getVersion());
+            }else {
+                System.out.println("***** NULL CONCEPT IDENTITY ******");
+            }
             if (dim.getLocalRepresentation()!=null&&dim.getLocalRepresentation().getTextFormat() != null) {
                 System.out.print(" Text Format:" + dim.getLocalRepresentation().getTextFormat().getTextType());
             }
@@ -120,6 +140,11 @@ public class DataStructureType extends StructureType {
             System.out.print(dim2.getConceptIdentity().getRef().getId());
             if (dim2.getLocalRepresentation()!=null&&dim2.getLocalRepresentation().getEnumeration() != null) {
                 System.out.print(" Codelist:" + dim2.getLocalRepresentation().getEnumeration().getRef().getAgencyId() + ":" + dim2.getLocalRepresentation().getEnumeration().getRef().getId() + ":" + dim2.getLocalRepresentation().getEnumeration().getRef().getVersion());
+            }
+            if (dim2.getConceptIdentity()!=null ) {
+                System.out.print(" Concept Identity:" + dim2.getConceptIdentity().getRef().getAgencyId()+":"+dim2.getConceptIdentity().getRef().getId()+":"+dim2.getConceptIdentity().getRef().getVersion());
+            }else {
+                System.out.println("***** NULL CONCEPT IDENTITY ******");
             }
             if (dim2.getLocalRepresentation()!=null&&dim2.getLocalRepresentation().getTextFormat() != null) {
                 System.out.print(" Text Format:" + dim2.getLocalRepresentation().getTextFormat().getTextType());
