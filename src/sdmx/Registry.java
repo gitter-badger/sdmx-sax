@@ -59,4 +59,5 @@ public interface Registry extends Queryable {
     public ConceptType findConcept(NestedNCNameIDType agency, IDType id);
     public ConceptType findConcept(IDType id);
     public List<DataStructureReferenceType> listDataStructures();
+    public void reset();
 }

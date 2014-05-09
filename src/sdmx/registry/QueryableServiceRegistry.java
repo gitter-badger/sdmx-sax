@@ -206,4 +206,9 @@ public class QueryableServiceRegistry implements Registry {
     public List<DataStructureReferenceType> listDataSets() {
         return queryable.listDataSets();
     }
+
+    @Override
+    public void reset() {
+        local.reset();
+    }
 }
