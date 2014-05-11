@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package sdmx.workspace;
+package sdmx.registry;
 
 import sdmx.registry.LocalRegistry;
 import sdmx.Registry;

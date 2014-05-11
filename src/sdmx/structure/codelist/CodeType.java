@@ -104,4 +104,8 @@ public class CodeType extends ItemType {
         }
         return sb.toString();
     }
+
+    public void dump() {
+        System.out.println("Code:"+this.getId()+":"+this.findName("en")+":"+this.findDescription("en"));
+    }
 }

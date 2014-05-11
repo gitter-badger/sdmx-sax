@@ -4,7 +4,10 @@
  */
 package sdmx.structure.base;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+import java.util.Locale;
 import sdmx.common.Description;
 import sdmx.common.Name;
 
@@ -89,7 +92,7 @@ public class NameableType extends IdentifiableType {
             if( lang!=null&&lang.equals(names.get(i).getLang()))return names.get(i);
             if( names.get(i).getLang()==null)def=names.get(i);
         }
-        if( !"en".equals(lang) ) return findName("en");
+        if( def == null &&!"en".equals(lang) ) def=findName("en");
         return def;
     }
     public Description findDescription(String lang) {
@@ -101,5 +104,13 @@ public class NameableType extends IdentifiableType {
         }
         if( !"en".equals(lang) ) return findDescription("en");
         return def;
+    }
+    public String toString() {
+        Locale loc = Locale.getDefault();
+        Name name = findName(loc.getLanguage());
+        if( name!=null ) return name.toString();
+        Description desc = findDescription(loc.getLanguage());
+        if( desc!=null ) return desc.getText();
+        return "NameableType";
     }
 }

@@ -66,11 +66,7 @@ public class StructuredValue {
             if( code == null ) {
                 return value;
             }
-            Name name = code.findName(loc.getLanguage());
-            Description desc = code.findDescription(loc.getLanguage());
-            if( name != null ) return name.getText();
-            if( desc!=null ) return desc.getText();
-            else return code.getId().toString();
+            return code.toString();
         }
         return value;
     }

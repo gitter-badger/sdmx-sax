@@ -10,6 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -64,18 +66,7 @@ public class Sdmx20DataParserTest {
     Registry registry = LocalRegistry.getDefaultWorkspace();
     
     @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
-    /**
-     * Test of isSdmx20 method, of class Sdmx20StructureParserProvider.
-     */
-    @Test
-    public void testCompactSample() throws IOException {
+    public void setUp() throws IOException {
         try {
             StructureType struct = null;
             try {
@@ -89,13 +80,76 @@ public class Sdmx20DataParserTest {
             }
             long t1= System.currentTimeMillis();
             InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/CompactSample.xml");
-            DataMessage data = SdmxIO.parseData(in);
+            data = SdmxIO.parseData(in);
             long t2 = System.currentTimeMillis();
             System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
             data.dump();
         } catch (ParseException ex) {
             Logger.getLogger(Sdmx20DataParserTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    @After
+    public void tearDown() {
+    }
+
+    /**
+     * Test of isSdmx20 method, of class Sdmx20StructureParserProvider.
+     */
+    DataMessage data = null;
+    @Test
+    public void testCompactSample1() throws IOException {
+        String result = "JD014";
+        assertEquals(result,data.getHeader().getId());
+    }
+    @Test
+    public void testCompactSample2() throws IOException {
+        Boolean result = Boolean.TRUE;
+        assertEquals(result,data.getHeader().getTest());
+    }
+    @Test
+    public void testCompactSample3() throws IOException {
+        String result = "en";
+        assertEquals(result,data.getHeader().getNames().get(0).getLang());
+    }
+    @Test
+    public void testCompactSample4() throws IOException {
+        String result = "Trans46305";
+        assertEquals(result,data.getHeader().getNames().get(0).getText());
+    }
+    @Test
+    public void testCompactSample5() throws IOException {
+        String result = "2001-03-11T09:30:47-05:00";
+        assertEquals(result,data.getHeader().getPrepared().getDate().toString());
+    }
+    @Test
+    public void testCompactSample6() throws IOException {
+        String result = "2001-03-11T09:30:47-05:00";
+        assertEquals(result,data.getHeader().getPrepared().getDate().toString());
+    }
+    @Test
+    public void testCompactSample7() throws IOException {
+        String result = "BIS";
+        assertEquals(result,data.getHeader().getSender().getId().toString());
+    }
+    @Test
+    public void testCompactSample8() throws IOException {
+        String result = "Bank for International Settlements";
+        assertEquals(result,data.getHeader().getSender().getNames().get(0).getText());
+    }
+    @Test
+    public void testCompactSample9() throws IOException {
+        String result = "en";
+        assertEquals(result,data.getHeader().getSender().getNames().get(0).getLang());
+    }
+    @Test
+    public void testCompactSample10() throws IOException {
+        assertNotNull(data.getHeader().getSender().getContacts());
+    }
+    @Test
+    public void testCompactSample11() throws IOException {
+        String result = "G.B Smith";
+        assertEquals(result,data.getHeader().getSender().getContacts().get(0));
     }
     @Test
     public void testGeneric() throws IOException, ParseException {

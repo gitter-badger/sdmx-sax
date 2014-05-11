@@ -39,6 +39,7 @@ public class DateTime {
 
     private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
     private static final SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    private String baseString = null;
     java.util.Date date = null;
     Calendar calendar = null;
 
@@ -76,12 +77,18 @@ public class DateTime {
                         .getName()).log(Level.SEVERE, null, ex2);
             }
         }
-        return new DateTime(cal);
+        DateTime dt = new DateTime(cal);
+        dt.setBaseString(s);
+        return dt;
     }
     public String toString() {
+        if( baseString!=null) return baseString;
         return df.format(calendar.getTime());
     }
     public static DateTime now() {
         return new DateTime(Calendar.getInstance());
+    }
+    public void setBaseString(String s) {
+        this.baseString=s;
     }
 }

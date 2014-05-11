@@ -92,4 +92,10 @@ public class CodelistType extends ItemSchemeType {
         }
         return sb.toString();
     }
+
+    public void dump() {
+        for(int i=0;i<this.size();i++) {
+            this.getCode(i).dump();
+        }
+    }
 }

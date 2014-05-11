@@ -379,6 +379,7 @@ public class ValueTypeResolver {
         if (rep != null) {
             if (rep.getEnumeration() != null) {
                 CodelistType codelist = registry.findCodelist(rep.getEnumeration());
+               
                 CodeType ct = codelist.findCode(value);
                 if (ct == null) {
                     CodeType ct2 = new CodeType();

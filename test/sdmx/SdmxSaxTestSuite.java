@@ -18,7 +18,7 @@ import sdmx.version.twopointzero.Sdmx20DataParserTest;
 import sdmx.version.twopointzero.Sdmx20DataWriteTest;
 import sdmx.version.twopointzero.Sdmx20ServiceTest;
 import sdmx.version.twopointzero.Sdmx20StructureParserTest;
-import sdmx.workspace.LocalRegistryTest;
+import sdmx.registry.LocalRegistryTest;
 
 /**
  *
