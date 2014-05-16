@@ -7,6 +7,7 @@ package sdmx.version.twopointzero.generic;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,21 +23,25 @@ import javax.xml.bind.JAXBException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import sdmx.Registry;
+import sdmx.common.ActionType;
 import sdmx.common.Name;
+import sdmx.common.ObservationalTimePeriodType;
+import sdmx.common.TextType;
 import sdmx.commonreferences.IDType;
 import sdmx.data.DataSet;
 import sdmx.data.DataSetWriter;
 import sdmx.data.flat.FlatDataSetWriter;
 import sdmx.message.BaseHeaderType;
+import sdmx.message.ContactType;
 import sdmx.message.DataMessage;
 import sdmx.message.HeaderTimeType;
+import sdmx.message.PartyType;
 import sdmx.message.SenderType;
 import sdmx.version.twopointzero.Sdmx20EventHandler;
 import sdmx.version.twopointzero.compact.CompactDataEventHandler;
-import static sdmx.version.twopointzero.compact.CompactDataEventHandler.STATE_HEADER;
-import static sdmx.version.twopointzero.compact.CompactDataEventHandler.STATE_HEADERPREPARED;
 import sdmx.xml.DateTime;
 import sdmx.xml.DateType;
+import sdmx.xml.anyURI;
 
 /**
  *
@@ -88,6 +93,15 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
     public static final int STATE_OBSATTRIBUTES = 24;
     public static final int STATE_TIME = 25;
     public static final int STATE_DATASETATTRIBUTES = 26;
+    public static final int STATE_HEADER_RECEIVER = 27;
+    public static final int STATE_DATASETACTION = 28;
+    public static final int STATE_DATASETACTIONEND = 29;
+    public static final int STATE_REPORTINGBEGIN = 30;
+    public static final int STATE_REPORTINGBEGINEND = 31;
+    public static final int STATE_REPORTINGEND = 32;
+    public static final int STATE_REPORTINGENDEND = 33;
+    public static final int STATE_EXTRACTED = 34;
+    public static final int STATE_EXTRACTEDEND = 35;
 
     BaseHeaderType header = new BaseHeaderType();
     List<DataSet> datasets = new ArrayList<DataSet>();
@@ -97,7 +111,38 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
     private boolean in_group = false;
     private boolean in_series = false;
     DataSetWriter writer = new FlatDataSetWriter();
+    
+    
+    String xmlLang = null;
+    Name name = null; // Temp Name
+    List<String> telephones = null;
+    boolean in_telephone = false;
+    List<TextType> depts = null;
+    boolean in_department = false;
+    List<String> x400s = null;
+    boolean in_x400 = false;
+    List<String> faxes = null;
+    boolean in_fax = false;
+    List<TextType> roles = null;
+    boolean in_role = false;
+    List<anyURI> uris = null;
+    boolean in_uri = false;
+    List<String> emails = null;
+    boolean in_email = false;
 
+    List<Name> names = null;
+    boolean in_name = false;
+    boolean in_header = false;
+    boolean in_sender = false;
+    boolean in_receiver = false;
+    
+    SenderType sender = null;
+    PartyType receiver = null;
+    
+    List<ContactType> contacts = null;
+    boolean in_contact = false;
+    ContactType contact = null;
+    
     public GenericDataEventHandler() {
     }
 
@@ -187,12 +232,22 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
 
     public void startHeaderSender(Attributes atts) {
         state = STATE_HEADERSENDER;
-        SenderType s = new SenderType();
-        s.setId(new IDType(atts.getValue("id")));
-        header.setSender(s);
+        sender = new SenderType();
+        sender.setId(new IDType(atts.getValue("id")));
+        header.setSender(sender);
+        names = new ArrayList<Name>();
+        name = null;
+        contacts = new ArrayList<ContactType>();
+        in_sender = true;
     }
-
+    
     public void endHeaderSender() {
+        in_sender = false;
+        names = null;
+        //System.out.println("Contacts="+contacts);
+        sender.setContacts(contacts);
+        header.setSender(sender);
+        contacts = new ArrayList<ContactType>();
     }
 
     public void endHeader() {
@@ -258,14 +313,71 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
         state = STATE_FINISH;
     }
 
-    public void startName() {
-        state = STATE_HEADERNAME;
+    public void startName(String uri, Attributes atts) {
+        in_name = true;
+        xmlLang = atts.getValue("xml:lang");
+        if (names == null) {
+            names = new ArrayList<Name>();
+        }
     }
-
+    
     public void endName() {
+        in_name = false;
+        if (state == STATE_HEADER ) {
+            header.setNames(names);
+        }
+        if (in_contact) {
+            contact.setNames(names);
+            return;
+        }
+        if (in_sender) {
+            sender.setNames(names);
+            return;
+        }
+        if (in_receiver) {
+            receiver.setNames(names);
+            return;
+        }
+        
     }
 
     public void characters(char[] c) {
+        if (in_uri) {
+            try {
+                uris.add(new anyURI(new String(c)));
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(CompactDataEventHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return;
+        }
+        if (in_role) {
+            roles.add(new TextType(xmlLang, new String(c)));
+            return;
+        }
+        if (in_email) {
+            emails.add(new String(c));
+            return;
+        }
+        if (in_telephone) {
+            telephones.add(new String(c));
+            return;
+        }
+        if (in_department) {
+            depts.add(new TextType(xmlLang, new String(c)));
+            return;
+        }
+        if (in_x400) {
+            x400s.add(new String(c));
+            return;
+        }
+        if (in_fax) {
+            faxes.add(new String(c));
+            return;
+        }
+        if (in_name) {
+            names.add(new Name(xmlLang, new String(c)));
+            return;
+        }
         switch (state) {
             case STATE_HEADERID:
                 header.setId(new String(c));
@@ -276,7 +388,7 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
                 this.state = STATE_HEADER;
                 break;
             case STATE_HEADERTRUNCATED:
-                // This field is in sdmx 2.0 but not in 2.1 ignore
+                // No Truncated in SDMX 2.1
                 //header.setTruncated(Boolean.parseBoolean(new String(c)));
                 this.state = STATE_HEADER;
                 break;
@@ -285,7 +397,7 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
                     HeaderTimeType htt = new HeaderTimeType();
                     htt.setDate(DateTime.fromString(new String(c)));
                     header.setPrepared(htt);
-                } catch (java.text.ParseException ex) {
+                } catch (java.text.ParseException pex) {
                     HeaderTimeType htt2 = new HeaderTimeType();
                     htt2.setDate(new DateTime(new Date()));
                     header.setPrepared(htt2);
@@ -293,21 +405,25 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
                 this.state = STATE_HEADER;
             }
             break;
-            case STATE_HEADERNAME:
-                Name name = new Name(null, new String(c));
-                List<Name> names = header.getNames();
-                if (names == null) {
-                    names = new ArrayList<Name>();
-                }
-                names.add(name);
-                header.setNames(names);
+            case STATE_DATASETACTION:
+                header.setDataSetAction(ActionType.fromString(new String(c)));
                 this.state = STATE_HEADER;
                 break;
-            case STATE_TIME:
-                writer.writeObservationComponent("TIME", new String(c));
+            case STATE_EXTRACTED:
+                try {
+                    header.setExtracted(DateTime.fromString(new String(c)));
+                } catch (java.text.ParseException ex) {
+                    header.setExtracted(new DateTime(new Date()));
+                }
+                this.state = STATE_HEADER;
                 break;
-            case STATE_KEYFAMILYREF:
-                //dsheader.setKeyFamilyURI(new String(c));
+            case STATE_REPORTINGBEGIN:
+                header.setReportingBegin(new ObservationalTimePeriodType(new String(c)));
+                this.state = STATE_HEADER;
+                break;
+            case STATE_REPORTINGEND:
+                header.setReportingEnd(new ObservationalTimePeriodType(new String(c)));
+                this.state = STATE_HEADER;
                 break;
         }
     }
@@ -403,5 +519,171 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
 
     void endObsValue() {
         //System.out.println("endobsvalue");
+    }
+
+    void startContact(Attributes atts) {
+        contact = new ContactType();
+        names = null;
+        in_contact = true;
+    }
+    
+    void startTelephone(Attributes atts) {
+        in_telephone = true;
+        telephones = contact.getTelephones();
+        if (telephones == null) {
+            telephones = new ArrayList<String>();
+        }
+        contact.setTelephones(telephones);
+    }
+    
+    void startDepartment(Attributes atts) {
+        in_department = true;
+        depts = contact.getDepartments();
+        if (depts == null) {
+            depts = new ArrayList<TextType>();
+        }
+        contact.setDepartments(depts);
+    }
+    
+    void startX400(Attributes atts) {
+        in_x400 = true;
+        x400s = contact.getX400s();
+        if (x400s == null) {
+            x400s = new ArrayList<String>();
+        }
+        contact.setX400s(x400s);
+    }
+    
+    void startFax(Attributes atts) {
+        in_fax = true;
+        faxes = contact.getFaxes();
+        if (faxes == null) {
+            faxes = new ArrayList<String>();
+        }
+        contact.setFaxes(faxes);
+    }
+    
+    void endContact() {
+        in_contact = false;
+        contact.setDepartments(depts);
+        contact.setEmails(emails);
+        contact.setFaxes(faxes);
+        contact.setRoles(roles);
+        contact.setUris(uris);
+        contact.setX400s(x400s);
+        contacts.add(contact);
+        contact = null;
+    }
+    
+    void endTelephone() {
+        in_telephone = false;
+        contact.setTelephones(telephones);
+    }
+    
+    void endDepartment() {
+        in_department = false;
+        contact.setDepartments(depts);
+    }
+    
+    void endtX400() {
+        in_x400 = false;
+        contact.setX400s(x400s);
+    }
+    
+    void endFax() {
+        in_fax = false;
+        contact.setFaxes(faxes);
+    }
+    
+    void startReceiver(Attributes atts) {
+        state = STATE_HEADER_RECEIVER;
+        receiver = new PartyType();
+        receiver.setId(new IDType(atts.getValue("id")));
+        names = new ArrayList<Name>();
+        name = null;
+        contacts = new ArrayList<ContactType>();
+        in_receiver = true;
+    }
+    
+    void endReceiver() {
+        List<PartyType> receivers = header.getReceivers();
+        if (receivers == null) {
+            receivers = new ArrayList<PartyType>();
+        }
+        receiver.setContacts(contacts);
+        receivers.add(receiver);
+        header.setReceivers(receivers);
+        in_receiver = false;
+    }
+    
+    void startRole(Attributes atts) {
+        in_role = true;
+        roles = contact.getRoles();
+        if (roles == null) {
+            roles = new ArrayList<TextType>();
+        }
+        contact.setRoles(roles);
+    }
+    
+    void startURI(Attributes atts) {
+        in_uri = true;
+        uris = contact.getUris();
+        if (uris == null) {
+            uris = new ArrayList<anyURI>();
+        }
+        contact.setUris(uris);
+    }
+    
+    void startEmail(Attributes atts) {
+        in_email = true;
+        emails = contact.getEmails();
+        if (emails == null) {
+            emails = new ArrayList<String>();
+        }
+        contact.setEmails(emails);
+    }
+    
+    void endRole() {
+        in_role = false;
+    }
+    
+    void endURI() {
+        in_uri = false;
+    }
+    
+    void endEmail() {
+        in_email = false;
+    }
+
+    void startDataSetAction(Attributes atts) {
+        state = STATE_DATASETACTION;
+    }
+
+    void startExtracted(Attributes atts) {
+        state = STATE_EXTRACTED;
+    }
+
+    void startReportingBegin(Attributes atts) {
+        state = STATE_REPORTINGBEGIN;
+    }
+
+    void startReportingEnd(Attributes atts) {
+        state = STATE_REPORTINGEND;
+    }
+
+    void endDataSetAction() {
+        state = STATE_DATASETACTIONEND;
+    }
+
+    void endExtracted() {
+        state = STATE_EXTRACTEDEND;
+    }
+
+    void endReportingBegin() {
+        state = STATE_REPORTINGBEGINEND;
+    }
+
+    void endReportingEnd() {
+        state = STATE_REPORTINGENDEND;
     }
 }

@@ -26,23 +26,23 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import sdmx.message.DataMessage;
 import sdmx.version.twopointzero.Sdmx20ContentHandler;
 import sdmx.version.twopointzero.generic.GenericDataEventHandler;
+
 /**
- *  This file is part of SdmxSax.
+ * This file is part of SdmxSax.
  *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *   SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * SdmxSax is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ * SdmxSax is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  Copyright James Gardner 2014
+ * You should have received a copy of the GNU General Public License along with
+ * SdmxSax. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright James Gardner 2014
  */
 public class GenericDataContentHandler extends Sdmx20ContentHandler {
 
@@ -66,12 +66,13 @@ public class GenericDataContentHandler extends Sdmx20ContentHandler {
         this.eh = new GenericDataEventHandler();
     }
 
-    public GenericDataContentHandler(GenericDataEventHandler handler,Reader in) {
+    public GenericDataContentHandler(GenericDataEventHandler handler, Reader in) {
         super();
         this.in2 = in;
         this.eh = handler;
     }
-    public GenericDataContentHandler(GenericDataEventHandler handler,InputStream in) {
+
+    public GenericDataContentHandler(GenericDataEventHandler handler, InputStream in) {
         super();
         this.in = in;
         this.eh = handler;
@@ -82,10 +83,10 @@ public class GenericDataContentHandler extends Sdmx20ContentHandler {
         reader = XMLReaderFactory.createXMLReader();
         reader.setContentHandler(this);
         reader.setErrorHandler(this);
-        if( this.in!=null) {
-           reader.parse(new InputSource(in));
-        }else {
-           reader.parse(new InputSource(in2));
+        if (this.in != null) {
+            reader.parse(new InputSource(in));
+        } else {
+            reader.parse(new InputSource(in2));
         }
         DataMessage doc = eh.getDataMessage();
         return doc;
@@ -121,7 +122,7 @@ public class GenericDataContentHandler extends Sdmx20ContentHandler {
         if ("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message".equals(uri)) {
             if ("GenericData".equals(localName)) {
                 eh.startRootElement(atts);
-            }else if ("MessageGroup".equals(localName)) {
+            } else if ("MessageGroup".equals(localName)) {
                 eh.startRootElement(atts);
             } else if ("Header".equals(localName)) {
                 eh.startHeader();
@@ -130,13 +131,39 @@ public class GenericDataContentHandler extends Sdmx20ContentHandler {
             } else if ("Test".equals(localName)) {
                 eh.startHeaderTest();
             } else if ("Name".equals(localName)) {
-                eh.startName();
+                eh.startName(uri,atts);
             } else if ("Truncated".equals(localName)) {
                 eh.startHeaderTruncated();
             } else if ("Prepared".equals(localName)) {
                 eh.startHeaderPrepared();
             } else if ("Sender".equals(localName)) {
                 eh.startHeaderSender(atts);
+            }  else if ("DataSetAction".equals(localName)) {
+                eh.startDataSetAction(atts);
+            } else if ("Extracted".equals(localName)) {
+                eh.startExtracted(atts);
+            } else if ("ReportingBegin".equals(localName)) {
+                eh.startReportingBegin(atts);
+            } else if ("ReportingEnd".equals(localName)) {
+                eh.startReportingEnd(atts);
+            } else if ("Contact".equals(localName)) {
+                eh.startContact(atts);
+            } else if ("Telephone".equals(localName)) {
+                eh.startTelephone(atts);
+            } else if ("Department".equals(localName)) {
+                eh.startDepartment(atts);
+            } else if ("X400".equals(localName)) {
+                eh.startX400(atts);
+            } else if ("Fax".equals(localName)) {
+                eh.startFax(atts);
+            } else if ("Receiver".equals(localName)) {
+                eh.startReceiver(atts);
+            } else if ("Role".equals(localName)) {
+                eh.startRole(atts);
+            } else if ("URI".equals(localName)) {
+                eh.startURI(atts);
+            } else if ("Email".equals(localName)) {
+                eh.startEmail(atts);
             }
         }
         if ("DataSet".equals(localName)) {
@@ -186,6 +213,32 @@ public class GenericDataContentHandler extends Sdmx20ContentHandler {
                 eh.endHeaderPrepared();
             } else if ("Sender".equals(localName)) {
                 eh.endHeaderSender();
+            } else if ("DataSetAction".equals(localName)) {
+                eh.endDataSetAction();
+            } else if ("Extracted".equals(localName)) {
+                eh.endExtracted();
+            } else if ("ReportingBegin".equals(localName)) {
+                eh.endReportingBegin();
+            } else if ("ReportingEnd".equals(localName)) {
+                eh.endReportingEnd();
+            }else if ("Contact".equals(localName)) {
+                eh.endContact();
+            } else if ("Telephone".equals(localName)) {
+                eh.endTelephone();
+            } else if ("Department".equals(localName)) {
+                eh.endDepartment();
+            } else if ("X400".equals(localName)) {
+                eh.endtX400();
+            } else if ("Fax".equals(localName)) {
+                eh.endFax();
+            } else if ("Receiver".equals(localName)) {
+                eh.endReceiver();
+            } else if ("Role".equals(localName)) {
+                eh.endRole();
+            } else if ("URI".equals(localName)) {
+                eh.endURI();
+            } else if ("Email".equals(localName)) {
+                eh.endEmail();
             }
         }
         if ("DataSet".equals(localName)) {
@@ -225,7 +278,6 @@ public class GenericDataContentHandler extends Sdmx20ContentHandler {
         //        }
         //        }
 
-
     }
 
     public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
@@ -240,12 +292,10 @@ public class GenericDataContentHandler extends Sdmx20ContentHandler {
     public void warning(SAXParseException exception) throws SAXException {
         System.out.println("Warning:" + exception);
 
-
     }
 
     public void error(SAXParseException exception) throws SAXException {
         System.out.println("Error:" + exception);
-
 
     }
 
