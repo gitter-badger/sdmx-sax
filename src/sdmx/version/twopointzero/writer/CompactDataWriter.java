@@ -247,7 +247,7 @@ public class CompactDataWriter {
 
     private static void writeText(XMLStreamWriter writer, String element, String lang, String text) throws XMLStreamException {
         writer.writeStartElement(element);
-        writer.writeAttribute("xml:lang", lang);
+        if(lang!=null)writer.writeAttribute("xml:lang", lang);
         writer.writeCharacters(text);
         writer.writeEndElement();
     }
@@ -257,13 +257,13 @@ public class CompactDataWriter {
     }
 
     public static void writeContact(XMLStreamWriter writer, ContactType contact) throws XMLStreamException {
-        if (contact.getNames().size() > 0) {
+        if (contact.getNames()!=null&&contact.getNames().size() > 0) {
             writeText(writer, "Name", contact.getNames().get(0).getLang(), contact.getNames().get(0).getText());
         }
-        if (contact.getDepartments().size() > 0) {
+        if (contact.getDepartments()!=null&&contact.getDepartments().size() > 0) {
             writeText(writer, "Department", contact.getDepartments().get(0).getLang(), contact.getDepartments().get(0).getText());
         }
-        if (contact.getTelephones().size() > 0) {
+        if (contact.getTelephones()!=null&&contact.getTelephones().size() > 0) {
             writeText(writer, "Telephone", null, contact.getTelephones().get(0));
         }
     }

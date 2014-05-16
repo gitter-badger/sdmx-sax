@@ -141,6 +141,24 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
                 eh.startReportingBegin(atts);
             } else if ("ReportingEnd".equals(localName)) {
                 eh.startReportingEnd(atts);
+            } else if ("Contact".equals(localName)) {
+                eh.startContact(atts);
+            } else if ("Telephone".equals(localName)) {
+                eh.startTelephone(atts);
+            } else if ("Department".equals(localName)) {
+                eh.startDepartment(atts);
+            }else if ("X400".equals(localName)) {
+                eh.startX400(atts);
+            }else if ("Fax".equals(localName)) {
+                eh.startFax(atts);
+            }else if ("Receiver".equals(localName)) {
+                eh.startReceiver(atts);
+            }else if ("Role".equals(localName)) {
+                eh.startRole(atts);
+            }else if ("URI".equals(localName)) {
+                eh.startURI(atts);
+            }else if ("Email".equals(localName)) {
+                eh.startEmail(atts);
             }
         } else {
             if ("DataSet".equals(localName)) {
@@ -199,6 +217,24 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
                 eh.endReportingBegin();
             } else if ("ReportingEnd".equals(localName)) {
                 eh.endReportingEnd();
+            }else if ("Contact".equals(localName)) {
+                eh.endContact();
+            } else if ("Telephone".equals(localName)) {
+                eh.endTelephone();
+            } else if ("Department".equals(localName)) {
+                eh.endDepartment();
+            }else if ("X400".equals(localName)) {
+                eh.endtX400();
+            }else if ("Fax".equals(localName)) {
+                eh.endFax();
+            }else if ("Receiver".equals(localName)) {
+                eh.endReceiver();
+            }else if ("Role".equals(localName)) {
+                eh.endRole();
+            }else if ("URI".equals(localName)) {
+                eh.endURI();
+            }else if ("Email".equals(localName)) {
+                eh.endEmail();
             }
         } else {
             if ("DataSet".equals(localName)) {

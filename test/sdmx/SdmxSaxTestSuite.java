@@ -12,13 +12,14 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import sdmx.data.StructuredDataTest;
 import sdmx.message.StructureTypeTest;
+import sdmx.registry.LocalRegistryTest;
 import sdmx.version.common.SOAPStripperInputStreamTest;
 import sdmx.version.twopointone.Sdmx21StructureParserTest;
 import sdmx.version.twopointzero.Sdmx20DataParserTest;
 import sdmx.version.twopointzero.Sdmx20DataWriteTest;
 import sdmx.version.twopointzero.Sdmx20ServiceTest;
 import sdmx.version.twopointzero.Sdmx20StructureParserTest;
-import sdmx.registry.LocalRegistryTest;
+import sdmx.version.twopointzero.compact.CompactDataEventHandlerTest;
 
 /**
  *
@@ -53,7 +54,8 @@ import sdmx.registry.LocalRegistryTest;
     StructuredDataTest.class,
     Sdmx20DataWriteTest.class,
     LocalRegistryTest.class,
-    StructureTypeTest.class
+    StructureTypeTest.class,
+    CompactDataEventHandlerTest.class
 })
 public class SdmxSaxTestSuite {
     @BeforeClass
