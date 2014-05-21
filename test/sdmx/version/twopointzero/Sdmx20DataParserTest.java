@@ -148,8 +148,8 @@ public class Sdmx20DataParserTest {
     }
     @Test
     public void testCompactSample11() throws IOException {
-        String result = "G.B Smith";
-        assertEquals(result,data.getHeader().getSender().getContacts().get(0));
+        String result = "G.B. Smith";
+        assertEquals(result,data.getHeader().getSender().getContacts().get(0).getNames().get(0).getText());
     }
     @Test
     public void testGeneric() throws IOException, ParseException {
