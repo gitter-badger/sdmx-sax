@@ -6,7 +6,10 @@
 
 package sdmx.cube;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import sdmx.structure.base.Component;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptType;
@@ -31,23 +34,29 @@ import sdmx.structure.concept.ConceptType;
  */
 public class MultipleValueCubeDimension extends CubeDimension {
 
-    public MultipleValueCubeDimension(Component comp, ConceptType concept, CodelistType code,String value){
-        super(comp,concept,code,value);
+    HashMap<String,CubeDimension> map = new HashMap<>();
+    
+    public MultipleValueCubeDimension(String concept,String value){
+        super(concept,value);
     }
     
     @Override
     public CubeDimension getSubDimension(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return map.get(id);
     }
 
     @Override
     public void putSubDimension(CubeDimension sub) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        map.put(sub.getValue(),sub);
     }
 
     @Override
-    public List<CubeDimension> listSubDimensions() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Collection<CubeDimension> listSubDimensions() {
+        return map.values();
+    }
+    @Override
+    public Set<String> listDimensionValues() {
+        return map.keySet();
     }
     
 }

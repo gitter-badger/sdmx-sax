@@ -5,6 +5,9 @@
  */
 package sdmx.cube;
 
+import sdmx.data.ColumnMapper;
+import sdmx.data.flat.FlatObs;
+
 /**
  * This file is part of SdmxSax.
  *
@@ -28,5 +31,22 @@ public class Cube {
 
     public CubeDimension getRootCubeDimension() {
         return root;
+    }
+    public void putObservation(ColumnMapper mapper,FlatObs obs) {
+        CubeDimension dim = getRootCubeDimension();
+        CubeDimension previous = dim;
+        if( dim == null ) {
+            root = new MultipleValueCubeDimension(mapper.getColumnName(0),obs.getValue(0));
+            dim = root;
+            previous = dim;
+        }
+        for(int i=1;i<mapper.size();i++) {
+            dim = dim.getSubDimension(obs.getValue(i));
+            if( dim == null ) {
+                dim = new MultipleValueCubeDimension(mapper.getColumnName(i),obs.getValue(i));
+                previous.putSubDimension(dim);
+            }
+            previous = dim;
+        }
     }
 }

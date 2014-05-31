@@ -6,7 +6,9 @@
 
 package sdmx.cube;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import sdmx.structure.base.Component;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptType;
@@ -34,8 +36,8 @@ public class CubeObservation extends CubeDimension {
     
     private List<CubeAttribute> attributes = null;
     
-    public CubeObservation(Component comp, ConceptType concept, CodelistType code,String value){
-        super(comp,concept,code,value);
+    public CubeObservation(String concept,String value){
+        super(concept,value);
     }
     
     @Override
@@ -64,7 +66,12 @@ public class CubeObservation extends CubeDimension {
 
     @Override
     public List<CubeDimension> listSubDimensions() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public Set<String> listDimensionValues() {
+        return Collections.EMPTY_SET;
     }
 
 }

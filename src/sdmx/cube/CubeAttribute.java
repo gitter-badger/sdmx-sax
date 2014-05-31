@@ -6,7 +6,10 @@
 
 package sdmx.cube;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Locale;
+import java.util.Set;
 import sdmx.common.DataType;
 import sdmx.common.Description;
 import sdmx.common.Name;
@@ -33,95 +36,29 @@ import sdmx.structure.concept.ConceptType;
  *
  *  Copyright James Gardner 2014
  */
-public class CubeAttribute {
+public class CubeAttribute extends CubeDimension {
 
-    private Component component = null;
-    private ConceptType concept = null;
-    private CodelistType codelist = null;
-
+    private String concept = null;
     private String value = null;
 
-    public String getName() {
-        Locale loc = Locale.getDefault();
-        Name name = getConcept().findName(loc.getLanguage());
-        if (name != null) {
-            return name.getText();
-        } else {
-            return getComponent().getId().toString();
-        }
-    }
-
-    public String getDescription() {
-        Locale loc = Locale.getDefault();
-        Description desc = getConcept().findDescription(loc.getLanguage());
-        if (desc != null) {
-            return desc.getText();
-        } else {
-            return "";
-        }
-    }
-
-    public String getValueString() {
-        if (codelist != null) {
-            CodeType ct = codelist.findCode(getValue());
-            Locale loc = Locale.getDefault();
-            Name name = ct.findName(loc.getLanguage());
-            if (name != null) {
-                return name.getText();
-            } else {
-                return ct.getId().toString();
-            }
-        } else {
-            if (getComponent().getLocalRepresentation().getTextFormat().getTextType() == DataType.DECIMAL) {
-                return getValue();
-            }
-            if (getComponent().getLocalRepresentation().getTextFormat().getTextType() == DataType.INTEGER) {
-                return getValue();
-            }
-        }
-        return "";
+    public CubeAttribute(String concept, String value) {
+        super(concept, value);
     }
 
     /**
      * @return the concept
      */
-    public ConceptType getConcept() {
+    @Override
+    public String getConcept() {
         return concept;
     }
 
     /**
      * @param concept the concept to set
      */
-    public void setConcept(ConceptType concept) {
+    @Override
+    public void setConcept(String concept) {
         this.concept = concept;
-    }
-
-    /**
-     * @return the codelist
-     */
-    public CodelistType getCodelist() {
-        return codelist;
-    }
-
-    /**
-     * @param codelist the codelist to set
-     */
-    public void setCodelist(CodelistType codelist) {
-        this.codelist = codelist;
-    }
-
-    /**
-     * @return the component
-     */
-    public Component getComponent() {
-        return component;
-    }
-
-    /**
-     * @param component the component to set
-     */
-    public void setComponent(Component component) {
-        this.component = component;
     }
 
     /**
@@ -136,6 +73,26 @@ public class CubeAttribute {
      */
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @Override
+    public CubeDimension getSubDimension(String id) {
+        return null;
+    }
+
+    @Override
+    public void putSubDimension(CubeDimension sub) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Collection<CubeDimension> listSubDimensions() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Set<String> listDimensionValues() {
+        return Collections.EMPTY_SET;
     }
 
 

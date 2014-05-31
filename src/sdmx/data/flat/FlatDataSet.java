@@ -305,6 +305,10 @@ public class FlatDataSet implements DataSet {
 
     @Override
     public Cube query(DataQuery query) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       Cube cube = new Cube();
+       for(int i=0;i<size();i++) {
+           cube.putObservation(mapper, getFlatObs(i));
+       }
+       return cube;
     }
 }
