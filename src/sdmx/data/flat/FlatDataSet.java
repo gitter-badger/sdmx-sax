@@ -288,8 +288,6 @@ public class FlatDataSet implements DataSet {
 
     @Override
     public void setGroups(List<Group> groups) {
-        System.out.println("Set Groups");
-        System.out.println("Size="+groups.size());
         this.groups = groups;
         if( groups == null ) return;
         for (int i = 0; i < groups.size(); i++) {

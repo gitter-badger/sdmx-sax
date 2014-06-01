@@ -9,6 +9,7 @@ package sdmx.cube;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import sdmx.structure.base.Component;
@@ -75,5 +76,11 @@ public class TimeCubeDimension extends CubeDimension {
     @Override
     public Set<String> listDimensionValues() {
         return Collections.EMPTY_SET;
+    }
+    public void dump() {
+        Iterator<String> it = map.keySet().iterator();
+        while(it.hasNext()) {
+            System.out.println("Value "+it.next());
+        }
     }
 }
