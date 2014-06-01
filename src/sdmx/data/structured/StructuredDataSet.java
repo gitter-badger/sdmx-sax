@@ -326,7 +326,7 @@ public class StructuredDataSet implements DataSet, Attachable {
     }
 
     @Override
-    public Cube query(DataQuery query) {
+    public Cube query(Cube cube,DataQuery query) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

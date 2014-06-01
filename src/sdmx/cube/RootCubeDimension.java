@@ -7,17 +7,8 @@
 package sdmx.cube;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Set;
-import sdmx.common.DataType;
-import sdmx.common.Description;
-import sdmx.common.Name;
-import sdmx.structure.base.Component;
-import sdmx.structure.codelist.CodeType;
-import sdmx.structure.codelist.CodelistType;
-import sdmx.structure.concept.ConceptType;
 
 /**
  *  This file is part of SdmxSax.
@@ -37,42 +28,31 @@ import sdmx.structure.concept.ConceptType;
  *
  *  Copyright James Gardner 2014
  */
-public class CubeAttribute  {
-
-    private String concept = null;
-    private String value = null;
-
-    public CubeAttribute(String concept, String value) {
-        this.concept=concept;
-        this.value=value;
+public class RootCubeDimension extends CubeDimension {
+    
+    HashMap<String,CubeDimension> map = new HashMap<>();
+    
+    public RootCubeDimension(){
+        super(null,null);
+    }
+    
+    @Override
+    public CubeDimension getSubDimension(String id) {
+        return map.get(id);
     }
 
-    /**
-     * @return the concept
-     */
-    public String getConcept() {
-        return concept;
+    @Override
+    public void putSubDimension(CubeDimension sub) {
+        map.put(sub.getValue(),sub);
     }
 
-    /**
-     * @param concept the concept to set
-     */
-    public void setConcept(String concept) {
-        this.concept = concept;
+    @Override
+    public Collection<CubeDimension> listSubDimensions() {
+        return map.values();
     }
-
-    /**
-     * @return the value
-     */
-    public String getValue() {
-        return value;
+    @Override
+    public Set<String> listDimensionValues() {
+        return map.keySet();
     }
-
-    /**
-     * @param value the value to set
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
-
+    
 }

@@ -288,10 +288,13 @@ public class FlatDataSet implements DataSet {
 
     @Override
     public void setGroups(List<Group> groups) {
+        System.out.println("Set Groups");
+        System.out.println("Size="+groups.size());
         this.groups = groups;
         if( groups == null ) return;
         for (int i = 0; i < groups.size(); i++) {
             Group g = groups.get(i);
+            g.processGroupValues(this);
             Iterator<String> it = g.getGroupAttributes().keySet().iterator();
             while (it.hasNext()) {
                 String s = it.next();
@@ -304,8 +307,7 @@ public class FlatDataSet implements DataSet {
     }
 
     @Override
-    public Cube query(DataQuery query) {
-       Cube cube = new Cube();
+    public Cube query(Cube cube, DataQuery query) {
        for(int i=0;i<size();i++) {
            cube.putObservation(mapper, getFlatObs(i));
        }

@@ -5,8 +5,16 @@
  */
 package sdmx.cube;
 
+import sdmx.commonreferences.IDType;
 import sdmx.data.ColumnMapper;
 import sdmx.data.flat.FlatObs;
+import sdmx.structure.base.Component;
+import sdmx.structure.datastructure.AttributeType;
+import sdmx.structure.datastructure.DataStructureType;
+import sdmx.structure.datastructure.DimensionType;
+import sdmx.structure.datastructure.MeasureDimensionType;
+import sdmx.structure.datastructure.PrimaryMeasure;
+import sdmx.structure.datastructure.TimeDimensionType;
 
 /**
  * This file is part of SdmxSax.
@@ -27,26 +35,59 @@ import sdmx.data.flat.FlatObs;
  */
 public class Cube {
 
-    private CubeDimension root = null;
+    DataStructureType struct = null;
 
-    public CubeDimension getRootCubeDimension() {
+    public Cube(DataStructureType struct) {
+        this.struct = struct;
+    }
+
+    private RootCubeDimension root = new RootCubeDimension();
+
+    public RootCubeDimension getRootCubeDimension() {
         return root;
     }
-    public void putObservation(ColumnMapper mapper,FlatObs obs) {
+
+    public void putObservation(ColumnMapper mapper, FlatObs obs) {
         CubeDimension dim = getRootCubeDimension();
-        CubeDimension previous = dim;
-        if( dim == null ) {
-            root = new MultipleValueCubeDimension(mapper.getColumnName(0),obs.getValue(0));
-            dim = root;
-            previous = dim;
-        }
-        for(int i=1;i<mapper.size();i++) {
-            dim = dim.getSubDimension(obs.getValue(i));
-            if( dim == null ) {
-                dim = new MultipleValueCubeDimension(mapper.getColumnName(i),obs.getValue(i));
-                previous.putSubDimension(dim);
+        for (int i = 0; i < struct.getDataStructureComponents().getDimensionList().size(); i++) {
+            IDType dimId = struct.getDataStructureComponents().getDimensionList().getDimension(i).getId();
+            CubeDimension myDim = dim.getSubDimension(obs.getValue(mapper.getColumnIndex(dimId.toString())));
+            if (myDim == null) {
+                myDim = new MultipleValueCubeDimension(dimId.toString(), obs.getValue(mapper.getColumnIndex(dimId.toString())));
+                dim.putSubDimension(myDim);
             }
-            previous = dim;
+            dim = myDim;
+        }
+        IDType dimId = struct.getDataStructureComponents().getTimeDimension().getId();
+        CubeDimension myDim = dim.getSubDimension(obs.getValue(mapper.getColumnIndex(dimId.toString())));
+        if (myDim == null) {
+            myDim = new TimeCubeDimension(dimId.toString(), obs.getValue(mapper.getColumnIndex(dimId.toString())));
+            dim.putSubDimension(myDim);
+        }
+        TimeCubeDimension time = (TimeCubeDimension) myDim;
+        CubeObservation cubeobs = null;
+
+        for (int i = 0; i < struct.getDataStructureComponents().getMeasureList().size(); i++) {
+            IDType dimId2 = struct.getDataStructureComponents().getMeasureList().getMeasure(i).getId();
+            cubeobs = time.getObservation(obs.getValue(mapper.getColumnIndex(dimId2.toString())));
+            if (cubeobs == null) {
+                cubeobs = new CubeObservation(dimId2.toString(), obs.getValue(mapper.getColumnIndex(dimId2.toString())));
+                time.putObservation(cubeobs);
+            }
+        }
+        IDType dimId3 = struct.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getId();
+        if (cubeobs == null) {
+            cubeobs = new CubeObservation(dimId3.toString(), obs.getValue(mapper.getColumnIndex(dimId3.toString())));
+            time.putObservation(cubeobs);
+        }
+
+        for (int i = 0; i < struct.getDataStructureComponents().getAttributeList().size(); i++) {
+            String name = struct.getDataStructureComponents().getAttributeList().getAttribute(i).getId().toString();
+            String value = null;
+            if (mapper.getColumnIndex(name) != -1) {
+                value = obs.getValue(mapper.getColumnIndex(name));
+                cubeobs.putAttribute(new CubeAttribute(name, value));
+            }
         }
     }
 }

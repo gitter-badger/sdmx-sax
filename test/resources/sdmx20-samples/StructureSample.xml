@@ -273,7 +273,8 @@
 		</structure:CodeList>
 	</CodeLists>
 	<Concepts>
-		<structure:Concept id="TIME" agencyID="BIS" version="1.0" uri="http://www.bis.org/structure/concepts/VIS_CTY.xml">
+	        <!-- Renamed conceptRef of TimeDimensiont to TIME_PERIOD from TIME -->
+		<structure:Concept id="TIME_PERIOD" agencyID="BIS" version="1.0" uri="http://www.bis.org/structure/concepts/VIS_CTY.xml">
 			<structure:Name xml:lang="en">Time</structure:Name>
 		</structure:Concept>
 		<structure:Concept id="FREQ" agencyID="BIS" version="1.0" uri="http://www.bis.org/structure/concepts/FREQ.xml">
@@ -334,7 +335,8 @@
 				<structure:Dimension conceptRef="JD_TYPE" codelist="CL_JD_TYPE" isMeasureDimension="true"/>
 				<structure:Dimension conceptRef="JD_CATEGORY" codelist="CL_JD_CATEGORY" crossSectionalAttachDataSet="false" crossSectionalAttachGroup="false" crossSectionalAttachSection="false" crossSectionalAttachObservation="true"/>
 				<structure:Dimension conceptRef="VIS_CTY" codelist="CL_BIS_IF_REF_AREA" crossSectionalAttachGroup="false" crossSectionalAttachSection="false" crossSectionalAttachObservation="true"/>
-				<structure:TimeDimension conceptRef="TIME" crossSectionalAttachGroup="true"/>
+				<structure:TimeDimension conceptRef="TIME_PERIOD" crossSectionalAttachGroup="true"/>
+				<!-- Renamed conceptRef of TimeDimensiont to TIME_PERIOD from TIME -->
 				<structure:Group id="SiblingGroup">
 					<structure:DimensionRef>JD_TYPE</structure:DimensionRef>
 					<structure:DimensionRef>JD_CATEGORY</structure:DimensionRef>

@@ -139,4 +139,7 @@ public class DataStructureComponentsType extends DataStructureComponentsBaseType
         }
         return null;
     }
+    public int size() {
+        return dimensionList.size()+attributeList.size()+measureList.size()+((timeDimension!=null)?1:0);
+    }
 }

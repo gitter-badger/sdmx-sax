@@ -6,7 +6,9 @@
 
 package sdmx.cube;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import sdmx.structure.base.Component;
@@ -31,47 +33,59 @@ import sdmx.structure.concept.ConceptType;
  *
  *  Copyright James Gardner 2014
  */
-public class CubeObservation extends CubeDimension {
-
+public class CubeObservation {
+    HashMap<String,CubeAttribute> map = new HashMap<>();
     
-    private List<CubeAttribute> attributes = null;
+    private String concept = null;
+    private String value = null;
     
     public CubeObservation(String concept,String value){
-        super(concept,value);
+        this.concept=concept;
+        this.value=value;
     }
-    
-    @Override
-    public CubeDimension getSubDimension(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+   
+    public CubeAttribute getAttribute(String id) {
+        return map.get(id);
     }
 
-    @Override
-    public void putSubDimension(CubeDimension sub) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void putAttribute(CubeAttribute sub) {
+        map.put(sub.getValue(),sub);
+    }
+
+    public Collection<CubeAttribute> listAttributes() {
+        return map.values();
+    }
+    public Set<String> listAttributeNames() {
+        return map.keySet();
     }
 
     /**
-     * @return the attributes
+     * @return the concept
      */
-    public List<CubeAttribute> getAttributes() {
-        return attributes;
+    public String getConcept() {
+        return concept;
     }
 
     /**
-     * @param attributes the attributes to set
+     * @param concept the concept to set
      */
-    public void setAttributes(List<CubeAttribute> attributes) {
-        this.attributes = attributes;
+    public void setConcept(String concept) {
+        this.concept = concept;
     }
 
-    @Override
-    public List<CubeDimension> listSubDimensions() {
-        return Collections.EMPTY_LIST;
+    /**
+     * @return the value
+     */
+    public String getValue() {
+        return value;
     }
 
-    @Override
-    public Set<String> listDimensionValues() {
-        return Collections.EMPTY_SET;
+    /**
+     * @param value the value to set
+     */
+    public void setValue(String value) {
+        this.value = value;
     }
+
 
 }

@@ -7,6 +7,7 @@
 package sdmx.cube;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -34,29 +35,45 @@ import sdmx.structure.concept.ConceptType;
  */
 public class TimeCubeDimension extends CubeDimension {
 
-    HashMap<String,CubeDimension> map = new HashMap<String,CubeDimension>();
+    HashMap<String,CubeObservation> map = new HashMap<String,CubeObservation>();
     
     public TimeCubeDimension(String concept, String value) {
         super(concept,value);
     }
 
-    @Override
-    public Collection<CubeDimension> listSubDimensions() {
+    public Collection<CubeObservation> listObservations() {
         return map.values();
     }
 
-    @Override
-    public void putSubDimension(CubeDimension sub) {
+    public void putObservation(CubeObservation sub) {
         map.put(sub.getValue(),sub);
+    }
+
+    public CubeObservation getObservation(String id) {
+        return map.get(id);
+    }
+
+    public Set<String> listObservationValues() {
+        return map.keySet();
     }
 
     @Override
     public CubeDimension getSubDimension(String id) {
-        return map.get(id);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void putSubDimension(CubeDimension sub) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Collection<CubeDimension> listSubDimensions() {
+        return Collections.EMPTY_LIST;
     }
 
     @Override
     public Set<String> listDimensionValues() {
-        return map.keySet();
+        return Collections.EMPTY_SET;
     }
 }

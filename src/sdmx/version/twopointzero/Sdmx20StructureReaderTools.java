@@ -541,6 +541,7 @@ public class Sdmx20StructureReaderTools {
         CodelistType code = getCodelist(d1);
         if (concept != null) {
             d2.setConceptIdentity(toConceptReference(cscheme, concept));
+            d2.setId(concept.getId());
         }
         //System.out.println("Dim:"+d1.getConceptRef()+":code="+code);
         if (code != null) {
@@ -630,6 +631,7 @@ public class Sdmx20StructureReaderTools {
         CodelistType code = getCodelist(a1);
         if (concept != null) {
             a2.setConceptIdentity(toConceptReference(cscheme, concept));
+            a2.setId(concept.getId());
         }
         if (code != null) {
             a2.setLocalRepresentation(toLocalRepresentation(code, toTextFormatType(a1.getTextFormat())));
@@ -839,6 +841,7 @@ public class Sdmx20StructureReaderTools {
         CodelistType code = getCodelist(pm1);
         if (concept != null) {
             pm2.setConceptIdentity(toConceptReference(cscheme, concept));
+            pm2.setId(concept.getId());
         }
         pm2.setLocalRepresentation(toLocalRepresentation(code, toTextFormatType(pm1.getTextFormat())));
         return pm2;
@@ -854,6 +857,7 @@ public class Sdmx20StructureReaderTools {
         CodelistType code = getCodelist(td1);
         if (concept != null) {
             td2.setConceptIdentity(toConceptReference(cscheme, concept));
+            td2.setId(concept.getId());
         }
         if (code != null) {
             td2.setLocalRepresentation(toLocalRepresentation(code, toTextFormatType(td1.getTextFormat())));

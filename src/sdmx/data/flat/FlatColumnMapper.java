@@ -35,8 +35,8 @@ import sdmx.data.AttachmentLevel;
 public class FlatColumnMapper implements ColumnMapper {
     List<String> columns = new ArrayList<String>();
     public int registerColumn(String s,AttachmentLevel attach) {
-        if( attach!=AttachmentLevel.OBSERVATION) {
-            throw new RuntimeException("Attachment level is not OBSERVATION");
+        if( attach!=AttachmentLevel.OBSERVATION&&attach!=AttachmentLevel.GROUP) {
+            throw new RuntimeException("Attachment level is not OBSERVATION Or Group");
         }
         columns.add(s);
         return columns.indexOf(s);
