@@ -53,8 +53,6 @@ public class Group {
     }
 
     public String getGroupValue(String concept) {
-        System.out.println("Get Group Value:"+concept);
-        System.out.println("Returning:"+groupAttributes.get(concept));
         return groupAttributes.get(concept);
     }
 
@@ -64,10 +62,15 @@ public class Group {
         while (it.hasNext()) {
             String s = it.next();
             if (ds.getColumnMapper().getColumnIndex(s) == -1||ds.getColumnMapper().isAttachedToGroup(s)) {
+                //System.out.println("Group Dim:"+s);
                 groupAttributes.put(s, map.get(s));
-                if(!ds.getColumnMapper().isAttachedToGroup(s))ds.getColumnMapper().registerColumn(s, AttachmentLevel.GROUP);
+                if(!ds.getColumnMapper().isAttachedToGroup(s)){
+                    //System.out.println("Register:"+s);
+                    ds.getColumnMapper().registerColumn(s, AttachmentLevel.GROUP);
+                }
                 it.remove();
             }else {
+                //System.out.println("Group Attr:"+s);
                 getGroupKey().put(s, map.get(s));
                 it.remove();
             }
@@ -81,7 +84,6 @@ public class Group {
             Object gv = getGroupKey().get(s);
             if( gv!=null) {
                 if( !gv.equals(key.getComponent(s))){
-                    System.out.println("s="+s+":gv="+gv+":k="+key.getComponent(s));
                     return false;
                 }
             }

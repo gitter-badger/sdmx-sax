@@ -8,6 +8,7 @@ package sdmx.cube;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import sdmx.structure.base.Component;
@@ -32,11 +33,11 @@ import sdmx.structure.concept.ConceptType;
  *
  *  Copyright James Gardner 2014
  */
-public class MultipleValueCubeDimension extends CubeDimension {
+public class HashMapCubeDimension extends CubeDimension {
 
     HashMap<String,CubeDimension> map = new HashMap<>();
     
-    public MultipleValueCubeDimension(String concept,String value){
+    public HashMapCubeDimension(String concept,String value){
         super(concept,value);
     }
     
@@ -58,5 +59,13 @@ public class MultipleValueCubeDimension extends CubeDimension {
     public Set<String> listDimensionValues() {
         return map.keySet();
     }
-    
+    public void dump() {
+        System.out.println("Dim:"+getConcept()+":"+getValue());
+        System.out.println("SubDims");
+        Iterator<CubeDimension> it = this.listSubDimensions().iterator();
+        while(it.hasNext()) {
+            it.next().dump();
+        }
+        System.out.println("End Dim:"+getConcept()+":"+getValue());
+    }
 }

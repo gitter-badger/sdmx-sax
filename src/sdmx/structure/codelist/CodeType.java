@@ -53,6 +53,9 @@ public class CodeType extends ItemType {
         if (getDescriptions() != null && getDescriptions().size() > 0) {
             return getDescriptions().get(0).getText();
         }
+        if (getNames() != null && getNames().size() > 0) {
+            return getNames().get(0).getText();
+        }
         return super.getId().getString();
     }
 

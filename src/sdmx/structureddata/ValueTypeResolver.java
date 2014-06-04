@@ -11,9 +11,14 @@ import sdmx.Registry;
 import sdmx.common.DataType;
 import sdmx.common.Name;
 import sdmx.commonreferences.ConceptReferenceType;
+import sdmx.commonreferences.ConceptSchemeReferenceType;
 import sdmx.commonreferences.IDType;
+import sdmx.commonreferences.ItemSchemeReferenceBaseType;
 import sdmx.commonreferences.NestedIDType;
 import sdmx.commonreferences.NestedNCNameIDType;
+import sdmx.commonreferences.RefBaseType;
+import sdmx.commonreferences.types.ItemSchemeTypeCodelistType;
+import sdmx.commonreferences.types.ObjectTypeCodelistType;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.structure.base.Component;
 import sdmx.structure.base.RepresentationType;
@@ -27,23 +32,23 @@ import sdmx.structure.datastructure.DimensionType;
 import sdmx.structure.datastructure.MeasureDimensionType;
 import sdmx.structure.datastructure.PrimaryMeasure;
 import sdmx.structure.datastructure.TimeDimensionType;
+
 /**
- *  This file is part of SdmxSax.
+ * This file is part of SdmxSax.
  *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *  SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * SdmxSax is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ * SdmxSax is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  Copyright James Gardner 2014
+ * You should have received a copy of the GNU General Public License along with
+ * SdmxSax. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright James Gardner 2014
  */
 public class ValueTypeResolver {
     /*
@@ -378,28 +383,52 @@ public class ValueTypeResolver {
         }
         if (rep != null) {
             if (rep.getEnumeration() != null) {
-                CodelistType codelist = registry.findCodelist(rep.getEnumeration());
-               
-                CodeType ct = codelist.findCode(value);
-                if (ct == null) {
-                    CodeType ct2 = new CodeType();
-                    ct2.setId(new IDType(value));
-                    Locale loc = Locale.getDefault();
-                    Name name = new Name("en","Missing Code:"+value);
-                    ArrayList<Name> names = new ArrayList<Name>();
-                    names.add(name);
-                    ct2.setNames(names);
-                    return ct2;
+                if (rep.getEnumeration().getRef().getRefClass() == ItemSchemeTypeCodelistType.CODELIST) {
+                    CodelistType codelist = registry.findCodelist(rep.getEnumeration());
+                    CodeType ct = codelist.findCode(value);
+                    if (ct == null) {
+                        CodeType ct2 = new CodeType();
+                        ct2.setId(new IDType(value));
+                        Locale loc = Locale.getDefault();
+                        Name name = new Name("en", "Missing Code:" + value);
+                        ArrayList<Name> names = new ArrayList<Name>();
+                        names.add(name);
+                        ct2.setNames(names);
+                        return ct2;
+                    } else {
+                        return ct;
+                    }
                 } else {
-                    return ct;
+                    ItemSchemeReferenceBaseType ref = rep.getEnumeration();
+                    ConceptSchemeType cs = registry.findConceptScheme(ref.getRef().getAgencyId(), new IDType(ref.getRef().getId().toString()));
+                    ConceptType conceptMeasure = null;
+                    for (int i = 0; i < cs.size()&&conceptMeasure==null; i++) {
+                        ConceptType tempConcept = cs.getConcept(i);
+                        if (tempConcept.getCode() != null && tempConcept.getCode().equals(value)) {
+                            conceptMeasure = cs.getConcept(i);
+                        } else if (tempConcept.getId().equals(value)) {
+                            conceptMeasure = tempConcept;
+                        }
+                    }
+                    if (conceptMeasure != null) {
+                        CodeType ct2 = new CodeType();
+                        ct2.setId(conceptMeasure.getId());
+                        ct2.setNames(conceptMeasure.getNames());
+                        ct2.setDescriptions(conceptMeasure.getDescriptions());
+                        return ct2;
+
+                    }
+                    return null;
                 }
             }
         } else {
             throw new RuntimeException("No Local Representation Type in Dimension");
         }
+
         return null;
     }
-    public static CodelistType getPossibleCodes(Registry registry,DataStructureType struct,String column) {
+
+    public static CodelistType getPossibleCodes(Registry registry, DataStructureType struct, String column) {
         Component dim = struct.getDataStructureComponents().findDimension(column);
         ConceptReferenceType conceptRef = dim.getConceptIdentity();
         RepresentationType rep = null;

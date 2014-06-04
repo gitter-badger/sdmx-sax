@@ -34,12 +34,23 @@ import sdmx.data.AttachmentLevel;
  */
 public class FlatColumnMapper implements ColumnMapper {
     List<String> columns = new ArrayList<String>();
+    List<String> groupColumns = new ArrayList<String>();
     public int registerColumn(String s,AttachmentLevel attach) {
+        if( columns.contains(s)||groupColumns.contains(s)){
+            throw new RuntimeException("Attempt to Register already registered Column!!");
+        }
         if( attach!=AttachmentLevel.OBSERVATION&&attach!=AttachmentLevel.GROUP) {
             throw new RuntimeException("Attachment level is not OBSERVATION Or Group");
         }
-        columns.add(s);
-        return columns.indexOf(s);
+        if( attach == AttachmentLevel.GROUP ) {
+            groupColumns.add(s);
+            columns.add(s);
+            return columns.indexOf(s);
+        }else {
+            columns.add(s);
+            return columns.indexOf(s);
+        }
+        
     }
     public int getColumnIndex(String s) {
         return columns.indexOf(s);
@@ -123,12 +134,12 @@ public class FlatColumnMapper implements ColumnMapper {
 
     @Override
     public boolean isAttachedToGroup(String s) {
-        return false;
+        return groupColumns.contains(s);
     }
 
     @Override
     public boolean isAttachedToGroup(int i) {
-        return false;
+        return isAttachedToGroup(getColumnName(i));
     }
 
     @Override

@@ -18,6 +18,7 @@ import org.apache.xmlbeans.GDuration;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
 import org.sdmx.resources.sdmxml.schemas.v20.structure.ComponentsType;
+import org.sdmx.resources.sdmxml.schemas.v20.structure.CrossSectionalMeasureType;
 import org.sdmx.resources.sdmxml.schemas.v20.structure.PrimaryMeasureType;
 import sdmx.Registry;
 import sdmx.common.ActionType;
@@ -33,6 +34,8 @@ import sdmx.common.TextType;
 import sdmx.common.TimezoneType;
 import sdmx.commonreferences.ConceptRefType;
 import sdmx.commonreferences.ConceptReferenceType;
+import sdmx.commonreferences.ConceptSchemeRefType;
+import sdmx.commonreferences.ConceptSchemeReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.ItemSchemeRefBaseType;
 import sdmx.commonreferences.ItemSchemeReferenceBaseType;
@@ -40,6 +43,7 @@ import sdmx.commonreferences.LocalItemRefBaseType;
 import sdmx.commonreferences.LocalItemReferenceType;
 import sdmx.commonreferences.NCNameIDType;
 import sdmx.commonreferences.NestedNCNameIDType;
+import sdmx.commonreferences.RefBaseType;
 import sdmx.commonreferences.StructureRefBaseType;
 import sdmx.commonreferences.StructureReferenceBaseType;
 import sdmx.commonreferences.VersionType;
@@ -150,11 +154,12 @@ public class Sdmx20StructureReaderTools {
         return parseStructure(structDoc);
     }
 
+    StructureType sd = new StructureType();
+    StructuresType struct = new StructuresType();
+
     public StructureType parseStructure(org.sdmx.resources.sdmxml.schemas.v20.message.StructureDocument structDoc) throws TypeValueNotFoundException {
-        StructureType sd = new StructureType();
-        StructuresType struct = new StructuresType();
-        if( !(registry instanceof DoubleRegistry) ) {
-            registry = new DoubleRegistry(struct,registry);
+        if (!(registry instanceof DoubleRegistry)) {
+            registry = new DoubleRegistry(struct, registry);
         }
         sd.setStructures(struct);
         try {
@@ -503,23 +508,26 @@ public class Sdmx20StructureReaderTools {
         return new VersionType(s);
     }
 
+    private DataStructureComponents currentDataStructure = null;
     public DataStructureComponents toDataStructureComponents(org.sdmx.resources.sdmxml.schemas.v20.structure.ComponentsType c1) throws TypeValueNotFoundException, URISyntaxException {
         if (c1 == null) {
             return null;
         }
-        DataStructureComponents c2 = new DataStructureComponents();
-        c2.setDimensionList(toDimensionListType(c1.getDimensionArray()));
-        c2.setAttributeList(toAttributeList(c1.getAttributeArray()));
-        c2.setMeasureList(toMeasureList(c1));
-        c2.setTimeDimension(toTimeDimension(c1.getTimeDimension()));
-        return c2;
+        currentDataStructure = new DataStructureComponents();
+        currentDataStructure.setDimensionList(toDimensionListType(c1.getDimensionArray()));
+        currentDataStructure.setAttributeList(toAttributeList(c1.getAttributeArray()));
+        currentDataStructure.setMeasureList(toMeasureList(c1));
+        currentDataStructure.setTimeDimension(toTimeDimension(c1.getTimeDimension()));
+        return currentDataStructure;
     }
 
     public DimensionListType toDimensionListType(org.sdmx.resources.sdmxml.schemas.v20.structure.DimensionType[] d1) throws TypeValueNotFoundException, URISyntaxException {
         DimensionListType dlt = new DimensionListType();
         List<DimensionType> d2 = new ArrayList<DimensionType>();
         for (int i = 0; i < d1.length; i++) {
-            d2.add(toDimensionType(d1[i]));
+            if (!d1[i].getIsMeasureDimension()) {
+                d2.add(toDimensionType(d1[i]));
+            }
         }
         dlt.setDimensions(d2);
         return dlt;
@@ -547,6 +555,40 @@ public class Sdmx20StructureReaderTools {
         if (code != null) {
             d2.setLocalRepresentation(toLocalRepresentation(code, toTextFormatType(d1.getTextFormat())));
         }
+        return d2;
+    }
+
+    public MeasureDimensionType toMeasureDimensionType(org.sdmx.resources.sdmxml.schemas.v20.structure.DimensionType d1) throws TypeValueNotFoundException, URISyntaxException {
+        //System.out.println("CS Agency="+d1.getConceptSchemeAgency());
+        //System.out.println("CS Ref="+d1.getConceptSchemeRef());
+        //System.out.println("CT Id="+d1.getConceptRef());
+        ConceptSchemeType cscheme = getConceptScheme(d1);
+        //System.out.println("Concept="+cscheme);
+        ConceptType concept = getConcept(cscheme, d1);
+        //System.out.println("ConceptT ID="+concept.getId());
+
+        //System.out.println("Dimension=" + d1.getConceptRef());
+        //System.out.println("Cscheme=" + cscheme);
+        //System.out.println("Concept=" + concept);
+        MeasureDimensionType d2 = new MeasureDimensionType();
+        if (concept != null) {
+            d2.setConceptIdentity(toConceptReference(cscheme, concept));
+            d2.setId(concept.getId());
+        }
+        //System.out.println("Dim:"+d1.getConceptRef()+":code="+code);
+        String id = d2.getId().toString();
+        if (!id.endsWith("_MEASURES")) {
+            id = id + "_MEASURES";
+        }
+        ConceptSchemeType scheme = registry.findConceptScheme(mainAgencyId, new IDType(id));
+        if (scheme == null) {
+            scheme = new ConceptSchemeType();
+            scheme.setAgencyID(mainAgencyId);
+            scheme.setId(new IDType(id));
+            scheme.setVersion(VersionType.ONE);
+            struct.getConcepts().getConceptSchemes().add(scheme);
+        }
+        d2.setLocalRepresentation(toLocalRepresentation(scheme));
         return d2;
     }
 
@@ -579,6 +621,59 @@ public class Sdmx20StructureReaderTools {
         }
     }
 
+    public void toCrossSectionalMeasure(CrossSectionalMeasureType d1) throws TypeValueNotFoundException, URISyntaxException {
+        //System.out.println("CS Agency="+d1.getConceptSchemeAgency());
+        //System.out.println("CS Ref="+d1.getConceptSchemeRef());
+        //System.out.println("CT Id="+d1.getConceptRef());
+        ConceptSchemeType cscheme = getConceptScheme(d1);
+        //System.out.println("Concept="+cscheme);
+        ConceptType concept = getConcept(cscheme, d1);
+        if (cscheme.getId().equals("STANDALONE_CONCEPT_SCHEME")) {
+            MeasureDimensionType measure = currentDataStructure.getMeasureList().getMeasures().get(0);
+            RefBaseType ref = measure.getLocalRepresentation().getEnumeration().getRef();
+            ConceptSchemeType cs = registry.findConceptScheme(ref.getAgencyId(),new IDType(ref.getId().toString()));
+            concept.setCode(d1.getCode());
+            cscheme.removeItem(concept);
+            cs.addConcept(concept);
+        }
+        return;
+    }
+
+    public ConceptSchemeType getConceptScheme(org.sdmx.resources.sdmxml.schemas.v20.structure.CrossSectionalMeasureType dim) {
+        //System.out.println(d1.getConceptSchemeAgency()+":"+d1.getConceptSchemeRef()+":"+d1.getConceptRef()+":"+d1.getConceptVersion());
+        if ((dim.getConceptSchemeAgency() != null || dim.getConceptAgency() != null) && dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
+            NestedNCNameIDType csa = new NestedNCNameIDType(dim.getConceptSchemeAgency() == null ? dim.getConceptAgency() : dim.getConceptSchemeAgency());
+            IDType csi = new IDType(dim.getConceptSchemeRef());
+            return registry.findConceptScheme(csa, csi);
+        } else if (dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
+            NestedNCNameIDType csa = currentKeyFamilyAgency;
+            IDType csi = new IDType(dim.getConceptSchemeRef());
+            return registry.findConceptScheme(csa, csi);
+        } else if (dim.getConceptRef() != null) {
+            NestedNCNameIDType csa = currentKeyFamilyAgency;
+            IDType csi = new IDType("STANDALONE_CONCEPT_SCHEME");
+            ConceptSchemeType cst = registry.findConceptScheme(csa, csi);
+            ConceptType ct = cst != null ? cst.findConcept(new IDType(dim.getConceptRef())) : null;
+            if (ct == null) {
+                ct = findConcept(dim.getConceptRef());
+                cst = registry.findConceptScheme(ct.getAgencyID(), new IDType("STANDALONE_CONCEPT_SCHEME"));
+            } else {
+                cst = registry.findConceptScheme(ct.getAgencyID(), new IDType("STANDALONE_CONCEPT_SCHEME"));
+            }
+            return cst;
+        } else {
+            return null;
+        }
+    }
+
+    public ConceptType getConcept(ConceptSchemeType scheme, org.sdmx.resources.sdmxml.schemas.v20.structure.CrossSectionalMeasureType dim) {
+        if (scheme != null) {
+            return scheme.findConcept(dim.getConceptRef());
+        } else {
+            return null;
+        }
+    }
+
     public RepresentationType toLocalRepresentation(CodelistType codelist, TextFormatType ttf) throws TypeValueNotFoundException, URISyntaxException {
         SimpleDataStructureRepresentationType lr2 = new SimpleDataStructureRepresentationType();
         lr2.setTextFormat(ttf);
@@ -586,6 +681,25 @@ public class Sdmx20StructureReaderTools {
             lr2.setEnumeration(toItemSchemeReference(codelist));
         }
         return lr2;
+    }
+
+    public RepresentationType toLocalRepresentation(ConceptSchemeType cscheme) throws TypeValueNotFoundException, URISyntaxException {
+        SimpleDataStructureRepresentationType lr2 = new SimpleDataStructureRepresentationType();
+        lr2.setEnumeration(toConceptSchemeReference(cscheme));
+        return lr2;
+    }
+
+    public ConceptSchemeReferenceType toConceptSchemeReference(ConceptSchemeType cscheme) {
+        ConceptSchemeReferenceType ref = new ConceptSchemeReferenceType(toConceptSchemeRefType(cscheme), cscheme.getUri());
+        return ref;
+    }
+
+    public ConceptSchemeRefType toConceptSchemeRefType(ConceptSchemeType cscheme) {
+        ConceptSchemeRefType ref = new ConceptSchemeRefType(ItemSchemeTypeCodelistType.CONCEPTSCHEME, ItemSchemePackageTypeCodelistType.CONCEPTSCHEME);
+        ref.setAgencyId(cscheme.getAgencyID());
+        ref.setId(cscheme.getId());
+        ref.setVersion(cscheme.getVersion());
+        return ref;
     }
 
     public SimpleDataStructureRepresentationType toSimpleDataStructureRepresentation(CodelistType codelist, TextFormatType ttf) throws TypeValueNotFoundException, URISyntaxException {
@@ -830,6 +944,17 @@ public class Sdmx20StructureReaderTools {
             return null;
         }
         MeasureListType measurelist = new MeasureListType();
+        List<MeasureDimensionType> measures = new ArrayList<MeasureDimensionType>();
+        for (int i = 0; i < c1.getDimensionArray().length; i++) {
+            if (c1.getDimensionArray(i).getIsMeasureDimension()) {
+                measures.add(toMeasureDimensionType(c1.getDimensionArray(i)));
+            }
+        }
+        measurelist.setMeasures(measures);
+        currentDataStructure.setMeasureList(measurelist);
+        for (int i = 0; i < c1.getCrossSectionalMeasureArray().length; i++) {
+            toCrossSectionalMeasure(c1.getCrossSectionalMeasureArray(i));
+        }
         measurelist.setPrimaryMeasure(toPrimaryMeasure(c1.getPrimaryMeasure()));
         return measurelist;
     }
@@ -868,8 +993,8 @@ public class Sdmx20StructureReaderTools {
 
     public ConceptSchemeType getConceptScheme(org.sdmx.resources.sdmxml.schemas.v20.structure.DimensionType dim) {
         //System.out.println(d1.getConceptSchemeAgency()+":"+d1.getConceptSchemeRef()+":"+d1.getConceptRef()+":"+d1.getConceptVersion());
-        if ((dim.getConceptSchemeAgency() != null||dim.getConceptAgency()!=null) && dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
-            NestedNCNameIDType csa = new NestedNCNameIDType(dim.getConceptSchemeAgency()==null?dim.getConceptAgency():dim.getConceptSchemeAgency());
+        if ((dim.getConceptSchemeAgency() != null || dim.getConceptAgency() != null) && dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
+            NestedNCNameIDType csa = new NestedNCNameIDType(dim.getConceptSchemeAgency() == null ? dim.getConceptAgency() : dim.getConceptSchemeAgency());
             IDType csi = new IDType(dim.getConceptSchemeRef());
             return registry.findConceptScheme(csa, csi);
         } else if (dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
@@ -903,8 +1028,8 @@ public class Sdmx20StructureReaderTools {
 
     public ConceptSchemeType getConceptScheme(org.sdmx.resources.sdmxml.schemas.v20.structure.TimeDimensionType dim) {
         //System.out.println(d1.getConceptSchemeAgency()+":"+d1.getConceptSchemeRef()+":"+d1.getConceptRef()+":"+d1.getConceptVersion());
-        if ((dim.getConceptSchemeAgency() != null||dim.getConceptAgency()!=null) && dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
-            NestedNCNameIDType csa = new NestedNCNameIDType(dim.getConceptSchemeAgency()==null?dim.getConceptAgency():dim.getConceptSchemeAgency());
+        if ((dim.getConceptSchemeAgency() != null || dim.getConceptAgency() != null) && dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
+            NestedNCNameIDType csa = new NestedNCNameIDType(dim.getConceptSchemeAgency() == null ? dim.getConceptAgency() : dim.getConceptSchemeAgency());
             IDType csi = new IDType(dim.getConceptSchemeRef());
             return registry.findConceptScheme(csa, csi);
         } else if (dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
@@ -938,8 +1063,8 @@ public class Sdmx20StructureReaderTools {
 
     public ConceptSchemeType getConceptScheme(org.sdmx.resources.sdmxml.schemas.v20.structure.PrimaryMeasureType dim) {
         //System.out.println(d1.getConceptSchemeAgency()+":"+d1.getConceptSchemeRef()+":"+d1.getConceptRef()+":"+d1.getConceptVersion());
-        if ((dim.getConceptSchemeAgency() != null||dim.getConceptAgency()!=null) && dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
-            NestedNCNameIDType csa = new NestedNCNameIDType(dim.getConceptSchemeAgency()==null?dim.getConceptAgency():dim.getConceptSchemeAgency());
+        if ((dim.getConceptSchemeAgency() != null || dim.getConceptAgency() != null) && dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
+            NestedNCNameIDType csa = new NestedNCNameIDType(dim.getConceptSchemeAgency() == null ? dim.getConceptAgency() : dim.getConceptSchemeAgency());
             IDType csi = new IDType(dim.getConceptSchemeRef());
             return registry.findConceptScheme(csa, csi);
         } else if (dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
@@ -973,8 +1098,8 @@ public class Sdmx20StructureReaderTools {
 
     public ConceptSchemeType getConceptScheme(org.sdmx.resources.sdmxml.schemas.v20.structure.AttributeType dim) {
         //System.out.println(d1.getConceptSchemeAgency()+":"+d1.getConceptSchemeRef()+":"+d1.getConceptRef()+":"+d1.getConceptVersion());
-        if ((dim.getConceptSchemeAgency() != null||dim.getConceptAgency()!=null) && dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
-            NestedNCNameIDType csa = new NestedNCNameIDType(dim.getConceptSchemeAgency()==null?dim.getConceptAgency():dim.getConceptSchemeAgency());
+        if ((dim.getConceptSchemeAgency() != null || dim.getConceptAgency() != null) && dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
+            NestedNCNameIDType csa = new NestedNCNameIDType(dim.getConceptSchemeAgency() == null ? dim.getConceptAgency() : dim.getConceptSchemeAgency());
             IDType csi = new IDType(dim.getConceptSchemeRef());
             return registry.findConceptScheme(csa, csi);
         } else if (dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
@@ -1087,4 +1212,5 @@ public class Sdmx20StructureReaderTools {
         }
         return code;
     }
+
 }

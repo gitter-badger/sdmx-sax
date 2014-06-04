@@ -36,11 +36,11 @@ import sdmx.structure.concept.ConceptType;
 public class CubeObservation {
     HashMap<String,CubeAttribute> map = new HashMap<>();
     
-    private String concept = null;
+    private String cross = null;
     private String value = null;
     
-    public CubeObservation(String concept,String value){
-        this.concept=concept;
+    public CubeObservation(String cross,String value){
+        this.cross=cross;
         this.value=value;
     }
    
@@ -62,15 +62,15 @@ public class CubeObservation {
     /**
      * @return the concept
      */
-    public String getConcept() {
-        return concept;
+    public String getCrossSection() {
+        return cross;
     }
 
     /**
      * @param concept the concept to set
      */
-    public void setConcept(String concept) {
-        this.concept = concept;
+    public void setCross(String concept) {
+        this.cross = concept;
     }
 
     /**
@@ -86,6 +86,4 @@ public class CubeObservation {
     public void setValue(String value) {
         this.value = value;
     }
-
-
 }

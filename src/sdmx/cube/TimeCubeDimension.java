@@ -6,12 +6,15 @@
 
 package sdmx.cube;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import sdmx.structure.base.Component;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptType;
@@ -34,28 +37,43 @@ import sdmx.structure.concept.ConceptType;
  *
  *  Copyright James Gardner 2014
  */
+
+/*
+     TimeDimension will only ever have cross sectional observation values here.
+*/
+
 public class TimeCubeDimension extends CubeDimension {
 
-    HashMap<String,CubeObservation> map = new HashMap<String,CubeObservation>();
+    List<CubeObservation> obs = new LinkedList<CubeObservation>();
     
     public TimeCubeDimension(String concept, String value) {
         super(concept,value);
     }
 
     public Collection<CubeObservation> listObservations() {
-        return map.values();
+        return obs;
     }
 
     public void putObservation(CubeObservation sub) {
-        map.put(sub.getValue(),sub);
+        obs.add(sub);
     }
 
     public CubeObservation getObservation(String id) {
-        return map.get(id);
+        Iterator<CubeObservation> it = obs.iterator();
+        while(it.hasNext()){
+            CubeObservation c = it.next();
+            if( c.getCrossSection().equals(id))return c;
+        }
+        return null;
     }
 
     public Set<String> listObservationValues() {
-        return map.keySet();
+        TreeSet<String> crosssections = new TreeSet<String>();
+        Iterator<CubeObservation> it = obs.iterator();
+        while(it.hasNext()) {
+            crosssections.add(it.next().getCrossSection());
+        }
+        return crosssections;
     }
 
     @Override
@@ -78,9 +96,10 @@ public class TimeCubeDimension extends CubeDimension {
         return Collections.EMPTY_SET;
     }
     public void dump() {
-        Iterator<String> it = map.keySet().iterator();
+        Iterator<CubeObservation> it = obs.iterator();
         while(it.hasNext()) {
-            System.out.println("Value "+it.next());
+            CubeObservation obs = it.next();
+            System.out.println("Time:"+this.getValue()+": Cross Section = "+obs.getCrossSection()+" Value="+obs.getValue());
         }
     }
 }

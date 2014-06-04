@@ -5,11 +5,14 @@
  */
 package sdmx.cube;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.SortedSet;
 import sdmx.common.DataType;
 import sdmx.common.Description;
 import sdmx.common.Name;
@@ -43,8 +46,7 @@ public abstract class CubeDimension {
 
     private String concept = null;
     private String value = null;
-
-    
+   
     public CubeDimension(String concept, String value){
         this.concept=concept;
         this.value=value;

@@ -6,10 +6,17 @@
 
 package sdmx.cube;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
+import sdmx.structure.base.Component;
+import sdmx.structure.codelist.CodelistType;
+import sdmx.structure.concept.ConceptType;
 
 /**
  *  This file is part of SdmxSax.
@@ -29,39 +36,50 @@ import java.util.Set;
  *
  *  Copyright James Gardner 2014
  */
-public class RootCubeDimension extends CubeDimension {
+public class ListCubeDimension extends CubeDimension {
+
+    List<CubeDimension> list = new LinkedList<CubeDimension>();
     
-    HashMap<String,CubeDimension> map = new HashMap<>();
-    
-    public RootCubeDimension(){
-        super(null,null);
+    public ListCubeDimension(String concept,String value){
+        super(concept,value);
     }
     
     @Override
     public CubeDimension getSubDimension(String id) {
-        return map.get(id);
+        Iterator<CubeDimension> it = list.iterator();
+        while(it.hasNext()){
+            CubeDimension cd = it.next();
+            if( cd.getValue().equals(id))return cd;
+        }
+        return null;
     }
 
     @Override
     public void putSubDimension(CubeDimension sub) {
-        map.put(sub.getValue(),sub);
+        CubeDimension old = getSubDimension(sub.getValue());
+        if( old!=null ) list.remove(old);
+        list.add(sub);
     }
 
     @Override
     public Collection<CubeDimension> listSubDimensions() {
-        return map.values();
+        return list;
     }
     @Override
     public Set<String> listDimensionValues() {
-        return map.keySet();
+        Set set = new TreeSet();
+        for(int i=0;i<list.size();i++) {
+            set.add(list.get(i).getValue());
+        }
+        return set;
     }
-   public void dump() {
-        System.out.println("Root");
+    public void dump() {
+        System.out.println("Dim:"+getConcept()+":"+getValue());
         System.out.println("SubDims");
         Iterator<CubeDimension> it = this.listSubDimensions().iterator();
         while(it.hasNext()) {
             it.next().dump();
         }
-        System.out.println("End Root");
+        System.out.println("End Dim:"+getConcept()+":"+getValue());
     }
 }

@@ -27,5 +27,5 @@ package sdmx.structure.datastructure;
  *  Copyright James Gardner 2014
  */
 public class MeasureDimensionType extends BaseDimensionType {
-    
+
 }

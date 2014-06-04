@@ -119,4 +119,21 @@ public class ConceptType extends ConceptBaseType {
     public void setVersion(VersionType version) {
         this.version = version;
     }
+    // Sdmx 2.0 only field
+    // this is the code used in the field for cross sectional measure
+    private String code = null;
+
+    /**
+     * @return the code
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * @param code the code to set
+     */
+    public void setCode(String code) {
+        this.code = code;
+    }
 }

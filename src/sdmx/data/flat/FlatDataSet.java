@@ -281,7 +281,8 @@ public class FlatDataSet implements DataSet {
             if (key.matches(flat, mapper)) {
                 flat.setValue(indx, value);
             } else {
-                flat.setValue(indx, null);
+                // This undoes everything the next time this method is called!!??
+                //flat.setValue(indx, null);
             }
         }
     }
@@ -296,7 +297,7 @@ public class FlatDataSet implements DataSet {
             Iterator<String> it = g.getGroupAttributes().keySet().iterator();
             while (it.hasNext()) {
                 String s = it.next();
-                getColumnMapper().registerColumn(it.next(), AttachmentLevel.GROUP);
+                //getColumnMapper().registerColumn(it.next(), AttachmentLevel.GROUP);
                 int indx = getColumnIndex(s);
                 PartialKey key = new PartialKey(g.getGroupKey());
                 applyGroupKey(key, s, (String) g.getGroupAttributes().get(s));
@@ -306,8 +307,15 @@ public class FlatDataSet implements DataSet {
 
     @Override
     public Cube query(Cube cube, DataQuery query) {
+       long time = System.currentTimeMillis();
        for(int i=0;i<size();i++) {
            cube.putObservation(mapper, getFlatObs(i));
+           /*
+           if( i % 100 == 0 ) {
+               System.out.println("100 obs="+(time-System.currentTimeMillis()));
+               time = System.currentTimeMillis();
+           }
+           */
        }
        return cube;
     }
