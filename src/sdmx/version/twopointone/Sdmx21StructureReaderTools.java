@@ -810,6 +810,7 @@ public class Sdmx21StructureReaderTools {
     }
 
     public static DataStructuresType toDataStructures(org.sdmx.resources.sdmxml.schemas.v21.structure.DataStructuresType ds1) throws TypeValueNotFoundException, URISyntaxException {
+        if( ds1 == null ) return null;
         DataStructuresType ds2 = new DataStructuresType();
         List<DataStructureType> list = new ArrayList<DataStructureType>();
         for (int i = 0; i < ds1.getDataStructureArray().length; i++) {

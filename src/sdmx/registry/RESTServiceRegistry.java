@@ -5,6 +5,8 @@
 package sdmx.registry;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -218,6 +220,11 @@ public class RESTServiceRegistry implements Registry {
             throw new IOException(conn.getResponseMessage());
         }
         InputStream in = conn.getInputStream();
+        FileOutputStream temp = new FileOutputStream("temp.xml");
+        org.apache.commons.io.IOUtils.copy(in, temp);
+        temp.close();
+        in.close();
+        in = new FileInputStream("temp.xml");
         System.out.println("Parsing!");
         StructureType st = SdmxIO.parseStructure(this, in);
         if( st == null ) {
@@ -240,6 +247,12 @@ public class RESTServiceRegistry implements Registry {
             throw new IOException(conn.getResponseMessage());
         }
         InputStream in = conn.getInputStream();
+        //FileOutputStream temp = new FileOutputStream("temp.xml");
+        //org.apache.commons.io.IOUtils.copy(in, temp);
+        //temp.close();
+        //in.close();
+        //in = new FileInputStream("temp.xml");
+        try{Thread.sleep(1000);}catch(InterruptedException ie) {}
         System.out.println("Parsing!");
         StructureType st = SdmxIO.parseStructure(local, in);
         if( st == null ) {
