@@ -47,6 +47,8 @@ public abstract class CubeDimension {
     private String concept = null;
     private String value = null;
    
+    private String subDimension = null;
+    
     public CubeDimension(String concept, String value){
         this.concept=concept;
         this.value=value;
@@ -94,5 +96,19 @@ public abstract class CubeDimension {
             it.next().dump();
         }
         System.out.println("End Dim:"+this.concept+":"+this.value);
+    }
+
+    /**
+     * @return the subDimension
+     */
+    public String getSubDimension() {
+        return subDimension;
+    }
+
+    /**
+     * @param subDimension the subDimension to set
+     */
+    public void setSubDimension(String subDimension) {
+        this.subDimension = subDimension;
     }
 }

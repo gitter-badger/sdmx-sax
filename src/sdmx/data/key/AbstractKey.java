@@ -34,10 +34,10 @@ import sdmx.data.flat.FlatObs;
  */
 public class AbstractKey implements Key {
 
-    private HashMap<String,String> map = new HashMap<String,String>();
+    protected HashMap<String,Object> map = new HashMap<String,Object>();
 
     public AbstractKey(){}
-    public AbstractKey(HashMap<String,String> map){
+    public AbstractKey(HashMap<String,Object> map){
         this.map=map;
     }
     
@@ -47,7 +47,7 @@ public class AbstractKey implements Key {
     }
 
     @Override
-    public void setComponent(String dim, String o) {
+    public void setComponent(String dim, Object o) {
         map.put(dim, o);
     }
 

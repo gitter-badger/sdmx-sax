@@ -4,10 +4,13 @@
  */
 package sdmx.structure.base;
 
+import java.lang.ref.Reference;
 import sdmx.common.Annotations;
 import sdmx.common.ExternalReferenceAttributeGroup;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.NestedNCNameIDType;
+import sdmx.commonreferences.RefBaseType;
+import sdmx.commonreferences.ReferenceType;
 import sdmx.commonreferences.VersionType;
 
 /**
@@ -172,5 +175,10 @@ public class MaintainableType extends MaintainableBaseType {
             //System.out.println("Doesn't Match!!");
             return false;
         }
+    }
+    public ReferenceType asReference() {
+        RefBaseType ref = new RefBaseType(agencyID,getId(),getVersion(),null,null,null,false,null,null);
+        ReferenceType reference = new ReferenceType(ref,getUri());
+        return reference;
     }
 }

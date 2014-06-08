@@ -59,6 +59,7 @@ public class ListCubeDimension extends CubeDimension {
         CubeDimension old = getSubDimension(sub.getValue());
         if( old!=null ) list.remove(old);
         list.add(sub);
+        setSubDimension(sub.getConcept());
     }
 
     @Override

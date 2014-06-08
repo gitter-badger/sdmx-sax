@@ -142,7 +142,7 @@ public class FlatDataSetWriter implements DataSetWriter {
     }
 
     @Override
-    public void writeGroupValues(String name,HashMap<String, String> groupValues) {
+    public void writeGroupValues(String name,HashMap<String, Object> groupValues) {
         Group group = new Group(groupValues);
         group.setGroupName(name);
         if(this.groups==null) {

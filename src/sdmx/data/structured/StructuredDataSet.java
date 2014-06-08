@@ -125,7 +125,7 @@ public class StructuredDataSet implements DataSet, Attachable {
             FlatObs flat = getFlatObsSansGroups(row);
             FullKey full = new FullKey(flat,columnMapper);
             for(int i=0;i<groups.size();i++) {
-                if( groups.get(i).matches(full))return groups.get(i).getGroupValue(columnMapper.getColumnName(col));
+                if( groups.get(i).matches(full))return (String)groups.get(i).getGroupValue(columnMapper.getColumnName(col));
             }
             return null;
         }else {

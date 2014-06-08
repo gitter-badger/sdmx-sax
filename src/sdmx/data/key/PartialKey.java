@@ -33,7 +33,7 @@ import java.util.HashMap;
 public class PartialKey extends AbstractKey {
     public PartialKey() {
     }
-    public PartialKey(HashMap<String,String> map) {
+    public PartialKey(HashMap<String,Object> map) {
         super(map);
     }
 }

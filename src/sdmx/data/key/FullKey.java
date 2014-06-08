@@ -7,6 +7,7 @@
 package sdmx.data.key;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import sdmx.data.ColumnMapper;
 import sdmx.data.flat.FlatObs;
 
@@ -35,7 +36,7 @@ import sdmx.data.flat.FlatObs;
 public class FullKey extends AbstractKey {
     public FullKey() {
     }
-    public FullKey(HashMap<String,String> map) {
+    public FullKey(HashMap<String,Object> map) {
         super(map);
     }
     public FullKey(FlatObs obs, ColumnMapper mapper) {
@@ -43,5 +44,18 @@ public class FullKey extends AbstractKey {
             //System.out.println("Cname="+mapper.getColumnName(i)+":ov="+obs.getValue(i));
             setComponent(mapper.getColumnName(i),obs.getValue(i));
         }
+    }
+    public FullKey clone() {
+        return new FullKey((HashMap)map.clone());
+    }
+
+    public void dump() {
+        Iterator<String> it = map.keySet().iterator();
+        while(it.hasNext()) {
+            String s = it.next();
+            System.out.print(s+":"+map.get(s));
+            if(it.hasNext())System.out.print(",");
+        }
+        System.out.println();
     }
 }

@@ -37,7 +37,7 @@ public interface DataSetWriter {
     public void writeDataSetComponent(String name,String val);
     public void writeSeriesComponent(String name,String val);
     public void writeObservationComponent(String name,String val);
-    public void writeGroupValues(String name,HashMap<String,String> group);
+    public void writeGroupValues(String name,HashMap<String,Object> group);
     public void finishObservation();
     public void finishSeries();
     public DataSet finishDataSet();

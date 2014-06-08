@@ -60,4 +60,7 @@ public class NestedIDType extends RegexXMLString {
         //System.out.println("left="+this.getString()+" right="+id.getString());
         return super.getString().equals(id.getString());
     }
+    public IDType asID() {
+        return new IDType(super.getString());
+    }
 }

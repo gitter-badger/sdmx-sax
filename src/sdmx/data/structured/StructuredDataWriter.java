@@ -129,7 +129,7 @@ public class StructuredDataWriter implements DataSetWriter {
     }
 
     @Override
-    public void writeGroupValues(String name,HashMap<String, String> groupValues) {
+    public void writeGroupValues(String name,HashMap<String, Object> groupValues) {
         Group g = new Group(groupValues);
         g.setGroupName(name);
         if( groups==null ) groups = new ArrayList<Group>();

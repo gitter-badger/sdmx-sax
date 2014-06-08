@@ -70,12 +70,17 @@ public class Cube {
         CubeObservation cubeobs = null;
 
         String cross = null;
+        IDType dimId2 = null;
         for (int i = 0; i < struct.getDataStructureComponents().getMeasureList().size(); i++) {
-            IDType dimId2 = struct.getDataStructureComponents().getMeasureList().getMeasure(i).getId();
+            dimId2 = struct.getDataStructureComponents().getMeasureList().getMeasure(i).getId();
             cross = obs.getValue(mapper.getColumnIndex(dimId2.toString()));
         }
         IDType dimId3 = struct.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getId();
-        cubeobs = new CubeObservation(cross, obs.getValue(mapper.getColumnIndex(dimId3.toString())));
+        if( dimId2!=null) {
+        cubeobs = new CubeObservation(dimId2.toString(),cross, dimId3.toString(),obs.getValue(mapper.getColumnIndex(dimId3.toString())));
+        }else {
+        cubeobs = new CubeObservation(null,null, dimId3.toString(),obs.getValue(mapper.getColumnIndex(dimId3.toString())));
+        }
         time.putObservation(cubeobs);
         
          for (int i = 0; i < struct.getDataStructureComponents().getAttributeList().size(); i++) {

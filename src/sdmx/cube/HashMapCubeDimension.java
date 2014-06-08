@@ -49,6 +49,7 @@ public class HashMapCubeDimension extends CubeDimension {
     @Override
     public void putSubDimension(CubeDimension sub) {
         map.put(sub.getValue(),sub);
+        setSubDimension(sub.getConcept());
     }
 
     @Override

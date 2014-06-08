@@ -36,28 +36,28 @@ import sdmx.data.key.PartialKey;
  */
 public class Group {
     private String groupName = null;
-    private HashMap<String,String> groupKey = new HashMap<String,String>();
-    private HashMap<String,String> groupAttributes = new HashMap<String,String>();
+    private HashMap<String,Object> groupKey = new HashMap<String,Object>();
+    private HashMap<String,Object> groupAttributes = new HashMap<String,Object>();
 
-    HashMap<String, String> map = new HashMap<String, String>();
+    HashMap<String, Object> map = new HashMap<String, Object>();
 
     public Group() {
     }
 
-    public Group(HashMap<String, String> groupValues) {
+    public Group(HashMap<String, Object> groupValues) {
         this.map=groupValues;
     }
 
-    public void putGroupValue(String concept, String value) {
+    public void putGroupValue(String concept, Object value) {
         map.put(concept, value);
     }
 
-    public String getGroupValue(String concept) {
+    public Object getGroupValue(String concept) {
         return groupAttributes.get(concept);
     }
 
     public void processGroupValues(DataSet ds) {
-        groupAttributes = new HashMap<String, String>();
+        groupAttributes = new HashMap<String, Object>();
         Iterator<String> it = map.keySet().iterator();
         while (it.hasNext()) {
             String s = it.next();
@@ -94,14 +94,14 @@ public class Group {
     /**
      * @return the groupKey
      */
-    public HashMap<String,String> getGroupKey() {
+    public HashMap<String,Object> getGroupKey() {
         return groupKey;
     }
 
     /**
      * @return the groupAttributes
      */
-    public HashMap<String,String> getGroupAttributes() {
+    public HashMap<String,Object> getGroupAttributes() {
         return groupAttributes;
     }
 

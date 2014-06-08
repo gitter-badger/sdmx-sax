@@ -300,7 +300,7 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
     
     public void startGroup(String name, Attributes atts) {
         state = STATE_GROUP;
-        HashMap<String, String> g = new HashMap<String, String>();
+        HashMap<String, Object> g = new HashMap<String, Object>();
         for (int i = atts.getLength() - 1; i >= 0; i--) {
             String s = atts.getLocalName(i);
             String v = atts.getValue(i);
