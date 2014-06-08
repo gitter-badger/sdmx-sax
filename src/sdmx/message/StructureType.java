@@ -5,6 +5,7 @@
 package sdmx.message;
 
 import java.util.List;
+import sdmx.Registry;
 import sdmx.commonreferences.ConceptReferenceType;
 import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.IDType;
@@ -15,8 +16,8 @@ import sdmx.structure.StructuresType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
+import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
-import sdmx.Registry;
 
 /**
  * *	<xs:complexType name="StructureType">
@@ -152,11 +153,6 @@ public class StructureType extends MessageType implements Registry {
     }
 
     @Override
-    public List<DataStructureReferenceType> listDataStructures() {
-        return structures.listDataStructures();
-    }
-
-    @Override
     public StructureType query(DataStructureQueryMessage message) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -167,7 +163,7 @@ public class StructureType extends MessageType implements Registry {
     }
 
     @Override
-    public List<DataStructureReferenceType> listDataSets() {
+    public List<DataflowType> listDataflows() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

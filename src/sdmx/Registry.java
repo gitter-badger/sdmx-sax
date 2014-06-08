@@ -19,6 +19,7 @@ import sdmx.structure.base.IdentifiableType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
+import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.version.common.Queryable;
 import sdmx.version.twopointone.Sdmx21StructureReaderTools;
@@ -58,6 +59,6 @@ public interface Registry extends Queryable {
     public ConceptSchemeType findConceptSchemeById(IDType id);
     public ConceptType findConcept(NestedNCNameIDType agency, IDType id);
     public ConceptType findConcept(IDType id);
-    public List<DataStructureReferenceType> listDataStructures();
+    public List<DataflowType> listDataflows();
     public void reset();
 }

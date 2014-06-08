@@ -63,6 +63,7 @@ import sdmx.structure.base.IdentifiableType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
+import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.version.common.Queryable;
 import sdmx.version.twopointone.Sdmx21StructureReaderTools;
@@ -185,8 +186,8 @@ public class QueryableServiceRegistry implements Registry {
         return local.findCodelist(codelistAgency, codelist);
     }
 
-    public List<DataStructureReferenceType> listDataStructures() {
-        return queryable.listDataSets();
+    public List<DataflowType> listDataflows() {
+        return queryable.listDataflows();
     }
 
     public Queryable getQueryable() {
@@ -203,12 +204,8 @@ public class QueryableServiceRegistry implements Registry {
     }
 
     @Override
-    public List<DataStructureReferenceType> listDataSets() {
-        return queryable.listDataSets();
-    }
-
-    @Override
     public void reset() {
         local.reset();
     }
+
 }

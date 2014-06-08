@@ -4,7 +4,6 @@
  */
 package sdmx.registry;
 
-import sdmx.Registry;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,30 +17,31 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sdmx.Registry;
+import sdmx.SdmxIO;
 import sdmx.commonreferences.ConceptReferenceType;
+import sdmx.commonreferences.DataStructureRefType;
 import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.ItemSchemeReferenceBaseType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.VersionType;
-import sdmx.structureddata.ValueTypeResolver;
+import sdmx.exception.ParseException;
+import sdmx.exception.QueryableException;
 import sdmx.message.DataMessage;
+import sdmx.message.DataQueryMessage;
+import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.StructureType;
 import sdmx.structure.StructuresType;
 import sdmx.structure.base.IdentifiableType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
+import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
-import sdmx.SdmxIO;
-import sdmx.commonreferences.DataStructureRefType;
-import sdmx.exception.ParseException;
-import sdmx.exception.QueryableException;
-import sdmx.message.DataQueryMessage;
-import sdmx.message.DataStructureQueryMessage;
 import sdmx.structure.datastructure.DimensionType;
+import sdmx.structureddata.ValueTypeResolver;
 import sdmx.version.twopointzero.Sdmx20RESTQueryable;
-import sdmx.version.twopointzero.Sdmx20SOAPQueryable;
 import sdmx.xml.anyURI;
 
 /**
@@ -78,7 +78,7 @@ public class RESTServiceRegistry implements Registry {
 
     
     
-    private List<DataStructureReferenceType> dataSetList = null;
+    private List<DataflowType> dataflowList = null;
     
     public RESTServiceRegistry(String agency, String service) {
         this.serviceURL = service;
@@ -291,7 +291,7 @@ public class RESTServiceRegistry implements Registry {
         }
         return dst;
     }
-
+/*
     public List<DataStructureReferenceType> listDataStructures() {
         if (dataSetList != null) {
             return dataSetList;
@@ -307,10 +307,10 @@ public class RESTServiceRegistry implements Registry {
                 dataSetList.add(reference);
             }
         } catch (MalformedURLException ex) {
-            Logger.getLogger(Sdmx20SOAPQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             dataSetList = null;
         } catch (IOException ex) {
-            Logger.getLogger(Sdmx20SOAPQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             dataSetList = null;
             
         } catch (ParseException ex) {
@@ -318,7 +318,7 @@ public class RESTServiceRegistry implements Registry {
         }
         return dataSetList;
     }
-
+*/
     @Override
     public StructureType query(DataStructureQueryMessage message) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -346,8 +346,25 @@ public class RESTServiceRegistry implements Registry {
     }
 
     @Override
-    public List<DataStructureReferenceType> listDataSets() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<DataflowType> listDataflows() {
+        if (dataflowList != null) {
+            return dataflowList;
+        }
+        dataflowList = new ArrayList<DataflowType>();
+        try {
+            StructureType st = retrieve2(serviceURL + "/dataflow/"+this.agency+"/all/all");
+            dataflowList = st.getStructures().getDataflows().getDataflows();
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            dataflowList = null;
+        } catch (IOException ex) {
+            Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            dataflowList = null;
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(Sdmx20RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return dataflowList;
     }
 
     @Override

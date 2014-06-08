@@ -24,6 +24,7 @@ import sdmx.message.StructureType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
+import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 
 /**
@@ -416,15 +417,8 @@ public class StructuresType implements Registry {
     }
 
     @Override
-    public List<DataStructureReferenceType> listDataStructures() {
-        List<DataStructureReferenceType> result = new ArrayList<DataStructureReferenceType>();
-        for(int i=0;i<this.getDataStructures().getDataStructures().size();i++) {
-            DataStructureType dst = getDataStructures().getDataStructures().get(i);
-            DataStructureRefType ref = new DataStructureRefType(dst.getAgencyID(),dst.getId(),dst.getVersion());
-            DataStructureReferenceType dref = new DataStructureReferenceType(ref,dst.getUrn());
-            result.add(dref);
-        }
-        return result;
+    public List<DataflowType> listDataflows() {
+        return getDataflows().getDataflows();
     }
 
     @Override
@@ -434,11 +428,6 @@ public class StructuresType implements Registry {
 
     @Override
     public DataMessage query(DataQueryMessage message) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<DataStructureReferenceType> listDataSets() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

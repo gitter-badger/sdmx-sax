@@ -35,6 +35,7 @@ import sdmx.query.datastructure.DataStructureWhereType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
+import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.version.common.Queryable;
 import sdmx.xml.DateTime;
@@ -154,7 +155,7 @@ public class DoubleRegistry implements Registry {
     }
 
     @Override
-    public List<DataStructureReferenceType> listDataSets() {
+    public List<DataflowType> listDataflows() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

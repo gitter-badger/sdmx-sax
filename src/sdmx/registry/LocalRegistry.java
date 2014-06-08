@@ -4,10 +4,10 @@
  */
 package sdmx.registry;
 
-import sdmx.Registry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import sdmx.Registry;
 import sdmx.commonreferences.ConceptReferenceType;
 import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.IDType;
@@ -25,6 +25,7 @@ import sdmx.structure.base.IdentifiableType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
+import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.version.twopointone.Sdmx21StructureReaderTools;
 import sdmx.xml.anyURI;
@@ -255,10 +256,10 @@ public class LocalRegistry implements Registry {
         return null;
     }
 
-    public List<DataStructureReferenceType> listDataStructures() {
-        List<DataStructureReferenceType> result = new ArrayList<DataStructureReferenceType>();
+    public List<DataflowType> listDataflows() {
+        List<DataflowType> result = new ArrayList<DataflowType>();
         for(int i=0;i<structures.size();i++) {
-            result.addAll(structures.get(i).listDataStructures());
+            result.addAll(structures.get(i).listDataflows());
         }
         return result;
     }
@@ -270,11 +271,6 @@ public class LocalRegistry implements Registry {
 
     @Override
     public DataMessage query(DataQueryMessage message) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<DataStructureReferenceType> listDataSets() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

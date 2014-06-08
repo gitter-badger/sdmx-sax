@@ -15,6 +15,7 @@ import sdmx.message.DataMessage;
 import sdmx.message.DataQueryMessage;
 import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.StructureType;
+import sdmx.structure.dataflow.DataflowType;
 
 /**
  *
@@ -41,5 +42,6 @@ import sdmx.message.StructureType;
 public interface Queryable {
     public StructureType query(DataStructureQueryMessage message);
     public DataMessage query(DataQueryMessage message);
-    public List<DataStructureReferenceType> listDataSets();
+    //public List<DataStructureReferenceType> listDataSets();
+    public List<DataflowType> listDataflows();
 }

@@ -32,6 +32,7 @@ import sdmx.message.StructureType;
 import sdmx.query.datastructure.DataStructureWhereType;
 import sdmx.registry.LocalRegistry;
 import sdmx.registry.RESTServiceRegistry;
+import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionType;
 import sdmx.version.common.Queryable;
@@ -65,6 +66,7 @@ public class Sdmx20RESTQueryable implements Queryable {
     // Temporary Registry
     Registry registry = null;
     List<DataStructureReferenceType> dataSetList = null;
+    StructureType dataflowList = null;
 
     public Sdmx20RESTQueryable(String agencyId, String serviceURL) {
         this.agencyId = agencyId;
@@ -139,7 +141,7 @@ public class Sdmx20RESTQueryable implements Queryable {
     public void setServiceURL(String serviceURL) {
         this.serviceURL = serviceURL;
     }
-
+/*
     @Override
     public List<DataStructureReferenceType> listDataSets() {
         if (dataSetList != null) {
@@ -167,10 +169,27 @@ public class Sdmx20RESTQueryable implements Queryable {
         }
         return dataSetList;
     }
+*/
     public Registry getRegistry() {
         return registry;
     }
     public void setRegistry(Registry r) {
         registry=r;
+    }
+
+    @Override
+    public List<DataflowType> listDataflows() {
+        StructureType st=null;
+        try {
+            st = retrieveStructure(serviceURL + "/dataflow/"+agencyId+"/all/latest");
+            this.dataflowList=st;
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(Sdmx20RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return st.getStructures().getDataflows().getDataflows();
     }
 }
