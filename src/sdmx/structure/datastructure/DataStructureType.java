@@ -9,6 +9,7 @@ import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.structure.base.Component;
 import sdmx.structure.base.StructureType;
+import sdmx.structure.dataflow.DataflowType;
 
 /**
  * <xs:complexType name="DataStructureType">
@@ -175,4 +176,16 @@ public class DataStructureType extends StructureType {
         DataStructureReferenceType reference = new DataStructureReferenceType(ref,getUri());
         return reference;
     }
+    public DataflowType asDataflow() {
+        DataflowType dataFlow = new DataflowType();
+        dataFlow.setNames(getNames());
+        dataFlow.setDescriptions(getDescriptions());
+        dataFlow.setStructure(asReference());
+        dataFlow.setAnnotations(getAnnotations());
+        dataFlow.setAgencyID(getAgencyID());
+        dataFlow.setId(getId());
+        dataFlow.setVersion(getVersion());
+        return dataFlow;
+    }
 }
+
