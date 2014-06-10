@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import sdmx.common.PayloadStructureType;
 import sdmx.common.StructureUsage;
+import sdmx.commonreferences.DataStructureRefType;
 import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.StructureUsageRefType;
 import sdmx.commonreferences.StructureUsageReferenceBaseType;
@@ -119,15 +120,10 @@ public class DataMessage extends MessageType {
             structures = new ArrayList<PayloadStructureType>();
         }
         PayloadStructureType payload = structures.size()==0?null:structures.get(0);
-        StructureUsageRefType ref2 = new StructureUsageRefType(StructureUsageTypeCodelistType.DATASTRUCTURE,StructurePackageTypeCodelistType.DATASTRUCTURE);
-        ref2.setAgencyId(ref.getRef().getAgencyId());
-        ref2.setId(ref.getRef().getId());
-        ref2.setVersion(ref.getRef().getVersion());
+        if( payload!=null ) return;
         payload = new PayloadStructureType();
-        payload.setStructureUsage(new StructureUsageReferenceBaseType(ref2,uri));
-        if( !structures.contains(payload) ) {
-            structures.add(payload);
-        }
+        payload.setStructure(ref);
+        structures.add(payload);
         getHeader().setStructures(structures);
     }
 }

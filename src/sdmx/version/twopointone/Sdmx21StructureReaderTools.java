@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1517,5 +1518,16 @@ public class Sdmx21StructureReaderTools {
         time2.setUri(toAnyURI((time1.getUri())));
         time2.setUrn(toAnyURI((time1.getUrn())));        
         return time2;
+    }
+
+    public static StructureType toStructureDocument(Reader in) throws XmlException, IOException {
+        org.sdmx.resources.sdmxml.schemas.v21.message.StructureDocument structDoc = null;
+        try {
+            structDoc = org.sdmx.resources.sdmxml.schemas.v21.message.StructureDocument.Factory.parse(in);
+            return parseStructure(structDoc);
+        } catch (TypeValueNotFoundException ex) {
+            Logger.getLogger(Sdmx21StructureReaderTools.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }

@@ -10,6 +10,7 @@ import sdmx.Registry;
 import sdmx.common.Description;
 import sdmx.common.Name;
 import sdmx.structure.base.Component;
+import sdmx.structure.base.ItemType;
 import sdmx.structure.base.RepresentationType;
 import sdmx.structure.codelist.CodeType;
 import sdmx.structure.codelist.CodelistType;
@@ -48,12 +49,15 @@ public class StructuredValue {
     }
     public boolean isCoded() {
         Component comp = structure.getDataStructureComponents().findDimension(concept);
+        if( "type".equals(concept) ) {
+            comp = structure.getDataStructureComponents().getMeasureList().getMeasure(0);
+        }
         if( comp == null ) return false;
         RepresentationType localRep = comp.getLocalRepresentation();
         if( localRep == null ) return false;
-        return structure.getDataStructureComponents().findDimension(concept).getLocalRepresentation().getEnumeration()!=null;
+        return localRep!=null;
     }
-    public CodeType getCode() {
+    public ItemType getCode() {
         return ValueTypeResolver.resolveCode(registry, structure, concept, value);
     }
     public CodelistType getCodelist() {
@@ -62,7 +66,7 @@ public class StructuredValue {
     public String toString() {
         Locale loc = Locale.getDefault();
         if( isCoded() ) {
-            CodeType code = getCode();
+            ItemType code = getCode();
             if( code == null ) {
                 return value;
             }

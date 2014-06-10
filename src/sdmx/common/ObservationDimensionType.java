@@ -38,7 +38,11 @@ public class ObservationDimensionType extends NCNameIDType {
     ObsDimensionsCodeType code;
     public ObservationDimensionType(String s) {
         super(s);
-        code = ObsDimensionsCodeType.fromString(s);
+        if( ObsDimensionsCodeType.ALL_DIMENSIONS_TEXT.equals(s)){
+           code = ObsDimensionsCodeType.fromString(s);
+        } else if( ObsDimensionsCodeType.TIME_PERIOD_TEXT.equals(s)) {
+           code = ObsDimensionsCodeType.fromString(s);
+        }
     }
-    public String toString() { return code.toString(); }
+    public String toString() { return code!=null?code.toString():super.toString(); }
 }

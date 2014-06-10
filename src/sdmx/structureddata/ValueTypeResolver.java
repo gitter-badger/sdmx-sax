@@ -5,6 +5,7 @@
 package sdmx.structureddata;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import sdmx.Registry;
@@ -21,6 +22,7 @@ import sdmx.commonreferences.types.ItemSchemeTypeCodelistType;
 import sdmx.commonreferences.types.ObjectTypeCodelistType;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.structure.base.Component;
+import sdmx.structure.base.ItemType;
 import sdmx.structure.base.RepresentationType;
 import sdmx.structure.codelist.CodeType;
 import sdmx.structure.codelist.CodelistType;
@@ -361,18 +363,26 @@ public class ValueTypeResolver {
      }
      */
 
-    public static CodeType resolveCode(Registry registry, DataStructureType struct, String column, String value) {
+    public static ItemType resolveCode(Registry registry, DataStructureType struct, String column, String value) {
         if (value == null) {
             return null;
         }
         Component dim = struct.getDataStructureComponents().findDimension(column);
+        if( dim == null && "type".equals(column) ) {
+            dim = struct.getDataStructureComponents().getMeasureList().getMeasure(0);
+        }
         ConceptReferenceType conceptRef = dim.getConceptIdentity();
         RepresentationType rep = null;
         ConceptType concept = null;
         if (conceptRef != null) {
-            ConceptSchemeType con = registry.findConceptScheme(struct.getAgencyID(), conceptRef);
+            ConceptSchemeType con = registry.findConceptScheme(conceptRef.getRef().getAgencyId()==null?struct.getAgencyID():conceptRef.getRef().getAgencyId(), conceptRef);
             if (con == null) {
                 System.out.println("Cant find concept:" + conceptRef.getRef().getId().getString());
+                CodeType ct = new CodeType();
+                ct.setId(new IDType(value));
+                Name name = new Name("en",value);
+                ct.setNames(Collections.singletonList(name));
+                return ct;
             }
             concept = con.findConcept(dim.getConceptIdentity().getRef().getId());
             rep = concept.getCoreRepresentation();
@@ -411,11 +421,8 @@ public class ValueTypeResolver {
                         }
                     }
                     if (conceptMeasure != null) {
-                        CodeType ct2 = new CodeType();
-                        ct2.setId(conceptMeasure.getId());
-                        ct2.setNames(conceptMeasure.getNames());
-                        ct2.setDescriptions(conceptMeasure.getDescriptions());
-                        return ct2;
+                        //System.out.println("ConceptMeasure:"+conceptMeasure);
+                        return conceptMeasure;
 
                     }
                     return null;

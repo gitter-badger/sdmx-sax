@@ -45,22 +45,21 @@ import sdmx.version.twopointzero.Sdmx20StructureParserTest;
  * @author James
  */
 /**
- *  This file is part of SdmxSax.
+ * This file is part of SdmxSax.
  *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *   SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * SdmxSax is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ * SdmxSax is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  Copyright James Gardner 2014
+ * You should have received a copy of the GNU General Public License along with
+ * SdmxSax. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright James Gardner 2014
  */
 public class Sdmx21StructureParserTest {
 
@@ -103,31 +102,66 @@ public class Sdmx21StructureParserTest {
     @Test
     public void testHeader1() {
         BaseHeaderType header = doc1.getHeader();
-        assertEquals(header.getId().toString(),"DEMOGRAPHY");
+        assertEquals(header.getId().toString(), "DEMOGRAPHY");
+    }
+
+    @Test
+    public void testHeader2() {
+        BaseHeaderType header = doc1.getHeader();
         assertFalse(header.getTest());
+    }
+
+    @Test
+    public void testHeader3() {
+        BaseHeaderType header = doc1.getHeader();
         Calendar c = Calendar.getInstance();
         c.setTime(header.getPrepared().getDate().getDate());
-        assertEquals(c.get(Calendar.YEAR),2010);
-        assertEquals(c.get(Calendar.MONTH),10);
-        assertEquals(c.get(Calendar.DATE),13);
-        assertEquals(c.get(Calendar.HOUR),8);
-        assertEquals(c.get(Calendar.MINUTE),0);
-        assertEquals(c.get(Calendar.SECOND),33);
-        assertEquals(c.get(Calendar.ZONE_OFFSET),28800000);
-        assertEquals(header.getSender().getId().toString(),"ESTAT");
+        assertEquals(c.get(Calendar.YEAR), 2010);
+        assertEquals(c.get(Calendar.MONTH), 10);
+        assertEquals(c.get(Calendar.DATE), 13);
+        assertEquals(c.get(Calendar.HOUR), 8);
+        assertEquals(c.get(Calendar.MINUTE), 0);
+        assertEquals(c.get(Calendar.SECOND), 33);
+        assertEquals(c.get(Calendar.ZONE_OFFSET), 28800000);
+    }
 
-        header = doc2.getHeader();
-        assertEquals(header.getId().toString(),"ESMS");
+    @Test
+    public void testHeader4() {
+        BaseHeaderType header = doc1.getHeader();
+        assertEquals(header.getSender().getId().toString(), "ESTAT");
+    }
+
+    @Test
+    public void testHeader5() {
+        BaseHeaderType header = doc2.getHeader();
+        assertEquals(header.getId().toString(), "ESMS");
+    }
+
+    @Test
+    public void testHeader6() {
+        BaseHeaderType header = doc2.getHeader();
         assertFalse(header.getTest());
+    }
+
+    @Test
+    public void testHeader7() {
+        BaseHeaderType header = doc2.getHeader();
+        Calendar c = Calendar.getInstance();
         c.setTime(header.getPrepared().getDate().getDate());
-        assertEquals(c.get(Calendar.YEAR),2010);
-        assertEquals(c.get(Calendar.MONTH),10);
-        assertEquals(c.get(Calendar.DATE),13);
-        assertEquals(c.get(Calendar.HOUR),8);
-        assertEquals(c.get(Calendar.MINUTE),0);
-        assertEquals(c.get(Calendar.SECOND),33);
-        assertEquals(c.get(Calendar.ZONE_OFFSET),28800000);
-        assertEquals(header.getSender().getId().toString(),"ESTAT");
+        assertEquals(c.get(Calendar.YEAR), 2010);
+        assertEquals(c.get(Calendar.MONTH), 10);
+        assertEquals(c.get(Calendar.DATE), 13);
+        assertEquals(c.get(Calendar.HOUR), 8);
+        assertEquals(c.get(Calendar.MINUTE), 0);
+        assertEquals(c.get(Calendar.SECOND), 33);
+        assertEquals(c.get(Calendar.ZONE_OFFSET), 28800000);
+
+    }
+
+    @Test
+    public void testHeader8() {
+        BaseHeaderType header = doc2.getHeader();
+        assertEquals(header.getSender().getId().toString(), "ESTAT");
     }
 
     /**
@@ -139,41 +173,182 @@ public class Sdmx21StructureParserTest {
         CodelistsType cls = doc1.getStructures().getCodelists();
         CodelistType cl = cls.findCodelist("SDMX", "CL_DECIMALS", "1.0");
         assertTrue(cl.isExternalReference());
+    }
+
+    @Test
+    public void testCodelists2() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("SDMX", "CL_DECIMALS", "1.0");
         assertEquals("../common/common.xml", cl.getExternalReferences().getStructureURL());
-        assertEquals("Code list for Decimals (DECIMALS)", cl.findName("en").toString());
-        cl = cls.findCodelist("SDMX", "CL_FREQ", "1.0");
+    }
+
+    @Test
+    public void testCodelists3() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("SDMX", "CL_FREQ", "1.0");
         assertEquals("../common/common.xml", cl.getExternalReferences().getStructureURL());
+    }
+
+    @Test
+    public void testCodelists4() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("SDMX", "CL_FREQ", "1.0");
         assertEquals("Code list for Frequency (FREQ)", cl.findName("en").toString());
-        cl = cls.findCodelist("SDMX", "CL_CONF_STATUS", "1.0");
+    }
+
+    @Test
+    public void testCodelists5() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("SDMX", "CL_CONF_STATUS", "1.0");
         assertEquals("../common/common.xml", cl.getExternalReferences().getStructureURL());
+    }
+
+    @Test
+    public void testCodelists6() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("SDMX", "CL_CONF_STATUS", "1.0");
         // Dont ask me why all these linefeeeds an tabs are doing here...
         assertEquals("\n					code list for Confidentiality Status (CONF_STATUS)\n\t\t\t\t", cl.findName("en").toString());
-        cl = cls.findCodelist("SDMX", "CL_OBS_STATUS", "1.0");
+    }
+
+    @Test
+    public void testCodelists7() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("SDMX", "CL_OBS_STATUS", "1.0");
         assertEquals("../common/common.xml", cl.getExternalReferences().getStructureURL());
+    }
+
+    @Test
+    public void testCodelists8() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("SDMX", "CL_OBS_STATUS", "1.0");
         assertEquals("Observation status", cl.findName("en").toString());
-        cl = cls.findCodelist("SDMX", "CL_UNIT_MULT", "1.0");
+    }
+
+    @Test
+    public void testCodelists9() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("SDMX", "CL_UNIT_MULT", "1.0");
         assertEquals("../common/common.xml", cl.getExternalReferences().getStructureURL());
+    }
+
+    @Test
+    public void testCodelists10() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("SDMX", "CL_UNIT_MULT", "1.0");
         // Dont ask me why all these linefeeeds an tabs are doing here...
         assertEquals("\n					code list for the Unit Multiplier (UNIT_MULT)\n\t\t\t\t", cl.findName("en").toString());
-        cl = cls.findCodelist("ESTAT", "CL_UNIT", "1.0");
-        assertTrue(cl.isPartial());
-        assertEquals("Unit code list", cl.findName("en").toString());
-        assertEquals("Persons", cl.findCode("PERS").findName("en").toString());
-        assertEquals("Children per woman (fertility rate)", cl.findCode("CPW").findName("en").toString());
-        assertEquals("Years", cl.findCode("YRS").findName("en").toString());
+    }
 
-        cl = cls.findCodelist("ESTAT", "CL_SEX", "1.0");
-        assertFalse(cl.isPartial());
-        assertEquals("Sex codelist", cl.findName("en").toString());
-        assertEquals("Female", cl.findCode("F").findName("en").toString());
-        assertEquals("Male", cl.findCode("M").findName("en").toString());
-        assertEquals("Total", cl.findCode("T").findName("en").toString());
-        cl = cls.findCodelist("ESTAT", "CL_COUNTRY", "1.0");
+    @Test
+    public void testCodelists11() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("ESTAT", "CL_UNIT", "1.0");
         assertTrue(cl.isPartial());
+    }
+
+    @Test
+    public void testCodelists12() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("ESTAT", "CL_UNIT", "1.0");
+        assertEquals("Unit code list", cl.findName("en").toString());
+    }
+
+    @Test
+    public void testCodelists13() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("ESTAT", "CL_UNIT", "1.0");
+        assertEquals("Persons", cl.findCode("PERS").findName("en").toString());
+    }
+
+    @Test
+    public void testCodelists14() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("ESTAT", "CL_UNIT", "1.0");
+        assertEquals("Children per woman (fertility rate)", cl.findCode("CPW").findName("en").toString());
+    }
+
+    @Test
+    public void testCodelists15() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("ESTAT", "CL_UNIT", "1.0");
+        assertEquals("Years", cl.findCode("YRS").findName("en").toString());
+    }
+
+    @Test
+    public void testCodelists16() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("ESTAT", "CL_SEX", "1.0");
+        assertFalse(cl.isPartial());
+    }
+
+    @Test
+    public void testCodelists17() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("ESTAT", "CL_SEX", "1.0");
+        assertEquals("Sex codelist", cl.findName("en").toString());
+    }
+
+    @Test
+    public void testCodelists18() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("ESTAT", "CL_SEX", "1.0");
+        assertEquals("Female", cl.findCode("F").findName("en").toString());
+    }
+
+    @Test
+    public void testCodelists19() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("ESTAT", "CL_SEX", "1.0");
+        assertEquals("Male", cl.findCode("M").findName("en").toString());
+    }
+
+    @Test
+    public void testCodelists20() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("ESTAT", "CL_SEX", "1.0");
+        assertEquals("Total", cl.findCode("T").findName("en").toString());
+    }
+
+    @Test
+    public void testCodelists21() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("ESTAT", "CL_COUNTRY", "1.0");
+        assertTrue(cl.isPartial());
+    }
+
+    @Test
+    public void testCodelists22() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("ESTAT", "CL_COUNTRY", "1.0");
         assertEquals("Country Codelist", cl.findName("en").toString());
+    }
+
+    @Test
+    public void testCodelists23() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("ESTAT", "CL_COUNTRY", "1.0");
         assertEquals("Belgium", cl.findCode("BE").findName("en").toString());
+    }
+
+    @Test
+    public void testCodelists24() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("ESTAT", "CL_COUNTRY", "1.0");
         assertEquals("Greece", cl.findCode("EL").findName("en").toString());
+    }
+
+    @Test
+    public void testCodelists25() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("ESTAT", "CL_COUNTRY", "1.0");
         assertEquals("Luxembourg", cl.findCode("LU").findName("en").toString());
+    }
+
+    @Test
+    public void testCodelists26() {
+        CodelistsType cls = doc1.getStructures().getCodelists();
+        CodelistType cl = cls.findCodelist("ESTAT", "CL_COUNTRY", "1.0");
         assertEquals("United Kingdom", cl.findCode("UK").findName("en").toString());
     }
 
@@ -182,17 +357,35 @@ public class Sdmx21StructureParserTest {
         ConceptsType css = doc1.getStructures().getConcepts();
         ConceptSchemeType cs = css.findConceptScheme("SDMX", "CROSS_DOMAIN_CONCEPTS", "1.0");
         assertEquals("SDMX Cross Domain Concept Scheme", cs.findName("en").toString());
+    }    
+    @Test
+    public void testConcepts2() {
+        ConceptsType css = doc1.getStructures().getConcepts();
+        ConceptSchemeType cs = css.findConceptScheme("SDMX", "CROSS_DOMAIN_CONCEPTS", "1.0");
         assertTrue(cs.isExternalReference());
+    }
+    @Test
+    public void testConcepts3() {
+        ConceptsType css = doc1.getStructures().getConcepts();
+        ConceptSchemeType cs = css.findConceptScheme("SDMX", "CROSS_DOMAIN_CONCEPTS", "1.0");
         assertEquals("../common/common.xml", cs.getExternalReferences().getStructureURL());
-        cs = css.findConceptScheme("ESTAT", "DEMO_CONCEPTS", "1.0");
+    }
+    
+    @Test
+    public void testConcepts4() {
+        ConceptsType css = doc1.getStructures().getConcepts();
+        ConceptSchemeType cs = css.findConceptScheme("ESTAT", "DEMO_CONCEPTS", "1.0");
         assertEquals("Demography domain concept scheme", cs.findName("en").toString());
         assertFalse(cs.isFinal());
         assertFalse(cs.isPartial());
         assertEquals("Reporting Country", cs.findConcept("COUNTRY").findName("en").toString());
         assertEquals("Sex", cs.findConcept("SEX").findName("en").toString());
         assertEquals("Demography", cs.findConcept("DEMO").findName("en").toString());
-
-        cs = css.findConceptScheme("ESTAT", "DEMO_MEASURES", "1.0");
+    }
+    @Test
+    public void testConcepts5() {
+        ConceptsType css = doc1.getStructures().getConcepts();
+        ConceptSchemeType cs = css.findConceptScheme("ESTAT", "DEMO_MEASURES", "1.0");
         assertEquals("Demography measures concept scheme", cs.findName("en").toString());
         assertFalse(cs.isFinal());
         assertFalse(cs.isPartial());
@@ -260,7 +453,7 @@ public class Sdmx21StructureParserTest {
         assertEquals("DEMOGRAPHY", ds.getId().toString());
         assertEquals("1.0", ds.getVersion().toString());
         DimensionListType dlt = ds.getDataStructureComponents().getDimensionList();
-        System.out.println("Test="+dlt.getDimension(0).getConceptIdentity().getRef().getAgencyId());
+        System.out.println("Test=" + dlt.getDimension(0).getConceptIdentity().getRef().getAgencyId());
         assertEquals("SDMX", dlt.getDimensions().get(0).getConceptIdentity().getRef().getAgencyId().toString());
         assertEquals("CROSS_DOMAIN_CONCEPTS", dlt.getDimensions().get(0).getConceptIdentity().getRef().getMaintainableParentId().toString());
         assertEquals("1.0", dlt.getDimensions().get(0).getConceptIdentity().getRef().getMaintainableParentVersion().toString());
