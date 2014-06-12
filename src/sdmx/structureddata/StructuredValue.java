@@ -17,22 +17,21 @@ import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.datastructure.DataStructureType;
 
 /**
- *  This file is part of SdmxSax.
+ * This file is part of SdmxSax.
  *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *  SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * SdmxSax is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ * SdmxSax is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  Copyright James Gardner 2014
+ * You should have received a copy of the GNU General Public License along with
+ * SdmxSax. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright James Gardner 2014
  */
 public class StructuredValue {
 
@@ -41,39 +40,54 @@ public class StructuredValue {
     private Registry registry = null;
     private DataStructureType structure = null;
 
-    public StructuredValue(String concept, String value, Registry registry,DataStructureType struct) {
-        this.concept=concept;
-        this.value=value;
-        this.registry=registry;
-        this.structure=struct;
+    public StructuredValue(String concept, String value, Registry registry, DataStructureType struct) {
+        this.concept = concept;
+        this.value = value;
+        this.registry = registry;
+        this.structure = struct;
     }
+
     public boolean isCoded() {
         Component comp = structure.getDataStructureComponents().findDimension(concept);
-        if( "type".equals(concept) ) {
+        if ("type".equals(concept)) {
             comp = structure.getDataStructureComponents().getMeasureList().getMeasure(0);
         }
-        if( comp == null ) return false;
+        if (comp == null) {
+            return false;
+        }
         RepresentationType localRep = comp.getLocalRepresentation();
-        if( localRep == null ) return false;
-        return localRep!=null;
+        if (localRep==null||localRep.getEnumeration() == null) {
+            return false;
+        }
+        return true;
     }
+
     public ItemType getCode() {
+        System.out.println("Concept:"+ concept+" Value:" + value);
+        Locale loc = Locale.getDefault();
+        ItemType item = ValueTypeResolver.resolveCode(registry, structure, concept, value);
+        System.out.println("Item=" + item.toString());
+        System.out.println("Item=" + item.findName(loc.getLanguage()));
         return ValueTypeResolver.resolveCode(registry, structure, concept, value);
     }
+
     public CodelistType getCodelist() {
         return ValueTypeResolver.getPossibleCodes(registry, structure, value);
     }
+
     public String toString() {
         Locale loc = Locale.getDefault();
-        if( isCoded() ) {
+        if (isCoded()) {
             ItemType code = getCode();
-            if( code == null ) {
+            if (code == null) {
                 return value;
             }
             Description desc = code.findDescription(loc.getLanguage());
-            if( desc == null ) {
+            if (desc == null) {
                 Name name = code.findName(loc.getLanguage());
-                if( name == null ) return code.getId().toString();
+                if (name == null) {
+                    return code.getId().toString();
+                }
                 return name.getText();
             }
             return desc.getText();

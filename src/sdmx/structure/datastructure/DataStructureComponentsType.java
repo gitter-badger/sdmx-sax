@@ -120,6 +120,7 @@ public class DataStructureComponentsType extends DataStructureComponentsBaseType
     }
     public Component findDimension(String name) {
         for(int i=0;i<dimensionList.size();i++) {
+            System.out.println("Dim="+dimensionList.getDimension(i));
             if( dimensionList.getDimension(i).getConceptIdentity().getRef().getId().equals(name))return dimensionList.getComponent(i);
         }
         for(int i=0;i<attributeList.size();i++) {

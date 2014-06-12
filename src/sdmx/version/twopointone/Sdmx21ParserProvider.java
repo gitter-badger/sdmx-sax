@@ -20,6 +20,8 @@ import sdmx.Registry;
 import sdmx.data.DataSetWriter;
 import sdmx.data.flat.FlatDataSetWriter;
 import sdmx.data.structured.StructuredDataWriter;
+import sdmx.version.twopointone.generic.GenericData21ContentHandler;
+import sdmx.version.twopointone.generic.GenericData21EventHandler;
 import sdmx.version.twopointone.structurespecific.StructureSpecificContentHandler;
 import sdmx.version.twopointone.structurespecific.StructureSpecificEventHandler;
 import sdmx.version.twopointzero.compact.CompactDataContentHandler;
@@ -59,6 +61,10 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
 
     public static boolean isSdmx21(String header) {
         if (header.indexOf("StructureSpecificTimeSeriesData ") != -1) {
+            return true;
+        } else if (header.indexOf("GenericTimeSeriesData ") != -1) {
+            return true;
+        } else if (header.indexOf("GenericData ") != -1) {
             return true;
         } else if (header.indexOf("StructureSpecificTimeSeriesData ") != -1) {
             return true;
@@ -141,11 +147,23 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
             return false;
         }
     }
+    public boolean isGenericData(String header) {
+        if (header.indexOf("GenericData ") != -1) {
+            return true;
+        } else if (header.indexOf("GenericTimeSeriesData ") != -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     @Override
     public DataMessage parseData(String header, InputStream in) throws IOException {
         if (isStructureSpecificData(header)) {
            return parseStructureSpecificData(in,false);
+        }
+        if( isGenericData(header)){
+            return parseGenericData(in,false);
         }
         return null;
     }
@@ -189,6 +207,9 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
         if (isStructureSpecificData(header)) {
            return parseStructureSpecificData(in,false);
         }
+        if( isGenericData(header)){
+            return parseGenericData(in,false);
+        }
         return null;
     }
 
@@ -196,6 +217,9 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     public DataMessage parseData(String header, InputStream in, boolean flat) throws IOException {
         if (isStructureSpecificData(header)) {
            return parseStructureSpecificData(in,flat);
+        }
+        if( isGenericData(header)){
+            return parseGenericData(in,flat);
         }
         return null;
     }
@@ -205,6 +229,9 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
         if (isStructureSpecificData(header)) {
            return parseStructureSpecificData(in,flat);
         }
+        if( isGenericData(header)){
+            return parseGenericData(in,flat);
+        }
         return null;
     }
 
@@ -212,6 +239,38 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
         DataSetWriter writer = flat?new FlatDataSetWriter():new StructuredDataWriter();
         StructureSpecificEventHandler event = new StructureSpecificEventHandler(writer);
         StructureSpecificContentHandler handler = new StructureSpecificContentHandler(in, event);
+        try {
+            return handler.parse();
+        } catch (SAXException ex) {
+            Logger.getLogger(Sdmx21ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Sdmx21ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
+        return null;
+    }
+
+    public DataMessage parseGenericData(InputStream in,boolean flat) throws IOException {
+        System.out.println("Parse Generic Data");
+        DataSetWriter writer = flat?new FlatDataSetWriter():new StructuredDataWriter();
+        GenericData21EventHandler event = new GenericData21EventHandler(writer);
+        GenericData21ContentHandler handler = new GenericData21ContentHandler(in, event);
+        try {
+            return handler.parse();
+        } catch (SAXException ex) {
+            ex.printStackTrace();
+            Logger.getLogger(Sdmx21ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            Logger.getLogger(Sdmx21ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
+        return null;
+    }
+    public DataMessage parseGenericData(Reader in,boolean flat) throws IOException {
+        DataSetWriter writer = flat?new FlatDataSetWriter():new StructuredDataWriter();
+        GenericData21EventHandler event = new GenericData21EventHandler(writer);
+        GenericData21ContentHandler handler = new GenericData21ContentHandler(in, event);
         try {
             return handler.parse();
         } catch (SAXException ex) {

@@ -59,7 +59,7 @@ public class StructuredDataSet {
         if (c == null && conceptString.equals("type")) {
             c = structure.getDataStructureComponents().getMeasureList().getMeasure(0);
         }
-        System.out.println("Concept="+conceptString+": component="+c);
+        //System.out.println("Concept="+conceptString+": component="+c);
         // * Fixed in DataStructureComponentsType.findDimension
         //if( "TIME_PERIOD".equals(conceptString)&&c == null ) {
         //    // TIME_PERIOD in Data, Something else in Structure
@@ -78,7 +78,7 @@ public class StructuredDataSet {
             }
             concept = con.findConcept(c.getConceptIdentity().getRef().getId());
 
-            System.out.println("Concept=" + concept);
+//            System.out.println("Concept=" + concept);
             Locale loc = Locale.getDefault();
             Name name = concept == null ? null : concept.findName(loc.getLanguage());
             if (name == null) {
