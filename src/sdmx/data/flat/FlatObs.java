@@ -39,7 +39,7 @@ public class FlatObs {
      }
      public void setValue(int i, String o) {
          if( values.size()<=i) {
-             for(int j=values.size();j<=i;j++) {
+             for(int j=values.size();(j-1)<i;j++) {
                  values.add(null);
              }
          }

@@ -27,6 +27,7 @@ import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.ItemSchemeReferenceBaseType;
 import sdmx.commonreferences.NestedNCNameIDType;
+import sdmx.commonreferences.StructureReferenceType;
 import sdmx.commonreferences.VersionType;
 import sdmx.exception.ParseException;
 import sdmx.exception.QueryableException;
@@ -36,6 +37,7 @@ import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.StructureType;
 import sdmx.structure.StructuresType;
 import sdmx.structure.base.IdentifiableType;
+import sdmx.structure.base.MaintainableType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
@@ -383,5 +385,9 @@ public class RESTServiceRegistry implements Registry {
     @Override
     public void reset() {
         local.reset();
+    }
+    @Override
+    public MaintainableType resolve(StructureReferenceType ref) {
+        return RegistryUtil.resolve(this, ref);
     }
 }

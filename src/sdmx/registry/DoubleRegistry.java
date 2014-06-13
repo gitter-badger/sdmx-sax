@@ -18,6 +18,7 @@ import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.ItemSchemeReferenceBaseType;
 import sdmx.commonreferences.NestedNCNameIDType;
+import sdmx.commonreferences.StructureReferenceType;
 import sdmx.commonreferences.VersionQueryType;
 import sdmx.commonreferences.VersionType;
 import sdmx.exception.QueryableException;
@@ -32,6 +33,7 @@ import sdmx.message.StructureType;
 import sdmx.query.base.QueryIDType;
 import sdmx.query.base.QueryNestedIDType;
 import sdmx.query.datastructure.DataStructureWhereType;
+import sdmx.structure.base.MaintainableType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
@@ -163,6 +165,11 @@ public class DoubleRegistry implements Registry {
     public void reset() {
        left.reset();
        right.reset();
+    }
+
+    @Override
+    public MaintainableType resolve(StructureReferenceType ref) {
+        return RegistryUtil.resolve(this, ref);
     }
 
 }

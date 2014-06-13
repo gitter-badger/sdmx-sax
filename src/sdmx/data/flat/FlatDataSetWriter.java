@@ -16,24 +16,24 @@ import sdmx.data.Group;
  * @author James
  */
 /**
- *  This file is part of SdmxSax.
+ * This file is part of SdmxSax.
  *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *   SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * SdmxSax is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ * SdmxSax is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  Copyright James Gardner 2014
+ * You should have received a copy of the GNU General Public License along with
+ * SdmxSax. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright James Gardner 2014
  */
 public class FlatDataSetWriter implements DataSetWriter {
+
     private ColumnMapper mapper = new FlatColumnMapper();
     private FlatDataSet dataSet = null;
     private List<String> dataSetValues = null;
@@ -41,12 +41,13 @@ public class FlatDataSetWriter implements DataSetWriter {
     private List<String> obsValues = null;
     List<Group> groups = null;
 
-    public FlatDataSetWriter(){}
-    public FlatDataSetWriter(ColumnMapper mapper) {
-       this.mapper=(ColumnMapper) mapper;
+    public FlatDataSetWriter() {
     }
-    
-    
+
+    public FlatDataSetWriter(ColumnMapper mapper) {
+        this.mapper = (ColumnMapper) mapper;
+    }
+
     @Override
     public void newDataSet() {
         dataSet = new FlatDataSet();
@@ -64,12 +65,13 @@ public class FlatDataSetWriter implements DataSetWriter {
     @Override
     public void newObservation() {
         obsValues = new ArrayList<String>();
-        for (int i = 0; i < seriesValues.size(); i++) {
-            obsValues.add(seriesValues.get(i));
+        if (seriesValues != null) {
+            for (int i = 0; i < seriesValues.size(); i++) {
+                obsValues.add(seriesValues.get(i));
+            }
         }
-
     }
-    
+
     @Override
     public void writeDataSetComponent(String name, String val) {
         if (!dataSet.getColumnMapper().containsColumn(name)) {
@@ -91,12 +93,17 @@ public class FlatDataSetWriter implements DataSetWriter {
         if (!dataSet.getColumnMapper().containsColumn(name)) {
             dataSet.registerColumn(name);
         }
-        obsValues.add(val);
+        if (obsValues.size() <= dataSet.getColumnMapper().getColumnIndex(name)) {
+            for (int j = obsValues.size(); (j - 1) < dataSet.getColumnIndex(name); j++) {
+                obsValues.add(null);
+            }
+        }
+        obsValues.set(dataSet.getColumnIndex(name), val);
     }
 
     @Override
     public void finishSeries() {
-        
+
     }
 
     @Override
@@ -108,32 +115,35 @@ public class FlatDataSetWriter implements DataSetWriter {
     public FlatDataSet finishDataSet() {
         FlatDataSet ds = dataSet;
         ds.setGroups(groups);
-        dataSet=null;
+        dataSet = null;
         return ds;
     }
-    private void setDataSet(int i,String val) {
-        if( dataSetValues.size()<i ) {
-            for(int j=dataSetValues.size();j<i;j++) {
+
+    private void setDataSet(int i, String val) {
+        if (dataSetValues.size() < i) {
+            for (int j = dataSetValues.size(); j < i; j++) {
                 dataSetValues.add(null);
             }
         }
         dataSetValues.set(i, val);
     }
-    private void setSeries(int i,String val) {
-        if( seriesValues.size()<i ) {
-            for(int j=seriesValues.size();j<i;j++) {
+
+    private void setSeries(int i, String val) {
+        if (seriesValues.size() < i) {
+            for (int j = seriesValues.size(); j < i; j++) {
                 seriesValues.add(null);
             }
         }
-        seriesValues.set(i,val);
+        seriesValues.set(i, val);
     }
-    private void setObservation(int i,String val) {
-        if( obsValues.size()<i ) {
-            for(int j=obsValues.size();j<i;j++) {
+
+    private void setObservation(int i, String val) {
+        if (obsValues.size() < i) {
+            for (int j = obsValues.size(); j < i; j++) {
                 obsValues.add(null);
             }
         }
-        obsValues.set(i,val);
+        obsValues.set(i, val);
     }
 
     @Override
@@ -142,10 +152,10 @@ public class FlatDataSetWriter implements DataSetWriter {
     }
 
     @Override
-    public void writeGroupValues(String name,HashMap<String, Object> groupValues) {
+    public void writeGroupValues(String name, HashMap<String, Object> groupValues) {
         Group group = new Group(groupValues);
         group.setGroupName(name);
-        if(this.groups==null) {
+        if (this.groups == null) {
             this.groups = new ArrayList<Group>();
         }
         groups.add(group);

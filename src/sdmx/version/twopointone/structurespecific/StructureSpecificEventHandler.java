@@ -321,7 +321,6 @@ public class StructureSpecificEventHandler {
             //System.out.println("Name="+name+": value="+val);
             if (atts.getLocalName(i).equals("type")) {
                 String val2 = val.substring(val.indexOf(":")+1,val.length());
-                System.out.println("Val2="+val2);
                 writer.writeObservationComponent("type", val2);
             } else {
                 writer.writeObservationComponent(name, val);

@@ -13,14 +13,19 @@ import sdmx.commonreferences.DataStructureRefType;
 import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.ItemSchemeReferenceBaseType;
+import sdmx.commonreferences.NestedIDType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.StructureOrUsageReferenceType;
+import sdmx.commonreferences.StructureReferenceType;
 import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.types.ObjectTypeCodelistType;
+import sdmx.commonreferences.types.PackageTypeCodelistType;
 import sdmx.message.DataMessage;
 import sdmx.message.DataQueryMessage;
 import sdmx.message.DataStructure;
 import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.StructureType;
+import sdmx.structure.base.MaintainableType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
@@ -435,5 +440,11 @@ public class StructuresType implements Registry {
     public void reset() {
         
     }
+
+    public MaintainableType resolve(StructureReferenceType ref) {
+
+        return null;
+    }
+    public
 
 }

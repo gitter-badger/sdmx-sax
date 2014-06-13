@@ -38,5 +38,7 @@ public class anyURI {
     }
     public String getString() {return s; }
     public URI getURI() { return uri; }
-    
+    public boolean isSdmxUrn() {
+        return s.startsWith("sdmx:");
+    }
 }

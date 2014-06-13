@@ -41,6 +41,10 @@ public class StructuredValue {
     private DataStructureType structure = null;
 
     public StructuredValue(String concept, String value, Registry registry, DataStructureType struct) {
+        if (concept.equals("FREQ")) {
+            System.out.println("Concept=" + concept);
+            System.out.println("Value=" + value);
+        }
         this.concept = concept;
         this.value = value;
         this.registry = registry;
@@ -56,18 +60,18 @@ public class StructuredValue {
             return false;
         }
         RepresentationType localRep = comp.getLocalRepresentation();
-        if (localRep==null||localRep.getEnumeration() == null) {
+        if (localRep == null || localRep.getEnumeration() == null) {
             return false;
         }
         return true;
     }
 
     public ItemType getCode() {
-        System.out.println("Concept:"+ concept+" Value:" + value);
-        Locale loc = Locale.getDefault();
-        ItemType item = ValueTypeResolver.resolveCode(registry, structure, concept, value);
-        System.out.println("Item=" + item.toString());
-        System.out.println("Item=" + item.findName(loc.getLanguage()));
+        //System.out.println("Concept:"+ concept+" Value:" + value);
+        //Locale loc = Locale.getDefault();
+        //ItemType item = ValueTypeResolver.resolveCode(registry, structure, concept, value);
+        //System.out.println("Item=" + item.toString());
+        //System.out.println("Item=" + item.findName(loc.getLanguage()));
         return ValueTypeResolver.resolveCode(registry, structure, concept, value);
     }
 
@@ -77,7 +81,12 @@ public class StructuredValue {
 
     public String toString() {
         Locale loc = Locale.getDefault();
+        if (concept.equals("FREQ")) {
+            ItemType code2 = getCode();
+            System.out.println("FREQ Code=" + code2);
+        }
         if (isCoded()) {
+
             ItemType code = getCode();
             if (code == null) {
                 return value;

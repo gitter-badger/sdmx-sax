@@ -11,11 +11,13 @@ import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.ItemSchemeReferenceBaseType;
 import sdmx.commonreferences.NestedNCNameIDType;
+import sdmx.commonreferences.StructureReferenceType;
 import sdmx.commonreferences.VersionType;
 import sdmx.message.DataStructure;
 import sdmx.message.StructureType;
 import sdmx.structure.StructuresType;
 import sdmx.structure.base.IdentifiableType;
+import sdmx.structure.base.MaintainableType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
@@ -60,5 +62,6 @@ public interface Registry extends Queryable {
     public ConceptType findConcept(NestedNCNameIDType agency, IDType id);
     public ConceptType findConcept(IDType id);
     public List<DataflowType> listDataflows();
+    public MaintainableType resolve(StructureReferenceType ref);
     public void reset();
 }

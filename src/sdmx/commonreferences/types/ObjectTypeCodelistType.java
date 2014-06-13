@@ -232,7 +232,7 @@ public class ObjectTypeCodelistType {
     public static final ObjectTypeCodelistType ORGANISATIONMAP = add(TARGET_ORGANISATIONMAP);
     public static final ObjectTypeCodelistType ORGANISATIONSCHEME = add(TARGET_ORGANISATIONSCHEME);
     public static final ObjectTypeCodelistType ORGANISATIONSCHEMEMAP = add(TARGET_ORGANISATIONSCHEMEMAP);
-    public static final ObjectTypeCodelistType ORGANISATIONUNI = add(TARGET_ORGANISATIONUNIT);
+    public static final ObjectTypeCodelistType ORGANISATIONUNIT = add(TARGET_ORGANISATIONUNIT);
     public static final ObjectTypeCodelistType ORGANISATIONUNITSCHEME = add(TARGET_ORGANISATIONUNITSCHEME);
     public static final ObjectTypeCodelistType PRIMARYMEASURE = add(TARGET_PRIMARYMEASURE);
     public static final ObjectTypeCodelistType PROCESS = add(TARGET_PROCESS);
@@ -249,6 +249,75 @@ public class ObjectTypeCodelistType {
     public static final ObjectTypeCodelistType STRUCTURESET = add(TARGET_STRUCTURESET);
     public static final ObjectTypeCodelistType TIMEDIMENSION = add(TARGET_TIMEDIMENSION);
     public static final ObjectTypeCodelistType TRANSITION = add(TARGET_TRANSITION);
+
+    public static final int INT_ANY = 0;
+    public static final int INT_AGENCY = 1;
+    public static final int INT_AGENCYSCHEME = 2;
+    public static final int INT_ATTACHMENTCONSTRAINT = 3;
+    public static final int INT_ATTRIBUTE = 4;
+    public static final int INT_ATTRIBUTEDESCRIPTOR = 5;
+    public static final int INT_CATEGORISATION = 6;
+    public static final int INT_CATEGORY = 7;
+    public static final int INT_CATEGORYSCHEMEMAP = 8;
+    public static final int INT_CATEGORYSCHEME = 9;
+    public static final int INT_CODE = 10;
+    public static final int INT_CODEMAP = 11;
+    public static final int INT_CODELIST = 12;
+    public static final int INT_CODELISTMAP = 13;
+    public static final int INT_COMPONENTMAP = 14;
+    public static final int INT_CONCEPT = 15;
+    public static final int INT_CONCEPTMAP = 16;
+    public static final int INT_CONCEPTSCHEME = 17;
+    public static final int INT_CONCEPTSCHEMEMAP = 18;
+    public static final int INT_CONSTRAINT = 19;
+    public static final int INT_CONSTRAINTARGET = 20;
+    public static final int INT_CONTENTCONSTRAINT = 21;
+    public static final int INT_DATAFLOW = 22;
+    public static final int INT_DATACONSUMER = 23;
+    public static final int INT_DATACONSUMERSCHEME = 24;
+    public static final int INT_DATAPROVIDER = 25;
+    public static final int INT_DATAPROVIDERSCHEME = 26;
+    public static final int INT_DATASETTARGET = 27;
+    public static final int INT_DATASTRUCTURE = 28;
+    public static final int INT_DIMENSION = 29;
+    public static final int INT_DIMENSIONDESCRIPTOR = 30;
+    public static final int INT_DIMENSIONDESCRIPTORVALUESTARGET = 31;
+    public static final int INT_GROUPDIMENSIONDESCRIPTOR = 32;
+    public static final int INT_HIERARCHICALCODE = 33;
+    public static final int INT_HIERARCHICALCODELIST = 34;
+    public static final int INT_HIERARCHY = 35;
+    public static final int INT_HYBRIDCODELISTMAP =36;
+    public static final int INT_HYBRIDCODEMAP = 37;
+    public static final int INT_IDENTIFIABLEOBJECTTARGET = 38;
+    public static final int INT_LEVEL = 39;
+    public static final int INT_MEASUREDESCRIPTOR = 40;
+    public static final int INT_MEASUREDIMENSION = 41;
+    public static final int INT_METADATAFLOW = 42;
+    public static final int INT_METADATAATTRIBUTE = 43;
+    public static final int INT_METADATASET = 44;
+    public static final int INT_METADATASTRUCTURE = 45;
+    public static final int INT_METADATATARGET = 46;
+    public static final int INT_ORGANISATION = 47;
+    public static final int INT_ORGANISATIONMAP = 48;
+    public static final int INT_ORGANISATIONSCHEME = 49;
+    public static final int INT_ORGANISATIONSCHEMEMAP = 50;
+    public static final int INT_ORGANISATIONUNIT = 51;
+    public static final int INT_ORGANISATIONUNITSCHEME = 52;
+    public static final int INT_PRIMARYMEASURE = 53;
+    public static final int INT_PROCESS = 54;
+    public static final int INT_PROCESSSTEP = 55;
+    public static final int INT_PROVISIONAGREEMENT = 56;
+    public static final int INT_REPORTINGCATEGORY = 57;
+    public static final int INT_REPORTINGCATEGORYMAP = 58;
+    public static final int INT_REPORTINGTAXONOMY = 59;
+    public static final int INT_REPORTINGTAXONOMYMAP = 60;
+    public static final int INT_REPORTINGYEARSTARTDAY = 61;
+    public static final int INT_REPORTPERIODTARGET = 62;
+    public static final int INT_REPORTSTRUCTURE = 63;
+    public static final int INT_STRUCTUREMAP = 64;
+    public static final int INT_STRUCTURESET = 65;
+    public static final int INT_TIMEDIMENSION = 66;
+    public static final int INT_TRANSITION = 67;
 
 // Utility
     private static ObjectTypeCodelistType add(String s){
@@ -275,9 +344,14 @@ public class ObjectTypeCodelistType {
     }
 // Instance
     private String target = null;
+    private int index = -1;
     public ObjectTypeCodelistType(String s) {
         if( !STRING_ENUM.contains(s))throw new IllegalArgumentException(s+" is not a valid ObjectTypeCodelistType");
         this.target=s;
+        this.index = STRING_ENUM.indexOf(s);
     }
     public String toString() { return target; }
+    public int toInt() {
+        return index;
+    }
 }
