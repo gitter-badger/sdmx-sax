@@ -45,16 +45,16 @@ public class StructuredDataMessage {
         this.dataMessage=dat;
         this.registry=reg;
         for(int i=0;i<dataMessage.getDataSets().size();i++) {
-            list.add(buildDecoratedDataSet(i));
+            list.add(buildStructuredDataSet(i));
         }
     }
     
     
     public int size() { return dataMessage.getDataSets().size(); }
-    public StructuredDataSet getDecoratedDataSet(int i) {
+    public StructuredDataSet getStructuredDataSet(int i) {
         return list.get(i);
     }
-    public StructuredDataSet buildDecoratedDataSet(int i) {
+    public StructuredDataSet buildStructuredDataSet(int i) {
         NestedNCNameIDType agency = dataMessage.getHeader().getStructures().get(0).getStructure().getRef().getAgencyId();
         NestedIDType id = dataMessage.getHeader().getStructures().get(0).getStructure().getRef().getId();
         VersionType vers = dataMessage.getHeader().getStructures().get(0).getStructure().getRef().getVersion();
