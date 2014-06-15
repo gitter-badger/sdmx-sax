@@ -213,4 +213,9 @@ public class QueryableServiceRegistry implements Registry {
     public MaintainableType resolve(StructureReferenceType ref) {
         return RegistryUtil.resolve(this, ref);
     }
+
+    @Override
+    public DataflowType findDataflow(NestedNCNameIDType agency, IDType id, VersionType vers) {
+        return local.findDataflow(agency, id, vers);
+    }
 }

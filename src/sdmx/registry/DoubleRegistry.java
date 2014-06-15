@@ -172,4 +172,11 @@ public class DoubleRegistry implements Registry {
         return RegistryUtil.resolve(this, ref);
     }
 
+    @Override
+    public DataflowType findDataflow(NestedNCNameIDType agency, IDType id, VersionType vers) {
+        DataflowType df = left.findDataflow(agency, id, vers);
+        if( df == null ) return right.findDataflow(agency, id, vers);
+        return df;
+    }
+
 }

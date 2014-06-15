@@ -6,6 +6,9 @@ package sdmx.xml;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import sdmx.commonreferences.IDType;
+import sdmx.commonreferences.NestedNCNameIDType;
+import sdmx.commonreferences.VersionType;
 
 /**
  *
@@ -40,5 +43,17 @@ public class anyURI {
     public URI getURI() { return uri; }
     public boolean isSdmxUrn() {
         return s.startsWith("sdmx:");
+    }
+    public NestedNCNameIDType getAgencyID() {
+        return null;
+    }
+    public IDType getID() {
+        return null;
+    }
+    public VersionType getVersion() {
+        return null;
+    }
+    public IDType getChildID() {
+        return null;
     }
 }

@@ -54,7 +54,8 @@ public class StructuredDataSet {
 
     public String getColumnName(int i) {
         String conceptString = dataSet.getColumnName(i);
-        //System.out.println("ds="+structure);
+        //System.out.println("Concept="+conceptString);
+        System.out.println("ds="+structure);
         Component c = structure.getDataStructureComponents().findDimension(conceptString);
         if (c == null && conceptString.equals("type")) {
             c = structure.getDataStructureComponents().getMeasureList().getMeasure(0);

@@ -173,7 +173,7 @@ public class GenericData21ContentHandler implements ContentHandler, ErrorHandler
                 eh.startCommonStructure(atts);;
             }
         }
-        if ("http://www.SDMX.org/resources/SDMXML/schemas/v2_1/generic".equalsIgnoreCase(uri)) {
+        if ("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic".equalsIgnoreCase(uri)) {
 
             if ("Series".equals(localName)) {
                 eh.startSeries(uri, atts);
@@ -260,7 +260,7 @@ public class GenericData21ContentHandler implements ContentHandler, ErrorHandler
                 eh.endCommonStructure();;
             }
         }
-        if ("http://www.SDMX.org/resources/SDMXML/schemas/v2_1/generic".equalsIgnoreCase(uri)) {
+        if ("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic".equalsIgnoreCase(uri)) {
 
             if ("Series".equals(localName)) {
                 eh.endSeries();

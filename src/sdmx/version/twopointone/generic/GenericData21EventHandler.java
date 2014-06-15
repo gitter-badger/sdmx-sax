@@ -164,10 +164,10 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
     }
 
     public DataMessage getDataMessage() {
-        if (state != STATE_FINISH) {
-            System.out.println("State=" + state);
-            throw new RuntimeException("You can't get the document before i've finished parsing!");
-        }
+        //if (state != STATE_FINISH) {
+        //    System.out.println("State=" + state);
+        //    throw new RuntimeException("You can't get the document before i've finished parsing!");
+        //}
         DataMessage dm = new DataMessage();
         dm.setDataSets(datasets);
         header.setStructures(payloads);
@@ -697,6 +697,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
     }
 
     public void startObsDimension(String uri, Attributes atts) {
+        //System.out.println("ObsDimension:"+atts.getValue("value"));
         String dimensionAtObservation = payload.getDimensionAtObservation().toString();
         writer.writeObservationComponent(dimensionAtObservation, atts.getValue("value"));
     }

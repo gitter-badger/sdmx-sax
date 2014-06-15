@@ -4,6 +4,8 @@
  */
 package sdmx.query.data;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import sdmx.common.TimeDataType;
 import sdmx.common.TimeRangeValueType;
@@ -319,5 +321,16 @@ public class DataParametersAndType {
            }
         }
         return true;
+    }
+
+    public List<String> getDimensionParameters(String concept) {
+        List<String> result = new ArrayList<String>();
+        for(int i=0;dimensionValue!=null&&i<this.dimensionValue.size();i++) {
+            if( dimensionValue.get(i).getId().equals(concept))result.add(dimensionValue.get(i).getValue());
+        }
+        for(int i=0;or!=null&&i<this.or.size();i++) {
+            result.addAll(or.get(i).getDimensionParameters(concept));
+        }
+        return result;
     }
 }

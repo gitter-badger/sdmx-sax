@@ -3,14 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/James/Dropbox/git/sdmx-sax/src/sdmx/data/structured/StructuredDataWriter.java</file>
-            <file>file:/C:/Users/James/Dropbox/git/sdmx-sax/src/sdmx/data/structured/StructuredColumnMapper.java</file>
-            <file>file:/C:/Users/James/Dropbox/git/sdmx-sax/src/sdmx/data/flat/FlatObs.java</file>
-            <file>file:/C:/Users/James/Dropbox/git/sdmx-sax/src/sdmx/structureddata/ValueTypeResolver.java</file>
-            <file>file:/C:/Users/James/Dropbox/git/sdmx-sax/src/sdmx/version/twopointone/generic/GenericData21EventHandler.java</file>
-            <file>file:/C:/Users/James/Dropbox/git/sdmx-sax/src/sdmx/structureddata/StructuredValue.java</file>
-            <file>file:/C:/Users/James/Dropbox/git/sdmx-sax/src/sdmx/data/flat/FlatDataSetWriter.java</file>
-            <file>file:/C:/Users/James/Dropbox/git/sdmx-sax/src/sdmx/version/twopointone/generic/GenericData21ContentHandler.java</file>
+            <file>file:/C:/Users/James/Dropbox/git/sdmx-sax/src/sdmx/xml/anyURI.java</file>
+            <file>file:/C:/Users/James/Dropbox/git/sdmx-sax/src/sdmx/structure/datastructure/DataStructureComponentsType.java</file>
         </group>
     </open-files>
 </project-private>

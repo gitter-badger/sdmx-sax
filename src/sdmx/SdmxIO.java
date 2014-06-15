@@ -123,6 +123,7 @@ public class SdmxIO {
             throw new ParseException("Unable to find Parser provider header="+header);
         }
         StructureType struct =  prov.parseStructure(registry,push);
+        registry.load(struct);
         return struct;
     }
     public static StructureType parseStructure(Registry registry,Reader in) throws IOException,ParseException {
@@ -134,6 +135,7 @@ public class SdmxIO {
             throw new ParseException("Unable to find Parser provider");
         }
         StructureType struct =  prov.parseStructure(push);
+        registry.load(struct);
         return struct;
     }
     public static DataMessage parseData(InputStream in) throws IOException,ParseException {

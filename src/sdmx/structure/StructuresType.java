@@ -25,6 +25,7 @@ import sdmx.message.DataQueryMessage;
 import sdmx.message.DataStructure;
 import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.StructureType;
+import sdmx.registry.RegistryUtil;
 import sdmx.structure.base.MaintainableType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
@@ -442,9 +443,11 @@ public class StructuresType implements Registry {
     }
 
     public MaintainableType resolve(StructureReferenceType ref) {
-
-        return null;
+        return RegistryUtil.resolve(this, ref);
     }
-    public
 
+    @Override
+    public DataflowType findDataflow(NestedNCNameIDType agency, IDType id, VersionType vers) {
+        return dataFlows.findDataflow(agency, id, vers);
+    }
 }

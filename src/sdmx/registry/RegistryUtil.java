@@ -11,73 +11,6 @@ import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.StructureReferenceType;
 import sdmx.commonreferences.VersionType;
 import sdmx.commonreferences.types.ObjectTypeCodelistType;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_AGENCY;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_AGENCYSCHEME;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_ANY;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_ATTACHMENTCONSTRAINT;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_ATTRIBUTE;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_ATTRIBUTEDESCRIPTOR;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_CATEGORISATION;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_CATEGORY;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_CATEGORYSCHEME;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_CATEGORYSCHEMEMAP;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_CODE;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_CODELIST;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_CODELISTMAP;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_COMPONENTMAP;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_CONCEPT;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_CONCEPTMAP;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_CONCEPTSCHEME;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_CONCEPTSCHEMEMAP;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_CONSTRAINT;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_CONSTRAINTARGET;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_CONTENTCONSTRAINT;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_DATACONSUMER;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_DATACONSUMERSCHEME;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_DATAFLOW;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_DATAPROVIDER;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_DATAPROVIDERSCHEME;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_DATASETTARGET;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_DATASTRUCTURE;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_DIMENSION;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_DIMENSIONDESCRIPTOR;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_DIMENSIONDESCRIPTORVALUESTARGET;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_GROUPDIMENSIONDESCRIPTOR;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_HIERARCHICALCODE;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_HIERARCHICALCODELIST;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_HIERARCHY;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_HYBRIDCODELISTMAP;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_HYBRIDCODEMAP;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_IDENTIFIABLEOBJECTTARGET;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_LEVEL;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_MEASUREDESCRIPTOR;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_MEASUREDIMENSION;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_METADATAATTRIBUTE;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_METADATAFLOW;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_METADATASET;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_METADATASTRUCTURE;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_METADATATARGET;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_ORGANISATION;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_ORGANISATIONMAP;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_ORGANISATIONSCHEME;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_ORGANISATIONSCHEMEMAP;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_ORGANISATIONUNIT;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_ORGANISATIONUNITSCHEME;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_PRIMARYMEASURE;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_PROCESS;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_PROCESSSTEP;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_PROVISIONAGREEMENT;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_REPORTINGCATEGORY;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_REPORTINGCATEGORYMAP;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_REPORTINGTAXONOMY;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_REPORTINGTAXONOMYMAP;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_REPORTINGYEARSTARTDAY;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_REPORTPERIODTARGET;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_REPORTSTRUCTURE;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_STRUCTUREMAP;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_STRUCTURESET;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_TIMEDIMENSION;
-import static sdmx.commonreferences.types.ObjectTypeCodelistType.TARGET_TRANSITION;
 import sdmx.commonreferences.types.PackageTypeCodelistType;
 import sdmx.structure.base.MaintainableType;
 
@@ -140,7 +73,7 @@ public class RegistryUtil {
                 case ObjectTypeCodelistType.INT_COMPONENTMAP:
                     break;
                 case ObjectTypeCodelistType.INT_CONCEPT:
-                    
+
                     break;
                 case ObjectTypeCodelistType.INT_CONCEPTMAP:
                     break;
@@ -155,7 +88,7 @@ public class RegistryUtil {
                 case ObjectTypeCodelistType.INT_CONTENTCONSTRAINT:
                     break;
                 case ObjectTypeCodelistType.INT_DATAFLOW:
-                    break;
+                    return registry.findDataflow(agency, id.asID(), version);
                 case ObjectTypeCodelistType.INT_DATACONSUMER:
                     break;
                 case ObjectTypeCodelistType.INT_DATACONSUMERSCHEME:
@@ -167,7 +100,7 @@ public class RegistryUtil {
                 case ObjectTypeCodelistType.INT_DATASETTARGET:
                     break;
                 case ObjectTypeCodelistType.INT_DATASTRUCTURE:
-                    break;
+                    return registry.findDataStructure(agency, id.asID(), version);
                 case ObjectTypeCodelistType.INT_DIMENSION:
                     break;
                 case ObjectTypeCodelistType.INT_DIMENSIONDESCRIPTOR:
@@ -247,8 +180,10 @@ public class RegistryUtil {
                 case ObjectTypeCodelistType.INT_TRANSITION:
                     break;
             }
+            throw new RuntimeException("Ref Object Type not supported.");
         } else if (ref.getUrn().isSdmxUrn()) {
-
+            String urn = ref.getUrn().getString();
+            return null;
         } else {
             throw new RuntimeException("URN is not an SDMX URN!" + ref.getUrn().getString());
         }

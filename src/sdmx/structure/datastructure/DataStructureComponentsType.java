@@ -5,6 +5,7 @@
 package sdmx.structure.datastructure;
 
 import sdmx.structure.base.Component;
+import sdmx.structure.concept.ConceptType;
 
 /**
  *	<xs:complexType name="DataStructureComponentsType">

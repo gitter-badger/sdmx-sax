@@ -64,7 +64,7 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
             return true;
         } else if (header.indexOf("GenericTimeSeriesData ") != -1) {
             return true;
-        } else if (header.indexOf("GenericData ") != -1) {
+        } else if (header.indexOf("GenericData ") != -1 && header.indexOf("\"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message\"") != -1) {
             return true;
         } else if (header.indexOf("StructureSpecificTimeSeriesData ") != -1) {
             return true;

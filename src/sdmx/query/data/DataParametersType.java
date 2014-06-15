@@ -338,10 +338,15 @@ public class DataParametersType  {
         return true;
     }   
     public List<String> getDimensionParameters(String concept) {
-        if( dimensionValue==null)return Collections.EMPTY_LIST;
         List<String> result = new ArrayList<String>();
-        for(int i=0;i<this.dimensionValue.size();i++) {
+        for(int i=0;dimensionValue!=null&&i<this.dimensionValue.size();i++) {
             if( dimensionValue.get(i).getId().equals(concept))result.add(dimensionValue.get(i).getValue());
+        }
+        for(int i=0;and!=null&&i<this.and.size();i++) {
+            result.addAll(and.get(i).getDimensionParameters(concept));
+        }        
+        for(int i=0;or!=null&&i<this.or.size();i++) {
+            result.addAll(or.get(i).getDimensionParameters(concept));
         }
         return result;
     }

@@ -130,8 +130,11 @@ public class LocalRegistry implements Registry {
 
     public DataStructureType findDataStructure(NestedNCNameIDType agency, IDType id, VersionType version) {
         DataStructureType found = null;
+        //System.out.println("findDS");
         for (int i = 0; i < structures.size(); i++) {
+            //System.out.println("Looking for DS");
             if (structures.get(i).getStructures().getDataStructures() != null) {
+                //System.out.println("Got a Structure with a DataStructure");
                 found = structures.get(i).findDataStructure(agency, id, version);
                 if (found != null) {
                     return found;
@@ -284,5 +287,15 @@ public class LocalRegistry implements Registry {
     @Override
     public MaintainableType resolve(StructureReferenceType ref) {
         return RegistryUtil.resolve(this, ref);
+    }
+
+    @Override
+    public DataflowType findDataflow(NestedNCNameIDType agency, IDType id, VersionType vers) {
+        DataflowType df = null;
+        for(int i=0;i<structures.size();i++) {
+            df = structures.get(i).findDataflow(agency, id, vers);
+            if( df!=null ) return df;
+        }
+        return null;
     }
 }

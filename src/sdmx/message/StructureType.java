@@ -180,4 +180,8 @@ public class StructureType extends MessageType implements Registry {
         return RegistryUtil.resolve(this, ref);
     }
 
+    public DataflowType findDataflow(NestedNCNameIDType agency, IDType id, VersionType vers) {
+        return structures.findDataflow(agency, id, vers);
+    }
+
 }

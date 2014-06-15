@@ -60,6 +60,7 @@ public interface Registry extends Queryable {
     public ConceptSchemeType findConceptScheme(NestedNCNameIDType csa, IDType csi);
     public ConceptSchemeType findConceptSchemeById(IDType id);
     public ConceptType findConcept(NestedNCNameIDType agency, IDType id);
+    public DataflowType findDataflow(NestedNCNameIDType agency, IDType id,VersionType vers);
     public ConceptType findConcept(IDType id);
     public List<DataflowType> listDataflows();
     public MaintainableType resolve(StructureReferenceType ref);
