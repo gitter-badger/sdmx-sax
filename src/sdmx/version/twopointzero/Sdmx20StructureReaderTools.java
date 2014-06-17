@@ -509,6 +509,7 @@ public class Sdmx20StructureReaderTools {
     }
 
     private DataStructureComponents currentDataStructure = null;
+
     public DataStructureComponents toDataStructureComponents(org.sdmx.resources.sdmxml.schemas.v20.structure.ComponentsType c1) throws TypeValueNotFoundException, URISyntaxException {
         if (c1 == null) {
             return null;
@@ -525,9 +526,9 @@ public class Sdmx20StructureReaderTools {
         DimensionListType dlt = new DimensionListType();
         List<DimensionType> d2 = new ArrayList<DimensionType>();
         for (int i = 0; i < d1.length; i++) {
-            if (!d1[i].getIsMeasureDimension()) {
-                d2.add(toDimensionType(d1[i]));
-            }
+            //if (!d1[i].getIsMeasureDimension()) {
+            d2.add(toDimensionType(d1[i]));
+            //}
         }
         dlt.setDimensions(d2);
         return dlt;
@@ -538,7 +539,7 @@ public class Sdmx20StructureReaderTools {
         //System.out.println("CS Ref="+d1.getConceptSchemeRef());
         //System.out.println("CT Id="+d1.getConceptRef());
         ConceptSchemeType cscheme = getConceptScheme(d1);
-        System.out.println("ConceptScheme="+cscheme);
+        System.out.println("ConceptScheme=" + cscheme);
         ConceptType concept = getConcept(cscheme, d1);
 
         System.out.println("Dimension=" + d1.getConceptRef());
@@ -630,7 +631,7 @@ public class Sdmx20StructureReaderTools {
         if (cscheme.getId().equals("STANDALONE_CONCEPT_SCHEME")) {
             MeasureDimensionType measure = currentDataStructure.getMeasureList().getMeasures().get(0);
             RefBaseType ref = measure.getLocalRepresentation().getEnumeration().getRef();
-            ConceptSchemeType cs = registry.findConceptScheme(ref.getAgencyId(),new IDType(ref.getId().toString()));
+            ConceptSchemeType cs = registry.findConceptScheme(ref.getAgencyId(), new IDType(ref.getId().toString()));
             concept.setCode(d1.getCode());
             cscheme.removeItem(concept);
             cs.addConcept(concept);

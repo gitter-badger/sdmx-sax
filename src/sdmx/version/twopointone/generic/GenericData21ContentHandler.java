@@ -251,7 +251,6 @@ public class GenericData21ContentHandler implements ContentHandler, ErrorHandler
             } else if ("Structure".equals(localName)) {
                 eh.endMessageStructure();;
             } else if ("DataSet".equals(localName)) {
-                System.out.println("End DataSet");
                 eh.endDataSet();
             }
         }

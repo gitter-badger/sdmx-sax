@@ -251,7 +251,6 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     }
 
     public DataMessage parseGenericData(InputStream in,boolean flat) throws IOException {
-        System.out.println("Parse Generic Data");
         DataSetWriter writer = flat?new FlatDataSetWriter():new StructuredDataWriter();
         GenericData21EventHandler event = new GenericData21EventHandler(writer);
         GenericData21ContentHandler handler = new GenericData21ContentHandler(in, event);
