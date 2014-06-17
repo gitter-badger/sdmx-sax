@@ -90,6 +90,7 @@ public class Series implements Attachable {
             throw new RuntimeException("Can't access DataSet value from Series");
         }
         else if (attach == AttachmentLevel.SERIES) {
+            return getValue(s);
         }
         return null;
     }
@@ -164,13 +165,18 @@ public class Series implements Attachable {
 
     @Override
     public String getValue(int i) {
+        if( columnValues.size()>=i){
+            for(int j=columnValues.size();j-1<i;j++) {
+                columnValues.add(null);
+            }
+        }
         return columnValues.get(i);
     }
 
     @Override
     public void setValue(int i, String val) {
-        if( columnValues.size()-1<i) {
-            for(int j=columnValues.size();j-1<i;j++) {
+        if (columnValues.size() - 1 < i) {
+            for (int j = columnValues.size(); (j - 1) < i; j++) {
                 columnValues.add(null);
             }
         }

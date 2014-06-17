@@ -41,10 +41,10 @@ public class StructuredValue {
     private DataStructureType structure = null;
 
     public StructuredValue(String concept, String value, Registry registry, DataStructureType struct) {
-        if (concept.equals("FREQ")) {
-            System.out.println("Concept=" + concept);
-            System.out.println("Value=" + value);
-        }
+        //if (concept.equals("FREQ")) {
+        //    System.out.println("Concept=" + concept);
+        //    System.out.println("Value=" + value);
+        //}
         this.concept = concept;
         this.value = value;
         this.registry = registry;
@@ -81,10 +81,10 @@ public class StructuredValue {
 
     public String toString() {
         Locale loc = Locale.getDefault();
-        if (concept.equals("FREQ")) {
-            ItemType code2 = getCode();
-            System.out.println("FREQ Code=" + code2);
-        }
+        //if (concept.equals("FREQ")) {
+        //    ItemType code2 = getCode();
+        //    System.out.println("FREQ Code=" + code2);
+        //}
         if (isCoded()) {
 
             ItemType code = getCode();

@@ -370,12 +370,10 @@ public class RESTServiceRegistry implements Registry {
         DataStructureType dst = null;
         for(int i=0;i<dataflowList.size();i++) {
             if( dataflowList.get(i).getId().equals(flowid)){
-                System.out.println("Found flow:"+flowid);
                 dst = findDataStructure(dataflowList.get(i).getStructure().getRef().getAgencyId(), dataflowList.get(i).getStructure().getRef().getId().asID(),dataflowList.get(i).getStructure().getRef().getVersion());
             }
         }
         DataStructureType structure = dst;
-        System.out.println("DataStructure="+dst);
         StringBuilder q = new StringBuilder();
         for (int i = 0; i < structure.getDataStructureComponents().getDimensionList().size(); i++) {
             DimensionType dim = structure.getDataStructureComponents().getDimensionList().getDimension(i);

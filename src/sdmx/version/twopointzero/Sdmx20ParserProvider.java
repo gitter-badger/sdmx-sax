@@ -61,7 +61,7 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
     }
 
     public static boolean isSdmx20(String header) {
-        if (header.indexOf("CompactData ") != -1) {
+        if (header.indexOf("CompactData") != -1) {
             return true;
         }else if (header.indexOf("MessageGroup") != -1) {
             return true;
@@ -75,7 +75,7 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
             return true;
         } else if (header.indexOf(":Structure xmlns=\"http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message\"") != -1) {
             return true;
-        } else if (header.indexOf("Structure") != -1 && header.indexOf("\"http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message\"") != -1) {
+        } else if (header.indexOf("Structure") != -1 && header.indexOf("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message") != -1) {
             return true;
         } else {
             return false;
@@ -139,9 +139,9 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
 
     @Override
     public boolean isData(String header) {
-        if (header.indexOf("CompactData ") != -1) {
+        if (header.indexOf("CompactData") != -1) {
             return true;
-        } else if (header.indexOf("GenericData ") != -1) {
+        } else if (header.indexOf("GenericData") != -1) {
             return true;
         } else if (header.indexOf("CrossSectionalData") != -1) {
             return true;
@@ -153,9 +153,9 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
     }
 
     public boolean isCompactData(String header) {
-        if (header.indexOf("CompactData ") != -1) {
+        if (header.indexOf("CompactData") != -1) {
             return true;
-        } else if (header.indexOf("GenericData ") != -1) {
+        } else if (header.indexOf("GenericData") != -1) {
             return false;
         } else {
             return false;
@@ -163,9 +163,9 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
     }
     
     public boolean isGenericData(String header) {
-        if (header.indexOf("GenericData ") != -1) {
+        if (header.indexOf("GenericData") != -1) {
             return true;
-        }if (header.indexOf("MessageGroup ") != -1) {
+        }if (header.indexOf("MessageGroup") != -1) {
             return true;
         } else {
             return false;

@@ -538,13 +538,12 @@ public class Sdmx20StructureReaderTools {
         //System.out.println("CS Ref="+d1.getConceptSchemeRef());
         //System.out.println("CT Id="+d1.getConceptRef());
         ConceptSchemeType cscheme = getConceptScheme(d1);
-        //System.out.println("Concept="+cscheme);
+        System.out.println("ConceptScheme="+cscheme);
         ConceptType concept = getConcept(cscheme, d1);
-        //System.out.println("ConceptT ID="+concept.getId());
 
-        //System.out.println("Dimension=" + d1.getConceptRef());
-        //System.out.println("Cscheme=" + cscheme);
-        //System.out.println("Concept=" + concept);
+        System.out.println("Dimension=" + d1.getConceptRef());
+        System.out.println("Cscheme=" + cscheme);
+        System.out.println("Concept=" + concept);
         DimensionType d2 = new DimensionType();
         CodelistType code = getCodelist(d1);
         if (concept != null) {
@@ -1022,6 +1021,7 @@ public class Sdmx20StructureReaderTools {
         if (scheme != null) {
             return scheme.findConcept(dim.getConceptRef());
         } else {
+            System.out.println("scheme==null!!!");
             return null;
         }
     }

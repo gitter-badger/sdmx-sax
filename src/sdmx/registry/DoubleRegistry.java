@@ -80,37 +80,37 @@ public class DoubleRegistry implements Registry {
     }
     public ConceptSchemeType findConceptScheme(NestedNCNameIDType agencyID, ConceptReferenceType conceptRef) {
         ConceptSchemeType dst = left.findConceptScheme(agencyID, conceptRef);
-        if( dst == null ) dst = right.findConceptScheme(agencyID, conceptRef);
+        if( dst == null||dst.isExternalReference() ) dst = right.findConceptScheme(agencyID, conceptRef);
         return dst;
     }
     public CodelistType findCodelist(ItemSchemeReferenceBaseType enumeration) {
         CodelistType dst = left.findCodelist(enumeration);
-        if( dst == null ) dst = right.findCodelist(enumeration);
+        if( dst == null||dst.isExternalReference() ) dst = right.findCodelist(enumeration);
         return dst;
     }
     public CodelistType findCodelistById(IDType id) {
         CodelistType dst = left.findCodelistById(id);
-        if( dst == null ) dst = right.findCodelistById(id);
+        if( dst == null||dst.isExternalReference() ) dst = right.findCodelistById(id);
         return dst;
     }
     public CodelistType findCodelist(NestedNCNameIDType codelistAgency, IDType codelist, VersionType codelistVersion) {
         CodelistType dst = left.findCodelist(codelistAgency, codelist, codelistVersion);
-        if( dst == null ) dst =right.findCodelist(codelistAgency, codelist, codelistVersion);
+        if( dst == null||dst.isExternalReference() ) dst =right.findCodelist(codelistAgency, codelist, codelistVersion);
         return dst;
     }
     public CodelistType findCodelist(String codelistAgency, String codelist, String codelistVersion) {
         CodelistType dst = left.findCodelist(codelistAgency, codelist, codelistVersion);
-        if(dst == null ) dst = right.findCodelist(codelistAgency, codelist, codelistVersion);
+        if(dst == null||dst.isExternalReference() ) dst = right.findCodelist(codelistAgency, codelist, codelistVersion);
         return dst;
     }
     public ConceptSchemeType findConceptScheme(NestedNCNameIDType csa, IDType csi) {
         ConceptSchemeType dst = left.findConceptScheme(csa, csi);
-        if( dst == null ) dst = right.findConceptScheme(csa, csi);
+        if( dst == null||dst.isExternalReference() ) dst = right.findConceptScheme(csa, csi);
         return dst;
     }
     public ConceptSchemeType findConceptSchemeById(IDType id) {
         ConceptSchemeType cs = left.findConceptSchemeById(id);
-        if( cs == null ) cs = right.findConceptSchemeById(id);
+        if( cs == null||cs.isExternalReference() ) cs = right.findConceptSchemeById(id);
         return cs;
     }
     public ConceptType findConcept(NestedNCNameIDType agency, IDType id) {
@@ -132,13 +132,13 @@ public class DoubleRegistry implements Registry {
     @Override
     public CodelistType findCodelist(NestedNCNameIDType codelistAgency, IDType codelist) {
         CodelistType ct = left.findCodelist(codelistAgency, codelist);
-        if( ct == null ) ct = right.findCodelist(codelistAgency, codelist);
+        if( ct == null||ct.isExternalReference() ) ct = right.findCodelist(codelistAgency, codelist);
         return ct;
     }
     @Override
     public CodelistType findCodelist(String codelistAgency, String codelist) {
         CodelistType ct = left.findCodelist(codelistAgency, codelist);
-        if( ct == null ) ct = right.findCodelist(codelistAgency, codelist);
+        if( ct == null||ct.isExternalReference() ) ct = right.findCodelist(codelistAgency, codelist);
         return ct;
     }
 
