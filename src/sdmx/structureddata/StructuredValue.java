@@ -10,10 +10,12 @@ import sdmx.Registry;
 import sdmx.common.Description;
 import sdmx.common.Name;
 import sdmx.structure.base.Component;
+import sdmx.structure.base.ItemSchemeType;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.base.RepresentationType;
 import sdmx.structure.codelist.CodeType;
 import sdmx.structure.codelist.CodelistType;
+import sdmx.structure.concept.ConceptType;
 import sdmx.structure.datastructure.DataStructureType;
 
 /**
@@ -75,7 +77,7 @@ public class StructuredValue {
         return ValueTypeResolver.resolveCode(registry, structure, concept, value);
     }
 
-    public CodelistType getCodelist() {
+    public ItemSchemeType getCodelist() {
         return ValueTypeResolver.getPossibleCodes(registry, structure, value);
     }
 
@@ -86,7 +88,6 @@ public class StructuredValue {
         //    System.out.println("FREQ Code=" + code2);
         //}
         if (isCoded()) {
-
             ItemType code = getCode();
             if (code == null) {
                 return value;

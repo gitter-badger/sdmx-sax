@@ -526,9 +526,9 @@ public class Sdmx20StructureReaderTools {
         DimensionListType dlt = new DimensionListType();
         List<DimensionType> d2 = new ArrayList<DimensionType>();
         for (int i = 0; i < d1.length; i++) {
-            //if (!d1[i].getIsMeasureDimension()) {
-            d2.add(toDimensionType(d1[i]));
-            //}
+            if (!d1[i].getIsMeasureDimension()) {
+                d2.add(toDimensionType(d1[i]));
+            }
         }
         dlt.setDimensions(d2);
         return dlt;
@@ -539,12 +539,12 @@ public class Sdmx20StructureReaderTools {
         //System.out.println("CS Ref="+d1.getConceptSchemeRef());
         //System.out.println("CT Id="+d1.getConceptRef());
         ConceptSchemeType cscheme = getConceptScheme(d1);
-        System.out.println("ConceptScheme=" + cscheme);
+        //System.out.println("ConceptScheme=" + cscheme);
         ConceptType concept = getConcept(cscheme, d1);
 
-        System.out.println("Dimension=" + d1.getConceptRef());
-        System.out.println("Cscheme=" + cscheme);
-        System.out.println("Concept=" + concept);
+        //System.out.println("Dimension=" + d1.getConceptRef());
+        //System.out.println("Cscheme=" + cscheme);
+        //System.out.println("Concept=" + concept);
         DimensionType d2 = new DimensionType();
         CodelistType code = getCodelist(d1);
         if (concept != null) {
@@ -587,6 +587,21 @@ public class Sdmx20StructureReaderTools {
             scheme.setId(new IDType(id));
             scheme.setVersion(VersionType.ONE);
             struct.getConcepts().getConceptSchemes().add(scheme);
+            CodelistType codelist = getCodelist(d1);
+            for(int i=0;i<codelist.size();i++) {
+                ConceptType concept2 = new ConceptType();
+                CodeType code = (CodeType)codelist.getItem(i);
+                concept2.setNames(code.getNames());
+                concept2.setDescriptions(code.getDescriptions());
+                concept2.setAnnotations(code.getAnnotations());
+                concept2.setId(code.getId());
+                ConceptRepresentation coreRep = new ConceptRepresentation();
+                TextFormatType text = new TextFormatType();
+                text.setTextType(DataType.DOUBLE);
+                coreRep.setTextFormat(text);
+                concept2.setCoreRepresentation(coreRep);
+                scheme.addConcept(concept2);
+            }
         }
         d2.setLocalRepresentation(toLocalRepresentation(scheme));
         return d2;

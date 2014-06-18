@@ -22,6 +22,7 @@ import sdmx.commonreferences.types.ItemSchemeTypeCodelistType;
 import sdmx.commonreferences.types.ObjectTypeCodelistType;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.structure.base.Component;
+import sdmx.structure.base.ItemSchemeType;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.base.RepresentationType;
 import sdmx.structure.codelist.CodeType;
@@ -59,19 +60,19 @@ public class ValueTypeResolver {
             return null;
         }
         Component dim = struct.getDataStructureComponents().findDimension(column);
-        if( dim == null && "type".equals(column) ) {
+        if (dim == null && "type".equals(column)) {
             dim = struct.getDataStructureComponents().getMeasureList().getMeasure(0);
         }
         ConceptReferenceType conceptRef = dim.getConceptIdentity();
         RepresentationType rep = null;
         ConceptType concept = null;
         if (conceptRef != null) {
-            ConceptSchemeType con = registry.findConceptScheme(conceptRef.getRef().getAgencyId()==null?struct.getAgencyID():conceptRef.getRef().getAgencyId(), conceptRef);
+            ConceptSchemeType con = registry.findConceptScheme(conceptRef.getRef().getAgencyId() == null ? struct.getAgencyID() : conceptRef.getRef().getAgencyId(), conceptRef);
             if (con == null) {
                 System.out.println("Cant find concept:" + conceptRef.getRef().getId().getString());
                 CodeType ct = new CodeType();
                 ct.setId(new IDType(value));
-                Name name = new Name("en",value);
+                Name name = new Name("en", value);
                 ct.setNames(Collections.singletonList(name));
                 return ct;
             }
@@ -103,7 +104,7 @@ public class ValueTypeResolver {
                     ItemSchemeReferenceBaseType ref = rep.getEnumeration();
                     ConceptSchemeType cs = registry.findConceptScheme(ref.getRef().getAgencyId(), new IDType(ref.getRef().getId().toString()));
                     ConceptType conceptMeasure = null;
-                    for (int i = 0; i < cs.size()&&conceptMeasure==null; i++) {
+                    for (int i = 0; i < cs.size() && conceptMeasure == null; i++) {
                         ConceptType tempConcept = cs.getConcept(i);
                         if (tempConcept.getCode() != null && tempConcept.getCode().equals(value)) {
                             conceptMeasure = cs.getConcept(i);
@@ -126,7 +127,7 @@ public class ValueTypeResolver {
         return null;
     }
 
-    public static CodelistType getPossibleCodes(Registry registry, DataStructureType struct, String column) {
+    public static ItemSchemeType getPossibleCodes(Registry registry, DataStructureType struct, String column) {
         Component dim = struct.getDataStructureComponents().findDimension(column);
         ConceptReferenceType conceptRef = dim.getConceptIdentity();
         RepresentationType rep = null;
@@ -145,11 +146,19 @@ public class ValueTypeResolver {
         }
         if (rep != null) {
             if (rep.getEnumeration() != null) {
-                CodelistType codelist = registry.findCodelist(rep.getEnumeration());
-                if (codelist == null) {
-                    throw new RuntimeException("Cant find codelist");
+                if (rep.getEnumeration().getRef().getRefClass() == ObjectTypeCodelistType.CONCEPTSCHEME) {
+                    ConceptSchemeType cscheme = registry.findConceptScheme(rep.getEnumeration().getRef().getAgencyId(), rep.getEnumeration().getRef().getId().asID());
+                    if( cscheme == null ) {
+                        throw new RuntimeException("Can't find ConceptScheme!"+rep.getEnumeration().getRef().getId().toString());
+                    }
+                    return cscheme;
                 } else {
-                    return codelist;
+                    CodelistType codelist = registry.findCodelist(rep.getEnumeration());
+                    if (codelist == null) {
+                        throw new RuntimeException("Cant find codelist");
+                    } else {
+                        return codelist;
+                    }
                 }
             }
         }

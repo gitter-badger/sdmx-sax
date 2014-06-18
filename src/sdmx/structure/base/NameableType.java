@@ -7,9 +7,9 @@ package sdmx.structure.base;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Locale;
 import sdmx.common.Description;
 import sdmx.common.Name;
+import sdmx.structure.concept.ConceptType;
 
 /**
  *	<xs:complexType name="NameableType" abstract="true">
