@@ -465,9 +465,12 @@ public class Sdmx21StructureReaderTools {
         cl2.setAgencyID(toNestedNCNameIDType(cl1.getAgencyID()));
         cl2.setAnnotations(toAnnotations(cl1.getAnnotations()));
         cl2.setDescriptions(toDescriptions(cl1.getDescriptionArray()));
+        // These three statements have defaults of 'false' set 
+        // inside sdmx schema.. so we pick up false here if there is no value set in xml file
         cl2.setExternalReference(cl1.getIsExternalReference());
         cl2.setFinal(cl1.getIsFinal());
         cl2.setPartial(cl1.getIsPartial());
+        
         cl2.setNames(toNames(cl1.getNameArray()));
         cl2.setCodes(toCodes(cl1.getCodeArray()));
         cl2.setVersion(toVersionType(cl1.getVersion()));

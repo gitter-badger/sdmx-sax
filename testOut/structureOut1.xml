@@ -1,6 +1,261 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mes:Structure xmlns:mes="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"><mes:Structures><str:Codelists xmlns:str="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure"><str:Codelist agencyID="SDMX" isExternalReference="true" isFinal="false" version="1.0" id="CL_DECIMALS"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">Code list for Decimals (DECIMALS)</com:Name></str:Codelist><str:Codelist agencyID="SDMX" isExternalReference="true" isFinal="false" version="1.0" id="CL_FREQ"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">Code list for Frequency (FREQ)</com:Name></str:Codelist><str:Codelist agencyID="SDMX" isExternalReference="true" isFinal="false" version="1.0" id="CL_CONF_STATUS"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">
-					code list for Confidentiality Status (CONF_STATUS)
-				</com:Name></str:Codelist><str:Codelist agencyID="SDMX" isExternalReference="true" isFinal="false" version="1.0" id="CL_OBS_STATUS"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">Observation status</com:Name></str:Codelist><str:Codelist agencyID="SDMX" isExternalReference="true" isFinal="false" version="1.0" id="CL_UNIT_MULT"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">
-					code list for the Unit Multiplier (UNIT_MULT)
-				</com:Name></str:Codelist><str:Codelist agencyID="ESTAT" isExternalReference="false" isFinal="false" version="1.0" id="CL_UNIT"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">Unit code list</com:Name><str:Code id="PERS"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">Persons</com:Name></str:Code><str:Code id="CPW"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">Children per woman (fertility rate)</com:Name></str:Code><str:Code id="YRS"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">Years</com:Name></str:Code></str:Codelist><str:Codelist agencyID="ESTAT" isExternalReference="false" isFinal="false" version="1.0" id="CL_SEX"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">Sex codelist</com:Name><str:Code id="F"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">Female</com:Name></str:Code><str:Code id="M"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">Male</com:Name></str:Code><str:Code id="T"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">Total</com:Name></str:Code></str:Codelist><str:Codelist agencyID="ESTAT" isExternalReference="false" isFinal="false" version="1.0" id="CL_COUNTRY"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">Country Codelist</com:Name><str:Code id="BE"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">Belgium</com:Name></str:Code><str:Code id="EL"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">Greece</com:Name></str:Code><str:Code id="LU"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">Luxembourg</com:Name></str:Code><str:Code id="UK"><com:Name xml:lang="en" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">United Kingdom</com:Name></str:Code></str:Codelist></str:Codelists></mes:Structures></mes:Structure>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<mes:Structure xmlns:mes="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:str="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">
+    <mes:Structures>
+        <str:Codelists>
+            <str:Codelist agencyID="SDMX" isExternalReference="true" isFinal="false" structureURL="../common/common.xml" version="1.0" id="CL_DECIMALS">
+                <com:Name xml:lang="en">Code list for Decimals (DECIMALS)</com:Name>
+            </str:Codelist>
+            <str:Codelist agencyID="SDMX" isExternalReference="true" isFinal="false" structureURL="../common/common.xml" version="1.0" id="CL_FREQ">
+                <com:Name xml:lang="en">Code list for Frequency (FREQ)</com:Name>
+            </str:Codelist>
+            <str:Codelist agencyID="SDMX" isExternalReference="true" isFinal="false" structureURL="../common/common.xml" version="1.0" id="CL_CONF_STATUS">
+                <com:Name xml:lang="en">code list for Confidentiality Status (CONF_STATUS)</com:Name>
+            </str:Codelist>
+            <str:Codelist agencyID="SDMX" isExternalReference="true" isFinal="false" structureURL="../common/common.xml" version="1.0" id="CL_OBS_STATUS">
+                <com:Name xml:lang="en">Observation status</com:Name>
+            </str:Codelist>
+            <str:Codelist agencyID="SDMX" isExternalReference="true" isFinal="false" structureURL="../common/common.xml" version="1.0" id="CL_UNIT_MULT">
+                <com:Name xml:lang="en">code list for the Unit Multiplier (UNIT_MULT)</com:Name>
+            </str:Codelist>
+            <str:Codelist agencyID="ESTAT" isExternalReference="false" isFinal="false" version="1.0" id="CL_UNIT">
+                <com:Name xml:lang="en">Unit code list</com:Name>
+                <str:Code id="PERS">
+                    <com:Name xml:lang="en">Persons</com:Name>
+                </str:Code>
+                <str:Code id="CPW">
+                    <com:Name xml:lang="en">Children per woman (fertility rate)</com:Name>
+                </str:Code>
+                <str:Code id="YRS">
+                    <com:Name xml:lang="en">Years</com:Name>
+                </str:Code>
+            </str:Codelist>
+            <str:Codelist agencyID="ESTAT" isExternalReference="false" isFinal="false" version="1.0" id="CL_SEX">
+                <com:Name xml:lang="en">Sex codelist</com:Name>
+                <str:Code id="F">
+                    <com:Name xml:lang="en">Female</com:Name>
+                </str:Code>
+                <str:Code id="M">
+                    <com:Name xml:lang="en">Male</com:Name>
+                </str:Code>
+                <str:Code id="T">
+                    <com:Name xml:lang="en">Total</com:Name>
+                </str:Code>
+            </str:Codelist>
+            <str:Codelist agencyID="ESTAT" isExternalReference="false" isFinal="false" version="1.0" id="CL_COUNTRY">
+                <com:Name xml:lang="en">Country Codelist</com:Name>
+                <str:Code id="BE">
+                    <com:Name xml:lang="en">Belgium</com:Name>
+                </str:Code>
+                <str:Code id="EL">
+                    <com:Name xml:lang="en">Greece</com:Name>
+                </str:Code>
+                <str:Code id="LU">
+                    <com:Name xml:lang="en">Luxembourg</com:Name>
+                </str:Code>
+                <str:Code id="UK">
+                    <com:Name xml:lang="en">United Kingdom</com:Name>
+                </str:Code>
+            </str:Codelist>
+        </str:Codelists>
+        <str:Concepts>
+            <str:ConceptScheme agencyID="SDMX" isExternalReference="true" isFinal="false" structureURL="../common/common.xml" version="1.0" id="CROSS_DOMAIN_CONCEPTS">
+                <com:Name xml:lang="en">SDMX Cross Domain Concept Scheme</com:Name>
+            </str:ConceptScheme>
+            <str:ConceptScheme agencyID="ESTAT" isExternalReference="false" isFinal="false" version="1.0" id="DEMO_CONCEPTS">
+                <com:Name xml:lang="en">Demography domain concept scheme</com:Name>
+                <str:Concept id="COUNTRY">
+                    <com:Name xml:lang="en">Reporting Country</com:Name>
+                </str:Concept>
+                <str:Concept id="SEX">
+                    <com:Name xml:lang="en">Sex</com:Name>
+                </str:Concept>
+                <str:Concept id="DEMO">
+                    <com:Name xml:lang="en">Demography</com:Name>
+                </str:Concept>
+            </str:ConceptScheme>
+            <str:ConceptScheme agencyID="ESTAT" isExternalReference="false" isFinal="false" version="1.0" id="DEMO_MEASURES">
+                <com:Name xml:lang="en">Demography measures concept scheme</com:Name>
+                <str:Concept id="PJANT">
+                    <com:Name xml:lang="en">Population on 1 January of Year X</com:Name>
+                    <str:CoreRepresentation>
+                        <str:TextFormat textType="Integer"/>
+                    </str:CoreRepresentation>
+                </str:Concept>
+                <str:Concept id="LBIRTHST">
+                    <com:Name xml:lang="en">Births in Year X</com:Name>
+                    <str:CoreRepresentation>
+                        <str:TextFormat textType="Integer"/>
+                    </str:CoreRepresentation>
+                </str:Concept>
+                <str:Concept id="DEATHST">
+                    <com:Name xml:lang="en">Deaths in Year X</com:Name>
+                    <str:CoreRepresentation>
+                        <str:TextFormat textType="Integer"/>
+                    </str:CoreRepresentation>
+                </str:Concept>
+                <str:Concept id="ADJT">
+                    <com:Name xml:lang="en">Statistical adjustment in Year X</com:Name>
+                    <str:CoreRepresentation>
+                        <str:TextFormat textType="Integer"/>
+                    </str:CoreRepresentation>
+                </str:Concept>
+                <str:Concept id="PJAN1T">
+                    <com:Name xml:lang="en">Population on 1 January Year X+1</com:Name>
+                    <str:CoreRepresentation>
+                        <str:TextFormat textType="Integer"/>
+                    </str:CoreRepresentation>
+                </str:Concept>
+                <str:Concept id="LBIRTHOUT">
+                    <com:Name xml:lang="en">Births outside marriage in Year X</com:Name>
+                    <str:CoreRepresentation>
+                        <str:TextFormat textType="Integer"/>
+                    </str:CoreRepresentation>
+                </str:Concept>
+                <str:Concept id="DEATHUN1">
+                    <com:Name xml:lang="en">Deaths under 1 year in Year X</com:Name>
+                    <str:CoreRepresentation>
+                        <str:TextFormat textType="Integer"/>
+                    </str:CoreRepresentation>
+                </str:Concept>
+                <str:Concept id="MAR">
+                    <com:Name xml:lang="en">Marriages in Year X</com:Name>
+                    <str:CoreRepresentation>
+                        <str:TextFormat textType="Integer"/>
+                    </str:CoreRepresentation>
+                </str:Concept>
+                <str:Concept id="DIV">
+                    <com:Name xml:lang="en">Divorces in Year X</com:Name>
+                    <str:CoreRepresentation>
+                        <str:TextFormat textType="Integer"/>
+                    </str:CoreRepresentation>
+                </str:Concept>
+                <str:Concept id="IMMIT">
+                    <com:Name xml:lang="en">Immigrants in Year X</com:Name>
+                    <str:CoreRepresentation>
+                        <str:TextFormat textType="Integer"/>
+                    </str:CoreRepresentation>
+                </str:Concept>
+                <str:Concept id="EMIGT">
+                    <com:Name xml:lang="en">Emigrants in Year X</com:Name>
+                    <str:CoreRepresentation>
+                        <str:TextFormat textType="Integer"/>
+                    </str:CoreRepresentation>
+                </str:Concept>
+                <str:Concept id="NETMT">
+                    <com:Name xml:lang="en">Net migration in Year X</com:Name>
+                    <str:CoreRepresentation>
+                        <str:TextFormat textType="Integer"/>
+                    </str:CoreRepresentation>
+                </str:Concept>
+                <str:Concept id="TFRNSI">
+                    <com:Name xml:lang="en">Total fertility rate in Year X</com:Name>
+                    <str:CoreRepresentation>
+                        <str:TextFormat decimals="2" textType="Decimal"/>
+                    </str:CoreRepresentation>
+                </str:Concept>
+                <str:Concept id="LEXPNSIT">
+                    <com:Name xml:lang="en">Life expectancy at birth in Year X</com:Name>
+                    <str:CoreRepresentation>
+                        <str:TextFormat decimals="1" textType="Decimal"/>
+                    </str:CoreRepresentation>
+                </str:Concept>
+            </str:ConceptScheme>
+        </str:Concepts>
+        <str:DataStructures>
+            <str:DataStructure agencyID="ESTAT" version="1.0" id="DEMOGRAPHY">
+                <com:Name xml:lang="en">DEMOGRAPHY Data Structure</com:Name>
+                <str:DataStructureComponents>
+                    <str:DimensionList>
+                        <str:Dimension position="0">
+                            <str:ConceptIdentity>
+                                <Ref agencyID="SDMX" id="FREQ" maintainableParentID="CROSS_DOMAIN_CONCEPTS" maintainableParentVersion="1.0"/>
+                            </str:ConceptIdentity>
+                        </str:Dimension>
+                        <str:Dimension position="0">
+                            <str:ConceptIdentity>
+                                <Ref agencyID="ESTAT" id="COUNTRY" maintainableParentID="DEMO_CONCEPTS" maintainableParentVersion="1.0"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref agencyID="ESTAT" id="CL_COUNTRY" version="1.0"/>
+                                </str:Enumeration>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                        <str:Dimension position="0">
+                            <str:ConceptIdentity>
+                                <Ref agencyID="ESTAT" id="SEX" maintainableParentID="DEMO_CONCEPTS" maintainableParentVersion="1.0"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref agencyID="ESTAT" id="CL_SEX" version="1.0"/>
+                                </str:Enumeration>
+                            </str:LocalRepresentation>
+                        </str:Dimension>
+                    </str:DimensionList>
+                    <str:AttributeList>
+                        <str:Attribute assignmentStatus="Mandatory">
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref agencyID="SDMX" id="CL_DECIMALS" version="1.0"/>
+                                </str:Enumeration>
+                            </str:LocalRepresentation>
+                            <str:ConceptRole>
+                                <Ref agencyID="SDMX" id="DECIMALS" maintainableParentID="CROSS_DOMAIN_CONCEPTS" maintainableParentVersion="1.0"/>
+                            </str:ConceptRole>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="DEMO"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute assignmentStatus="Mandatory">
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref agencyID="ESTAT" id="CL_UNIT" version="1.0"/>
+                                </str:Enumeration>
+                            </str:LocalRepresentation>
+                            <str:ConceptRole>
+                                <Ref agencyID="SDMX" id="UNIT_MEASURE" maintainableParentID="CROSS_DOMAIN_CONCEPTS" maintainableParentVersion="1.0"/>
+                            </str:ConceptRole>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="DEMO"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute id="UNIT_MULT" assignmentStatus="Mandatory">
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref agencyID="SDMX" id="CL_UNIT_MULT" version="1.0"/>
+                                </str:Enumeration>
+                            </str:LocalRepresentation>
+                            <str:ConceptRole>
+                                <Ref agencyID="SDMX" id="UNIT_MULT" maintainableParentID="CROSS_DOMAIN_CONCEPTS" maintainableParentVersion="1.0"/>
+                            </str:ConceptRole>
+                            <str:AttributeRelationship>
+                                <str:Dimension>
+                                    <Ref id="DEMO"/>
+                                </str:Dimension>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                        <str:Attribute id="OBS_STATUS" assignmentStatus="Mandatory">
+                            <str:LocalRepresentation>
+                                <str:Enumeration>
+                                    <Ref agencyID="SDMX" id="CL_OBS_STATUS" version="1.0"/>
+                                </str:Enumeration>
+                            </str:LocalRepresentation>
+                            <str:ConceptRole>
+                                <Ref agencyID="SDMX" id="OBS_STATUS" maintainableParentID="CROSS_DOMAIN_CONCEPTS" maintainableParentVersion="1.0"/>
+                            </str:ConceptRole>
+                            <str:AttributeRelationship>
+                                <str:PrimaryMeasure>
+                                    <Ref id="OBS_VALUE"/>
+                                </str:PrimaryMeasure>
+                            </str:AttributeRelationship>
+                        </str:Attribute>
+                    </str:AttributeList>
+                </str:DataStructureComponents>
+            </str:DataStructure>
+        </str:DataStructures>
+    </mes:Structures>
+</mes:Structure>

@@ -68,7 +68,7 @@ public class Sdmx21StructureWriterTest {
         }
 
         try {
-            InputStream in = Sdmx21StructureParserTest.class.getResourceAsStream("/resources/sdmx21-samples/demography/esms.xml");
+            InputStream in = Sdmx21StructureParserTest.class.getResourceAsStream("/resources/abs-20/alc-structure.xml");
             doc2 = SdmxIO.parseStructure(in);
         } catch (IOException ex) {
             Logger.getLogger(Sdmx21StructureParserTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -85,6 +85,7 @@ public class Sdmx21StructureWriterTest {
     public void tearDown() {
         doc1 = null;
         doc2 = null;
+        doc3 = null;
     }
 
     @Test

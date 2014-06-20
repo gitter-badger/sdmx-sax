@@ -105,12 +105,12 @@ public class DoubleRegistry implements Registry {
     }
     public ConceptSchemeType findConceptScheme(NestedNCNameIDType csa, IDType csi) {
         ConceptSchemeType dst = left.findConceptScheme(csa, csi);
-        if( dst == null||dst.isExternalReference() ) dst = right.findConceptScheme(csa, csi);
+        if( dst == null||(dst.isExternalReference()!=null&&dst.isExternalReference()) ) dst = right.findConceptScheme(csa, csi);
         return dst;
     }
     public ConceptSchemeType findConceptSchemeById(IDType id) {
         ConceptSchemeType cs = left.findConceptSchemeById(id);
-        if( cs == null||cs.isExternalReference() ) cs = right.findConceptSchemeById(id);
+        if( cs == null||(cs.isExternalReference()!=null&&cs.isExternalReference()) ) cs = right.findConceptSchemeById(id);
         return cs;
     }
     public ConceptType findConcept(NestedNCNameIDType agency, IDType id) {
@@ -138,7 +138,7 @@ public class DoubleRegistry implements Registry {
     @Override
     public CodelistType findCodelist(String codelistAgency, String codelist) {
         CodelistType ct = left.findCodelist(codelistAgency, codelist);
-        if( ct == null||ct.isExternalReference() ) ct = right.findCodelist(codelistAgency, codelist);
+        if( ct == null||(ct.isExternalReference()!=null&&ct.isExternalReference()) ) ct = right.findCodelist(codelistAgency, codelist);
         return ct;
     }
 

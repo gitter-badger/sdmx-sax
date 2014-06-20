@@ -81,9 +81,9 @@ import sdmx.commonreferences.VersionType;
  */
 public class MaintainableType extends MaintainableBaseType {
 
-    private NestedNCNameIDType agencyID;
-    private boolean isFinal = false;
-    private boolean isExternalReference = false;
+    private NestedNCNameIDType agencyID=null;
+    private Boolean isFinal = null;
+    private Boolean isExternalReference = null;
     private ExternalReferenceAttributeGroup externalReferences = null;
 
     /**
@@ -103,28 +103,28 @@ public class MaintainableType extends MaintainableBaseType {
     /**
      * @return the isFinal
      */
-    public boolean isFinal() {
+    public Boolean isFinal() {
         return isFinal;
     }
 
     /**
      * @param isFinal the isFinal to set
      */
-    public void setFinal(boolean isFinal) {
+    public void setFinal(Boolean isFinal) {
         this.isFinal = isFinal;
     }
 
     /**
      * @return the isExternalReference
      */
-    public boolean isExternalReference() {
+    public Boolean isExternalReference() {
         return isExternalReference;
     }
 
     /**
      * @param isExternalReference the isExternalReference to set
      */
-    public void setExternalReference(boolean isExternalReference) {
+    public void setExternalReference(Boolean isExternalReference) {
         this.isExternalReference = isExternalReference;
     }
 
