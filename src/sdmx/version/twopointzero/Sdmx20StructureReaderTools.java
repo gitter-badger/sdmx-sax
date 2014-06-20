@@ -312,6 +312,9 @@ public class Sdmx20StructureReaderTools {
         // No URI in sdmx 2.0
         //        cl2.setUri(toAnyURI(cl1.getUrn()));
         cl2.setUrn(toAnyURI(cl1.getUrn()));
+        if (cl1.getParentCode() != null) {
+            cl2.setParent(toLocalItemReference(cl1.getParentCode(), ItemTypeCodelistType.CODE, ItemSchemePackageTypeCodelistType.CODELIST));
+        }
         // No Hierarchical Codelists in sdmx 2.0
         //cl2.setCodes(toCodes(cl1.getItemArray()));
         return cl2;
@@ -588,9 +591,9 @@ public class Sdmx20StructureReaderTools {
             scheme.setVersion(VersionType.ONE);
             struct.getConcepts().getConceptSchemes().add(scheme);
             CodelistType codelist = getCodelist(d1);
-            for(int i=0;i<codelist.size();i++) {
+            for (int i = 0; i < codelist.size(); i++) {
                 ConceptType concept2 = new ConceptType();
-                CodeType code = (CodeType)codelist.getItem(i);
+                CodeType code = (CodeType) codelist.getItem(i);
                 concept2.setNames(code.getNames());
                 concept2.setDescriptions(code.getDescriptions());
                 concept2.setAnnotations(code.getAnnotations());
@@ -1227,6 +1230,12 @@ public class Sdmx20StructureReaderTools {
             code = registry.findCodelist(new NestedNCNameIDType(dim.getCodelistAgency()), new IDType(dim.getCodelist()));
         }
         return code;
+    }
+
+    public LocalItemReferenceType toLocalItemReference(String parentCode, ItemTypeCodelistType obs, ItemSchemePackageTypeCodelistType pack) {
+        LocalItemRefBaseType ref = new LocalItemRefBaseType(new IDType(parentCode), obs, pack);
+        LocalItemReferenceType reference = new LocalItemReferenceType(ref);
+        return reference;
     }
 
 }
