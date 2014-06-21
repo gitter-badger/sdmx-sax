@@ -75,7 +75,7 @@ public class StructuredDataSet {
         if (conceptRef != null) {
             ConceptSchemeType con = registry.findConceptScheme(conceptRef.getRef().getAgencyId(), conceptRef.getRef().getMaintainableParentId());
             if (con == null) {
-                System.out.println("Cant find concept:" + conceptRef.getRef().getMaintainableParentId());
+                System.out.println("Cant find concept:" + conceptRef.getRef().getAgencyId()+":"+conceptRef.getRef().getMaintainableParentId());
             }
             concept = con.findConcept(c.getConceptIdentity().getRef().getId());
 
