@@ -51,18 +51,5 @@ public class ComponentListType extends IdentifiableType {
     public List<Component> getComponents() {
         return components;
     }
-
-    /**
-     * @param components the components to set
-     */
-    public void setComponents(List<Component> components) {
-        this.components = components;
-    }
-    public Component getComponent(int i) {
-        return components.get(i);
-    }
-    public void setComponent(int i,Component c) {
-        components.set(i, c);
-    }
     public int size() { return components.size(); }
 }

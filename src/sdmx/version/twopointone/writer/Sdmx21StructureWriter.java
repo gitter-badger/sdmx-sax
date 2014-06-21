@@ -17,6 +17,7 @@ import org.apache.xmlbeans.XmlOptions;
 import org.sdmx.resources.sdmxml.schemas.v21.common.AnnotationType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.AnnotationsType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.ConceptReferenceType;
+import org.sdmx.resources.sdmxml.schemas.v21.common.DataProviderReferenceType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.ItemSchemeReferenceBaseType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.LocalDimensionReferenceType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.LocalGroupKeyDescriptorReferenceType;
@@ -25,9 +26,13 @@ import org.sdmx.resources.sdmxml.schemas.v21.common.LocalPrimaryMeasureReference
 import org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.SimpleDataType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.TextType;
+import org.sdmx.resources.sdmxml.schemas.v21.message.BaseHeaderType;
+import org.sdmx.resources.sdmxml.schemas.v21.message.ContactType;
+import org.sdmx.resources.sdmxml.schemas.v21.message.PartyType;
 import org.sdmx.resources.sdmxml.schemas.v21.message.StructureDocument;
 import org.sdmx.resources.sdmxml.schemas.v21.message.StructureType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.AttributeListType;
+import org.sdmx.resources.sdmxml.schemas.v21.structure.AttributeRelationshipType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.AttributeType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.CodeType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.CodededTextFormatType;
@@ -40,20 +45,24 @@ import org.sdmx.resources.sdmxml.schemas.v21.structure.ConceptsType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.DataStructureComponentsType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.DataStructureType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.DataStructuresType;
-import org.sdmx.resources.sdmxml.schemas.v21.structure.ISOConceptReferenceType;
-import org.sdmx.resources.sdmxml.schemas.v21.structure.MaintainableType;
-import org.sdmx.resources.sdmxml.schemas.v21.structure.NameableType;
-import org.sdmx.resources.sdmxml.schemas.v21.structure.StructuresType;
-import org.sdmx.resources.sdmxml.schemas.v21.structure.TextFormatType;
-import org.sdmx.resources.sdmxml.schemas.v21.structure.UsageStatusType;
-import org.sdmx.resources.sdmxml.schemas.v21.structure.AttributeRelationshipType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.DimensionListType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.DimensionType;
+import org.sdmx.resources.sdmxml.schemas.v21.structure.ISOConceptReferenceType;
+import org.sdmx.resources.sdmxml.schemas.v21.structure.MaintainableType;
+import org.sdmx.resources.sdmxml.schemas.v21.structure.MeasureListType;
+import org.sdmx.resources.sdmxml.schemas.v21.structure.NameableType;
+import org.sdmx.resources.sdmxml.schemas.v21.structure.PrimaryMeasureType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.RepresentationType;
+import org.sdmx.resources.sdmxml.schemas.v21.structure.StructuresType;
+import org.sdmx.resources.sdmxml.schemas.v21.structure.TextFormatType;
+import org.sdmx.resources.sdmxml.schemas.v21.structure.TimeDimensionType;
+import org.sdmx.resources.sdmxml.schemas.v21.structure.UsageStatusType;
 import sdmx.common.Annotations;
 import sdmx.common.DataType;
+import sdmx.common.Name;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.datastructure.DataStructureComponents;
+import sdmx.structure.datastructure.PrimaryMeasure;
 import sdmx.structure.datastructure.SimpleDataStructureRepresentationType;
 import sdmx.version.twopointone.Sdmx21StructureReaderTools;
 
@@ -83,6 +92,7 @@ public class Sdmx21StructureWriter {
 
     public static org.sdmx.resources.sdmxml.schemas.v21.message.StructureType toStructureType(sdmx.message.StructureType structure1) {
         StructureType structure2 = StructureType.Factory.newInstance();
+        toHeader(structure2.addNewHeader(),structure1.getHeader());
         structure2.setStructures(toStructuresType(structure1.getStructures()));
         return structure2;
     }
@@ -393,17 +403,19 @@ public class Sdmx21StructureWriter {
 
         if (dsc.getDimensionList() != null) {
             toDimensionList(dsc2.addNewDimensionList(), dsc.getDimensionList());
+            if( dsc.getDimensionList().getTimeDimension()!=null){
+                toTimeDimension(dsc2.getDimensionList().addNewTimeDimension(),dsc.getDimensionList().getTimeDimension());
+            }
+        }
+        if (dsc.getMeasureList() != null) {
+            toMeasureList(dsc2.addNewMeasureList(), dsc.getMeasureList());
         }
         /*
          if (dsc.getGroup() != null) {
          toGroup(dsc2.addNewGroup(), dsc.getGroup());
          }
-         if (dsc.getMeasureList() != null) {
-         toMeasureList(dsc.getMeasureList(), dsc.getMeasureList());
-         }
-         if (dsc.getTimeDimension() != null) {
-         toTimeDimension(dsc.getTimeDimension());
-         }*/
+
+         */
     }
 
     private static void toAttributeList(AttributeListType att2, sdmx.structure.datastructure.AttributeListType att) {
@@ -437,7 +449,7 @@ public class Sdmx21StructureWriter {
             toAttributeRelationship(att2.addNewAttributeRelationship(), att.getRelationshipType());
         }
         if (att.getConceptIdentity() != null) {
-            toConceptReferenceType(att2.addNewConceptRole(), att.getConceptIdentity());
+            toConceptReferenceType(att2.addNewConceptIdentity(), att.getConceptIdentity());
         }
         if (att.getLocalRepresentation() != null) {
             toLocalRepresentation(att2.addNewLocalRepresentation(), att.getLocalRepresentation());
@@ -460,8 +472,8 @@ public class Sdmx21StructureWriter {
                 toLocalGroupKeyDescriptorReference(rel2.addNewGroup(), it.next());
             }
         }
-        if( rel.getPrimaryMeasure()!=null) {
-            toLocalPrimaryMeasureReferenceType(rel2.addNewPrimaryMeasure(),rel.getPrimaryMeasure());
+        if (rel.getPrimaryMeasure() != null) {
+            toLocalPrimaryMeasureReferenceType(rel2.addNewPrimaryMeasure(), rel.getPrimaryMeasure());
         }
     }
 
@@ -512,13 +524,20 @@ public class Sdmx21StructureWriter {
             toTextFormat(localrep2.addNewTextFormat(), localrep.getTextFormat());
         }
     }
+
     private static void toLocalRepresentation(RepresentationType localrep2, sdmx.structure.base.RepresentationType localrep) {
         if (localrep.getEnumeration() != null) {
-            toItemSchemeReference(localrep2.addNewEnumeration(), localrep.getEnumeration());
+            localrep2.addNewEnumeration();
+            toItemSchemeReference(localrep2.getEnumeration(), localrep.getEnumeration());
         }
         if (localrep.getEnumerationFormat() != null) {
-            toCodededTextFormatType(localrep2.getEnumerationFormat(), localrep.getEnumerationFormat());
+            toCodededTextFormatType(localrep2.addNewEnumerationFormat(), localrep.getEnumerationFormat());
         }
+        if (localrep.getTextFormat() != null) {
+            toTextFormat(localrep2.addNewTextFormat(), localrep.getTextFormat());
+        }
+    }
+    private static void toTDLocalRepresentation(RepresentationType localrep2, sdmx.structure.base.RepresentationType localrep) {
         if (localrep.getTextFormat() != null) {
             toTextFormat(localrep2.addNewTextFormat(), localrep.getTextFormat());
         }
@@ -559,14 +578,16 @@ public class Sdmx21StructureWriter {
         if (dim.getConceptIdentity() != null) {
             toConceptReferenceType(dim2.addNewConceptIdentity(), dim.getConceptIdentity());
         }
-        if( dim.getLocalRepresentation()!=null ) {
+        if (dim.getLocalRepresentation() != null) {
             toLocalRepresentation(dim2.addNewLocalRepresentation(), dim.getLocalRepresentation());
         }
-        if( dim.getPosition()!=null ) dim2.setPosition(dim.getPosition());
-        if( dim.getRoles()!=null) {
+        if (dim.getPosition() != null) {
+            dim2.setPosition(dim.getPosition());
+        }
+        if (dim.getRoles() != null) {
             Iterator<sdmx.commonreferences.ConceptReferenceType> it = dim.getRoles().iterator();
-            while(it.hasNext()) {
-                toConceptReferenceType(dim2.addNewConceptRole(),it.next());
+            while (it.hasNext()) {
+                toConceptReferenceType(dim2.addNewConceptRole(), it.next());
             }
         }
     }
@@ -577,6 +598,186 @@ public class Sdmx21StructureWriter {
         }
         if (reference.getUrn() != null) {
             reference2.setURN(reference.getUrn().getString());
+        }
+    }
+
+    private static void toMeasureList(MeasureListType mlist2, sdmx.structure.datastructure.MeasureListType mlist) {
+        if (mlist.getAnnotations() != null) {
+            toAnnotationsType(mlist2.addNewAnnotations(), mlist.getAnnotations());
+        }
+        if (mlist.getId() != null) {
+            mlist2.setId(mlist.getId().getString());
+        }
+        if (mlist.getUri() != null) {
+            mlist2.setUri(mlist.getUri().getString());
+        }
+        if (mlist.getUrn() != null) {
+            mlist2.setUrn(mlist.getUrn().getString());
+        }
+        if (mlist.getPrimaryMeasure() != null) {
+            toPrimaryMeasure(mlist2.addNewPrimaryMeasure(), mlist.getPrimaryMeasure());
+        }
+
+    }
+
+    private static void toPrimaryMeasure(PrimaryMeasureType prim2, PrimaryMeasure prim) {
+        if (prim.getAnnotations() != null) {
+            toAnnotationsType(prim2.addNewAnnotations(), prim.getAnnotations());
+        }
+        if (prim.getId() != null) {
+            prim2.setId(prim.getId().getString());
+        }
+        if (prim.getUri() != null) {
+            prim2.setUri(prim.getUri().getString());
+        }
+        if (prim.getUrn() != null) {
+            prim2.setUrn(prim.getUrn().getString());
+        }
+        if (prim.getConceptIdentity() != null) {
+            toConceptReferenceType(prim2.addNewConceptIdentity(), prim.getConceptIdentity());
+        }
+        if (prim.getLocalRepresentation() != null) {
+            toLocalRepresentation(prim2.addNewLocalRepresentation(), prim.getLocalRepresentation());
+        }
+    }
+
+    private static void toTimeDimension(TimeDimensionType time2, sdmx.structure.datastructure.TimeDimensionType time) {
+        if (time.getLocalRepresentation() != null) {
+            toTDLocalRepresentation(time2.addNewLocalRepresentation(), time.getLocalRepresentation());
+            //toLocalRepresentation(time2.addNewLocalRepresentation(), time.getLocalRepresentation());
+        }
+        if (time.getAnnotations() != null) {
+            toAnnotationsType(time2.addNewAnnotations(), time.getAnnotations());
+        }
+        if (time.getId() != null) {
+            time2.setId(time.getId().getString());
+        }
+        if (time.getUri() != null) {
+            time2.setUri(time.getUri().getString());
+        }
+        if (time.getUrn() != null) {
+            time2.setUrn(time.getUrn().getString());
+        }
+        if (time.getConceptIdentity() != null) {
+            toConceptReferenceType(time2.addNewConceptIdentity(), time.getConceptIdentity());
+        }
+
+    }
+
+    private static void toHeader(BaseHeaderType header2, sdmx.message.BaseHeaderType header) {
+        if( header.getId()!=null)header2.setID(header.getId());
+        if( header.getTest()!=null)header2.setTest(header.getTest());
+        if( header.getDataProvider()!=null)toDataProvider(header2.addNewDataProvider(),header.getDataProvider());
+        if( header.getDataSetAction()!=null)header2.setDataSetAction(org.sdmx.resources.sdmxml.schemas.v21.common.ActionType.Enum.forString(header.getDataSetAction().getString()));
+        if( header.getPrepared()!=null){ 
+          Calendar cal = Calendar.getInstance();
+          cal.setTime(header.getPrepared().getDate().getDate());
+          header2.setPrepared(cal);
+        }
+        if( header.getDataSetID()!=null) {
+           Iterator<sdmx.commonreferences.IDType> it = header.getDataSetID().iterator();
+           while(it.hasNext()) {
+               header2.addDataSetID(it.next().toString());
+                
+           }
+        }
+        if( header.getEmbargoDate()!=null) {
+          Calendar cal = Calendar.getInstance();
+          cal.setTime(header.getEmbargoDate().getDate());
+          header2.setEmbargoDate(cal);
+        }
+        if( header.getExtracted()!=null) {
+          Calendar cal = Calendar.getInstance();
+          cal.setTime(header.getExtracted().getDate());
+          header2.setExtracted(cal);          
+        }
+        if( header.getNames()!=null) {
+             Iterator<sdmx.common.Name> it = header.getNames().iterator();
+             while(it.hasNext()) {
+                  toTextType(header2.addNewName(),it.next());
+             }
+        }
+        if( header.getReceivers()!=null) {
+            Iterator<sdmx.message.PartyType> it = header.getReceivers().iterator();
+            while(it.hasNext()) {
+                 toPartyType(header2.addNewReceiver(),it.next());
+            }
+        }
+    }
+
+    private static void toDataProvider(DataProviderReferenceType reference2, sdmx.commonreferences.DataProviderReferenceType reference) {
+        if (reference.getRef() != null) {
+            toRef(reference2.addNewRef(), reference.getRef());
+        }
+        if (reference.getUrn() != null) {
+            reference2.setURN(reference.getUrn().getString());
+        }
+    }
+
+    private static void toPartyType(PartyType party2, sdmx.message.PartyType party) {
+        if( party.getId()!=null)party2.setId(party.getId().toString());
+        if( party.getNames()!=null) {
+           Iterator<Name> it = party.getNames().iterator();
+           while(it.hasNext()) {
+               toTextType(party2.addNewName(),it.next());
+           }
+        }
+        if( party.getContacts()!=null) {
+            Iterator<sdmx.message.ContactType> it = party.getContacts().iterator();
+            while(it.hasNext()) {
+               toContactType(party2.addNewContact(),it.next());
+            }
+        }
+    }
+
+    private static void toContactType(ContactType contact2, sdmx.message.ContactType contact) {
+        if( contact.getNames()!=null) {
+           Iterator<sdmx.common.Name> it = contact.getNames().iterator();
+           while(it.hasNext()) {
+                 toTextType(contact2.addNewName(), it.next());
+           }
+        }
+        if( contact.getDepartments()!=null) {
+           Iterator<sdmx.common.TextType> it = contact.getDepartments().iterator();
+           while(it.hasNext()) {
+                 toTextType(contact2.addNewDepartment(),it.next());
+           }
+        }
+        if( contact.getEmails()!=null) {
+           Iterator<String> it = contact.getEmails().iterator();
+           while(it.hasNext()) {
+                contact2.addNewEmail().setStringValue(it.next());
+           }
+        }
+        if( contact.getFaxes()!=null) {
+           Iterator<String> it = contact.getFaxes().iterator();
+           while(it.hasNext()) {
+                contact2.addNewFax().setStringValue(it.next());
+           }        
+        }
+        if( contact.getRoles()!=null) {
+            Iterator<sdmx.common.TextType> it = contact.getRoles().iterator();
+            while(it.hasNext()) {
+                toTextType(contact2.addNewRole(), it.next());
+            }
+        }
+        if( contact.getTelephones()!=null) {
+            Iterator<String> it = contact.getTelephones().iterator();
+            while(it.hasNext()) {
+                  contact2.addNewTelephone().setStringValue(it.next());
+            }
+        }
+        if( contact.getUris()!=null) {
+            Iterator<sdmx.xml.anyURI> it = contact.getUris().iterator();
+            while(it.hasNext()) {
+                contact2.addNewURI().setStringValue(it.next().getString());
+            }
+        }
+        if( contact.getX400s()!=null) {
+            Iterator<String> it = contact.getX400s().iterator();
+            while(it.hasNext()) {
+               contact2.addX400(it.next());
+            }
         }
     }
 }

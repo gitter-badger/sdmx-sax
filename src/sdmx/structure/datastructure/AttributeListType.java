@@ -52,26 +52,18 @@ import sdmx.structure.datastructure.AttributeBaseType;
  *  Copyright James Gardner 2014
  */
 public class AttributeListType extends AttributeListBaseType {
-   
+   List<AttributeType> attributes = new ArrayList<AttributeType>();
+    
    public List<AttributeType> getAttributes() {
-       List<AttributeType> list = new ArrayList<AttributeType>();
-       for(int i=0;i<super.getComponents().size();i++) {
-           list.add( getAttribute(i) );
-       }
-       return list;
+       return attributes;
    }
    
    public void setAttributes(List<AttributeType> at) {
-       List<Component> list = new ArrayList<Component>();
-       for(int i=0;i<at.size();i++) {
-           list.add(at.get(i));
-       }
-       super.setComponents(list);
+       this.attributes=at;
    }
    
    public AttributeType getAttribute(int i) {
-       Component c = getComponent(i);
-       AttributeBaseType at=(AttributeType)c;
-       return (AttributeType) at;
+       return attributes.get(i);
    }
+   public int size() { return attributes.size();}
 }

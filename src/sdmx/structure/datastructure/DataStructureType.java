@@ -122,7 +122,7 @@ public class DataStructureType extends StructureType {
             System.out.println();
         }
         System.out.println("Time");
-        TimeDimensionType dim = components.getTimeDimension();
+        TimeDimensionType dim = components.getDimensionList().getTimeDimension();
         if (dim != null) {
             System.out.print(dim.getConceptIdentity().getRef().getId());
             if (dim.getLocalRepresentation()!=null&&dim.getLocalRepresentation().getEnumeration() != null) {
@@ -165,7 +165,7 @@ public class DataStructureType extends StructureType {
         for (MeasureDimensionType dim : components.getMeasureList().getMeasures()) {
             if( dim.identifiesMe(col))return dim;
         }
-        TimeDimensionType dim = components.getTimeDimension();
+        TimeDimensionType dim = components.getDimensionList().getTimeDimension();
         if( dim.identifiesMe(col))return dim;
         PrimaryMeasure dim2 = components.getMeasureList().getPrimaryMeasure();
         if( dim2.identifiesMe(col))return dim2;

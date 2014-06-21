@@ -48,7 +48,7 @@ public class DataStructureComponentsType extends DataStructureComponentsBaseType
      private Group group=null;
      private AttributeListType attributeList = null;
      private MeasureListType measureList = null;
-     private TimeDimensionType timeDimension = null;
+     
 
     /**
      * @return the dimensionList
@@ -106,19 +106,7 @@ public class DataStructureComponentsType extends DataStructureComponentsBaseType
         this.measureList = measureList;
     }
 
-    /**
-     * @return the timeDimension
-     */
-    public TimeDimensionType getTimeDimension() {
-        return timeDimension;
-    }
 
-    /**
-     * @param timeDimension the timeDimension to set
-     */
-    public void setTimeDimension(TimeDimensionType timeDimension) {
-        this.timeDimension = timeDimension;
-    }
     public Component findDimension(String name) {
         for(int i=0;i<dimensionList.size();i++) {
             //System.out.println("Dim="+dimensionList);
@@ -126,26 +114,27 @@ public class DataStructureComponentsType extends DataStructureComponentsBaseType
             //System.out.println("Dim3="+dimensionList.getDimension(i).getLocalRepresentation().getEnumeration().getRef().getId());
             //System.out.println("Dim4="+dimensionList.getDimension(i).getConceptIdentity().getRef());
             //System.out.println("Dim5="+dimensionList.getDimension(i).getConceptIdentity().getRef().getId());
-            if( dimensionList.getDimension(i).getConceptIdentity().getRef().getId().equals(name))return dimensionList.getComponent(i);
+            if( dimensionList.getDimension(i).getConceptIdentity().getRef().getId().equals(name))return dimensionList.getDimension(i);
         }
         for(int i=0;i<attributeList.size();i++) {
-            if( attributeList.getAttribute(i).getConceptIdentity().getRef().getId().equals(name))return attributeList.getComponent(i);
+            if( attributeList.getAttribute(i).getConceptIdentity().getRef().getId().equals(name))return attributeList.getAttribute(i);
         }
         for(int i=0;i<measureList.size();i++) {
-            if( measureList.getMeasure(i).getConceptIdentity().getRef().getId().equals(name))return measureList.getComponent(i);
+            if( measureList.getMeasure(i).getConceptIdentity().getRef().getId().equals(name))return measureList.getMeasure(i);
         }
-        if( timeDimension!=null&& timeDimension.getConceptIdentity().getRef().getId().equals(name))return timeDimension;
+        if( dimensionList.getTimeDimension()!=null&& dimensionList.getTimeDimension().getConceptIdentity().getRef().getId().equals(name))return dimensionList.getTimeDimension();
         if( measureList.getPrimaryMeasure()!=null&&measureList.getPrimaryMeasure().getConceptIdentity().getRef().getId().equals(name))return measureList.getPrimaryMeasure();
         // These are the 2 hard coded values in the Sdmx Specification
         if( "TIME_PERIOD".equals(name)) {
-            return timeDimension;
+            return dimensionList.getTimeDimension();
         }
         if( "OBS_VALUE".equals(name) ) {
             return measureList.getPrimaryMeasure();
         }
+//        System.out.println("Can't Find:"+name);
         return null;
     }
     public int size() {
-        return dimensionList.size()+attributeList.size()+measureList.size()+((timeDimension!=null)?1:0);
+        return dimensionList.size()+attributeList.size()+measureList.size()+((dimensionList.getTimeDimension()!=null)?1:0)+(measureList.getPrimaryMeasure()!=null?1:0);
     }
 }

@@ -34,14 +34,5 @@ import java.util.List;
  */
 public class Grouping extends GroupingType {
 
-    @Override
-    public List<ComponentList> getComponents() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setComponents(List<ComponentList> components) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
+   
 }

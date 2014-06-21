@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <mes:Structure xmlns:mes="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:str="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">
+    <mes:Header>
+        <mes:ID>DEMOGRAPHY</mes:ID>
+        <mes:Test>false</mes:Test>
+        <mes:Prepared>2010-11-13T08:00:33.000+08:00</mes:Prepared>
+    </mes:Header>
     <mes:Structures>
         <str:Codelists>
             <str:Codelist agencyID="SDMX" isExternalReference="true" isFinal="false" structureURL="../common/common.xml" version="1.0" id="CL_DECIMALS">
@@ -191,17 +196,25 @@
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
+                        <str:TimeDimension id="TIME_PERIOD">
+                            <str:ConceptIdentity>
+                                <Ref agencyID="SDMX" id="TIME_PERIOD" maintainableParentID="CROSS_DOMAIN_CONCEPTS" maintainableParentVersion="1.0"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat textType="ObservationalTimePeriod"/>
+                            </str:LocalRepresentation>
+                        </str:TimeDimension>
                     </str:DimensionList>
                     <str:AttributeList>
                         <str:Attribute assignmentStatus="Mandatory">
+                            <str:ConceptIdentity>
+                                <Ref agencyID="SDMX" id="DECIMALS" maintainableParentID="CROSS_DOMAIN_CONCEPTS" maintainableParentVersion="1.0"/>
+                            </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
                                     <Ref agencyID="SDMX" id="CL_DECIMALS" version="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
-                            <str:ConceptRole>
-                                <Ref agencyID="SDMX" id="DECIMALS" maintainableParentID="CROSS_DOMAIN_CONCEPTS" maintainableParentVersion="1.0"/>
-                            </str:ConceptRole>
                             <str:AttributeRelationship>
                                 <str:Dimension>
                                     <Ref id="DEMO"/>
@@ -209,14 +222,14 @@
                             </str:AttributeRelationship>
                         </str:Attribute>
                         <str:Attribute assignmentStatus="Mandatory">
+                            <str:ConceptIdentity>
+                                <Ref agencyID="SDMX" id="UNIT_MEASURE" maintainableParentID="CROSS_DOMAIN_CONCEPTS" maintainableParentVersion="1.0"/>
+                            </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
                                     <Ref agencyID="ESTAT" id="CL_UNIT" version="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
-                            <str:ConceptRole>
-                                <Ref agencyID="SDMX" id="UNIT_MEASURE" maintainableParentID="CROSS_DOMAIN_CONCEPTS" maintainableParentVersion="1.0"/>
-                            </str:ConceptRole>
                             <str:AttributeRelationship>
                                 <str:Dimension>
                                     <Ref id="DEMO"/>
@@ -224,14 +237,14 @@
                             </str:AttributeRelationship>
                         </str:Attribute>
                         <str:Attribute id="UNIT_MULT" assignmentStatus="Mandatory">
+                            <str:ConceptIdentity>
+                                <Ref agencyID="SDMX" id="UNIT_MULT" maintainableParentID="CROSS_DOMAIN_CONCEPTS" maintainableParentVersion="1.0"/>
+                            </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
                                     <Ref agencyID="SDMX" id="CL_UNIT_MULT" version="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
-                            <str:ConceptRole>
-                                <Ref agencyID="SDMX" id="UNIT_MULT" maintainableParentID="CROSS_DOMAIN_CONCEPTS" maintainableParentVersion="1.0"/>
-                            </str:ConceptRole>
                             <str:AttributeRelationship>
                                 <str:Dimension>
                                     <Ref id="DEMO"/>
@@ -239,14 +252,14 @@
                             </str:AttributeRelationship>
                         </str:Attribute>
                         <str:Attribute id="OBS_STATUS" assignmentStatus="Mandatory">
+                            <str:ConceptIdentity>
+                                <Ref agencyID="SDMX" id="OBS_STATUS" maintainableParentID="CROSS_DOMAIN_CONCEPTS" maintainableParentVersion="1.0"/>
+                            </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
                                     <Ref agencyID="SDMX" id="CL_OBS_STATUS" version="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
-                            <str:ConceptRole>
-                                <Ref agencyID="SDMX" id="OBS_STATUS" maintainableParentID="CROSS_DOMAIN_CONCEPTS" maintainableParentVersion="1.0"/>
-                            </str:ConceptRole>
                             <str:AttributeRelationship>
                                 <str:PrimaryMeasure>
                                     <Ref id="OBS_VALUE"/>
@@ -254,6 +267,16 @@
                             </str:AttributeRelationship>
                         </str:Attribute>
                     </str:AttributeList>
+                    <str:MeasureList>
+                        <str:PrimaryMeasure id="OBS_VALUE">
+                            <str:ConceptIdentity>
+                                <Ref agencyID="SDMX" id="OBS_VALUE" maintainableParentID="CROSS_DOMAIN_CONCEPTS" maintainableParentVersion="1.0"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat textType="Decimal"/>
+                            </str:LocalRepresentation>
+                        </str:PrimaryMeasure>
+                    </str:MeasureList>
                 </str:DataStructureComponents>
             </str:DataStructure>
         </str:DataStructures>

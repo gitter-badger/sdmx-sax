@@ -60,7 +60,7 @@ public class Cube {
             }
             dim = myDim;
         }
-        IDType dimId = struct.getDataStructureComponents().getTimeDimension().getId();
+        IDType dimId = struct.getDataStructureComponents().getDimensionList().getTimeDimension().getId();
         CubeDimension myDim = dim.getSubDimension(obs.getValue(mapper.getColumnIndex(dimId.toString())));
         if (myDim == null) {
             myDim = new TimeCubeDimension(dimId.toString(), obs.getValue(mapper.getColumnIndex(dimId.toString())));

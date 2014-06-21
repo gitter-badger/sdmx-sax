@@ -857,11 +857,12 @@ public class Sdmx21StructureReaderTools {
         AttributeListType atl = new AttributeListType();
         List<AttributeType> atts = new ArrayList<AttributeType>();
         for (int i = 0; i < ds1.getAttributeList().getAttributeArray().length; i++) {
+            System.out.println("Att="+ds1.getAttributeList().getAttributeArray(i).getId());
             atts.add(toAttribute(ds1.getAttributeList().getAttributeArray(i)));
         }
         if( ds1.getDimensionList().getTimeDimensionArray().length>0) {
             TimeDimensionType time = toTimeDimension(ds1.getDimensionList().getTimeDimensionArray()[0]);
-            ds2.setTimeDimension(time);
+            dimList.setTimeDimension(time);
         }
         atl.setAttributes(atts);
         ds2.setDimensionList(dimList);
@@ -978,7 +979,7 @@ public class Sdmx21StructureReaderTools {
         at2.setUri(toAnyURI((at1.getUri())));
         at2.setUrn(toAnyURI((at1.getUrn())));
         at2.setRelationshipType(toAttributeRelationShipType(at1.getAttributeRelationship()));
-        at2.setAssignmentStatus(sdmx.structure.datastructure.UsageStatusType.fromStringWithException(at1.getAssignmentStatus().toString()));
+        if( at1.getAssignmentStatus()!=null)at2.setAssignmentStatus(sdmx.structure.datastructure.UsageStatusType.fromStringWithException(at1.getAssignmentStatus().toString()));
         return at2;
     }
 
@@ -1426,6 +1427,7 @@ public class Sdmx21StructureReaderTools {
     }
 
     public static SenderType toSenderType(org.sdmx.resources.sdmxml.schemas.v21.message.SenderType sender) throws URISyntaxException {
+        if( sender == null ) return null;
         SenderType st = new SenderType();
         st.setContacts(toContactList(sender.getContactArray()));
         st.setId(toIDType(sender.getId()));

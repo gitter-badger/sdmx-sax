@@ -33,27 +33,17 @@ import sdmx.structure.base.ComponentListType;
  */
 public class MeasureListType extends ComponentListType {
     private PrimaryMeasure primary = null;
-
+    private List<MeasureDimensionType> measures = new ArrayList<MeasureDimensionType>();
    public List<MeasureDimensionType> getMeasures() {
-       List<MeasureDimensionType> list = new ArrayList<MeasureDimensionType>();
-       for(int i=0;i<super.getComponents().size();i++) {
-           list.add( getMeasure(i) );
-       }
-       return list;
+       return measures;
    }
    
    public void setMeasures(List<MeasureDimensionType> at) {
-       List<Component> list = new ArrayList<Component>();
-       for(int i=0;i<at.size();i++) {
-           list.add(at.get(i));
-       }
-       super.setComponents(list);
+       measures = at;
    }
    
    public MeasureDimensionType getMeasure(int i) {
-       Component c = getComponent(i);
-       MeasureDimensionType at=(MeasureDimensionType)c;
-       return (MeasureDimensionType) at;
+       return measures.get(i);
    }
     
     /**

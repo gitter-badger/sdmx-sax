@@ -39,7 +39,7 @@ import sdmx.structure.base.GroupingType;
  *  Copyright James Gardner 2014
  */
 public class DataStructureComponentsBaseType extends GroupingType {
-
+/*
     @Override
     public List<ComponentList> getComponents() {
         return null;
@@ -49,5 +49,5 @@ public class DataStructureComponentsBaseType extends GroupingType {
     public void setComponents(List<ComponentList> components) {
         return;
     }
-    
+  */  
 }

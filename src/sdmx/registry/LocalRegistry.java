@@ -151,7 +151,7 @@ public class LocalRegistry implements Registry {
         ConceptSchemeType cs = null;
         for (int i = 0; i < structures.size(); i++) {
             cs = structures.get(i).findConceptScheme(agencyID, conceptRef);
-            if (cs != null&&!cs.isExternalReference()) {
+            if (cs != null&&cs.isExternalReference()!=null&&!cs.isExternalReference()) {
                 return cs;
             }
         }
@@ -161,7 +161,7 @@ public class LocalRegistry implements Registry {
     public CodelistType findCodelist(ItemSchemeReferenceBaseType enumeration) {
         for (int i = 0; i < structures.size(); i++) {
             CodelistType cs = structures.get(i).findCodelist(enumeration);
-            if (cs != null&&!cs.isExternalReference()) {
+            if (cs != null&&cs.isExternalReference()!=null&&!cs.isExternalReference()) {
                 return cs;
             }
         }
@@ -185,7 +185,7 @@ public class LocalRegistry implements Registry {
     public CodelistType findCodelist(String codelistAgency, String codelist, String codelistVersion) {
         for (int i = 0; i < structures.size(); i++) {
             CodelistType cl = structures.get(i).findCodelist(codelistAgency, codelist, codelistVersion);
-            if (cl != null&&!cl.isExternalReference()) {
+            if (cl != null&&cl.isExternalReference()!=null&&!cl.isExternalReference()) {
                 return cl;
             }
         }
@@ -195,7 +195,7 @@ public class LocalRegistry implements Registry {
     public ConceptSchemeType findConceptScheme(NestedNCNameIDType csa, IDType csi) {
         for (int i = 0; i < structures.size(); i++) {
             ConceptSchemeType cs = structures.get(i).findConceptScheme(csa, csi);
-            if (cs != null&&!cs.isExternalReference()) {
+            if (cs != null&&cs.isExternalReference()!=null&&!cs.isExternalReference()) {
                 return cs;
             }
         }
@@ -205,7 +205,7 @@ public class LocalRegistry implements Registry {
     public ConceptSchemeType findConceptSchemeById(IDType id) {
         for (int i = 0; i < structures.size(); i++) {
             ConceptSchemeType cs = structures.get(i).findConceptSchemeById(id);
-            if (cs != null&&!cs.isExternalReference()) {
+            if (cs != null&&cs.isExternalReference()!=null&&!cs.isExternalReference()) {
                 return cs;
             }
         }
@@ -238,7 +238,7 @@ public class LocalRegistry implements Registry {
     public CodelistType findCodelist(NestedNCNameIDType codelistAgency, IDType codelist) {
         for (int i = 0; i < structures.size(); i++) {
             CodelistType cl = structures.get(i).findCodelist(codelistAgency, codelist);
-            if (cl != null&&!cl.isExternalReference()) {
+            if (cl != null&&cl.isExternalReference()!=null&&!cl.isExternalReference()) {
                 return cl;
             }
         }

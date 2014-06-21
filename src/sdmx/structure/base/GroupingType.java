@@ -39,13 +39,5 @@ import java.util.List;
  *  Copyright James Gardner 2014
  */
 public abstract class GroupingType {
-    /**
-     * @return the components
-     */
-    public abstract List<ComponentList> getComponents();
 
-    /**
-     * @param components the components to set
-     */
-    public abstract void setComponents(List<ComponentList> components);
 }

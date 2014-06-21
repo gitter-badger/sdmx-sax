@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <mes:Structure xmlns:mes="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:str="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">
+    <mes:Header>
+        <mes:ID>none</mes:ID>
+        <mes:Test>false</mes:Test>
+        <mes:Prepared>2013-06-24T12:30:59.000+08:00</mes:Prepared>
+    </mes:Header>
     <mes:Structures>
         <str:Codelists>
-            <str:Codelist agencyID="ABS" isExternalReference="false" isFinal="false" id="CL_8NRPVER5_OBS_STATUS">
+            <str:Codelist agencyID="ABS" isExternalReference="false" isFinal="false" version="1.0" id="CL_8NRPVER5_OBS_STATUS">
                 <com:Name xml:lang="en">Observation Status</com:Name>
                 <com:Name xml:lang="fr">Statut d'observation</com:Name>
             </str:Codelist>
-            <str:Codelist agencyID="ABS" isExternalReference="false" isFinal="false" id="CL_8NRPVER5_REGION">
+            <str:Codelist agencyID="ABS" isExternalReference="false" isFinal="false" version="1.0" id="CL_8NRPVER5_REGION">
                 <com:Name xml:lang="en">8NRPVER5_REGION codelist</com:Name>
                 <str:Code id="ASGS">
                     <com:Description xml:lang="en">Australian Statistical Geography Standard (ASGS)</com:Description>
@@ -18966,7 +18971,7 @@
                     </str:Parent>
                 </str:Code>
             </str:Codelist>
-            <str:Codelist agencyID="ABS" isExternalReference="false" isFinal="false" id="CL_8NRPVER5_DATA_ITEM">
+            <str:Codelist agencyID="ABS" isExternalReference="false" isFinal="false" version="1.0" id="CL_8NRPVER5_DATA_ITEM">
                 <com:Name xml:lang="en">8NRPVER5_DATA_ITEM codelist</com:Name>
                 <str:Code id="ECON">
                     <com:Description xml:lang="en">ECONOMY</com:Description>
@@ -22016,14 +22021,14 @@
                     </str:Parent>
                 </str:Code>
             </str:Codelist>
-            <str:Codelist agencyID="ABS" isExternalReference="false" isFinal="false" id="CL_8NRPVER5_FREQUENCY">
+            <str:Codelist agencyID="ABS" isExternalReference="false" isFinal="false" version="1.0" id="CL_8NRPVER5_FREQUENCY">
                 <com:Name xml:lang="en">8NRPVER5_FREQUENCY codelist</com:Name>
                 <str:Code id="A">
                     <com:Description xml:lang="en">Annual</com:Description>
                     <com:Description xml:lang="fr">Annuelle</com:Description>
                 </str:Code>
             </str:Codelist>
-            <str:Codelist agencyID="ABS" isExternalReference="false" isFinal="false" id="CL_8NRPVER5_TIME">
+            <str:Codelist agencyID="ABS" isExternalReference="false" isFinal="false" version="1.0" id="CL_8NRPVER5_TIME">
                 <com:Name xml:lang="en">8NRPVER5_TIME codelist</com:Name>
                 <str:Code id="2006">
                     <com:Description xml:lang="en">2006</com:Description>
@@ -22050,7 +22055,7 @@
                     <com:Description xml:lang="fr">2011</com:Description>
                 </str:Code>
             </str:Codelist>
-            <str:Codelist agencyID="ABS" isExternalReference="false" isFinal="false" id="CL_8NRPVER5_TIME_FORMAT">
+            <str:Codelist agencyID="ABS" isExternalReference="false" isFinal="false" version="1.0" id="CL_8NRPVER5_TIME_FORMAT">
                 <com:Name xml:lang="en">8NRPVER5_TIME_FORMAT codelist</com:Name>
                 <str:Code id="P1Y">
                     <com:Description xml:lang="en">Annual</com:Description>
@@ -22120,7 +22125,7 @@
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_8NRPVER5_REGION"/>
+                                    <Ref agencyID="ABS" id="CL_8NRPVER5_REGION" version="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
@@ -22130,7 +22135,7 @@
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_8NRPVER5_DATA_ITEM"/>
+                                    <Ref agencyID="ABS" id="CL_8NRPVER5_DATA_ITEM" version="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
@@ -22140,33 +22145,49 @@
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_8NRPVER5_FREQUENCY"/>
+                                    <Ref agencyID="ABS" id="CL_8NRPVER5_FREQUENCY" version="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
+                        <str:TimeDimension id="TIME">
+                            <str:ConceptIdentity>
+                                <Ref agencyID="ABS" id="TIME" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation/>
+                        </str:TimeDimension>
                     </str:DimensionList>
                     <str:AttributeList>
                         <str:Attribute id="OBS_STATUS">
+                            <str:ConceptIdentity>
+                                <Ref agencyID="ABS" id="OBS_STATUS" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                            </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_8NRPVER5_OBS_STATUS"/>
+                                    <Ref agencyID="ABS" id="CL_8NRPVER5_OBS_STATUS" version="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
-                            <str:ConceptRole>
-                                <Ref agencyID="ABS" id="OBS_STATUS" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
-                            </str:ConceptRole>
                         </str:Attribute>
                         <str:Attribute id="TIME_FORMAT">
+                            <str:ConceptIdentity>
+                                <Ref agencyID="ABS" id="TIME_FORMAT" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                            </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_8NRPVER5_TIME_FORMAT"/>
+                                    <Ref agencyID="ABS" id="CL_8NRPVER5_TIME_FORMAT" version="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
-                            <str:ConceptRole>
-                                <Ref agencyID="ABS" id="TIME_FORMAT" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
-                            </str:ConceptRole>
                         </str:Attribute>
                     </str:AttributeList>
+                    <str:MeasureList>
+                        <str:PrimaryMeasure id="OBS_VALUE">
+                            <str:ConceptIdentity>
+                                <Ref agencyID="OECD" id="OBS_VALUE" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                            </str:ConceptIdentity>
+                            <str:LocalRepresentation>
+                                <str:TextFormat endValue="0.0" interval="0.0" startValue="0.0" textType="Double"/>
+                            </str:LocalRepresentation>
+                        </str:PrimaryMeasure>
+                    </str:MeasureList>
                 </str:DataStructureComponents>
             </str:DataStructure>
         </str:DataStructures>

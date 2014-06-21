@@ -10,6 +10,7 @@ import java.io.Reader;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -198,7 +199,10 @@ public class Sdmx20StructureReaderTools {
         CodelistType cl2 = new CodelistType();
         cl2.setId(toIDType(cl1.getId()));
         cl2.setAgencyID(toNestedNCNameIDType(cl1.getAgencyID()));
-        cl2.setVersion(toVersionType(cl1.getVersion()));
+        if( cl1.getVersion()!=null){cl2.setVersion(toVersionType(cl1.getVersion()));}
+        else {
+           cl2.setVersion(VersionType.ONE);
+        }
         cl2.setAnnotations(toAnnotations(cl1.getAnnotations()));
         cl2.setDescriptions(toDescriptions(cl1.getDescriptionArray()));
         cl2.setExternalReference(cl1.getIsExternalReference());
@@ -521,7 +525,9 @@ public class Sdmx20StructureReaderTools {
         currentDataStructure.setDimensionList(toDimensionListType(c1.getDimensionArray()));
         currentDataStructure.setAttributeList(toAttributeList(c1.getAttributeArray()));
         currentDataStructure.setMeasureList(toMeasureList(c1));
-        currentDataStructure.setTimeDimension(toTimeDimension(c1.getTimeDimension()));
+        if( currentDataStructure.getDimensionList()!=null&&c1.getTimeDimension()!=null) {
+            currentDataStructure.getDimensionList().setTimeDimension(toTimeDimension(c1.getTimeDimension()));
+        }
         return currentDataStructure;
     }
 
@@ -866,6 +872,7 @@ public class Sdmx20StructureReaderTools {
 
     public List<IDType> toDataSetIDTypeList(String idtype) {
         List<IDType> list = new ArrayList<IDType>();
+        if( idtype==null ) return list;
         list.add(toIDType(idtype));
         return list;
     }
