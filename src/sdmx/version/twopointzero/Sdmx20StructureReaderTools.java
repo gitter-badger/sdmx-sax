@@ -85,6 +85,7 @@ import sdmx.structure.datastructure.MeasureListType;
 import sdmx.structure.datastructure.PrimaryMeasure;
 import sdmx.structure.datastructure.SimpleDataStructureRepresentationType;
 import sdmx.structure.datastructure.TimeDimensionType;
+import sdmx.structure.datastructure.UsageStatusType;
 import static sdmx.version.twopointone.Sdmx21StructureReaderTools.toContactList;
 import static sdmx.version.twopointone.Sdmx21StructureReaderTools.toIDType;
 import static sdmx.version.twopointone.Sdmx21StructureReaderTools.toNames;
@@ -310,7 +311,16 @@ public class Sdmx20StructureReaderTools {
         cl2.setAnnotations(toAnnotations(cl1.getAnnotations()));
         // No Name Array in sdmx 2.0
         //cl2.setNames(toNames(cl1.getNameArray()));
-        cl2.setDescriptions(toDescriptions(cl1.getDescriptionArray()));
+        //cl2.setDescriptions(toDescriptions(cl1.getDescriptionArray()));
+        List<Name> names = new ArrayList<Name>(cl1.getDescriptionArray().length);
+        List<Description> descs = toDescriptions(cl1.getDescriptionArray());
+        Iterator<Description> it = descs.iterator();
+        while(it.hasNext()) {
+            Description desc = it.next();
+            Name name = new Name(desc.getLang(),desc.getText());
+            names.add(name);
+        }
+        cl2.setNames(names);
         // Codelist Id is 'Value' in sdmx 2.0
         cl2.setId(toIDType(cl1.getValue().toString()));
         // No URI in sdmx 2.0
@@ -372,6 +382,8 @@ public class Sdmx20StructureReaderTools {
         standalone.setId(new IDType("STANDALONE_CONCEPT_SCHEME"));
         standalone.setAgencyID(agency);
         standalone.setVersion(new VersionType("1.0"));
+        Name name = new Name("en","Standalone Concept Scheme");
+        standalone.setNames(Collections.singletonList(name));
         list.add(standalone);
         return standalone;
     }
@@ -558,7 +570,7 @@ public class Sdmx20StructureReaderTools {
         CodelistType code = getCodelist(d1);
         if (concept != null) {
             d2.setConceptIdentity(toConceptReference(cscheme, concept));
-            d2.setId(concept.getId());
+            //d2.setId(concept.getId());
         }
         //System.out.println("Dim:"+d1.getConceptRef()+":code="+code);
         if (code != null) {
@@ -582,7 +594,7 @@ public class Sdmx20StructureReaderTools {
         MeasureDimensionType d2 = new MeasureDimensionType();
         if (concept != null) {
             d2.setConceptIdentity(toConceptReference(cscheme, concept));
-            d2.setId(concept.getId());
+            //d2.setId(concept.getId());
         }
         //System.out.println("Dim:"+d1.getConceptRef()+":code="+code);
         String id = d2.getId().toString();
@@ -712,6 +724,11 @@ public class Sdmx20StructureReaderTools {
         lr2.setEnumeration(toConceptSchemeReference(cscheme));
         return lr2;
     }
+    public RepresentationType toLocalRepresentation(TextFormatType tf) throws TypeValueNotFoundException, URISyntaxException {
+        SimpleDataStructureRepresentationType lr2 = new SimpleDataStructureRepresentationType();
+        lr2.setTextFormat(tf);
+        return lr2;
+    }
 
     public ConceptSchemeReferenceType toConceptSchemeReference(ConceptSchemeType cscheme) {
         ConceptSchemeReferenceType ref = new ConceptSchemeReferenceType(toConceptSchemeRefType(cscheme), cscheme.getUri());
@@ -769,7 +786,8 @@ public class Sdmx20StructureReaderTools {
         CodelistType code = getCodelist(a1);
         if (concept != null) {
             a2.setConceptIdentity(toConceptReference(cscheme, concept));
-            a2.setId(concept.getId());
+            //a2.setId(concept.getId());
+            a2.setAssignmentStatus(UsageStatusType.fromString(a1.getAssignmentStatus().toString()));
         }
         if (code != null) {
             a2.setLocalRepresentation(toLocalRepresentation(code, toTextFormatType(a1.getTextFormat())));
@@ -991,7 +1009,7 @@ public class Sdmx20StructureReaderTools {
         CodelistType code = getCodelist(pm1);
         if (concept != null) {
             pm2.setConceptIdentity(toConceptReference(cscheme, concept));
-            pm2.setId(concept.getId());
+            //pm2.setId(concept.getId());
         }
         pm2.setLocalRepresentation(toLocalRepresentation(code, toTextFormatType(pm1.getTextFormat())));
         return pm2;
@@ -1007,11 +1025,14 @@ public class Sdmx20StructureReaderTools {
         CodelistType code = getCodelist(td1);
         if (concept != null) {
             td2.setConceptIdentity(toConceptReference(cscheme, concept));
-            td2.setId(concept.getId());
+            //td2.setId(concept.getId());
         }
+        
         if (code != null) {
             td2.setLocalRepresentation(toLocalRepresentation(code, toTextFormatType(td1.getTextFormat())));
             td2.getLocalRepresentation().setEnumeration(toItemSchemeReference(code));
+        }else {
+            td2.setLocalRepresentation(toLocalRepresentation(toTextFormatType(td1.getTextFormat())));
         }
         return td2;
     }

@@ -19,6 +19,7 @@ import org.sdmx.resources.sdmxml.schemas.v21.common.AnnotationsType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.ConceptReferenceType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.DataProviderReferenceType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.ItemSchemeReferenceBaseType;
+import org.sdmx.resources.sdmxml.schemas.v21.common.ItemSchemeReferenceType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.LocalDimensionReferenceType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.LocalGroupKeyDescriptorReferenceType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.LocalItemReferenceType;
@@ -92,7 +93,7 @@ public class Sdmx21StructureWriter {
 
     public static org.sdmx.resources.sdmxml.schemas.v21.message.StructureType toStructureType(sdmx.message.StructureType structure1) {
         StructureType structure2 = StructureType.Factory.newInstance();
-        toHeader(structure2.addNewHeader(),structure1.getHeader());
+        toHeader(structure2.addNewHeader(), structure1.getHeader());
         structure2.setStructures(toStructuresType(structure1.getStructures()));
         return structure2;
     }
@@ -403,8 +404,8 @@ public class Sdmx21StructureWriter {
 
         if (dsc.getDimensionList() != null) {
             toDimensionList(dsc2.addNewDimensionList(), dsc.getDimensionList());
-            if( dsc.getDimensionList().getTimeDimension()!=null){
-                toTimeDimension(dsc2.getDimensionList().addNewTimeDimension(),dsc.getDimensionList().getTimeDimension());
+            if (dsc.getDimensionList().getTimeDimension() != null) {
+                toTimeDimension(dsc2.getDimensionList().addNewTimeDimension(), dsc.getDimensionList().getTimeDimension());
             }
         }
         if (dsc.getMeasureList() != null) {
@@ -516,29 +517,34 @@ public class Sdmx21StructureWriter {
     private static void toLocalRepresentation(RepresentationType localrep2, SimpleDataStructureRepresentationType localrep) {
         if (localrep.getEnumeration() != null) {
             toItemSchemeReference(localrep2.addNewEnumeration(), localrep.getEnumeration());
-        }
-        if (localrep.getEnumerationFormat() != null) {
-            toCodededTextFormatType(localrep2.getEnumerationFormat(), localrep.getEnumerationFormat());
-        }
-        if (localrep.getTextFormat() != null) {
+            if (localrep.getEnumerationFormat() != null) {
+                toCodededTextFormatType(localrep2.getEnumerationFormat(), localrep.getEnumerationFormat());
+            }
+        } else if (localrep.getTextFormat() != null) {
             toTextFormat(localrep2.addNewTextFormat(), localrep.getTextFormat());
         }
     }
 
     private static void toLocalRepresentation(RepresentationType localrep2, sdmx.structure.base.RepresentationType localrep) {
         if (localrep.getEnumeration() != null) {
-            localrep2.addNewEnumeration();
-            toItemSchemeReference(localrep2.getEnumeration(), localrep.getEnumeration());
-        }
-        if (localrep.getEnumerationFormat() != null) {
-            toCodededTextFormatType(localrep2.addNewEnumerationFormat(), localrep.getEnumerationFormat());
-        }
-        if (localrep.getTextFormat() != null) {
+            toItemSchemeReference(localrep2.addNewEnumeration(), localrep.getEnumeration());
+            if (localrep.getEnumerationFormat() != null) {
+                toCodededTextFormatType(localrep2.getEnumerationFormat(), localrep.getEnumerationFormat());
+            }
+        } else if (localrep.getTextFormat() != null) {
             toTextFormat(localrep2.addNewTextFormat(), localrep.getTextFormat());
         }
     }
+
     private static void toTDLocalRepresentation(RepresentationType localrep2, sdmx.structure.base.RepresentationType localrep) {
-        if (localrep.getTextFormat() != null) {
+        if (localrep.getEnumeration() != null) {
+            ItemSchemeReferenceBaseType reference = ItemSchemeReferenceBaseType.Factory.newInstance();
+            toItemSchemeReference(reference, localrep.getEnumeration());
+            localrep2.setEnumeration(reference);
+            if (localrep.getEnumerationFormat() != null) {
+                toCodededTextFormatType(localrep2.getEnumerationFormat(), localrep.getEnumerationFormat());
+            }
+        } else if (localrep.getTextFormat() != null) {
             toTextFormat(localrep2.addNewTextFormat(), localrep.getTextFormat());
         }
     }
@@ -665,43 +671,54 @@ public class Sdmx21StructureWriter {
     }
 
     private static void toHeader(BaseHeaderType header2, sdmx.message.BaseHeaderType header) {
-        if( header.getId()!=null)header2.setID(header.getId());
-        if( header.getTest()!=null)header2.setTest(header.getTest());
-        if( header.getDataProvider()!=null)toDataProvider(header2.addNewDataProvider(),header.getDataProvider());
-        if( header.getDataSetAction()!=null)header2.setDataSetAction(org.sdmx.resources.sdmxml.schemas.v21.common.ActionType.Enum.forString(header.getDataSetAction().getString()));
-        if( header.getPrepared()!=null){ 
-          Calendar cal = Calendar.getInstance();
-          cal.setTime(header.getPrepared().getDate().getDate());
-          header2.setPrepared(cal);
+        if (header.getId() != null) {
+            header2.setID(header.getId());
         }
-        if( header.getDataSetID()!=null) {
-           Iterator<sdmx.commonreferences.IDType> it = header.getDataSetID().iterator();
-           while(it.hasNext()) {
-               header2.addDataSetID(it.next().toString());
-                
-           }
+        if (header.getTest() != null) {
+            header2.setTest(header.getTest());
         }
-        if( header.getEmbargoDate()!=null) {
-          Calendar cal = Calendar.getInstance();
-          cal.setTime(header.getEmbargoDate().getDate());
-          header2.setEmbargoDate(cal);
+        if (header.getDataProvider() != null) {
+            toDataProvider(header2.addNewDataProvider(), header.getDataProvider());
         }
-        if( header.getExtracted()!=null) {
-          Calendar cal = Calendar.getInstance();
-          cal.setTime(header.getExtracted().getDate());
-          header2.setExtracted(cal);          
+        if (header.getDataSetAction() != null) {
+            header2.setDataSetAction(org.sdmx.resources.sdmxml.schemas.v21.common.ActionType.Enum.forString(header.getDataSetAction().getString()));
         }
-        if( header.getNames()!=null) {
-             Iterator<sdmx.common.Name> it = header.getNames().iterator();
-             while(it.hasNext()) {
-                  toTextType(header2.addNewName(),it.next());
-             }
+        if (header.getPrepared() != null) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(header.getPrepared().getDate().getDate());
+            header2.setPrepared(cal);
         }
-        if( header.getReceivers()!=null) {
-            Iterator<sdmx.message.PartyType> it = header.getReceivers().iterator();
-            while(it.hasNext()) {
-                 toPartyType(header2.addNewReceiver(),it.next());
+        if (header.getDataSetID() != null) {
+            Iterator<sdmx.commonreferences.IDType> it = header.getDataSetID().iterator();
+            while (it.hasNext()) {
+                header2.addDataSetID(it.next().toString());
+
             }
+        }
+        if (header.getEmbargoDate() != null) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(header.getEmbargoDate().getDate());
+            header2.setEmbargoDate(cal);
+        }
+        if (header.getExtracted() != null) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(header.getExtracted().getDate());
+            header2.setExtracted(cal);
+        }
+        if (header.getNames() != null) {
+            Iterator<sdmx.common.Name> it = header.getNames().iterator();
+            while (it.hasNext()) {
+                toTextType(header2.addNewName(), it.next());
+            }
+        }
+        if (header.getReceivers() != null) {
+            Iterator<sdmx.message.PartyType> it = header.getReceivers().iterator();
+            while (it.hasNext()) {
+                toPartyType(header2.addNewReceiver(), it.next());
+            }
+        }
+        if (header.getSender() != null) {
+            toPartyType(header2.addNewSender(), header.getSender());
         }
     }
 
@@ -715,68 +732,70 @@ public class Sdmx21StructureWriter {
     }
 
     private static void toPartyType(PartyType party2, sdmx.message.PartyType party) {
-        if( party.getId()!=null)party2.setId(party.getId().toString());
-        if( party.getNames()!=null) {
-           Iterator<Name> it = party.getNames().iterator();
-           while(it.hasNext()) {
-               toTextType(party2.addNewName(),it.next());
-           }
+        if (party.getId() != null) {
+            party2.setId(party.getId().toString());
         }
-        if( party.getContacts()!=null) {
+        if (party.getNames() != null) {
+            Iterator<Name> it = party.getNames().iterator();
+            while (it.hasNext()) {
+                toTextType(party2.addNewName(), it.next());
+            }
+        }
+        if (party.getContacts() != null) {
             Iterator<sdmx.message.ContactType> it = party.getContacts().iterator();
-            while(it.hasNext()) {
-               toContactType(party2.addNewContact(),it.next());
+            while (it.hasNext()) {
+                toContactType(party2.addNewContact(), it.next());
             }
         }
     }
 
     private static void toContactType(ContactType contact2, sdmx.message.ContactType contact) {
-        if( contact.getNames()!=null) {
-           Iterator<sdmx.common.Name> it = contact.getNames().iterator();
-           while(it.hasNext()) {
-                 toTextType(contact2.addNewName(), it.next());
-           }
+        if (contact.getNames() != null) {
+            Iterator<sdmx.common.Name> it = contact.getNames().iterator();
+            while (it.hasNext()) {
+                toTextType(contact2.addNewName(), it.next());
+            }
         }
-        if( contact.getDepartments()!=null) {
-           Iterator<sdmx.common.TextType> it = contact.getDepartments().iterator();
-           while(it.hasNext()) {
-                 toTextType(contact2.addNewDepartment(),it.next());
-           }
+        if (contact.getDepartments() != null) {
+            Iterator<sdmx.common.TextType> it = contact.getDepartments().iterator();
+            while (it.hasNext()) {
+                toTextType(contact2.addNewDepartment(), it.next());
+            }
         }
-        if( contact.getEmails()!=null) {
-           Iterator<String> it = contact.getEmails().iterator();
-           while(it.hasNext()) {
+        if (contact.getEmails() != null) {
+            Iterator<String> it = contact.getEmails().iterator();
+            while (it.hasNext()) {
                 contact2.addNewEmail().setStringValue(it.next());
-           }
+            }
         }
-        if( contact.getFaxes()!=null) {
-           Iterator<String> it = contact.getFaxes().iterator();
-           while(it.hasNext()) {
+        if (contact.getFaxes() != null) {
+            Iterator<String> it = contact.getFaxes().iterator();
+            while (it.hasNext()) {
                 contact2.addNewFax().setStringValue(it.next());
-           }        
+            }
         }
-        if( contact.getRoles()!=null) {
+        if (contact.getRoles() != null) {
             Iterator<sdmx.common.TextType> it = contact.getRoles().iterator();
-            while(it.hasNext()) {
+            while (it.hasNext()) {
                 toTextType(contact2.addNewRole(), it.next());
             }
         }
-        if( contact.getTelephones()!=null) {
+        if (contact.getTelephones() != null) {
             Iterator<String> it = contact.getTelephones().iterator();
-            while(it.hasNext()) {
-                  contact2.addNewTelephone().setStringValue(it.next());
+            while (it.hasNext()) {
+                contact2.addNewTelephone().setStringValue(it.next());
             }
         }
-        if( contact.getUris()!=null) {
+        if (contact.getUris() != null) {
             Iterator<sdmx.xml.anyURI> it = contact.getUris().iterator();
-            while(it.hasNext()) {
+            while (it.hasNext()) {
                 contact2.addNewURI().setStringValue(it.next().getString());
             }
         }
-        if( contact.getX400s()!=null) {
+        if (contact.getX400s() != null) {
             Iterator<String> it = contact.getX400s().iterator();
-            while(it.hasNext()) {
-               contact2.addX400(it.next());
+            while (it.hasNext()) {
+                contact2.addX400(it.next());
             }
         }
     }
