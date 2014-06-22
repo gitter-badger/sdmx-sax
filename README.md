@@ -30,21 +30,21 @@ sdmx.version.twopointzero.Sdmx20SDWSOAPQueryable   -> this represents the sdmx d
 as well as the url of the data service, look into the SwingDemo class 'DataProvider' for details of supported data services. This can be queried for data.
 RESTServiceRegistry : this represents an sdmx 2.1 data service, and can be queried for data and structure...
 there are lots of caveats on the supported dataquery message as I have only just added support for querying data...
-1. DataQueryWhere must have an enclosing <And>
+1. DataQueryWhere must have an enclosing And
 2. Wheres must be structured like they are in the Swingdemo, look in SwingDemo -> ConceptChoiceModel->toDataQuery
    for an example of the DataWhere being constructed...
-   <DataQueryWhere>
-       <And>
-       <DataSetID>8nrpver5</DataSetID>
-       <Or>
-          <DimensionValue id="dima">a</DimensionWhere>
-          <DimensionValue id="dima">b</DimensionWhere>
-       </Or>
-       <Or>
-          <DimensionValue id="dimb">a</DimensionWhere>
-          <DimensionValue id="dimb">b</DimensionWhere>
-       </Or>
-       </And>
+   DataQueryWhere<BR>
+       And<BR>
+       DataSetID 8nrpver5 /DataSetID<BR>
+       Or<BR>
+          DimensionValue id="dima" a /DimensionWhere<BR>
+          DimensionValue id="dima" b /DimensionWhere<BR>
+       /Or<BR>
+       Or<BR>
+          DimensionValue id="dimb" a /DimensionWhere<BR>
+          DimensionValue id="dimb" b /DimensionWhere<BR>
+       /Or<BR>
+       /And<BR>
    </DataQueryWhere>
 For all values for a dimension, simply dont specify the dimension at all, and everything will be returned!
 
