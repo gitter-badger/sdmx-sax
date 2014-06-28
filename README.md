@@ -24,7 +24,7 @@ A registry is used to look up structural information.. the interface is very ear
 data as well...
 
 main implementations of registry are;
-StructureType : yes a structure message is a registry ot structural information this can't be queried for data
+StructureType : yes a structure message is a registry of structural information this can't be queried for data
 LocalRegistry : a convenience class that loads lots of StructureType messages and queries them one after the other for Structural Information
 sdmx.version.twopointzero.Sdmx20SDWSOAPQueryable   -> this represents the sdmx data service.. don't forget to set the required namespace for soap messages
 as well as the url of the data service, look into the SwingDemo class 'DataProvider' for details of supported data services. This can be queried for data.
@@ -49,7 +49,33 @@ there are lots of caveats on the supported dataquery message as I have only just
 For all values for a dimension, simply dont specify the dimension at all, and everything will be returned!
 
 as a convenience, you can 'wrap' a data message with some structure to make a useful data model
-StructureDataMessage structured = new StructureDataMessage(dataMessage,registry)
+StructuredDataMessage structured = new StructuredDataMessage(dataMessage,registry)
 structured.getStructuredDataSet(0);
 
+These are the steps you would need to do to query a sdmx data source, and obtain a StructuredDataMessage
 
+1. Create a Queryable (either Sdmx20SDWSOAPQueryable for ABS,OECD,IMF or RESTServiceRegistry for ESTAT)
+2. List the dataflows queryable.listDataflows();
+2. Create a DataQueryMessage
+   fill in the DataWhere, start with an 'and' to hold everything,
+   add a datasetwhere to the dataflowid (taken from queryable.listDataflows().get(<index>).getId(); (this is likely to change in a future version as it should be dataflowid :(
+   for each dimension add an 'or',
+   and inside that or, there should be one 'DimensionWhere' with a concept="<DimensionID>" value="<code>"
+   for each value that you want to specify.. for multiple values, add more DimensionWhere's..
+   for all values for that dimension, dont have any dimensionWheres at all..
+3. call queryable.query(dataQueryMessage) to obtain a DataMessage
+4. obtain the datastructure, querable.findDataStructure(dataFlow.getAgency(),dataFlow.getID(),dataFLow.getVersion));
+5. dataMessage.setDataStructure(dataflow.getStructure); // this is important for sdmx 2.0 files
+6. StructuredDataMessage structured = new StructuredDataMessage(message, registry);
+play around with StructuredDataMessage
+this returns a 'StructuredValue' for each cell in the data..
+from this you can get the concept id, text value, whether the dimension is coded, and a reference
+to the ItemType (this can be cast into a CodeType for Code dimensions, or a ConceptType for cross sectional Measure dimensions)
+getCodes() can be cast into a CodelistType for dimensions, or a ConceptSchemeType for cross sectional measures..
+
+   
+
+   
+   
+   
+   set the with each dimension in its own 'or'

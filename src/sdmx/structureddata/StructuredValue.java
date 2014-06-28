@@ -54,8 +54,8 @@ public class StructuredValue {
     }
 
     public boolean isCoded() {
-        Component comp = structure.getDataStructureComponents().findDimension(concept);
-        if ("type".equals(concept)) {
+        Component comp = structure.getDataStructureComponents().findDimension(getConcept());
+        if ("type".equals(getConcept())) {
             comp = structure.getDataStructureComponents().getMeasureList().getMeasure(0);
         }
         if (comp == null) {
@@ -74,11 +74,11 @@ public class StructuredValue {
         //ItemType item = ValueTypeResolver.resolveCode(registry, structure, concept, value);
         //System.out.println("Item=" + item.toString());
         //System.out.println("Item=" + item.findName(loc.getLanguage()));
-        return ValueTypeResolver.resolveCode(registry, structure, concept, value);
+        return ValueTypeResolver.resolveCode(registry, structure, getConcept(), getValue());
     }
 
     public ItemSchemeType getCodelist() {
-        return ValueTypeResolver.getPossibleCodes(registry, structure, value);
+        return ValueTypeResolver.getPossibleCodes(registry, structure, getConcept());
     }
 
     public String toString() {
@@ -90,7 +90,7 @@ public class StructuredValue {
         if (isCoded()) {
             ItemType code = getCode();
             if (code == null) {
-                return value;
+                return getValue();
             }
             Description desc = code.findDescription(loc.getLanguage());
             if (desc == null) {
@@ -102,6 +102,20 @@ public class StructuredValue {
             }
             return desc.getText();
         }
+        return getValue();
+    }
+
+    /**
+     * @return the concept
+     */
+    public String getConcept() {
+        return concept;
+    }
+
+    /**
+     * @return the value
+     */
+    public String getValue() {
         return value;
     }
 }

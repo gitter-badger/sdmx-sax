@@ -103,12 +103,12 @@ public class IdentifiableType extends AnnotableType {
         this.uri = uri;
     }
     public boolean identifiesMe(IDType id2){
-        if( this.id==null) return false;
-        return this.id.equals(id2);
+        if( this.getId()==null) return false;
+        return this.getId().equals(id2);
     }
     public boolean identifiesMe(NestedIDType id2){
-        if( this.id==null) return false;
-        return this.id.equals(id2);
+        if( this.getId()==null) return false;
+        return this.getId().equals(id2);
     }
     public boolean identifiesMe(anyURI uri2){
         if( this.uri!=null&&this.urn!=null)

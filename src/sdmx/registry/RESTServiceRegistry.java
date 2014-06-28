@@ -4,39 +4,28 @@
  */
 package sdmx.registry;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sdmx.Registry;
 import sdmx.SdmxIO;
 import sdmx.commonreferences.ConceptReferenceType;
-import sdmx.commonreferences.DataStructureRefType;
-import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.ItemSchemeReferenceBaseType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.StructureReferenceType;
 import sdmx.commonreferences.VersionType;
 import sdmx.exception.ParseException;
-import sdmx.exception.QueryableException;
 import sdmx.message.DataMessage;
 import sdmx.message.DataQueryMessage;
 import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.StructureType;
-import sdmx.structure.StructuresType;
-import sdmx.structure.base.IdentifiableType;
 import sdmx.structure.base.MaintainableType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
@@ -44,9 +33,6 @@ import sdmx.structure.concept.ConceptType;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionType;
-import sdmx.structureddata.ValueTypeResolver;
-import sdmx.version.twopointzero.Sdmx20RESTQueryable;
-import sdmx.xml.anyURI;
 
 /**
  *
@@ -420,7 +406,7 @@ public class RESTServiceRegistry implements Registry {
             Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             //dataflowList = null;
         } catch (ParseException ex) {
-            Logger.getLogger(Sdmx20RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
         }
         return dataflowList;
     }

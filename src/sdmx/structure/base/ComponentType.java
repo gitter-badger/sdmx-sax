@@ -5,6 +5,7 @@
 package sdmx.structure.base;
 
 import sdmx.commonreferences.ConceptReferenceType;
+import sdmx.commonreferences.IDType;
 
 /**
  *	<xs:complexType name="ComponentType" abstract="true">
@@ -53,6 +54,15 @@ public class ComponentType extends ComponentBaseType {
     private ConceptReferenceType conceptIdentity = null;
     private RepresentationType localRepresentation = null;
 
+    /**
+     * @return the id
+     */
+    public IDType getId() {
+        if( super.getId()==null ) {
+            return conceptIdentity.getRef().getId().asID();
+        }
+        return super.getId();
+    }
     /**
      * @return the conceptIdentity
      */
