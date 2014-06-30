@@ -59,6 +59,8 @@ public class MeasureListType extends ComponentListType {
     public void setPrimaryMeasure(PrimaryMeasure primary) {
         this.primary = primary;
     }
-
+    public int size() {
+        return measures.size();
+    }
     
 }

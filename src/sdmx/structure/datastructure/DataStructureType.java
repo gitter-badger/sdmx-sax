@@ -162,7 +162,9 @@ public class DataStructureType extends StructureType {
         for (AttributeType dim : components.getAttributeList().getAttributes()) {
             if( dim.identifiesMe(col))return dim;
         }
+        System.out.println("Measure3="+components.getMeasureList().getMeasures().size());
         for (MeasureDimensionType dim : components.getMeasureList().getMeasures()) {
+            System.out.println("Dim="+dim.getId()+":concept="+col);
             if( dim.identifiesMe(col))return dim;
         }
         TimeDimensionType dim = components.getDimensionList().getTimeDimension();

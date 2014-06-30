@@ -580,6 +580,7 @@ public class Sdmx20StructureReaderTools {
     }
 
     public MeasureDimensionType toMeasureDimensionType(org.sdmx.resources.sdmxml.schemas.v20.structure.DimensionType d1) throws TypeValueNotFoundException, URISyntaxException {
+        //System.out.println("To MEasure");
         //System.out.println("CS Agency="+d1.getConceptSchemeAgency());
         //System.out.println("CS Ref="+d1.getConceptSchemeRef());
         //System.out.println("CT Id="+d1.getConceptRef());
@@ -598,17 +599,18 @@ public class Sdmx20StructureReaderTools {
         }
         //System.out.println("Dim:"+d1.getConceptRef()+":code="+code);
         String id = d2.getId().toString();
-        if (!id.endsWith("_MEASURES")) {
-            id = id + "_MEASURES";
-        }
-        ConceptSchemeType scheme = registry.findConceptScheme(mainAgencyId, new IDType(id));
+        CodelistType codelist = getCodelist(d1);
+
+        //if (!id.endsWith("_MEASURES")) {
+        //    id = id + "_MEASURES";
+        //}
+        ConceptSchemeType scheme = registry.findConceptScheme(mainAgencyId, codelist.getId());
         if (scheme == null) {
             scheme = new ConceptSchemeType();
             scheme.setAgencyID(mainAgencyId);
-            scheme.setId(new IDType(id));
+            scheme.setId(codelist.getId());
             scheme.setVersion(VersionType.ONE);
             struct.getConcepts().getConceptSchemes().add(scheme);
-            CodelistType codelist = getCodelist(d1);
             for (int i = 0; i < codelist.size(); i++) {
                 ConceptType concept2 = new ConceptType();
                 CodeType code = (CodeType) codelist.getItem(i);
@@ -993,12 +995,14 @@ public class Sdmx20StructureReaderTools {
                 measures.add(toMeasureDimensionType(c1.getDimensionArray(i)));
             }
         }
-        measurelist.setMeasures(measures);
-        currentDataStructure.setMeasureList(measurelist);
+        measurelist.setMeasures(measures);        
         for (int i = 0; i < c1.getCrossSectionalMeasureArray().length; i++) {
             toCrossSectionalMeasure(c1.getCrossSectionalMeasureArray(i));
         }
+        //System.out.println("Measures="+measurelist.getMeasures().size());
         measurelist.setPrimaryMeasure(toPrimaryMeasure(c1.getPrimaryMeasure()));
+        //System.out.println("Measures="+measurelist.getMeasures().size());
+        currentDataStructure.setMeasureList(measurelist);
         return measurelist;
     }
 

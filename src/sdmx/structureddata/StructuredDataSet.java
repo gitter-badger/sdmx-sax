@@ -49,16 +49,16 @@ public class StructuredDataSet {
     }
 
     public StructuredValue getDecoratedValue(int row, int column) {
-        return new StructuredValue(dataSet.getColumnName(column), dataSet.getValue(row, column), registry, structure);
+        return new StructuredValue(getDataSet().getColumnName(column), getDataSet().getValue(row, column), registry, getStructure());
     }
 
     public String getColumnName(int i) {
-        String conceptString = dataSet.getColumnName(i);
+        String conceptString = getDataSet().getColumnName(i);
         //System.out.println("Concept="+conceptString);
-        System.out.println("ds="+structure);
-        Component c = structure.getDataStructureComponents().findDimension(conceptString);
+        //System.out.println("ds="+getStructure());
+        Component c = getStructure().getDataStructureComponents().findDimension(conceptString);
         if (c == null && conceptString.equals("type")) {
-            c = structure.getDataStructureComponents().getMeasureList().getMeasure(0);
+            c = getStructure().getDataStructureComponents().getMeasureList().getMeasure(0);
         }
         //System.out.println("Concept="+conceptString+": component="+c);
         // * Fixed in DataStructureComponentsType.findDimension
@@ -78,7 +78,6 @@ public class StructuredDataSet {
                 System.out.println("Cant find concept:" + conceptRef.getRef().getAgencyId()+":"+conceptRef.getRef().getMaintainableParentId());
             }
             concept = con.findConcept(c.getConceptIdentity().getRef().getId());
-
 //            System.out.println("Concept=" + concept);
             Locale loc = Locale.getDefault();
             Name name = concept == null ? null : concept.findName(loc.getLanguage());
@@ -92,10 +91,24 @@ public class StructuredDataSet {
     }
 
     public int size() {
-        return dataSet.size();
+        return getDataSet().size();
     }
 
     public int getColumnCount() {
-        return dataSet.getColumnSize();
+        return getDataSet().getColumnSize();
+    }
+
+    /**
+     * @return the dataSet
+     */
+    public DataSet getDataSet() {
+        return dataSet;
+    }
+
+    /**
+     * @return the structure
+     */
+    public DataStructureType getStructure() {
+        return structure;
     }
 }

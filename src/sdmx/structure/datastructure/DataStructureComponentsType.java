@@ -114,16 +114,16 @@ public class DataStructureComponentsType extends DataStructureComponentsBaseType
             //System.out.println("Dim3="+dimensionList.getDimension(i).getLocalRepresentation().getEnumeration().getRef().getId());
             //System.out.println("Dim4="+dimensionList.getDimension(i).getConceptIdentity().getRef());
             //System.out.println("Dim5="+dimensionList.getDimension(i).getConceptIdentity().getRef().getId());
-            if( dimensionList.getDimension(i).getConceptIdentity().getRef().getId().equals(name))return dimensionList.getDimension(i);
+            if( dimensionList.getDimension(i).getId().equals(name))return dimensionList.getDimension(i);
         }
         for(int i=0;i<attributeList.size();i++) {
-            if( attributeList.getAttribute(i).getConceptIdentity().getRef().getId().equals(name))return attributeList.getAttribute(i);
+            if( attributeList.getAttribute(i).getId().equals(name))return attributeList.getAttribute(i);
         }
         for(int i=0;i<measureList.size();i++) {
-            if( measureList.getMeasure(i).getConceptIdentity().getRef().getId().equals(name))return measureList.getMeasure(i);
+            if( measureList.getMeasure(i).getId().equals(name))return measureList.getMeasure(i);
         }
-        if( dimensionList.getTimeDimension()!=null&& dimensionList.getTimeDimension().getConceptIdentity().getRef().getId().equals(name))return dimensionList.getTimeDimension();
-        if( measureList.getPrimaryMeasure()!=null&&measureList.getPrimaryMeasure().getConceptIdentity().getRef().getId().equals(name))return measureList.getPrimaryMeasure();
+        if( dimensionList.getTimeDimension()!=null&& dimensionList.getTimeDimension().getId().equals(name))return dimensionList.getTimeDimension();
+        if( measureList.getPrimaryMeasure()!=null&&measureList.getPrimaryMeasure().getId().equals(name))return measureList.getPrimaryMeasure();
         // These are the 2 hard coded values in the Sdmx Specification
         if( "TIME_PERIOD".equals(name)) {
             return dimensionList.getTimeDimension();

@@ -73,9 +73,3 @@ from this you can get the concept id, text value, whether the dimension is coded
 to the ItemType (this can be cast into a CodeType for Code dimensions, or a ConceptType for cross sectional Measure dimensions)
 getCodes() can be cast into a CodelistType for dimensions, or a ConceptSchemeType for cross sectional measures..
 
-   
-
-   
-   
-   
-   set the with each dimension in its own 'or'
