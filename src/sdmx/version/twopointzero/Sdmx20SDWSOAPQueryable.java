@@ -134,7 +134,7 @@ public class Sdmx20SDWSOAPQueryable implements Queryable {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Document doc = Sdmx20QueryWriter.toDocument(message);
             String soapStart = "<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:sdmx=\"" + soapNamespace + "\">\n"
-                    + "   <soap:Header/>\n"
+                    //+ "   <soap:Header/>\n"
                     + "   <soap:Body>\n"
                     + "      <sdmx:GetDataStructureDefinition>\n"
                     + "         <sdmx:QueryMessage>";
