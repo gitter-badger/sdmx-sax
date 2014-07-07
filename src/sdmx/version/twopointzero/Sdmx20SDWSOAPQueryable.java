@@ -255,10 +255,10 @@ public class Sdmx20SDWSOAPQueryable implements Queryable {
             req.setEntity(entity);
             HttpResponse response = client.execute(req);
             InputStream socket = response.getEntity().getContent();
-            String name = System.currentTimeMillis()+".xml";
-            FileOutputStream file = new FileOutputStream(name);
-            IOUtils.copy(socket, file);
-            socket = new FileInputStream(name);
+            //String name = System.currentTimeMillis()+".xml";
+            //FileOutputStream file = new FileOutputStream(name);
+            //IOUtils.copy(socket, file);
+            //socket = new FileInputStream(name);
             if (response.getStatusLine().getStatusCode() == 200) {
                 SOAPStrippingInputStream stripper = new SOAPStrippingInputStream(socket, "<" + action + ">", "</" + action + ">");
                 InputStreamReader isr = new InputStreamReader(stripper);
