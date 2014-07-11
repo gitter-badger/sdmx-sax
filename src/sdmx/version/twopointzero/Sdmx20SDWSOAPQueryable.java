@@ -15,6 +15,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -129,7 +130,7 @@ public class Sdmx20SDWSOAPQueryable implements Queryable {
 
     @Override
     public StructureType query(DataStructureQueryMessage message) {
-        message.setHeader(getBaseHeader());
+        if( message.getHeader()==null)message.setHeader(getBaseHeader());
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Document doc = Sdmx20QueryWriter.toDocument(message);
@@ -161,7 +162,7 @@ public class Sdmx20SDWSOAPQueryable implements Queryable {
     }
 
     public DataMessage query(DataQueryMessage message) {
-        message.setHeader(getBaseHeader());
+        if( message.getHeader()==null)message.setHeader(getBaseHeader());
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Document doc = Sdmx20QueryWriter.toDocument(message);
@@ -265,6 +266,8 @@ public class Sdmx20SDWSOAPQueryable implements Queryable {
                 return isr;
             } else {
                 System.out.println("Response=" + response.getStatusLine().getStatusCode());
+                System.out.println(Arrays.toString(response.getAllHeaders()));
+                IOUtils.copy(socket, System.out);
                 return null;
             }
         } catch (Exception ex) {
