@@ -7,6 +7,8 @@ package sdmx.data.key;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Set;
 import sdmx.data.ColumnMapper;
 import sdmx.data.flat.FlatObs;
 
@@ -34,10 +36,10 @@ import sdmx.data.flat.FlatObs;
  */
 public class AbstractKey implements Key {
 
-    protected HashMap<String,Object> map = new HashMap<String,Object>();
+    protected LinkedHashMap<String,Object> map = new LinkedHashMap<String,Object>();
 
     public AbstractKey(){}
-    public AbstractKey(HashMap<String,Object> map){
+    public AbstractKey(LinkedHashMap<String,Object> map){
         this.map=map;
     }
     
@@ -84,5 +86,8 @@ public class AbstractKey implements Key {
 
         }
         return false;
+    }
+    public Set<String> keySet() {
+        return map.keySet();
     }
 }

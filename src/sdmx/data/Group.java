@@ -7,6 +7,7 @@ package sdmx.data;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import sdmx.data.key.FullKey;
 import sdmx.data.key.Key;
@@ -36,7 +37,7 @@ import sdmx.data.key.PartialKey;
  */
 public class Group {
     private String groupName = null;
-    private HashMap<String,Object> groupKey = new HashMap<String,Object>();
+    private LinkedHashMap<String,Object> groupKey = new LinkedHashMap<String,Object>();
     private HashMap<String,Object> groupAttributes = new HashMap<String,Object>();
 
     HashMap<String, Object> map = new HashMap<String, Object>();
@@ -94,7 +95,7 @@ public class Group {
     /**
      * @return the groupKey
      */
-    public HashMap<String,Object> getGroupKey() {
+    public LinkedHashMap<String,Object> getGroupKey() {
         return groupKey;
     }
 

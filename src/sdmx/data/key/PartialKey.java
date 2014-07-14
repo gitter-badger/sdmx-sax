@@ -7,6 +7,7 @@
 package sdmx.data.key;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Partial Key matches many observations
@@ -33,7 +34,7 @@ import java.util.HashMap;
 public class PartialKey extends AbstractKey {
     public PartialKey() {
     }
-    public PartialKey(HashMap<String,Object> map) {
+    public PartialKey(LinkedHashMap<String,Object> map) {
         super(map);
     }
 }
