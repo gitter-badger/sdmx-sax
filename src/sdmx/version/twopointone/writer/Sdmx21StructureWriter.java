@@ -703,7 +703,7 @@ public class Sdmx21StructureWriter {
         if (header.getExtracted() != null) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(header.getExtracted().getDate());
-            header2.setExtracted(cal);
+            //header2.setExtracted(cal);
         }
         if (header.getNames() != null) {
             Iterator<sdmx.common.Name> it = header.getNames().iterator();

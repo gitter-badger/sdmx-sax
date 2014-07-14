@@ -185,7 +185,7 @@ public class LocalRegistry implements Registry {
     public CodelistType findCodelist(String codelistAgency, String codelist, String codelistVersion) {
         for (int i = 0; i < structures.size(); i++) {
             CodelistType cl = structures.get(i).findCodelist(codelistAgency, codelist, codelistVersion);
-            if (cl != null&&(cl.isExternalReference()==null||cl.isExternalReference())) {
+            if (cl != null&&(cl.isExternalReference()==null||!cl.isExternalReference())) {
                 return cl;
             }
         }

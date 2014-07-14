@@ -130,7 +130,7 @@ public class Sdmx20SDWSOAPQueryable implements Queryable {
 
     @Override
     public StructureType query(DataStructureQueryMessage message) {
-        if( message.getHeader()==null)message.setHeader(getBaseHeader());
+        message.setHeader(getBaseHeader());
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Document doc = Sdmx20QueryWriter.toDocument(message);
@@ -152,7 +152,6 @@ public class Sdmx20SDWSOAPQueryable implements Queryable {
             baos.write(soapEnd.getBytes());
             // Create a response handler
             byte[] bytes = baos.toByteArray();
-            //System.out.println(new String(bytes));
             ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
             return SdmxIO.parseStructure(query("GetDataStructureDefinitionResult", bais, bytes.length));
         } catch (Exception ex) {
@@ -162,7 +161,7 @@ public class Sdmx20SDWSOAPQueryable implements Queryable {
     }
 
     public DataMessage query(DataQueryMessage message) {
-        if( message.getHeader()==null)message.setHeader(getBaseHeader());
+        message.setHeader(getBaseHeader());
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Document doc = Sdmx20QueryWriter.toDocument(message);
@@ -256,10 +255,10 @@ public class Sdmx20SDWSOAPQueryable implements Queryable {
             req.setEntity(entity);
             HttpResponse response = client.execute(req);
             InputStream socket = response.getEntity().getContent();
-            //String name = System.currentTimeMillis()+".xml";
-            //FileOutputStream file = new FileOutputStream(name);
-            //IOUtils.copy(socket, file);
-            //socket = new FileInputStream(name);
+            String name = System.currentTimeMillis()+".xml";
+            FileOutputStream file = new FileOutputStream(name);
+            IOUtils.copy(socket, file);
+            socket = new FileInputStream(name);
             if (response.getStatusLine().getStatusCode() == 200) {
                 SOAPStrippingInputStream stripper = new SOAPStrippingInputStream(socket, "<" + action + ">", "</" + action + ">");
                 InputStreamReader isr = new InputStreamReader(stripper);

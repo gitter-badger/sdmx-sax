@@ -666,6 +666,7 @@ public class Sdmx20StructureReaderTools {
         ConceptSchemeType cscheme = getConceptScheme(d1);
         //System.out.println("Concept="+cscheme);
         ConceptType concept = getConcept(cscheme, d1);
+        /*
         if (cscheme.getId().equals("STANDALONE_CONCEPT_SCHEME")) {
             MeasureDimensionType measure = currentDataStructure.getMeasureList().getMeasures().get(0);
             RefBaseType ref = measure.getLocalRepresentation().getEnumeration().getRef();
@@ -673,7 +674,7 @@ public class Sdmx20StructureReaderTools {
             concept.setCode(d1.getCode());
             cscheme.removeItem(concept);
             cs.addConcept(concept);
-        }
+        }*/
         return;
     }
 
@@ -996,13 +997,14 @@ public class Sdmx20StructureReaderTools {
             }
         }
         measurelist.setMeasures(measures);        
+        currentDataStructure.setMeasureList(measurelist);
         for (int i = 0; i < c1.getCrossSectionalMeasureArray().length; i++) {
             toCrossSectionalMeasure(c1.getCrossSectionalMeasureArray(i));
         }
         //System.out.println("Measures="+measurelist.getMeasures().size());
         measurelist.setPrimaryMeasure(toPrimaryMeasure(c1.getPrimaryMeasure()));
         //System.out.println("Measures="+measurelist.getMeasures().size());
-        currentDataStructure.setMeasureList(measurelist);
+        
         return measurelist;
     }
 

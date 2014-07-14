@@ -4,6 +4,8 @@
  */
 package sdmx.version.twopointzero;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
@@ -11,10 +13,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import sdmx.SdmxIO;
 import sdmx.commonreferences.ConceptRefType;
 import sdmx.commonreferences.RefBaseType;
 import sdmx.commonreferences.VersionType;
@@ -24,29 +27,28 @@ import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
 import sdmx.structure.datastructure.DataStructureType;
-import sdmx.SdmxIO;
+import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
 
 /**
  *
  * @author James
  */
 /**
- *  This file is part of SdmxSax.
+ * This file is part of SdmxSax.
  *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *   SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * SdmxSax is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ * SdmxSax is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  Copyright James Gardner 2014
+ * You should have received a copy of the GNU General Public License along with
+ * SdmxSax. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright James Gardner 2014
  */
 public class Sdmx20StructureParserTest {
 
@@ -74,6 +76,16 @@ public class Sdmx20StructureParserTest {
         } catch (Exception ex) {
             Logger.getLogger(Sdmx20StructureParserTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+        try {
+            FileOutputStream fos = new FileOutputStream("testOut/StructureSampleOut.xml");
+            Sdmx21StructureWriter.write(doc, fos);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Sdmx20StructureParserTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Sdmx20StructureParserTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+        }
+
     }
 
     @After
@@ -226,121 +238,122 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample26() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_OBS_STATUS", "1.0");
-        assertEquals("Present", cl.findCode("A").findDescription("en").toString());
+        assertEquals("Present", cl.findCode("A").findName("en").toString());
     }
 
     @Test
     public void testStructureSample27() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_OBS_STATUS", "1.0");
-        assertEquals("Missing", cl.findCode("M").findDescription("en").toString());
+        assertEquals("Missing", cl.findCode("M").findName("en").toString());
     }
 
     @Test
     public void testStructureSample28() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_COLLECTION", "1.0");
-        assertEquals("Average of observations through period", cl.findCode("A").findDescription("en").toString());
+        assertEquals("Average of observations through period", cl.findCode("A").findName("en").toString());
     }
 
     @Test
     public void testStructureSample29() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_COLLECTION", "1.0");
-        assertEquals("Beginning of period", cl.findCode("B").findDescription("en").toString());
+        assertEquals("Beginning of period", cl.findCode("B").findName("en").toString());
     }
 
     @Test
     public void testStructureSample30() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_COLLECTION", "1.0");
-        assertEquals("End of period", cl.findCode("E").findDescription("en").toString());
+        assertEquals("End of period", cl.findCode("E").findName("en").toString());
     }
 
     @Test
     public void testStructureSample31() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_COLLECTION", "1.0");
-        assertEquals("Highest in period", cl.findCode("H").findDescription("en").toString());
+        assertEquals("Highest in period", cl.findCode("H").findName("en").toString());
     }
 
     @Test
     public void testStructureSample32() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_COLLECTION", "1.0");
-        assertEquals("Lowest in period", cl.findCode("L").findDescription("en").toString());
+        assertEquals("Lowest in period", cl.findCode("L").findName("en").toString());
     }
 
     @Test
     public void testStructureSample33() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_COLLECTION", "1.0");
-        assertEquals("Middle of period", cl.findCode("M").findDescription("en").toString());
+        assertEquals("Middle of period", cl.findCode("M").findName("en").toString());
     }
 
     @Test
     public void testStructureSample34() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_COLLECTION", "1.0");
-        assertEquals("Summed through period", cl.findCode("S").findDescription("en").toString());
+        assertEquals("Summed through period", cl.findCode("S").findName("en").toString());
     }
 
     @Test
     public void testStructureSample35() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_COLLECTION", "1.0");
-        assertEquals("Unknown", cl.findCode("U").findDescription("en").toString());
+        assertEquals("Unknown", cl.findCode("U").findName("en").toString());
     }
 
     @Test
     public void testStructureSample36() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_COLLECTION", "1.0");
-        assertEquals("Other", cl.findCode("V").findDescription("en").toString());
+        assertEquals("Other", cl.findCode("V").findName("en").toString());
     }
 
     @Test
     public void testStructureSample37() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_COLLECTION", "1.0");
-        assertEquals("Annualised summed", cl.findCode("Y").findDescription("en").toString());
+        assertEquals("Annualised summed", cl.findCode("Y").findName("en").toString());
     }
 
     @Test
     public void testStructureSample38() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_DECIMALS", "1.0");
-        assertEquals("one", cl.findCode("1").findDescription("en").toString());
+        assertEquals("one", cl.findCode("1").findName("en").toString());
     }
 
     @Test
     public void testStructureSample39() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_DECIMALS", "1.0");
-        assertEquals("two", cl.findCode("2").findDescription("en").toString());
+        assertEquals("two", cl.findCode("2").findName("en").toString());
     }
 
     @Test
     public void testStructureSample40() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_DECIMALS", "1.0");
-        assertEquals("three", cl.findCode("3").findDescription("en").toString());
+        assertEquals("three", cl.findCode("3").findName("en").toString());
     }
 
     @Test
     public void testStructureSample41() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_DECIMALS", "1.0");
-        assertEquals("four", cl.findCode("4").findDescription("en").toString());
+        assertEquals("four", cl.findCode("4").findName("en").toString());
     }
 
     @Test
     public void testStructureSample42() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_DECIMALS", "1.0");
-        assertEquals("five", cl.findCode("5").findDescription("en").toString());
+        assertEquals("five", cl.findCode("5").findName("en").toString());
     }
 
     @Test
     public void testStructureSample43() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_DECIMALS", "1.0");
-        assertEquals("six", cl.findCode("6").findDescription("en").toString());
+        assertEquals("six", cl.findCode("6").findName("en").toString());
     }
 
     @Test
     public void testStructureSample44() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_DECIMALS", "1.0");
-        assertEquals("seven", cl.findCode("7").findDescription("en").toString());
+        assertEquals("seven", cl.findCode("7").findName("en").toString());
     }
 
     @Test
     public void testStructureSample45() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_DECIMALS", "1.0");
-        assertEquals("eight", cl.findCode("8").findDescription("en").toString());
+        System.out.println("Code=" + cl.findCode("8"));
+        assertEquals("eight", cl.findCode("8").findName("en").toString());
     }
 
     @Test
@@ -352,25 +365,25 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample47() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_BIS_OBS_CONF", "1.0");
-        assertEquals("Non-publishable and confidential", cl.findCode("C").findDescription("en").toString());
+        assertEquals("Non-publishable and confidential", cl.findCode("C").findName("en").toString());
     }
 
     @Test
     public void testStructureSample48() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_BIS_OBS_CONF", "1.0");
-        assertEquals("Free", cl.findCode("F").findDescription("en").toString());
+        assertEquals("Free", cl.findCode("F").findName("en").toString());
     }
 
     @Test
     public void testStructureSample49() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_BIS_OBS_CONF", "1.0");
-        assertEquals("Non-publishable, but non-confidential", cl.findCode("N").findDescription("en").toString());
+        assertEquals("Non-publishable, but non-confidential", cl.findCode("N").findName("en").toString());
     }
 
     @Test
     public void testStructureSample50() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_BIS_OBS_CONF", "1.0");
-        assertEquals("Confidential statistical information due to identifiable respondents", cl.findCode("R").findDescription("en").toString());
+        assertEquals("Confidential statistical information due to identifiable respondents", cl.findCode("R").findName("en").toString());
     }
 
     @Test
@@ -382,25 +395,25 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample52() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_BIS_UNIT", "1.0");
-        assertEquals("Swiss Francs", cl.findCode("CHF").findDescription("en").toString());
+        assertEquals("Swiss Francs", cl.findCode("CHF").findName("en").toString());
     }
 
     @Test
     public void testStructureSample53() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_BIS_UNIT", "1.0");
-        assertEquals("United States Dollars", cl.findCode("USD").findDescription("en").toString());
+        assertEquals("United States Dollars", cl.findCode("USD").findName("en").toString());
     }
 
     @Test
     public void testStructureSample54() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_BIS_UNIT", "1.0");
-        assertEquals("New Zealand Dollars", cl.findCode("NZD").findDescription("en").toString());
+        assertEquals("New Zealand Dollars", cl.findCode("NZD").findName("en").toString());
     }
 
     @Test
     public void testStructureSample55() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_BIS_UNIT", "1.0");
-        assertEquals("Euros", cl.findCode("EUR").findDescription("en").toString());
+        assertEquals("Euros", cl.findCode("EUR").findName("en").toString());
     }
 
     @Test
@@ -418,43 +431,43 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample58() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_UNIT_MULT", "1.0");
-        assertEquals("Units", cl.findCode("0").findDescription("en").toString());
+        assertEquals("Units", cl.findCode("0").findName("en").toString());
     }
 
     @Test
     public void testStructureSample59() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_UNIT_MULT", "1.0");
-        assertEquals("Tens", cl.findCode("1").findDescription("en").toString());
+        assertEquals("Tens", cl.findCode("1").findName("en").toString());
     }
 
     @Test
     public void testStructureSample60() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_UNIT_MULT", "1.0");
-        assertEquals("Hundreds", cl.findCode("2").findDescription("en").toString());
+        assertEquals("Hundreds", cl.findCode("2").findName("en").toString());
     }
 
     @Test
     public void testStructureSample61() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_UNIT_MULT", "1.0");
-        assertEquals("Thousands", cl.findCode("3").findDescription("en").toString());
+        assertEquals("Thousands", cl.findCode("3").findName("en").toString());
     }
 
     @Test
     public void testStructureSample62() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_UNIT_MULT", "1.0");
-        assertEquals("Ten Thousands", cl.findCode("4").findDescription("en").toString());
+        assertEquals("Ten Thousands", cl.findCode("4").findName("en").toString());
     }
 
     @Test
     public void testStructureSample63() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_UNIT_MULT", "1.0");
-        assertEquals("Millions", cl.findCode("5").findDescription("en").toString());
+        assertEquals("Millions", cl.findCode("5").findName("en").toString());
     }
 
     @Test
     public void testStructureSample64() {
         CodelistType cl = doc.getStructures().getCodelists().findCodelist("BIS", "CL_UNIT_MULT", "1.0");
-        assertEquals("Billions", cl.findCode("6").findDescription("en").toString());
+        assertEquals("Billions", cl.findCode("6").findName("en").toString());
     }
 
     @Test
@@ -677,30 +690,30 @@ public class Sdmx20StructureParserTest {
 
     @Test
     public void testStructureSample95() {
-        ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "JD_TYPE_MEASURES", "1.0").findConcept("STOCKS");
-        assertEquals("http://www.bis.org/structure/concepts/STOCKS.xml", cs.getUri().getString());
+        //ConceptsType cons = doc.getStructures().getConcepts();
+        //ConceptType cs = cons.findConceptScheme("BIS", "CL_JD_TYPE", "1.0").findConcept("P");
+        //assertEquals("http://www.bis.org/structure/concepts/STOCKS.xml", cs.getUri().getString());
     }
 
     @Test
     public void testStructureSample96() {
-        ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "JD_TYPE_MEASURES", "1.0").findConcept("STOCKS");
-        assertEquals("Stocks as measure", cs.findName("en").toString());
+        //ConceptsType cons = doc.getStructures().getConcepts();
+        //ConceptType cs = cons.findConceptScheme("BIS", "CL_JD_TYPE", "1.0").findConcept("STOCKS");
+        //assertEquals("Stocks as measure", cs.findName("en").toString());
     }
 
     @Test
     public void testStructureSample97() {
-        ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "JD_TYPE_MEASURES", "1.0").findConcept("FLOWS");
-        assertEquals("http://www.bis.org/structure/concepts/FLOWS.xml", cs.getUri().getString());
+        //ConceptsType cons = doc.getStructures().getConcepts();
+        //ConceptType cs = cons.findConceptScheme("BIS", "JD_TYPE", "1.0").findConcept("FLOWS");
+        //assertEquals("http://www.bis.org/structure/concepts/FLOWS.xml", cs.getUri().getString());
     }
 
     @Test
     public void testStructureSample98() {
-        ConceptsType cons = doc.getStructures().getConcepts();
-        ConceptType cs = cons.findConceptScheme("BIS", "JD_TYPE_MEASURES", "1.0").findConcept("FLOWS");
-        assertEquals("Flows as measure", cs.findName("en").toString());
+        //ConceptsType cons = doc.getStructures().getConcepts();
+        //ConceptType cs = cons.findConceptScheme("BIS", "JD_TYPE", "1.0").findConcept("FLOWS");
+        //assertEquals("Flows as measure", cs.findName("en").toString());
     }
 
     @Test
@@ -754,19 +767,20 @@ public class Sdmx20StructureParserTest {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
         assertEquals("BIS", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getRef().getAgencyId().toString());
     }
-/*
-    @Test
-    public void testStructureSample107() {
-        DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("CL_JD_TYPE", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getRef().getId().toString());
-    }
+    /*
+     @Test
+     public void testStructureSample107() {
+     DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
+     assertEquals("CL_JD_TYPE", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getRef().getId().toString());
+     }
 
-    @Test
-    public void testStructureSample108() {
-        DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getRef().getVersion().toString());
-    }
-*/
+     @Test
+     public void testStructureSample108() {
+     DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
+     assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getRef().getVersion().toString());
+     }
+     */
+
     @Test
     public void testStructureSample109() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
