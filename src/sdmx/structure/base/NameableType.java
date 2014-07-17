@@ -142,7 +142,12 @@ public class NameableType extends IdentifiableType {
         return "NameableType";
     }
 
-    public static String toString(NameableType named) {
+    public String getName() {
+        return toString(this);
+    }
+    
+    
+    private static String toString(NameableType named) {
         Locale loc = Locale.getDefault();
         //if (concept.equals("FREQ")) {
         //    ItemType code2 = getCode();
@@ -160,5 +165,11 @@ public class NameableType extends IdentifiableType {
             return name.getText();
         }
         return desc.getText();
+    }
+    public static String toString(Object o) {
+        if( o == null ) return "";
+        if( o instanceof String ) return (String)o;
+        if( o instanceof NameableType ) return toString((NameableType)o);
+        throw new RuntimeException("Not String or Nameable "+o.getClass());
     }
 }

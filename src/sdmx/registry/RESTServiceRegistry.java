@@ -61,8 +61,8 @@ public class RESTServiceRegistry implements Registry {
         RESTServiceRegistry registry = new RESTServiceRegistry("FAO", "http://www.fao.org/figis/sdmx");
         System.out.println("DataStructure=" + registry.findDataStructure(new NestedNCNameIDType("FAO"), new IDType("CAPTURE_DATASTRUCTURE"), new VersionType("0.1")));
     }
-    String agency = "";
-    String serviceURL = "";
+    private String agency = "";
+    private String serviceURL = "";
     Registry local = new LocalRegistry();
 
     private List<DataflowType> dataflowList = null;
@@ -84,7 +84,7 @@ public class RESTServiceRegistry implements Registry {
         DataStructureType dst = local.findDataStructure(agency, id, version);
         if (dst == null) {
             try {
-                StructureType st = retrieve(serviceURL + "/datastructure/" + agency.getString() + "/" + id.getString() + "/" + version.getString());
+                StructureType st = retrieve(getServiceURL() + "/datastructure/" + agency.getString() + "/" + id.getString() + "/" + version.getString());
                 load(st);
                 return local.findDataStructure(agency, id, version);
             } catch (MalformedURLException ex) {
@@ -105,7 +105,7 @@ public class RESTServiceRegistry implements Registry {
         ConceptSchemeType dst = local.findConceptScheme(agencyID, conceptRef);
         if (dst == null) {
             try {
-                StructureType st = retrieve(serviceURL + "/conceptscheme/" + agencyID.getString() + "/" + conceptRef.getRef().getMaintainableParentId() + "/" + conceptRef.getRef().getMaintainableParentVersion());
+                StructureType st = retrieve(getServiceURL() + "/conceptscheme/" + agencyID.getString() + "/" + conceptRef.getRef().getMaintainableParentId() + "/" + conceptRef.getRef().getMaintainableParentVersion());
                 load(st);
                 return local.findConceptScheme(agencyID, conceptRef);
             } catch (MalformedURLException ex) {
@@ -123,7 +123,7 @@ public class RESTServiceRegistry implements Registry {
         CodelistType dst = local.findCodelist(enumeration);
         if (dst == null) {
             try {
-                StructureType st = retrieve(serviceURL + "/codelist/" + enumeration.getRef().getAgencyId() + "/" + enumeration.getRef().getId() + "/" + enumeration.getRef().getVersion());
+                StructureType st = retrieve(getServiceURL() + "/codelist/" + enumeration.getRef().getAgencyId() + "/" + enumeration.getRef().getId() + "/" + enumeration.getRef().getVersion());
                 load(st);
                 return local.findCodelist(enumeration);
             } catch (MalformedURLException ex) {
@@ -145,7 +145,7 @@ public class RESTServiceRegistry implements Registry {
         CodelistType dst = local.findCodelist(codelistAgency, codelist, codelistVersion);
         if (dst == null) {
             try {
-                StructureType st = retrieve(serviceURL + "/codelist/" + codelistAgency.getString() + "/" + codelist.getString() + "/" + codelistVersion.getString());
+                StructureType st = retrieve(getServiceURL() + "/codelist/" + codelistAgency.getString() + "/" + codelist.getString() + "/" + codelistVersion.getString());
                 load(st);
                 return local.findCodelist(codelistAgency, codelist, codelistVersion);
             } catch (MalformedURLException ex) {
@@ -167,7 +167,7 @@ public class RESTServiceRegistry implements Registry {
         ConceptSchemeType dst = local.findConceptScheme(csa, csi);
         if (dst == null) {
             try {
-                StructureType st = retrieve(serviceURL + "/conceptscheme/" + csa.getString() + "/" + csi.getString() + "/latest");
+                StructureType st = retrieve(getServiceURL() + "/conceptscheme/" + csa.getString() + "/" + csi.getString() + "/latest");
                 System.out.println("Loaded CSA/CSI struc:" + st.findConceptScheme(csa, csi));
                 load(st);
                 return local.findConceptScheme(csa, csi);
@@ -277,7 +277,7 @@ public class RESTServiceRegistry implements Registry {
         CodelistType dst = local.findCodelist(codelistAgency, codelist);
         if (dst == null) {
             try {
-                StructureType st = retrieve(serviceURL + "/registry/codelist/" + codelistAgency.getString() + "/" + codelist.getString() + "/latest");
+                StructureType st = retrieve(getServiceURL() + "/registry/codelist/" + codelistAgency.getString() + "/" + codelist.getString() + "/latest");
                 load(st);
                 return local.findCodelist(codelistAgency, codelist);
             } catch (MalformedURLException ex) {
@@ -301,7 +301,7 @@ public class RESTServiceRegistry implements Registry {
         DataStructureType dst = local.findDataStructure(agency, id);
         if (dst == null) {
             try {
-                StructureType st = retrieve(serviceURL + "/registry/datastructure/" + agency.getString() + "/" + id.getString() + "/latest");
+                StructureType st = retrieve(getServiceURL() + "/registry/datastructure/" + agency.getString() + "/" + id.getString() + "/latest");
                 load(st);
                 return local.findDataStructure(agency, id);
             } catch (MalformedURLException ex) {
@@ -352,7 +352,7 @@ public class RESTServiceRegistry implements Registry {
     @Override
     public DataMessage query(DataQueryMessage message) {
         IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataSetId().get(0);
-        NestedNCNameIDType agency = new NestedNCNameIDType(this.agency);
+        NestedNCNameIDType agency = new NestedNCNameIDType(this.getAgencyId());
         DataStructureType dst = null;
         for(int i=0;i<dataflowList.size();i++) {
             if( dataflowList.get(i).getId().equals(flowid)){
@@ -381,7 +381,7 @@ public class RESTServiceRegistry implements Registry {
         String endTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getEnd().toString();
         DataMessage msg=null;
         try {
-            msg = query(serviceURL+"/data/"+flowid+"/"+q.toString()+"?startPeriod="+startTime+"&endPeriod="+endTime);
+            msg = query(getServiceURL()+"/data/"+flowid+"/"+q.toString()+"?startPeriod="+startTime+"&endPeriod="+endTime);
         } catch (IOException ex) {
             Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
@@ -397,7 +397,7 @@ public class RESTServiceRegistry implements Registry {
         }
         dataflowList = new ArrayList<DataflowType>();
         try {
-            StructureType st = retrieve2(serviceURL + "/dataflow/" + this.agency + "/all/latest");
+            StructureType st = retrieve2(getServiceURL() + "/dataflow/" + this.getAgencyId() + "/all/latest");
             dataflowList = st.getStructures().getDataflows().getDataflows();
         } catch (MalformedURLException ex) {
             Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
@@ -426,7 +426,7 @@ public class RESTServiceRegistry implements Registry {
         DataflowType dst = local.findDataflow(agency, id, vers);
         if (dst == null) {
             try {
-                StructureType st = retrieve(serviceURL + "/registry/dataflow/" + agency.getString() + "/" + id.getString() + "/" + vers != null ? vers.toString() : "latest");
+                StructureType st = retrieve(getServiceURL() + "/registry/dataflow/" + agency.getString() + "/" + id.getString() + "/" + vers != null ? vers.toString() : "latest");
                 load(st);
                 return local.findDataflow(agency, id, vers);
             } catch (MalformedURLException ex) {
@@ -440,4 +440,33 @@ public class RESTServiceRegistry implements Registry {
         }
         return dst;
     }
+
+    /**
+     * @return the agency
+     */
+    public String getAgencyId() {
+        return agency;
+    }
+
+    /**
+     * @param agency the agency to set
+     */
+    public void setAgencyId(String agency) {
+        this.agency = agency;
+    }
+
+    /**
+     * @return the serviceURL
+     */
+    public String getServiceURL() {
+        return serviceURL;
+    }
+
+    /**
+     * @param serviceURL the serviceURL to set
+     */
+    public void setServiceURL(String serviceURL) {
+        this.serviceURL = serviceURL;
+    }
+    
 }

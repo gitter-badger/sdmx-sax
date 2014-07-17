@@ -36,7 +36,7 @@ public class RegexXMLString extends XMLString {
         Pattern[] patterns = getPatternArray();
         for (int i = 0; i < patterns.length; i++) {
             if (!patterns[i].matcher(s).matches()) {
-                throw new RuntimeException("Input " + s + " does not match Pattern:" + patterns[i].pattern());
+                throw new ExceptionInInitializerError("Input " + s + " does not match Pattern:" + patterns[i].pattern());
             }
         }
     }

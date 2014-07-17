@@ -155,6 +155,9 @@ public class DataStructureType extends StructureType {
             System.out.println();
         }
     }
+    public Component findComponent(String col) {
+        return findComponent(new IDType(col));
+    }
     public Component findComponent(IDType col) {
         for (DimensionType dim : components.getDimensionList().getDimensions()) {
             if( dim.identifiesMe(col))return dim;

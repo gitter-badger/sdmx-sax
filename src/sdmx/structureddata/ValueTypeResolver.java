@@ -87,10 +87,19 @@ public class ValueTypeResolver {
             if (rep.getEnumeration() != null) {
                 if (rep.getEnumeration().getRef().getRefClass() == ItemSchemeTypeCodelistType.CODELIST) {
                     CodelistType codelist = registry.findCodelist(rep.getEnumeration());
-                    CodeType ct = codelist.findCode(value);
+                    IDType id = null;
+                    try {
+                        id = new IDType(value);
+                    } catch (ExceptionInInitializerError ie) {
+                        // Ignore
+                    }
+                    CodeType ct = null;
+                    if (id != null) {
+                        ct = codelist.findCode(id);
+                    }
                     if (ct == null) {
                         CodeType ct2 = new CodeType();
-                        ct2.setId(new IDType(value));
+                        ct2.setId(id);
                         Locale loc = Locale.getDefault();
                         Name name = new Name("en", "Missing Code:" + value);
                         ArrayList<Name> names = new ArrayList<Name>();
@@ -138,7 +147,9 @@ public class ValueTypeResolver {
                 System.out.println("Cant find concept:" + conceptRef.getRef().getId().getString());
             }
             concept = con.findConcept(dim.getConceptIdentity().getRef().getId());
-            rep = concept.getCoreRepresentation();
+            if (concept != null) {
+                rep = concept.getCoreRepresentation();
+            }
         }
         RepresentationType localRep = dim.getLocalRepresentation();
         if (localRep != null) {
@@ -148,8 +159,8 @@ public class ValueTypeResolver {
             if (rep.getEnumeration() != null) {
                 if (rep.getEnumeration().getRef().getRefClass() == ObjectTypeCodelistType.CONCEPTSCHEME) {
                     ConceptSchemeType cscheme = registry.findConceptScheme(rep.getEnumeration().getRef().getAgencyId(), rep.getEnumeration().getRef().getId().asID());
-                    if( cscheme == null ) {
-                        throw new RuntimeException("Can't find ConceptScheme!"+rep.getEnumeration().getRef().getId().toString());
+                    if (cscheme == null) {
+                        throw new RuntimeException("Can't find ConceptScheme!" + rep.getEnumeration().getRef().getId().toString());
                     }
                     return cscheme;
                 } else {
