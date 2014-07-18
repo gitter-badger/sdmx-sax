@@ -580,7 +580,7 @@ public class Sdmx20StructureReaderTools {
     }
 
     public MeasureDimensionType toMeasureDimensionType(org.sdmx.resources.sdmxml.schemas.v20.structure.DimensionType d1) throws TypeValueNotFoundException, URISyntaxException {
-        //System.out.println("To MEasure");
+        System.out.println("To MEasure");
         //System.out.println("CS Agency="+d1.getConceptSchemeAgency());
         //System.out.println("CS Ref="+d1.getConceptSchemeRef());
         //System.out.println("CT Id="+d1.getConceptRef());

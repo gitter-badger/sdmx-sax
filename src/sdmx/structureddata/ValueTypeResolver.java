@@ -68,6 +68,7 @@ public class ValueTypeResolver {
         ConceptType concept = null;
         if (conceptRef != null) {
             ConceptSchemeType con = registry.findConceptScheme(conceptRef.getRef().getAgencyId() == null ? struct.getAgencyID() : conceptRef.getRef().getAgencyId(), conceptRef);
+            
             if (con == null) {
                 System.out.println("Cant find concept:" + conceptRef.getRef().getId().getString());
                 CodeType ct = new CodeType();
@@ -77,6 +78,14 @@ public class ValueTypeResolver {
                 return ct;
             }
             concept = con.findConcept(dim.getConceptIdentity().getRef().getId());
+            if (concept == null) {
+                System.out.println("Cant find concept:" + conceptRef.getRef().getId().getString());
+                CodeType ct = new CodeType();
+                ct.setId(new IDType(value));
+                Name name = new Name("en", value);
+                ct.setNames(Collections.singletonList(name));
+                return ct;
+            }
             rep = concept.getCoreRepresentation();
         }
         RepresentationType localRep = dim.getLocalRepresentation();

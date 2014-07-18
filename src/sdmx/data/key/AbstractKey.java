@@ -90,4 +90,12 @@ public class AbstractKey implements Key {
     public Set<String> keySet() {
         return map.keySet();
     }
+    public void dump() {
+        System.out.println("Dump Key");
+        Iterator<String> it = keySet().iterator();
+        while(it.hasNext()) {
+            String s = it.next();
+            System.out.println("Key:"+s+":"+getComponent(s));
+        }
+    }
 }
