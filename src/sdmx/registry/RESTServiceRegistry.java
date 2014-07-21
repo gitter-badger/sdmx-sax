@@ -4,6 +4,8 @@
  */
 package sdmx.registry;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.io.IOUtils;
 import sdmx.Registry;
 import sdmx.SdmxIO;
 import sdmx.commonreferences.ConceptReferenceType;
@@ -33,6 +36,7 @@ import sdmx.structure.concept.ConceptType;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionType;
+import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
 
 /**
  *
@@ -205,6 +209,12 @@ public class RESTServiceRegistry implements Registry {
             throw new IOException(conn.getResponseMessage());
         }
         InputStream in = conn.getInputStream();
+        if (SdmxIO.isSaveXml()) {
+            String name = System.currentTimeMillis() + ".xml";
+            FileOutputStream file = new FileOutputStream(name);
+            IOUtils.copy(in, file);
+            in = new FileInputStream(name);
+        }
         //FileOutputStream temp = new FileOutputStream("temp.xml");
         //org.apache.commons.io.IOUtils.copy(in, temp);
         //temp.close();
@@ -214,6 +224,12 @@ public class RESTServiceRegistry implements Registry {
         StructureType st = SdmxIO.parseStructure(this, in);
         if (st == null) {
             System.out.println("St is null!");
+        } else {
+            if (SdmxIO.isSaveXml()) {
+                String name = System.currentTimeMillis() + "-21.xml";
+                FileOutputStream file = new FileOutputStream(name);
+                Sdmx21StructureWriter.write(st, file);
+            }
         }
         return st;
     }
@@ -227,11 +243,12 @@ public class RESTServiceRegistry implements Registry {
             throw new IOException(conn.getResponseMessage());
         }
         InputStream in = conn.getInputStream();
-        //FileOutputStream temp = new FileOutputStream("temp.xml");
-        //org.apache.commons.io.IOUtils.copy(in, temp);
-        //temp.close();
-        //in.close();
-        //in = new FileInputStream("temp.xml");
+        if (SdmxIO.isSaveXml()) {
+            String name = System.currentTimeMillis() + ".xml";
+            FileOutputStream file = new FileOutputStream(name);
+            IOUtils.copy(in, file);
+            in = new FileInputStream(name);
+        }
         System.out.println("Parsing!");
         DataMessage msg = SdmxIO.parseData(in);
         if (msg == null) {
@@ -354,9 +371,9 @@ public class RESTServiceRegistry implements Registry {
         IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataSetId().get(0);
         NestedNCNameIDType agency = new NestedNCNameIDType(this.getAgencyId());
         DataStructureType dst = null;
-        for(int i=0;i<dataflowList.size();i++) {
-            if( dataflowList.get(i).getId().equals(flowid)){
-                dst = findDataStructure(dataflowList.get(i).getStructure().getRef().getAgencyId(), dataflowList.get(i).getStructure().getRef().getId().asID(),dataflowList.get(i).getStructure().getRef().getVersion());
+        for (int i = 0; i < dataflowList.size(); i++) {
+            if (dataflowList.get(i).getId().equals(flowid)) {
+                dst = findDataStructure(dataflowList.get(i).getStructure().getRef().getAgencyId(), dataflowList.get(i).getStructure().getRef().getId().asID(), dataflowList.get(i).getStructure().getRef().getVersion());
             }
         }
         DataStructureType structure = dst;
@@ -379,9 +396,9 @@ public class RESTServiceRegistry implements Registry {
         }
         String startTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getStart().toString();
         String endTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getEnd().toString();
-        DataMessage msg=null;
+        DataMessage msg = null;
         try {
-            msg = query(getServiceURL()+"/data/"+flowid+"/"+q.toString()+"?startPeriod="+startTime+"&endPeriod="+endTime);
+            msg = query(getServiceURL() + "/data/" + flowid + "/" + q.toString() + "?startPeriod=" + startTime + "&endPeriod=" + endTime);
         } catch (IOException ex) {
             Logger.getLogger(RESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
@@ -468,5 +485,5 @@ public class RESTServiceRegistry implements Registry {
     public void setServiceURL(String serviceURL) {
         this.serviceURL = serviceURL;
     }
-    
+
 }

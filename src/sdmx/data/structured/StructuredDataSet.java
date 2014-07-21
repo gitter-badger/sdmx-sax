@@ -25,22 +25,21 @@ import sdmx.structure.codelist.CodeType;
  * @author James
  */
 /**
- *  This file is part of SdmxSax.
+ * This file is part of SdmxSax.
  *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *   SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * SdmxSax is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ * SdmxSax is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  Copyright James Gardner 2014
+ * You should have received a copy of the GNU General Public License along with
+ * SdmxSax. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright James Gardner 2014
  */
 public class StructuredDataSet implements DataSet, Attachable {
 
@@ -52,9 +51,11 @@ public class StructuredDataSet implements DataSet, Attachable {
 
     public StructuredDataSet() {
     }
+
     public int getColumnIndex(String name) {
         return columnMapper.getColumnIndex(name);
     }
+
     public StructuredDataSet(StructuredColumnMapper mapper) {
         this.columnMapper = mapper;
     }
@@ -121,14 +122,16 @@ public class StructuredDataSet implements DataSet, Attachable {
             //System.out.println("Find Row:"+row+": Series="+series);
             //System.out.println("Find Row:"+row+": Obs="+series.getObservationRow(row));
             return series.getObservationRow(row).getValue(columnMapper.getObservationIndex(s));
-        } else if( attach == AttachmentLevel.GROUP) {
+        } else if (attach == AttachmentLevel.GROUP) {
             FlatObs flat = getFlatObsSansGroups(row);
-            FullKey full = new FullKey(flat,columnMapper);
-            for(int i=0;i<groups.size();i++) {
-                if( groups.get(i).matches(full))return (String)groups.get(i).getGroupValue(columnMapper.getColumnName(col));
+            FullKey full = new FullKey(flat, columnMapper);
+            for (int i = 0; i < groups.size(); i++) {
+                if (groups.get(i).matches(full)) {
+                    return (String) groups.get(i).getGroupValue(columnMapper.getColumnName(col));
+                }
             }
             return null;
-        }else {
+        } else {
             return null;
         }
     }
@@ -155,11 +158,13 @@ public class StructuredDataSet implements DataSet, Attachable {
             Obs obs = series.getObservationRow(row);
             obs.setValue(columnMapper.getObservationIndex(s), val);
         }
-        if( attach == AttachmentLevel.GROUP) {
+        if (attach == AttachmentLevel.GROUP) {
             FlatObs flat = getFlatObsSansGroups(row);
-            FullKey full = new FullKey(flat,columnMapper);
-            for(int i=0;i<groups.size();i++) {
-                if( groups.get(i).matches(full)) groups.get(i).setGroupValue(columnMapper.getColumnName(col),val);
+            FullKey full = new FullKey(flat, columnMapper);
+            for (int i = 0; i < groups.size(); i++) {
+                if (groups.get(i).matches(full)) {
+                    groups.get(i).setGroupValue(columnMapper.getColumnName(col), val);
+                }
             }
         }
     }
@@ -181,7 +186,7 @@ public class StructuredDataSet implements DataSet, Attachable {
     }
 
     public int findSeriesIndex(int row) {
-        return findSeriesIndex(row, 0, series.size()-1);
+        return findSeriesIndex(row, 0, series.size() - 1);
     }
 
     public int findSeriesIndex(int row, int from, int to) {
@@ -191,24 +196,24 @@ public class StructuredDataSet implements DataSet, Attachable {
         if (series.get(from + half).contains(row)) {
             return from + half;
         }
-        if (series.size()>to&&series.get(to).contains(row)) {
+        if (series.size() > to && series.get(to).contains(row)) {
             return to;
         }
-        if (series.size()>from&&series.get(from).contains(row)) {
+        if (series.size() > from && series.get(from).contains(row)) {
             return from;
         }
-/*
-        if( half == 0 ) {
-           System.out.println("From="+from);
-           System.out.println("To="+to);
-           System.out.println("Half="+half);
-           int actual = _findSeriesIndex(row);
-           System.out.println("Actual="+actual);
-           return actual;
-        }
-*/
+        /*
+         if( half == 0 ) {
+         System.out.println("From="+from);
+         System.out.println("To="+to);
+         System.out.println("Half="+half);
+         int actual = _findSeriesIndex(row);
+         System.out.println("Actual="+actual);
+         return actual;
+         }
+         */
         if (series.get(from + half).getStart() > row) {
-            return findSeriesIndex(row, from, from+half);
+            return findSeriesIndex(row, from, from + half);
         }
         if (series.get(from + half).getStart() < row) {
             return findSeriesIndex(row, from + half, to);
@@ -216,12 +221,16 @@ public class StructuredDataSet implements DataSet, Attachable {
         System.out.println("Can't Find");
         return -1;
     }
+
     public int _findSeriesIndex(int row) {
-       for(int i=0;i<series.size();i++) {
-          if( series.get(i).contains(row))return i;
-       }
-       return -1;
+        for (int i = 0; i < series.size(); i++) {
+            if (series.get(i).contains(row)) {
+                return i;
+            }
+        }
+        return -1;
     }
+
     @Override
     public String getValue(String s) {
         return getValue(columnMapper.getDataSetIndex(s));
@@ -242,8 +251,8 @@ public class StructuredDataSet implements DataSet, Attachable {
 
     @Override
     public void setValue(int i, String val) {
-        if (columnValues.size()-1 < i) {
-            for (int j = columnValues.size()-1; j < i; j++) {
+        if (columnValues.size() - 1 < i) {
+            for (int j = columnValues.size() - 1; j < i; j++) {
                 columnValues.add(null);
             }
         }
@@ -292,17 +301,20 @@ public class StructuredDataSet implements DataSet, Attachable {
 
     public FlatObs getFlatObs(int i) {
         FlatObs flat = new FlatObs(columnMapper.size());
-        for(int j=0;j<columnMapper.size();j++) {
-            flat.setValue(j, getValue(i,j));
+        for (int j = 0; j < columnMapper.size(); j++) {
+            flat.setValue(j, getValue(i, j));
         }
         return flat;
     }
+
     public FlatObs getFlatObsSansGroups(int i) {
+
         FlatObs flat = new FlatObs(columnMapper.size());
-        for(int j=0;j<columnMapper.size()&&columnMapper.getAttachmentLevel(j)!=AttachmentLevel.GROUP;j++) {
-            flat.setValue(j, getValue(i,j));
+        for (int j = 0; j < columnMapper.size() && columnMapper.getAttachmentLevel(j) != AttachmentLevel.GROUP; j++) {
+            flat.setValue(j, getValue(i, j));
         }
         return flat;
+
     }
 
     @Override
@@ -312,31 +324,35 @@ public class StructuredDataSet implements DataSet, Attachable {
 
     @Override
     public int groupSize() {
-        if( groups == null ) return 0;
+        if (groups == null) {
+            return 0;
+        }
         return groups.size();
     }
 
     @Override
     public void setGroups(List<Group> groups) {
-        this.groups=groups;
-        if( groups == null ) return;
-        for(int i=0;i<groups.size();i++) {
+        this.groups = groups;
+        if (groups == null) {
+            return;
+        }
+        for (int i = 0; i < groups.size(); i++) {
             this.groups.get(i).processGroupValues(this);
         }
     }
 
     @Override
-    public Cube query(Cube cube,DataQuery query) {
-       long time = System.currentTimeMillis();
-       for(int i=0;i<size();i++) {
-           cube.putObservation(columnMapper, getFlatObs(i));
-           /*
-           if( i % 100 == 0 ) {
-               System.out.println("100 obs="+(time-System.currentTimeMillis()));
-               time = System.currentTimeMillis();
-           }
-           */
-       }
-       return cube;
+    public Cube query(Cube cube, DataQuery query) {
+        long time = System.currentTimeMillis();
+        for (int i = 0; i < size(); i++) {
+            cube.putObservation(columnMapper, getFlatObs(i));
+            /*
+             if( i % 100 == 0 ) {
+             System.out.println("100 obs="+(time-System.currentTimeMillis()));
+             time = System.currentTimeMillis();
+             }
+             */
+        }
+        return cube;
     }
 }

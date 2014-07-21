@@ -666,7 +666,6 @@ public class Sdmx20StructureReaderTools {
         ConceptSchemeType cscheme = getConceptScheme(d1);
         //System.out.println("Concept="+cscheme);
         ConceptType concept = getConcept(cscheme, d1);
-        /*
         if (cscheme.getId().equals("STANDALONE_CONCEPT_SCHEME")) {
             MeasureDimensionType measure = currentDataStructure.getMeasureList().getMeasures().get(0);
             RefBaseType ref = measure.getLocalRepresentation().getEnumeration().getRef();
@@ -674,7 +673,7 @@ public class Sdmx20StructureReaderTools {
             concept.setCode(d1.getCode());
             cscheme.removeItem(concept);
             cs.addConcept(concept);
-        }*/
+        }
         return;
     }
 
@@ -1032,6 +1031,8 @@ public class Sdmx20StructureReaderTools {
         if (concept != null) {
             td2.setConceptIdentity(toConceptReference(cscheme, concept));
             //td2.setId(concept.getId());
+        }else {
+            System.out.println("Time Dimension Concept Is Null");
         }
         
         if (code != null) {

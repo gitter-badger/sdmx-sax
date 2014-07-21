@@ -44,7 +44,7 @@ import sdmx.version.twopointzero.Sdmx20ParserProvider;
  *  Copyright James Gardner 2014
  */
 public class SdmxIO {
-    
+    private static boolean SAVE_XML = false;
     private static List<SdmxParserProvider> list = new ArrayList<SdmxParserProvider>(0);
     public static void register(SdmxParserProvider pp) {
         list.add(pp);
@@ -184,4 +184,6 @@ public class SdmxIO {
         }
         return null;
     }
+    public static boolean isSaveXml() { return SAVE_XML; }
+    public static void setSaveXml(boolean b) { SAVE_XML =b; }
 }

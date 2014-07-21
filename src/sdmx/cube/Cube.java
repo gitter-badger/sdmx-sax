@@ -49,6 +49,8 @@ public class Cube {
 
     public void putObservation(ColumnMapper mapper, FlatObs obs) {
         CubeDimension dim = getRootCubeDimension();
+        TimeCubeDimension time = null;
+        CubeObservation cubeobs = null;
         for (int i = 0; i < struct.getDataStructureComponents().getDimensionList().size(); i++) {
             //if( struct.getDataStructureComponents().getDimensionList().getDimension(i).)
             IDType dimId = struct.getDataStructureComponents().getDimensionList().getDimension(i).getId();
@@ -60,31 +62,39 @@ public class Cube {
             }
             dim = myDim;
         }
+        CubeDimension myDim = null;
         IDType dimId = struct.getDataStructureComponents().getDimensionList().getTimeDimension().getId();
-        CubeDimension myDim = dim.getSubDimension(obs.getValue(mapper.getColumnIndex(dimId.toString())));
+        System.out.println("DimId'=" + dimId.toString());
+        int i = mapper.getColumnIndex(dimId.toString());
+        System.out.println("i=" + i);
+        System.out.println("Val=" + obs.getValue(i));
+        String s = obs.getValue(i);
+        System.out.println("SubDim==" + dim.getSubDimension(s));
+        myDim = dim.getSubDimension(obs.getValue(mapper.getColumnIndex(dimId.toString())));
+        System.out.println("Blah!");
         if (myDim == null) {
             myDim = new TimeCubeDimension(dimId.toString(), obs.getValue(mapper.getColumnIndex(dimId.toString())));
             dim.putSubDimension(myDim);
         }
-        TimeCubeDimension time = (TimeCubeDimension) myDim;
-        CubeObservation cubeobs = null;
-
+        time = (TimeCubeDimension) myDim;
         String cross = null;
         IDType dimId2 = null;
-        for (int i = 0; i < struct.getDataStructureComponents().getMeasureList().size(); i++) {
-            dimId2 = struct.getDataStructureComponents().getMeasureList().getMeasure(i).getId();
+        for (int j = 0; j < struct.getDataStructureComponents().getMeasureList().size(); j++) {
+            dimId2 = struct.getDataStructureComponents().getMeasureList().getMeasure(j).getId();
             cross = obs.getValue(mapper.getColumnIndex(dimId2.toString()));
         }
         IDType dimId3 = struct.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getId();
-        if( dimId2!=null) {
-        cubeobs = new CubeObservation(dimId2.toString(),cross, dimId3.toString(),obs.getValue(mapper.getColumnIndex(dimId3.toString())));
-        }else {
-        cubeobs = new CubeObservation(null,null, dimId3.toString(),obs.getValue(mapper.getColumnIndex(dimId3.toString())));
+        if (dimId2
+                != null) {
+            cubeobs = new CubeObservation(dimId2.toString(), cross, dimId3.toString(), obs.getValue(mapper.getColumnIndex(dimId3.toString())));
+        } else {
+            cubeobs = new CubeObservation(null, null, dimId3.toString(), obs.getValue(mapper.getColumnIndex(dimId3.toString())));
         }
+
         time.putObservation(cubeobs);
-        
-         for (int i = 0; i < struct.getDataStructureComponents().getAttributeList().size(); i++) {
-            String name = struct.getDataStructureComponents().getAttributeList().getAttribute(i).getId().toString();
+
+        for (int k = 0;k < struct.getDataStructureComponents().getAttributeList().size(); k++) {
+            String name = struct.getDataStructureComponents().getAttributeList().getAttribute(k).getId().toString();
             String value = null;
             if (mapper.getColumnIndex(name) != -1) {
                 value = obs.getValue(mapper.getColumnIndex(name));

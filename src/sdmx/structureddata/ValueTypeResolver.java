@@ -70,7 +70,8 @@ public class ValueTypeResolver {
             ConceptSchemeType con = registry.findConceptScheme(conceptRef.getRef().getAgencyId() == null ? struct.getAgencyID() : conceptRef.getRef().getAgencyId(), conceptRef);
             
             if (con == null) {
-                System.out.println("Cant find concept:" + conceptRef.getRef().getId().getString());
+                System.out.println("Cant find conceptScheme:" + conceptRef.getRef().getId().getString());
+                System.out.println(conceptRef.getRef().getAgencyId()+":"+conceptRef.getRef().getMaintainableParentId()+":"+ conceptRef.getRef().getId()+":"+conceptRef.getRef().getVersion());
                 CodeType ct = new CodeType();
                 ct.setId(new IDType(value));
                 Name name = new Name("en", value);
@@ -79,7 +80,11 @@ public class ValueTypeResolver {
             }
             concept = con.findConcept(dim.getConceptIdentity().getRef().getId());
             if (concept == null) {
-                System.out.println("Cant find concept:" + conceptRef.getRef().getId().getString());
+                System.out.println("Cant find concept:" + dim.getConceptIdentity().getRef().getId());
+                System.out.println(conceptRef.getRef().getAgencyId()+":"+conceptRef.getRef().getMaintainableParentId()+":"+ conceptRef.getRef().getId()+":"+conceptRef.getRef().getVersion());
+                for(int i=0;i<con.size();i++) {
+                    System.out.println("Concept:"+con.getConcept(i).getId());
+                }
                 CodeType ct = new CodeType();
                 ct.setId(new IDType(value));
                 Name name = new Name("en", value);

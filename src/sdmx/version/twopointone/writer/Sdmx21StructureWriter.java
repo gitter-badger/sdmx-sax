@@ -39,6 +39,7 @@ import org.sdmx.resources.sdmxml.schemas.v21.structure.CodeType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.CodededTextFormatType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.CodelistType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.CodelistsType;
+import org.sdmx.resources.sdmxml.schemas.v21.structure.ComponentType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.ConceptRepresentation;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.ConceptSchemeType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.ConceptType;
@@ -63,6 +64,7 @@ import sdmx.common.DataType;
 import sdmx.common.Name;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.datastructure.DataStructureComponents;
+import sdmx.structure.datastructure.MeasureDimensionType;
 import sdmx.structure.datastructure.PrimaryMeasure;
 import sdmx.structure.datastructure.SimpleDataStructureRepresentationType;
 import sdmx.version.twopointone.Sdmx21StructureReaderTools;
@@ -620,10 +622,20 @@ public class Sdmx21StructureWriter {
         if (mlist.getUrn() != null) {
             mlist2.setUrn(mlist.getUrn().getString());
         }
+        ComponentType[] components = new ComponentType[((mlist.getPrimaryMeasure()!=null?1:0)+(mlist.getMeasures()!=null?mlist.getMeasures().size():0))];
+        int i = 0;
         if (mlist.getPrimaryMeasure() != null) {
             toPrimaryMeasure(mlist2.addNewPrimaryMeasure(), mlist.getPrimaryMeasure());
+            components[i++]=mlist2.getPrimaryMeasure();
         }
-
+        if( mlist.getMeasures()!=null) {
+            for(int j=0;j<mlist.getMeasures().size();j++) {
+                org.sdmx.resources.sdmxml.schemas.v21.structure.MeasureDimensionType meas = org.sdmx.resources.sdmxml.schemas.v21.structure.MeasureDimensionType.Factory.newInstance();
+                toMeasure(meas,mlist.getMeasure(j));
+                components[i++]=meas;
+            }
+            mlist2.setComponentArray(components);
+        }
     }
 
     private static void toPrimaryMeasure(PrimaryMeasureType prim2, PrimaryMeasure prim) {
@@ -797,6 +809,27 @@ public class Sdmx21StructureWriter {
             while (it.hasNext()) {
                 contact2.addX400(it.next());
             }
+        }
+    }
+
+    public static void toMeasure(ComponentType meas2, MeasureDimensionType meas) {
+        if (meas.getAnnotations() != null) {
+            toAnnotationsType(meas2.addNewAnnotations(), meas.getAnnotations());
+        }
+        if (meas.getId() != null) {
+            meas2.setId(meas.getId().getString());
+        }
+        if (meas.getUri() != null) {
+            meas2.setUri(meas.getUri().getString());
+        }
+        if (meas.getUrn() != null) {
+            meas2.setUrn(meas.getUrn().getString());
+        }
+        if (meas.getConceptIdentity() != null) {
+            toConceptReferenceType(meas2.addNewConceptIdentity(), meas.getConceptIdentity());
+        }
+        if (meas.getLocalRepresentation() != null) {
+            toLocalRepresentation(meas2.addNewLocalRepresentation(), meas.getLocalRepresentation());
         }
     }
 }

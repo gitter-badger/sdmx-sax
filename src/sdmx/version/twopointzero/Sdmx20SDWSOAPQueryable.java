@@ -60,6 +60,7 @@ import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.version.common.Queryable;
 import sdmx.version.common.SOAPStrippingInputStream;
+import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
 import sdmx.xml.DateTime;
 
 /**
@@ -108,7 +109,7 @@ public class Sdmx20SDWSOAPQueryable implements Queryable {
         DataStructureWhereType dsw = new DataStructureWhereType();
         qm.setDataStructureWhereType(dsw);
         StructureType st = query(qm);
-        if( st == null ) {
+        if (st == null) {
             dataflowList = null;
             return Collections.EMPTY_LIST;
         }
@@ -153,7 +154,13 @@ public class Sdmx20SDWSOAPQueryable implements Queryable {
             // Create a response handler
             byte[] bytes = baos.toByteArray();
             ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-            return SdmxIO.parseStructure(query("GetDataStructureDefinitionResult", bais, bytes.length));
+            StructureType st = SdmxIO.parseStructure(query("GetDataStructureDefinitionResult", bais, bytes.length));
+            if (SdmxIO.isSaveXml()&&st!=null) {
+                String name = System.currentTimeMillis() + "-21.xml";
+                FileOutputStream file = new FileOutputStream(name);
+                Sdmx21StructureWriter.write(st, file);
+            }
+            return st;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -255,10 +262,12 @@ public class Sdmx20SDWSOAPQueryable implements Queryable {
             req.setEntity(entity);
             HttpResponse response = client.execute(req);
             InputStream socket = response.getEntity().getContent();
-            String name = System.currentTimeMillis()+".xml";
-            //FileOutputStream file = new FileOutputStream(name);
-            //IOUtils.copy(socket, file);
-            //socket = new FileInputStream(name);
+            if (SdmxIO.isSaveXml()) {
+                String name = System.currentTimeMillis() + ".xml";
+                FileOutputStream file = new FileOutputStream(name);
+                IOUtils.copy(socket, file);
+                socket = new FileInputStream(name);
+            }
             if (response.getStatusLine().getStatusCode() == 200) {
                 SOAPStrippingInputStream stripper = new SOAPStrippingInputStream(socket, "<" + action + ">", "</" + action + ">");
                 InputStreamReader isr = new InputStreamReader(stripper);

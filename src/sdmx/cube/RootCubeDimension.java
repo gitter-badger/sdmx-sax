@@ -44,6 +44,7 @@ public class RootCubeDimension extends CubeDimension {
 
     @Override
     public void putSubDimension(CubeDimension sub) {
+        this.setSubDimension(sub.getConcept());
         map.put(sub.getValue(),sub);
     }
 

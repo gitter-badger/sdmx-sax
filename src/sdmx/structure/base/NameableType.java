@@ -172,4 +172,13 @@ public class NameableType extends IdentifiableType {
         if( o instanceof NameableType ) return toString((NameableType)o);
         throw new RuntimeException("Not String or Nameable "+o.getClass());
     }
+    private static String toIDString(NameableType named) {
+        return named.getId().toString();
+    }
+    public static String toIDString(Object o) {
+        if( o == null ) return "";
+        if( o instanceof String ) return (String)o;
+        if( o instanceof NameableType ) return toIDString((NameableType)o);
+        throw new RuntimeException("Not String or Nameable "+o.getClass());
+    }
 }
