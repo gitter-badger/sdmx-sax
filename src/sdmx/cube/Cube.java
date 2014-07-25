@@ -64,14 +64,9 @@ public class Cube {
         }
         CubeDimension myDim = null;
         IDType dimId = struct.getDataStructureComponents().getDimensionList().getTimeDimension().getId();
-        System.out.println("DimId'=" + dimId.toString());
         int i = mapper.getColumnIndex(dimId.toString());
-        System.out.println("i=" + i);
-        System.out.println("Val=" + obs.getValue(i));
         String s = obs.getValue(i);
-        System.out.println("SubDim==" + dim.getSubDimension(s));
         myDim = dim.getSubDimension(obs.getValue(mapper.getColumnIndex(dimId.toString())));
-        System.out.println("Blah!");
         if (myDim == null) {
             myDim = new TimeCubeDimension(dimId.toString(), obs.getValue(mapper.getColumnIndex(dimId.toString())));
             dim.putSubDimension(myDim);

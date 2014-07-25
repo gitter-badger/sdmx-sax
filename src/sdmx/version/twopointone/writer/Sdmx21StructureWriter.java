@@ -622,20 +622,20 @@ public class Sdmx21StructureWriter {
         if (mlist.getUrn() != null) {
             mlist2.setUrn(mlist.getUrn().getString());
         }
-        ComponentType[] components = new ComponentType[((mlist.getPrimaryMeasure()!=null?1:0)+(mlist.getMeasures()!=null?mlist.getMeasures().size():0))];
+        ComponentType[] components = new ComponentType[((mlist.getPrimaryMeasure() != null ? 1 : 0) + (mlist.getMeasures() != null ? mlist.getMeasures().size() : 0))];
         int i = 0;
         if (mlist.getPrimaryMeasure() != null) {
             toPrimaryMeasure(mlist2.addNewPrimaryMeasure(), mlist.getPrimaryMeasure());
-            components[i++]=mlist2.getPrimaryMeasure();
+            components[i++] = mlist2.getPrimaryMeasure();
         }
-        if( mlist.getMeasures()!=null) {
-            for(int j=0;j<mlist.getMeasures().size();j++) {
+        if (mlist.getMeasures() != null) {
+            for (int j = 0; j < mlist.getMeasures().size(); j++) {
                 org.sdmx.resources.sdmxml.schemas.v21.structure.MeasureDimensionType meas = org.sdmx.resources.sdmxml.schemas.v21.structure.MeasureDimensionType.Factory.newInstance();
-                toMeasure(meas,mlist.getMeasure(j));
-                components[i++]=meas;
+                toMeasure(meas, mlist.getMeasure(j));
+                components[i++] = meas;
             }
-            mlist2.setComponentArray(components);
         }
+        mlist2.setComponentArray(components);
     }
 
     private static void toPrimaryMeasure(PrimaryMeasureType prim2, PrimaryMeasure prim) {

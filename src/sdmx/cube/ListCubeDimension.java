@@ -42,6 +42,9 @@ public class ListCubeDimension extends CubeDimension {
     
     public ListCubeDimension(String concept,String value){
         super(concept,value);
+        if( concept == null ) {
+            System.out.println("Concept is null value = "+value);
+        }
     }
     
     @Override
