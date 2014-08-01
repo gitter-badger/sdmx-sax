@@ -67,9 +67,14 @@ public class SdmxIO {
         byte[] buf = new byte[8192];
         int read = pushback.read(buf);
         int total = read;
-        while(total<100) {
+        int retries = 1000;
+        while(total<100&&retries>0) {
             read=pushback.read(buf,total,buf.length-total);
             total+=read;
+            retries--;
+        }
+        if( retries == 0 ) {
+            throw new RuntimeException("Retry Limit Reached!");
         }
         pushback.unread(buf, 0, total);
         byte[] buf2 = new byte[total];

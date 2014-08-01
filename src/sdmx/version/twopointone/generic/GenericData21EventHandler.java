@@ -47,6 +47,7 @@ import sdmx.message.DataMessage;
 import sdmx.message.HeaderTimeType;
 import sdmx.message.PartyType;
 import sdmx.message.SenderType;
+import sdmx.version.twopointone.structurespecific.StructureSpecificEventHandler;
 import sdmx.version.twopointzero.Sdmx20EventHandler;
 import sdmx.version.twopointzero.compact.CompactDataEventHandler;
 import sdmx.xml.DateTime;
@@ -114,6 +115,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
     public static final int STATE_EXTRACTED = 34;
     public static final int STATE_EXTRACTEDEND = 35;
     public static final int STATE_OBSDIMENSION = 36;
+    public static final int STATE_URN = 37;
 
     BaseHeaderType header = new BaseHeaderType();
     private List<PayloadStructureType> payloads = new ArrayList<PayloadStructureType>();
@@ -400,6 +402,17 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
             case STATE_REPORTINGEND:
                 header.setReportingEnd(new ObservationalTimePeriodType(new String(c)));
                 this.state = STATE_HEADER;
+                break;
+            case STATE_URN:
+                anyURI uri = null;
+                System.out.println("URN="+new String(c));
+                try {
+                    uri = new anyURI(new String(c));
+                } catch (URISyntaxException ex) {
+                    Logger.getLogger(StructureSpecificEventHandler.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                StructureReferenceType reference = new StructureReferenceType(uri);
+                payload.setStructure(reference);
                 break;
         }
     }
@@ -704,5 +717,12 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
 
     public void endCommonStructure() {
 
+    }
+    public void startURN(Attributes atts) {
+        state = STATE_URN;
+    }
+
+    public void endURN() {
+        state = STATE_HEADER;
     }
 }

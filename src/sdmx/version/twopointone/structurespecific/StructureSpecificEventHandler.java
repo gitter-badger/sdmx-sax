@@ -132,6 +132,7 @@ public class StructureSpecificEventHandler {
     public static final int STATE_GROUP = 28;
     public static final int STATE_GROUPEND = 29;
     public static final int STATE_HEADER_RECEIVER = 30;
+    public static final int STATE_URN = 31;
 
     String namespace = null;
     String namespaceprefix = null;
@@ -320,7 +321,7 @@ public class StructureSpecificEventHandler {
             String val = atts.getValue(i);
             //System.out.println("Name="+name+": value="+val);
             if (atts.getLocalName(i).equals("type")) {
-                String val2 = val.substring(val.indexOf(":")+1,val.length());
+                String val2 = val.substring(val.indexOf(":") + 1, val.length());
                 writer.writeObservationComponent("type", val2);
             } else {
                 writer.writeObservationComponent(name, val);
@@ -473,6 +474,17 @@ public class StructureSpecificEventHandler {
             case STATE_REPORTINGEND:
                 header.setReportingEnd(new ObservationalTimePeriodType(new String(c)));
                 this.state = STATE_HEADER;
+                break;
+            case STATE_URN:
+                anyURI uri = null;
+                System.out.println("URN="+new String(c));
+                try {
+                    uri = new anyURI(new String(c));
+                } catch (URISyntaxException ex) {
+                    Logger.getLogger(StructureSpecificEventHandler.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                StructureReferenceType reference = new StructureReferenceType(uri);
+                payload.setStructure(reference);
                 break;
         }
     }
@@ -658,7 +670,16 @@ public class StructureSpecificEventHandler {
 
     }
 
-    void startCommonStructure(Attributes atts) {
+    public void startCommonStructure(Attributes atts) {
+    }
+
+    public void startURN(Attributes atts) {
+        state = STATE_URN;
+    }
+
+    public void endURN() {
+        state = STATE_HEADER;
+
     }
 
     void endMessageStructure() {

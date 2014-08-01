@@ -55,8 +55,9 @@ public class StructuredDataMessage {
         return list.get(i);
     }
     public StructuredDataSet buildStructuredDataSet(int i) {
+        dataMessage.getHeader().getStructures().get(0).getStructure().dump();
         NestedNCNameIDType agency = dataMessage.getHeader().getStructures().get(0).getStructure().getAgencyId();
-        IDType id = dataMessage.getHeader().getStructures().get(0).getStructure().getMaintainableParentId();
+        IDType id = dataMessage.getHeader().getStructures().get(0).getStructure().getId().asID();
         VersionType vers = dataMessage.getHeader().getStructures().get(0).getStructure().getVersion();
         System.out.println("Ref="+agency+":"+id+":"+vers);
         DataStructureType structure = registry.findDataStructure(agency, id, vers);

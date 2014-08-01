@@ -164,8 +164,6 @@ public class GenericData21ContentHandler implements ContentHandler, ErrorHandler
                 eh.startEmail(atts);
             } else if ("Structure".equals(localName)) {
                 eh.startMessageStructure(atts);;
-            } else if ("DataSet".equals(localName)) {
-                eh.startDataSet(uri, atts);
             }
         }
         if ("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common".equalsIgnoreCase(uri)) {
@@ -195,6 +193,10 @@ public class GenericData21ContentHandler implements ContentHandler, ErrorHandler
                 eh.startValue(uri, atts);
             } else if ("Group".equals(localName)) {
                 eh.startGroup(uri, atts);
+            } else if ("DataSet".equals(localName)) {
+                eh.startDataSet(uri, atts);
+            } else if ("URN".equals(localName)) {
+                eh.startURN(atts);
             }
         }
         if ("Ref".equals(localName)) {
@@ -250,8 +252,6 @@ public class GenericData21ContentHandler implements ContentHandler, ErrorHandler
                 eh.endEmail();
             } else if ("Structure".equals(localName)) {
                 eh.endMessageStructure();;
-            } else if ("DataSet".equals(localName)) {
-                eh.endDataSet();
             }
         }
         if ("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common".equalsIgnoreCase(uri)) {
@@ -281,6 +281,10 @@ public class GenericData21ContentHandler implements ContentHandler, ErrorHandler
                 eh.endValue();
             } else if ("Group".equals(localName)) {
                 eh.endGroup();
+            } else if ("DataSet".equals(localName)) {
+                eh.endDataSet();
+            } else if ("URN".equals(localName)) {
+                eh.endURN();
             }
         }
         if ("Ref".equals(localName)) {

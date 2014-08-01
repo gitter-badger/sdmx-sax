@@ -120,7 +120,11 @@ public class DataMessage extends MessageType {
             structures = new ArrayList<PayloadStructureType>();
         }
         PayloadStructureType payload = structures.size()==0?null:structures.get(0);
-        if( payload!=null ) return;
+        if( payload!=null ) {
+            System.out.println("Strucure");
+            payload.getStructure().dump();
+            return;
+        }
         payload = new PayloadStructureType();
         payload.setStructure(ref);
         structures.add(payload);

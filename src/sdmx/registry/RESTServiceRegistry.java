@@ -8,14 +8,25 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.InputStreamEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 import sdmx.Registry;
 import sdmx.SdmxIO;
 import sdmx.commonreferences.ConceptReferenceType;
@@ -37,6 +48,7 @@ import sdmx.structure.concept.ConceptType;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionType;
+import sdmx.version.common.SOAPStrippingInputStream;
 import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
 
 /**
@@ -234,18 +246,28 @@ public class RESTServiceRegistry implements Registry {
         }
         return st;
     }
-
     private DataMessage query(String urlString) throws MalformedURLException, IOException, ParseException {
         System.out.println("Query:" + urlString);
+        HttpClient client = new DefaultHttpClient();
+        HttpGet get = new HttpGet(urlString);
+        get.addHeader("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
+        get.addHeader("User-Agent", "Sdmx-Sax");
+        HttpResponse response = client.execute(get);
+        /*
         URL url = new URL(urlString);
         HttpURLConnection conn
                 = (HttpURLConnection) url.openConnection();
         //if (conn.getResponseCode() != 200) {
         //    return null;
         //}
+        conn.setDoInput(true);
+        conn.setDoOutput(false);
         conn.addRequestProperty("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
         conn.addRequestProperty("User-Agent", "Sdmx-Sax");
+        conn.connect();
         InputStream in = conn.getInputStream();
+        */
+        InputStream in = response.getEntity().getContent();
         if (SdmxIO.isSaveXml()) {
             String name = System.currentTimeMillis() + ".xml";
             FileOutputStream file = new FileOutputStream(name);

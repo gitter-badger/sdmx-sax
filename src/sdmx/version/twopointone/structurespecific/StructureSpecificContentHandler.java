@@ -159,13 +159,6 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
                 eh.startEmail(atts);
             } else if ("Structure".equals(localName)) {
                 eh.startMessageStructure(atts);;
-            } else if ("DataSet".equals(localName)) {
-                //System.out.println("StartDataSet");
-                try {
-                    eh.startDataSet(uri, qName, atts);
-                } catch (URISyntaxException ex) {
-                    Logger.getLogger(StructureSpecificContentHandler.class.getName()).log(Level.SEVERE, null, ex);
-                }
             }
         } else if ("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common".equals(uri)) {
             if ("Structure".equals(localName)) {
@@ -180,6 +173,15 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
                 eh.startGroup(localName, atts);
             } else if ("Ref".equals(localName)) {
                 eh.startRef(atts);
+            } else if ("URN".equals(localName)) {
+                eh.startURN(atts);
+            } else if ("DataSet".equals(localName)) {
+                //System.out.println("StartDataSet");
+                try {
+                    eh.startDataSet(uri, qName, atts);
+                } catch (URISyntaxException ex) {
+                    Logger.getLogger(StructureSpecificContentHandler.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
@@ -245,9 +247,6 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
                 eh.endEmail();
             } else if ("Structure".equals(localName)) {
                 eh.endMessageStructure();
-            } else if ("DataSet".equals(localName)) {
-                //System.out.println("EndDataSet");
-                eh.endDataSet();
             } else if ("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common".equals(uri)) {
                 if ("Structure".equals(localName)) {
                     //eh.endCommonStructure();;
@@ -263,6 +262,11 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
             eh.endGroup();
         } else if ("Ref".equals(localName)) {
             eh.endRef();
+        } else if ("URN".equals(localName)) {
+            eh.endURN();
+        } else if ("DataSet".equals(localName)) {
+            //System.out.println("EndDataSet");
+            eh.endDataSet();
         }
     }
 

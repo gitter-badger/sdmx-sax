@@ -248,5 +248,14 @@ public class ReferenceType {
     public VersionType getMaintainedParentVersion() {
         return maintainedParentVersion;
     }
-
+    public void dump() {
+        System.out.println("Reference");
+        System.out.println("Agency:"+this.getAgencyId());
+        System.out.println("MID:"+this.getMaintainableParentId());
+        System.out.println("MVers:"+this.getMaintainedParentVersion());
+        System.out.println("ID:"+this.getId());
+        System.out.println("Vers:"+this.getVersion());
+        System.out.println("Class:"+this.getClazz());
+        System.out.println("Pack:"+this.getPack());
+    }
 }
