@@ -164,6 +164,8 @@ public class GenericData21ContentHandler implements ContentHandler, ErrorHandler
                 eh.startEmail(atts);
             } else if ("Structure".equals(localName)) {
                 eh.startMessageStructure(atts);;
+            } else if ("DataSet".equals(localName)) {
+                eh.startDataSet(uri, atts);
             }
         }
         if ("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common".equalsIgnoreCase(uri)) {
@@ -252,6 +254,8 @@ public class GenericData21ContentHandler implements ContentHandler, ErrorHandler
                 eh.endEmail();
             } else if ("Structure".equals(localName)) {
                 eh.endMessageStructure();;
+            } else if ("DataSet".equals(localName)) {
+                eh.endDataSet();
             }
         }
         if ("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common".equalsIgnoreCase(uri)) {

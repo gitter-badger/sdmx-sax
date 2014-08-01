@@ -35,6 +35,7 @@ import sdmx.structure.datastructure.DimensionType;
 import sdmx.structure.datastructure.MeasureDimensionType;
 import sdmx.structure.datastructure.PrimaryMeasure;
 import sdmx.structure.datastructure.TimeDimensionType;
+import sdmx.version.common.ReferenceUtils;
 
 /**
  * This file is part of SdmxSax.
@@ -99,7 +100,7 @@ public class ValueTypeResolver {
         }
         if (rep != null) {
             if (rep.getEnumeration() != null) {
-                if (rep.getEnumeration().getRefClass() == ItemSchemeTypeCodelistType.CODELIST) {
+                if (rep.getEnumeration().getRefClass().toInt()==ItemSchemeTypeCodelistType.CODELIST.toInt()) {
                     CodelistType codelist = registry.findCodelist(rep.getEnumeration());
                     IDType id = null;
                     try {
@@ -124,8 +125,8 @@ public class ValueTypeResolver {
                         return ct;
                     }
                 } else {
-                    ItemSchemeReferenceBaseType ref = rep.getEnumeration();
-                    ConceptSchemeType cs = registry.findConceptScheme(ref.getAgencyId(), ref.getMaintainableParentId().asID());
+                    rep.getEnumeration().dump();
+                    ConceptSchemeType cs = ReferenceUtils.findConceptScheme(registry, rep.getEnumeration());
                     ConceptType conceptMeasure = null;
                     for (int i = 0; i < cs.size() && conceptMeasure == null; i++) {
                         ConceptType tempConcept = cs.getConcept(i);

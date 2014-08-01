@@ -159,23 +159,30 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
                 eh.startEmail(atts);
             } else if ("Structure".equals(localName)) {
                 eh.startMessageStructure(atts);;
+            } else if ("DataSet".equalsIgnoreCase(localName)) {
+                //System.out.println("StartDataSet");
+                try {
+                    eh.startDataSet(uri, qName, atts);
+                } catch (URISyntaxException ex) {
+                    Logger.getLogger(StructureSpecificContentHandler.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         } else if ("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common".equals(uri)) {
             if ("Structure".equals(localName)) {
                 eh.startCommonStructure(atts);;
             }
         } else {
-            if ("Series".equals(localName)) {
+            if ("Series".equalsIgnoreCase(localName)) {
                 eh.startSeries(uri, atts);
-            } else if ("Obs".equals(localName)) {
+            } else if ("Obs".equalsIgnoreCase(localName)) {
                 eh.startObs(uri, atts);
             } else if (localName.indexOf("Group") != -1) {
                 eh.startGroup(localName, atts);
-            } else if ("Ref".equals(localName)) {
+            } else if ("Ref".equalsIgnoreCase(localName)) {
                 eh.startRef(atts);
-            } else if ("URN".equals(localName)) {
+            } else if ("URN".equalsIgnoreCase(localName)) {
                 eh.startURN(atts);
-            } else if ("DataSet".equals(localName)) {
+            } else if ("DataSet".equalsIgnoreCase(localName)) {
                 //System.out.println("StartDataSet");
                 try {
                     eh.startDataSet(uri, qName, atts);
@@ -251,6 +258,9 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
                 if ("Structure".equals(localName)) {
                     //eh.endCommonStructure();;
                 }
+            } else if ("DataSet".equals(localName)) {
+                //System.out.println("EndDataSet");
+                eh.endDataSet();
             }
         } else if ("Series".equals(localName)) {
             //System.out.println("EndSeries");

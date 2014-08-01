@@ -477,7 +477,6 @@ public class StructureSpecificEventHandler {
                 break;
             case STATE_URN:
                 anyURI uri = null;
-                System.out.println("URN="+new String(c));
                 try {
                     uri = new anyURI(new String(c));
                 } catch (URISyntaxException ex) {

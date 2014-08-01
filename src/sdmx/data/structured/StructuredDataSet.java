@@ -110,29 +110,33 @@ public class StructuredDataSet implements DataSet, Attachable {
 
     @Override
     public String getValue(int row, int col) {
-        AttachmentLevel attach = columnMapper.getAttachmentLevel(col);
-        String s = columnMapper.getColumnName(col);
-        if (attach == AttachmentLevel.DATASET) {
-            return columnValues.get(columnMapper.getDataSetIndex(s));
-        } else if (attach == AttachmentLevel.SERIES) {
-            Series series = findSeries(row);
-            return series.getValue(columnMapper.getSeriesIndex(s));
-        } else if (attach == AttachmentLevel.OBSERVATION) {
-            Series series = findSeries(row);
+        if (series.size() > 0) {
+            AttachmentLevel attach = columnMapper.getAttachmentLevel(col);
+            String s = columnMapper.getColumnName(col);
+            if (attach == AttachmentLevel.DATASET) {
+                return columnValues.get(columnMapper.getDataSetIndex(s));
+            } else if (attach == AttachmentLevel.SERIES) {
+                Series series = findSeries(row);
+                return series.getValue(columnMapper.getSeriesIndex(s));
+            } else if (attach == AttachmentLevel.OBSERVATION) {
+                Series series = findSeries(row);
             //System.out.println("Find Row:"+row+": Series="+series);
-            //System.out.println("Find Row:"+row+": Obs="+series.getObservationRow(row));
-            return series.getObservationRow(row).getValue(columnMapper.getObservationIndex(s));
-        } else if (attach == AttachmentLevel.GROUP) {
-            FlatObs flat = getFlatObsSansGroups(row);
-            FullKey full = new FullKey(flat, columnMapper);
-            for (int i = 0; i < groups.size(); i++) {
-                if (groups.get(i).matches(full)) {
-                    return (String) groups.get(i).getGroupValue(columnMapper.getColumnName(col));
+                //System.out.println("Find Row:"+row+": Obs="+series.getObservationRow(row));
+                return series.getObservationRow(row).getValue(columnMapper.getObservationIndex(s));
+            } else if (attach == AttachmentLevel.GROUP) {
+                FlatObs flat = getFlatObsSansGroups(row);
+                FullKey full = new FullKey(flat, columnMapper);
+                for (int i = 0; i < groups.size(); i++) {
+                    if (groups.get(i).matches(full)) {
+                        return (String) groups.get(i).getGroupValue(columnMapper.getColumnName(col));
+                    }
                 }
+                return null;
+            } else {
+                return null;
             }
-            return null;
-        } else {
-            return null;
+        }else {
+            return observations.get(row).getValue(col);
         }
     }
 

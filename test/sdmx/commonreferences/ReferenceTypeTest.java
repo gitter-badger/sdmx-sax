@@ -28,7 +28,7 @@ public class ReferenceTypeTest {
         assertEquals(PackageTypeCodelistType.DATASTRUCTURE,reference.getPack());
         assertEquals(ObjectTypeCodelistType.DATASTRUCTURE,reference.getClazz());
         assertEquals(new NestedNCNameIDType("ECB").toString(),reference.getAgencyId().toString());
-        assertEquals(new NestedIDType("ECB_FMD2").toString(),reference.getMaintainableParentId().toString());
+        assertEquals(new NestedIDType("ECB_FMD2").toString(),reference.getId().toString());
         assertEquals(VersionType.ONE.toString(),reference.getVersion().toString());
     }
     @Test
@@ -37,7 +37,7 @@ public class ReferenceTypeTest {
         assertEquals(PackageTypeCodelistType.DATASTRUCTURE,reference.getPack());
         assertEquals(ObjectTypeCodelistType.DATASTRUCTURE,reference.getClazz());
         assertEquals(new NestedNCNameIDType("TFFS").toString(),reference.getAgencyId().toString());
-        assertEquals(new NestedIDType("CRED_EXT_DEBT").toString(),reference.getMaintainableParentId().toString());
+        assertEquals(new NestedIDType("CRED_EXT_DEBT").toString(),reference.getId().toString());
         assertEquals(VersionType.ONE.toString(),reference.getVersion().toString());
     }
     @Test
@@ -47,7 +47,7 @@ public class ReferenceTypeTest {
         assertEquals(ObjectTypeCodelistType.CODE,reference.getClazz());
         assertEquals(new NestedNCNameIDType("ISO").toString(),reference.getAgencyId().toString());
         assertEquals(new NestedIDType("CL_3166A2").toString(),reference.getMaintainableParentId().toString());
-//        assertEquals(new IDType("AR").toString(),reference.getId().toString());
+        assertEquals(new IDType("AR").toString(),reference.getId().toString());
         assertEquals(VersionType.ONE.toString(),reference.getVersion().toString());
     }
     @Test
@@ -57,7 +57,19 @@ public class ReferenceTypeTest {
         assertEquals(ObjectTypeCodelistType.CATEGORY,reference.getClazz());
         assertEquals(new NestedNCNameIDType("ESTAT").toString(),reference.getAgencyId().toString());
         assertEquals(new NestedIDType("ESTAT_DATAFLOWS_SCHEME").toString(),reference.getMaintainableParentId().toString());
-        assertEquals(new IDType("STS").toString(),reference.getId().toString());
+        assertEquals(new IDType("STS").toString(),reference.getContainedObjectIds()[0].toString());
+        assertEquals(new IDType("STSCONS").toString(),reference.getId().toString());
         assertEquals(VersionType.ONE.toString(),reference.getVersion().toString());
     }
+    @Test
+    public void test5() throws URISyntaxException {
+        ReferenceType reference = new ReferenceType(new anyURI("urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=SDMX:CROSS_DOMAIN_CONCEPTS(1.0).UNIT_MULT"));
+        assertEquals(PackageTypeCodelistType.CONCEPTSCHEME,reference.getPack());
+        assertEquals(ObjectTypeCodelistType.CONCEPT,reference.getClazz());
+        assertEquals(new NestedNCNameIDType("SDMX").toString(),reference.getAgencyId().toString());
+        assertEquals(new NestedIDType("CROSS_DOMAIN_CONCEPTS").toString(),reference.getMaintainableParentId().toString());
+        assertEquals(new IDType("UNIT_MULT").toString(),reference.getId().toString());
+        assertEquals(VersionType.ONE.toString(),reference.getVersion().toString());
+    }
+
 }

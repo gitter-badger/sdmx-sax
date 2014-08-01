@@ -6,6 +6,7 @@ package sdmx.commonreferences;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sdmx.commonreferences.types.PackageTypeCodelistType;
@@ -86,6 +87,7 @@ public class ReferenceType {
     private transient IDType maintainedParentId = null;
     private transient VersionType maintainedParentVersion = null;
     private transient VersionType version = null;
+    private transient IDType[] containedIds = null;
     private transient NestedIDType objectId = null;
 
     public ReferenceType(RefBaseType ref, anyURI urn) {
@@ -93,14 +95,14 @@ public class ReferenceType {
         this.urn = urn;
         if (this.ref != null) {
             //try {
-                this.pack = ref.getPack();
-                this.clazz = ref.getRefClass();
-                this.agency = ref.getAgencyId();
-                this.objectId = ref.getId();
-                this.maintainedParentId = ref.getMaintainableParentId();
-                this.maintainedParentVersion = ref.getMaintainableParentVersion();
-                this.version = ref.getVersion();
-                //produce();
+            this.pack = ref.getPack();
+            this.clazz = ref.getRefClass();
+            this.agency = ref.getAgencyId();
+            this.objectId = ref.getId();
+            this.maintainedParentId = ref.getMaintainableParentId();
+            this.maintainedParentVersion = ref.getMaintainableParentVersion();
+            this.version = ref.getVersion();
+            //produce();
             //} catch (URISyntaxException ex) {
             //    Logger.getLogger(ReferenceType.class.getName()).log(Level.SEVERE, null, ex);
             //}
@@ -187,6 +189,22 @@ public class ReferenceType {
         this.maintainedParentId = new IDType(id);
         String vers = idAndVersion.substring(idAndVersion.indexOf("(") + 1, idAndVersion.indexOf(")"));
         this.version = new VersionType(vers);
+        if (idAndVersion.indexOf(").") != -1) {
+            id = idAndVersion.substring(idAndVersion.indexOf(").") + 2, idAndVersion.length());
+            String[] array = id.split("\\.");
+            if (array.length > 0) {
+                this.containedIds = new IDType[array.length - 1];
+                for (int i = 0; i < array.length - 1; i++) {
+                    this.containedIds[i] = new IDType(array[i]);
+                }
+                this.objectId = new IDType(array[array.length - 1]);
+            } else {
+                this.objectId = new IDType(id);
+            }
+        } else {
+            this.objectId = maintainedParentId;
+            this.maintainedParentId = null;
+        }
     }
 
     /**
@@ -239,7 +257,7 @@ public class ReferenceType {
     }
 
     public IDType[] getContainedObjectIds() {
-        return new IDType[]{};
+        return containedIds;
     }
 
     /**
@@ -248,14 +266,19 @@ public class ReferenceType {
     public VersionType getMaintainedParentVersion() {
         return maintainedParentVersion;
     }
+    public IDType getMainID() {
+        if( this.maintainedParentId==null ) return objectId!=null?objectId.asID():null;
+        else return maintainedParentId;
+    }
+
     public void dump() {
         System.out.println("Reference");
-        System.out.println("Agency:"+this.getAgencyId());
-        System.out.println("MID:"+this.getMaintainableParentId());
-        System.out.println("MVers:"+this.getMaintainedParentVersion());
-        System.out.println("ID:"+this.getId());
-        System.out.println("Vers:"+this.getVersion());
-        System.out.println("Class:"+this.getClazz());
-        System.out.println("Pack:"+this.getPack());
+        System.out.println("Agency:" + this.getAgencyId());
+        System.out.println("MID:" + this.getMaintainableParentId());
+        System.out.println("MVers:" + this.getMaintainedParentVersion());
+        System.out.println("ID:" + this.getId());
+        System.out.println("Vers:" + this.getVersion());
+        System.out.println("Class:" + this.getClazz());
+        System.out.println("Pack:" + this.getPack());
     }
 }
