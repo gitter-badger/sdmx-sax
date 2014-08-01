@@ -21,6 +21,7 @@ import sdmx.SdmxIO;
 import sdmx.commonreferences.ConceptReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.ItemSchemeReferenceBaseType;
+import sdmx.commonreferences.NestedIDType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.StructureReferenceType;
 import sdmx.commonreferences.VersionType;
@@ -109,7 +110,7 @@ public class RESTServiceRegistry implements Registry {
         ConceptSchemeType dst = local.findConceptScheme(agencyID, conceptRef);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/conceptscheme/" + agencyID.getString() + "/" + conceptRef.getRef().getMaintainableParentId() + "/" + conceptRef.getRef().getMaintainableParentVersion());
+                StructureType st = retrieve(getServiceURL() + "/conceptscheme/" + agencyID.getString() + "/" + conceptRef.getMaintainableParentId() + "/" + conceptRef.getVersion());
                 load(st);
                 return local.findConceptScheme(agencyID, conceptRef);
             } catch (MalformedURLException ex) {
@@ -127,7 +128,7 @@ public class RESTServiceRegistry implements Registry {
         CodelistType dst = local.findCodelist(enumeration);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/codelist/" + enumeration.getRef().getAgencyId() + "/" + enumeration.getRef().getId() + "/" + enumeration.getRef().getVersion());
+                StructureType st = retrieve(getServiceURL() + "/codelist/" + enumeration.getAgencyId() + "/" + enumeration.getId() + "/" + enumeration.getVersion());
                 load(st);
                 return local.findCodelist(enumeration);
             } catch (MalformedURLException ex) {
@@ -239,9 +240,11 @@ public class RESTServiceRegistry implements Registry {
         URL url = new URL(urlString);
         HttpURLConnection conn
                 = (HttpURLConnection) url.openConnection();
-        if (conn.getResponseCode() != 200) {
-            throw new IOException(conn.getResponseMessage());
-        }
+        //if (conn.getResponseCode() != 200) {
+        //    return null;
+        //}
+        conn.addRequestProperty("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
+        conn.addRequestProperty("User-Agent", "Sdmx-Sax");
         InputStream in = conn.getInputStream();
         if (SdmxIO.isSaveXml()) {
             String name = System.currentTimeMillis() + ".xml";
@@ -373,14 +376,14 @@ public class RESTServiceRegistry implements Registry {
         DataStructureType dst = null;
         for (int i = 0; i < dataflowList.size(); i++) {
             if (dataflowList.get(i).getId().equals(flowid)) {
-                dst = findDataStructure(dataflowList.get(i).getStructure().getRef().getAgencyId(), dataflowList.get(i).getStructure().getRef().getId().asID(), dataflowList.get(i).getStructure().getRef().getVersion());
+                dst = findDataStructure(dataflowList.get(i).getStructure().getAgencyId(), dataflowList.get(i).getStructure().getId().asID(), dataflowList.get(i).getStructure().getVersion());
             }
         }
         DataStructureType structure = dst;
         StringBuilder q = new StringBuilder();
         for (int i = 0; i < structure.getDataStructureComponents().getDimensionList().size(); i++) {
             DimensionType dim = structure.getDataStructureComponents().getDimensionList().getDimension(i);
-            String concept = dim.getConceptIdentity().getRef().getId().toString();
+            String concept = dim.getConceptIdentity().getId().toString();
             List<String> params = message.getQuery().getDataWhere().getAnd().get(0).getDimensionParameters(concept);
             if (params.size() > 0) {
                 for (int j = 0; j < params.size(); j++) {

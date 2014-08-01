@@ -59,7 +59,7 @@ public class ComponentType extends ComponentBaseType {
      */
     public IDType getId() {
         if( super.getId()==null ) {
-            return conceptIdentity.getRef().getId().asID();
+            return conceptIdentity.getId().asID();
         }
         return super.getId();
     }

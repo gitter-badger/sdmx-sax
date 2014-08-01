@@ -152,20 +152,20 @@ public class CompactDataWriter {
 
         DataSet ds = msg.getDataSets().get(0);
 
-        if (msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider().getRef() != null && msg.getHeader().getDataProvider().getRef().getAgencyId() != null) {
-            writer.writeAttribute("DataFlowAgencyID", msg.getHeader().getDataProvider().getRef().getAgencyId().toString());
+        if (msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider().getAgencyId() != null) {
+            writer.writeAttribute("DataFlowAgencyID", msg.getHeader().getDataProvider().getAgencyId().toString());
         }
         if (msg.getHeader().getDataSetID() != null && msg.getHeader().getDataSetID().size() > 0) {
             writer.writeAttribute("DataFlowID", msg.getHeader().getDataSetID().get(0).toString());
         }
-        if (msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider().getRef() != null && msg.getHeader().getDataProvider().getRef().getAgencyId() != null) {
-            writer.writeAttribute("DataProviderID", msg.getHeader().getDataProvider().getRef().getAgencyId().toString());
+        if (msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider().getAgencyId() != null) {
+            writer.writeAttribute("DataProviderID", msg.getHeader().getDataProvider().getAgencyId().toString());
         }
-        if (msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider().getRef() != null && msg.getHeader().getDataProvider().getRef().getAgencyId() != null) {
-            writer.writeAttribute("DataProviderSchemeAgencyId", msg.getHeader().getDataProvider().getRef().getAgencyId().toString());
+        if (msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider().getAgencyId() != null) {
+            writer.writeAttribute("DataProviderSchemeAgencyId", msg.getHeader().getDataProvider().getAgencyId().toString());
         }
-        if (msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider().getRef() != null && msg.getHeader().getDataProvider().getRef().getAgencyId() != null) {
-            writer.writeAttribute("DataProviderSchemeId", msg.getHeader().getDataProvider().getRef().getId().toString());
+        if (msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider()!= null && msg.getHeader().getDataProvider().getAgencyId() != null) {
+            writer.writeAttribute("DataProviderSchemeId", msg.getHeader().getDataProvider().getId().toString());
         }
         if (msg.getHeader().getDataSetID() != null && msg.getHeader().getDataSetID().size() > 0) {
             writer.writeAttribute("DataSetID", msg.getHeader().getDataSetID().get(0).toString());

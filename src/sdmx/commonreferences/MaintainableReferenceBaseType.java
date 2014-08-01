@@ -56,10 +56,10 @@ public class MaintainableReferenceBaseType extends ReferenceType {
      public String toString() {
          if( getRef()!=null ) {
              StringBuilder builder = new StringBuilder();
-             if( getRef().getAgencyId()!=null ) builder.append(getRef().getAgencyId().toString());
-             if( getRef().getMaintainableParentId()!=null) builder.append(getRef().getMaintainableParentId().toString());
-             if( getRef().getId()!=null)builder.append(","+getRef().getId());
-             if( getRef().getVersion()!=null)builder.append(","+getRef().getVersion());
+             if( getAgencyId()!=null ) builder.append(getAgencyId().toString());
+             if( getMaintainableParentId()!=null) builder.append(getMaintainableParentId().toString());
+             if( getId()!=null)builder.append(","+getId());
+             if( getVersion()!=null)builder.append(","+getVersion());
              return builder.toString();
          }
          if( this.getUrn()!=null ) {

@@ -1,19 +1,13 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sdmx.xml;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.VersionType;
+package sdmx.commonreferences;
 
-/**
- *
- * @author James
- */
+import sdmx.xml.anyURI;
+
 /**
  *  This file is part of SdmxSax.
  *
@@ -32,14 +26,8 @@ import sdmx.commonreferences.VersionType;
  *
  *  Copyright James Gardner 2014
  */
-public class anyURI {
-    URI uri = null;
-    String s = null;
-    public anyURI(String s) throws URISyntaxException {
-        this.s=s;
-        this.uri=new URI(s);
+public class URNUtilities {
+    public static boolean isSdmxURN(anyURI uri) {
+        return uri.getString().startsWith("urn:sdmx:org");
     }
-    public String getString() {return s; }
-    public URI getURI() { return uri; }
-
 }

@@ -4,15 +4,16 @@
  */
 package sdmx.structure;
 
-import sdmx.structure.concept.ConceptSchemeType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import sdmx.commonreferences.ConceptReferenceType;
 import sdmx.commonreferences.IDType;
+import sdmx.commonreferences.NestedIDType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.VersionType;
 import sdmx.structure.categorisation.CategorisationType;
+import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
 import sdmx.xml.anyURI;
 
@@ -88,7 +89,7 @@ public class ConceptsType {
         return findConceptScheme(ag, findid, ver);
     }
 
-    public ConceptSchemeType findConceptScheme(NestedNCNameIDType agency2, IDType findid, VersionType ver) {
+    public ConceptSchemeType findConceptScheme(NestedNCNameIDType agency2, NestedIDType findid, VersionType ver) {
         for (int i = 0; i < conceptSchemes.size(); i++) {
             if (conceptSchemes.get(i).identifiesMe(agency2, findid, ver)) {
                 return conceptSchemes.get(i);
@@ -109,7 +110,7 @@ public class ConceptsType {
      * ConceptReference out of it with it's AgencyID and Version.
      */
 
-    public ConceptSchemeType findConceptSchemeById(IDType id) {
+    public ConceptSchemeType findConceptSchemeById(NestedIDType id) {
         ConceptSchemeType cs = null;
         for (int i = 0; i < conceptSchemes.size(); i++) {
             if (conceptSchemes.get(i).identifiesMe(id)) {
@@ -146,16 +147,12 @@ public class ConceptsType {
     }
 
     public ConceptSchemeType findConceptScheme(NestedNCNameIDType agency, ConceptReferenceType ref) {
-        if (ref.getRef() != null) {
-            return findConceptScheme(agency, ref.getRef().getMaintainableParentId(), ref.getRef().getMaintainableParentVersion());
-        } else {
-            return findConceptSchemeByUrn(ref.getUrn());
-        }
+        return findConceptScheme(agency, ref.getMaintainableParentId(), ref.getVersion());
     }
 
     public ConceptType findConcept(NestedNCNameIDType agency, ConceptReferenceType ref) {
         ConceptSchemeType cs = findConceptScheme(agency, ref);
-        return cs.findConcept(ref.getRef().getId());
+        return cs.findConcept(ref.getId());
     }
     public ConceptType findConcept(IDType id) {
         for(int i=0;i<conceptSchemes.size();i++) {
@@ -165,7 +162,7 @@ public class ConceptsType {
         return null;
     }
 
-    public ConceptSchemeType findConceptScheme(NestedNCNameIDType mainAgencyId, IDType id) {
+    public ConceptSchemeType findConceptScheme(NestedNCNameIDType mainAgencyId, NestedIDType id) {
         for (int i = 0; i < conceptSchemes.size(); i++) {
             if (conceptSchemes.get(i).getAgencyID().equals(mainAgencyId) && conceptSchemes.get(i).getId().equals(id)) {
                 return conceptSchemes.get(i);

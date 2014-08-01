@@ -89,14 +89,14 @@ public class GenericData21Test {
     }   
     @Test
     public void testGenericData7() throws IOException {
-        assertEquals("ECB",msg.getHeader().getStructures().get(0).getStructure().getRef().getAgencyId().toString());
+        assertEquals("ECB",msg.getHeader().getStructures().get(0).getStructure().getAgencyId().toString());
     }   
     @Test
     public void testGenericData8() throws IOException {
-        assertEquals("ECB_EXR_NG",msg.getHeader().getStructures().get(0).getStructure().getRef().getId().toString());
+        assertEquals("ECB_EXR_NG",msg.getHeader().getStructures().get(0).getStructure().getId().toString());
     }   
     @Test
     public void testGenericData9() throws IOException {
-        assertEquals("1.0",msg.getHeader().getStructures().get(0).getStructure().getRef().getVersion().toString());
+        assertEquals("1.0",msg.getHeader().getStructures().get(0).getStructure().getVersion().toString());
     }   
 }

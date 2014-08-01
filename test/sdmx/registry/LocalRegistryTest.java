@@ -154,6 +154,7 @@ public class LocalRegistryTest {
         ref.setAgencyId(new NestedNCNameIDType("BIS"));
         ref.setId(new IDType("CL_COLLECTION"));
         ref.setVersion(new VersionType("1.0"));
+        ref.setMaintainableParentVersion(VersionType.ONE);
         ItemSchemeReferenceBaseType cref = new ItemSchemeReferenceBaseType(ref, null);
         CodelistType cl = doc.findCodelist(cref);
         assertNotNull(cl);

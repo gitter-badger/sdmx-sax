@@ -41,6 +41,7 @@ import sdmx.commonreferences.ConceptReferenceType;
 import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.ItemSchemeReferenceBaseType;
+import sdmx.commonreferences.NestedIDType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.StructureReferenceType;
 import sdmx.commonreferences.VersionQueryType;

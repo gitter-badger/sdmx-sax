@@ -102,14 +102,14 @@ public class Sdmx21StructureSpecificDataTest {
     }   
     @Test
     public void testStructureSpecific9() throws IOException {
-        assertEquals("ESTAT",msg.getHeader().getStructures().get(0).getStructure().getRef().getAgencyId().toString());
+        assertEquals("ESTAT",msg.getHeader().getStructures().get(0).getStructure().getAgencyId().toString());
     }   
     @Test
     public void testStructureSpecific10() throws IOException {
-        assertEquals("DEMOGRAPHY",msg.getHeader().getStructures().get(0).getStructure().getRef().getId().toString());
+        assertEquals("DEMOGRAPHY",msg.getHeader().getStructures().get(0).getStructure().getId().toString());
     }   
     @Test
     public void testStructureSpecific11() throws IOException {
-        assertEquals("1.0",msg.getHeader().getStructures().get(0).getStructure().getRef().getVersion().toString());
+        assertEquals("1.0",msg.getHeader().getStructures().get(0).getStructure().getVersion().toString());
     }   
 }

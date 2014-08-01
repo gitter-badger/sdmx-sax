@@ -698,9 +698,9 @@ public class Sdmx21StructureReaderTools {
             ConceptType con = it.next();
             if (con.getParent() != null) {
                 ConceptType parent;
-                parent = con2.findConcept(con.getParent().getRef().getId());
+                parent = con2.findConcept(con.getParent().getId());
                 if (parent == null) {
-                    throw new RuntimeException("Cannot find parent concept referenced in concept:" + con1.getId() + ":parent:" + con.getParent().getRef().getId());
+                    throw new RuntimeException("Cannot find parent concept referenced in concept:" + con1.getId() + ":parent:" + con.getParent().getId());
                 } else {
                     it.remove();
                     parent.addConcept(con);

@@ -22124,73 +22124,73 @@
                 <com:Name xml:lang="fr">National Regional Profile (ASGS)</com:Name>
                 <str:DataStructureComponents>
                     <str:DimensionList>
-                        <str:Dimension>
+                        <str:Dimension id="REGION">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="REGION" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="REGION" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_8NRPVER5_REGION" version="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_8NRPVER5_REGION" version="1.0" maintainableParentVersion="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
-                        <str:Dimension>
+                        <str:Dimension id="DATA_ITEM">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="DATA_ITEM" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="DATA_ITEM" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_8NRPVER5_DATA_ITEM" version="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_8NRPVER5_DATA_ITEM" version="1.0" maintainableParentVersion="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
-                        <str:Dimension>
+                        <str:Dimension id="FREQUENCY">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="FREQUENCY" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="FREQUENCY" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_8NRPVER5_FREQUENCY" version="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_8NRPVER5_FREQUENCY" version="1.0" maintainableParentVersion="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
-                        <str:TimeDimension>
+                        <str:TimeDimension id="TIME">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="TIME" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="TIME" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_8NRPVER5_TIME" version="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_8NRPVER5_TIME" version="1.0" maintainableParentVersion="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:TimeDimension>
                     </str:DimensionList>
                     <str:AttributeList>
-                        <str:Attribute assignmentStatus="Conditional">
+                        <str:Attribute id="OBS_STATUS" assignmentStatus="Conditional">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="OBS_STATUS" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="OBS_STATUS" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_8NRPVER5_OBS_STATUS" version="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_8NRPVER5_OBS_STATUS" version="1.0" maintainableParentVersion="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Attribute>
-                        <str:Attribute assignmentStatus="Conditional">
+                        <str:Attribute id="TIME_FORMAT" assignmentStatus="Conditional">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="TIME_FORMAT" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="TIME_FORMAT" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_8NRPVER5_TIME_FORMAT" version="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_8NRPVER5_TIME_FORMAT" version="1.0" maintainableParentVersion="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Attribute>
                     </str:AttributeList>
                     <str:MeasureList>
-                        <str:PrimaryMeasure>
+                        <str:PrimaryMeasure id="OBS_VALUE">
                             <str:ConceptIdentity>
-                                <Ref agencyID="OECD" id="OBS_VALUE" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="OECD" id="OBS_VALUE" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:TextFormat endValue="0.0" interval="0.0" startValue="0.0" textType="Double"/>

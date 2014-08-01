@@ -73,11 +73,11 @@ public class StructuredDataSet {
         ConceptReferenceType conceptRef = c.getConceptIdentity();
         ConceptType concept = null;
         if (conceptRef != null) {
-            ConceptSchemeType con = registry.findConceptScheme(conceptRef.getRef().getAgencyId(), conceptRef.getRef().getMaintainableParentId());
+            ConceptSchemeType con = registry.findConceptScheme(conceptRef.getAgencyId(), conceptRef.getMaintainableParentId());
             if (con == null) {
-                System.out.println("Cant find concept:" + conceptRef.getRef().getAgencyId()+":"+conceptRef.getRef().getMaintainableParentId());
+                System.out.println("Cant find concept:" + conceptRef.getAgencyId()+":"+conceptRef.getMaintainableParentId());
             }
-            concept = con.findConcept(c.getConceptIdentity().getRef().getId());
+            concept = con.findConcept(c.getConceptIdentity().getId());
 //            System.out.println("Concept=" + concept);
             Locale loc = Locale.getDefault();
             Name name = concept == null ? null : concept.findName(loc.getLanguage());

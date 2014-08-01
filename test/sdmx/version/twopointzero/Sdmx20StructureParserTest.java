@@ -727,45 +727,45 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample100() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("BIS", ds.getDataStructureComponents().getDimensionList().getDimensions().get(0).getConceptIdentity().getRef().getAgencyId().toString());
+        assertEquals("BIS", ds.getDataStructureComponents().getDimensionList().getDimensions().get(0).getConceptIdentity().getAgencyId().toString());
     }
 
     @Test
     public void testStructureSample101() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("FREQ", ds.getDataStructureComponents().getDimensionList().getDimensions().get(0).getConceptIdentity().getRef().getId().toString());
+        assertEquals("FREQ", ds.getDataStructureComponents().getDimensionList().getDimensions().get(0).getConceptIdentity().getId().toString());
     }
 
     @Test
     public void testStructureSample102() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
         // 1.0 is filled in from the conceptRef field.
-        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(0).getConceptIdentity().getRef().getMaintainableParentVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(0).getConceptIdentity().getMaintainedParentVersion().toString());
     }
 
     @Test
     public void testStructureSample103() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("BIS", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getRef().getAgencyId().toString());
+        assertEquals("BIS", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getAgencyId().toString());
     }
 
     @Test
     public void testStructureSample104() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("JD_TYPE", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getRef().getId().toString());
+        assertEquals("JD_TYPE", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getId().toString());
     }
 
     @Test
     public void testStructureSample105() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
         // 1.0 is filled in from the conceptRef field.
-        assertEquals("1.0", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getRef().getMaintainableParentVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getMaintainedParentVersion().toString());
     }
 
     @Test
     public void testStructureSample106() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("BIS", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getRef().getAgencyId().toString());
+        assertEquals("BIS", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getAgencyId().toString());
     }
     /*
      @Test
@@ -785,75 +785,75 @@ public class Sdmx20StructureParserTest {
     public void testStructureSample109() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
 
-        assertEquals("BIS", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getConceptIdentity().getRef().getAgencyId().toString());
+        assertEquals("BIS", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getConceptIdentity().getAgencyId().toString());
     }
 
     @Test
     public void testStructureSample110() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("JD_CATEGORY", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getConceptIdentity().getRef().getId().toString());
+        assertEquals("JD_CATEGORY", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getConceptIdentity().getId().toString());
     }
 
     @Test
     public void testStructureSample111() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
         // 1.0 is filled in from the conceptRef field.
-        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getConceptIdentity().getRef().getMaintainableParentVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getConceptIdentity().getMaintainedParentVersion().toString());
     }
 
     @Test
     public void testStructureSample112() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("BIS", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getRef().getAgencyId().toString());
+        assertEquals("BIS", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getAgencyId().toString());
     }
 
     @Test
     public void testStructureSample113() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("CL_JD_CATEGORY", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getRef().getId().toString());
+        assertEquals("CL_JD_CATEGORY", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getId().toString());
     }
 
     @Test
     public void testStructureSample114() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getRef().getVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getVersion().toString());
     }
 
     @Test
     public void testStructureSample115() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
 
-        assertEquals("BIS", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getConceptIdentity().getRef().getAgencyId().toString());
+        assertEquals("BIS", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getConceptIdentity().getAgencyId().toString());
     }
 
     @Test
     public void testStructureSample116() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("VIS_CTY", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getConceptIdentity().getRef().getId().toString());
+        assertEquals("VIS_CTY", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getConceptIdentity().getId().toString());
     }
 
     @Test
     public void testStructureSample117() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getConceptIdentity().getRef().getMaintainableParentVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getConceptIdentity().getMaintainedParentVersion().toString());
     }
 
     @Test
     public void testStructureSample118() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("BIS", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getLocalRepresentation().getEnumeration().getRef().getAgencyId().toString());
+        assertEquals("BIS", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getLocalRepresentation().getEnumeration().getAgencyId().toString());
     }
 
     @Test
     public void testStructureSample119() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("CL_BIS_IF_REF_AREA", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getLocalRepresentation().getEnumeration().getRef().getId().toString());
+        assertEquals("CL_BIS_IF_REF_AREA", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getLocalRepresentation().getEnumeration().getId().toString());
     }
 
     @Test
     public void testStructureSample120() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getLocalRepresentation().getEnumeration().getRef().getVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getLocalRepresentation().getEnumeration().getVersion().toString());
     }
 
     @Test

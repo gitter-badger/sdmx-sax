@@ -4,15 +4,16 @@
  */
 package sdmx.structure;
 
-import sdmx.structure.codelist.CodelistType;
 import java.util.ArrayList;
 import java.util.List;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.ItemSchemeReferenceBaseType;
+import sdmx.commonreferences.NestedIDType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.RefBaseType;
 import sdmx.commonreferences.VersionType;
 import sdmx.structure.categorisation.CategorisationType;
+import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.xml.anyURI;
 
@@ -79,7 +80,7 @@ public class CodelistsType {
         VersionType ver = vers==null?null:new VersionType(vers);
         return findCodelist(ag,findid,ver);
     }
-    public CodelistType findCodelist(NestedNCNameIDType agency2,IDType findid,VersionType ver) {
+    public CodelistType findCodelist(NestedNCNameIDType agency2,NestedIDType findid,VersionType ver) {
         for(int i=0;i<codelists.size();i++) {
             CodelistType cl2 = codelists.get(i);
             if( codelists.get(i).identifiesMe(agency2,findid,ver)) {
@@ -88,7 +89,7 @@ public class CodelistsType {
         }
         return null;
     }
-    public CodelistType findCodelist(NestedNCNameIDType agency2,IDType findid) {
+    public CodelistType findCodelist(NestedNCNameIDType agency2,NestedIDType findid) {
         for(int i=0;i<codelists.size();i++) {
             if( codelists.get(i).identifiesMe(agency2,findid)) {
                 return codelists.get(i);
@@ -112,7 +113,7 @@ public class CodelistsType {
      * only an ID.. we lookup the Codelist by it's ID, when we find a match, we can make a 
      * LocalItemSchemeReference out of it with it's AgencyID and Version.
      */
-    public CodelistType findCodelistById(IDType id) {
+    public CodelistType findCodelistById(NestedIDType id) {
         CodelistType cl = null;
         for(int i=0;i<codelists.size();i++) {
             if( codelists.get(i).identifiesMe(id)) {
@@ -135,10 +136,6 @@ public class CodelistsType {
         return cl;
     }
     public CodelistType findCodelist(ItemSchemeReferenceBaseType ref) {
-        if( ref.getRef()!=null) {
-            return findCodelist(ref.getRef().getAgencyId(),new IDType(ref.getRef().getId().toString()), ref.getRef().getVersion());
-        }else {
-            return findCodelist(ref.getUrn());
-        }
+        return findCodelist(ref.getAgencyId(),ref.getId(), ref.getVersion());
     }
 }

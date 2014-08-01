@@ -4,13 +4,14 @@
  */
 package sdmx.structure;
 
-import sdmx.structure.category.CategorySchemeType;
 import java.util.ArrayList;
 import java.util.List;
 import sdmx.commonreferences.IDType;
+import sdmx.commonreferences.NestedIDType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.VersionType;
 import sdmx.structure.categorisation.CategorisationType;
+import sdmx.structure.category.CategorySchemeType;
 
 /**
  *
@@ -56,7 +57,7 @@ public class CategorySchemesType {
         VersionType ver = new VersionType(vers);
         return findCategoryScheme(ag,findid,ver);
     }
-    public CategorySchemeType findCategoryScheme(NestedNCNameIDType agency2,IDType findid,VersionType ver) {
+    public CategorySchemeType findCategoryScheme(NestedNCNameIDType agency2,NestedIDType findid,VersionType ver) {
         for(int i=0;i<categorySchemes.size();i++) {
             if( categorySchemes.get(i).identifiesMe(agency2,findid,ver)) {
                 return categorySchemes.get(i);

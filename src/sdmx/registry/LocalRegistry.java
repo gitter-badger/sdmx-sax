@@ -12,6 +12,7 @@ import sdmx.commonreferences.ConceptReferenceType;
 import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.ItemSchemeReferenceBaseType;
+import sdmx.commonreferences.NestedIDType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.StructureReferenceType;
 import sdmx.commonreferences.VersionType;
@@ -218,7 +219,7 @@ public class LocalRegistry implements Registry {
             // This is for ABS Data Structures -> the OBS_VALUE
             // has an agency of 'OECD' and this agency can't be inferred from the
             // keyfamily agency, or sender agency.
-            return findConcept(id);
+            return findConcept(id.asID());
         }
         return cs.findConcept(id);
     }

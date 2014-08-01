@@ -9,6 +9,7 @@ import sdmx.Registry;
 import sdmx.commonreferences.NestedIDType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.StructureReferenceType;
+import sdmx.commonreferences.URNUtilities;
 import sdmx.commonreferences.VersionType;
 import sdmx.commonreferences.types.ObjectTypeCodelistType;
 import sdmx.commonreferences.types.PackageTypeCodelistType;
@@ -35,11 +36,11 @@ public class RegistryUtil {
 
     public static MaintainableType resolve(Registry registry, StructureReferenceType ref) {
         if (ref.getRef() != null) {
-            NestedNCNameIDType agency = ref.getRef().getAgencyId();
-            NestedIDType id = ref.getRef().getId();
-            VersionType version = ref.getRef().getVersion();
-            ObjectTypeCodelistType object = ref.getRef().getRefClass();
-            PackageTypeCodelistType pack = ref.getRef().getPack();
+            NestedNCNameIDType agency = ref.getAgencyId();
+            NestedIDType id = ref.getId();
+            VersionType version = ref.getVersion();
+            ObjectTypeCodelistType object = ref.getRefClass();
+            PackageTypeCodelistType pack = ref.getPack();
             System.out.println(ObjectTypeCodelistType.INT_AGENCY);
             switch (object.toInt()) {
                 case ObjectTypeCodelistType.INT_ANY:
@@ -181,7 +182,7 @@ public class RegistryUtil {
                     break;
             }
             throw new RuntimeException("Ref Object Type not supported.");
-        } else if (ref.getUrn().isSdmxUrn()) {
+        } else if (URNUtilities.isSdmxURN(ref.getUrn())) {
             String urn = ref.getUrn().getString();
             return null;
         } else {

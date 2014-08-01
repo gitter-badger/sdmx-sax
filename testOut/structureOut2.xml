@@ -1372,118 +1372,118 @@
                 <com:Name xml:lang="fr">Apparent Consumption of Alcohol, Australia</com:Name>
                 <str:DataStructureComponents>
                     <str:DimensionList>
-                        <str:Dimension>
+                        <str:Dimension id="TYP">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="TYP" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="TYP" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_ALC_TYP" version="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_TYP" version="1.0" maintainableParentVersion="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
-                        <str:Dimension>
+                        <str:Dimension id="MEA">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="MEA" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="MEA" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_ALC_MEA" version="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_MEA" version="1.0" maintainableParentVersion="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
-                        <str:Dimension>
+                        <str:Dimension id="BEVT">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="BEVT" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="BEVT" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_ALC_BEVT" version="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_BEVT" version="1.0" maintainableParentVersion="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
-                        <str:Dimension>
+                        <str:Dimension id="SUB">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="SUB" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="SUB" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_ALC_SUB" version="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_SUB" version="1.0" maintainableParentVersion="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
-                        <str:Dimension>
+                        <str:Dimension id="FREQUENCY">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="FREQUENCY" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="FREQUENCY" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_ALC_FREQUENCY" version="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_FREQUENCY" version="1.0" maintainableParentVersion="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
-                        <str:TimeDimension>
+                        <str:TimeDimension id="TIME">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="TIME" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="TIME" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_ALC_TIME" version="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_TIME" version="1.0" maintainableParentVersion="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:TimeDimension>
                     </str:DimensionList>
                     <str:AttributeList>
-                        <str:Attribute assignmentStatus="Conditional">
+                        <str:Attribute id="OBS_STATUS" assignmentStatus="Conditional">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="OBS_STATUS" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="OBS_STATUS" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_ALC_OBS_STATUS" version="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_OBS_STATUS" version="1.0" maintainableParentVersion="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Attribute>
-                        <str:Attribute assignmentStatus="Conditional">
+                        <str:Attribute id="UNIT" assignmentStatus="Conditional">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="UNIT" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="UNIT" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_ALC_UNIT" version="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_UNIT" version="1.0" maintainableParentVersion="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Attribute>
-                        <str:Attribute assignmentStatus="Conditional">
+                        <str:Attribute id="POWERCODE" assignmentStatus="Conditional">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="POWERCODE" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="POWERCODE" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_ALC_POWERCODE" version="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_POWERCODE" version="1.0" maintainableParentVersion="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Attribute>
-                        <str:Attribute assignmentStatus="Conditional">
+                        <str:Attribute id="REFERENCEPERIOD" assignmentStatus="Conditional">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="REFERENCEPERIOD" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="REFERENCEPERIOD" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                         </str:Attribute>
-                        <str:Attribute assignmentStatus="Conditional">
+                        <str:Attribute id="TIME_FORMAT" assignmentStatus="Conditional">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="TIME_FORMAT" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="TIME_FORMAT" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_ALC_TIME_FORMAT" version="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_TIME_FORMAT" version="1.0" maintainableParentVersion="1.0"/>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Attribute>
                     </str:AttributeList>
                     <str:MeasureList>
-                        <str:PrimaryMeasure>
+                        <str:PrimaryMeasure id="OBS_VALUE">
                             <str:ConceptIdentity>
-                                <Ref agencyID="OECD" id="OBS_VALUE" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="OECD" id="OBS_VALUE" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:TextFormat endValue="0.0" interval="0.0" startValue="0.0" textType="Double"/>

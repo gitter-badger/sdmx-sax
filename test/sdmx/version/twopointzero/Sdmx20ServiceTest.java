@@ -233,7 +233,7 @@ public class Sdmx20ServiceTest {
             System.out.println("Flow "+flow.getAgencyID()+":"+flow.getId()+":"+flow.getVersion());
             DataStructureReferenceType ref = flow.getStructure();
             try{
-            DataStructureType ds = registry.findDataStructure(ref.getRef().getAgencyId(), new IDType(ref.getRef().getId().toString()),ref.getRef().getVersion());
+            DataStructureType ds = registry.findDataStructure(ref.getAgencyId(), new IDType(ref.getId().toString()),ref.getVersion());
             ds.dump();
             }catch(Exception ie) {}
         }

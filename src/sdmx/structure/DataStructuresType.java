@@ -7,6 +7,7 @@ package sdmx.structure;
 import java.util.ArrayList;
 import java.util.List;
 import sdmx.commonreferences.IDType;
+import sdmx.commonreferences.NestedIDType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.VersionType;
 import sdmx.structure.category.CategorySchemeType;
@@ -56,7 +57,7 @@ public class DataStructuresType {
         VersionType ver = new VersionType(vers);
         return findDataStructure(ag,findid,ver);
     }
-    public DataStructureType findDataStructure(NestedNCNameIDType agency2,IDType findid,VersionType ver) {
+    public DataStructureType findDataStructure(NestedNCNameIDType agency2,NestedIDType findid,VersionType ver) {
         for(int i=0;i<dataStructures.size();i++) {
             if( dataStructures.get(i).identifiesMe(agency2,findid,ver)) {
                 return dataStructures.get(i);
@@ -64,7 +65,7 @@ public class DataStructuresType {
         }
         return null;
     }
-    public DataStructureType findDataStructure(NestedNCNameIDType agency2,IDType findid) {
+    public DataStructureType findDataStructure(NestedNCNameIDType agency2,NestedIDType findid) {
         for(int i=0;i<dataStructures.size();i++) {
             if( dataStructures.get(i).identifiesMe(agency2,findid)) {
                 return dataStructures.get(i);

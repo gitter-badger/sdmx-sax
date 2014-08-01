@@ -109,63 +109,63 @@ public class RefBaseType {
     /**
      * @return the agencyId
      */
-    public NestedNCNameIDType getAgencyId() {
+    protected NestedNCNameIDType getAgencyId() {
         return agencyId;
     }
 
     /**
      * @return the maintainableParentId
      */
-    public IDType getMaintainableParentId() {
+    protected IDType getMaintainableParentId() {
         return maintainableParentId;
     }
 
     /**
      * @return the maintainableParentVersion
      */
-    public VersionType getMaintainableParentVersion() {
+    protected VersionType getMaintainableParentVersion() {
         return maintainableParentVersion;
     }
 
     /**
      * @return the containerId
      */
-    public NestedIDType getContainerId() {
+    protected NestedIDType getContainerId() {
         return containerId;
     }
 
     /**
      * @return the id
      */
-    public NestedIDType getId() {
+    protected NestedIDType getId() {
         return id;
     }
 
     /**
      * @return the version
      */
-    public VersionType getVersion() {
+    protected VersionType getVersion() {
         return version;
     }
 
     /**
      * @return the local
      */
-    public boolean isLocal() {
+    protected boolean isLocal() {
         return local;
     }
 
     /**
      * @return the clazz
      */
-    public ObjectTypeCodelistType getRefClass() {
+    protected ObjectTypeCodelistType getRefClass() {
         return clazz;
     }
 
     /**
      * @return the pack
      */
-    public PackageTypeCodelistType getPack() {
+    protected PackageTypeCodelistType getPack() {
         return pack;
     }
 

@@ -212,7 +212,7 @@ public class Sdmx21StructureWriter {
 
     public static LocalItemReferenceType toLocalItemReference(LocalItemReferenceType ref2, sdmx.commonreferences.LocalItemReferenceType ref) {
         if (ref.getRef() != null) {
-            toRef(ref2.addNewRef(), ref.getRef());
+            toRef(ref2.addNewRef(), ref);
         }
         if (ref.getUrn() != null) {
             ref2.setURN(ref.getUrn().getString());
@@ -220,7 +220,7 @@ public class Sdmx21StructureWriter {
         return ref2;
     }
 
-    public static void toRef(RefBaseType ref2, sdmx.commonreferences.RefBaseType ref) {
+    public static void toRef(RefBaseType ref2, sdmx.commonreferences.ReferenceType ref) {
         if (ref.getAgencyId() != null) {
             ref2.setAgencyID(ref.getAgencyId().toString());
         }
@@ -233,11 +233,8 @@ public class Sdmx21StructureWriter {
         if (ref.getMaintainableParentId() != null) {
             ref2.setMaintainableParentID(ref.getMaintainableParentId().toString());
         }
-        if (ref.getMaintainableParentVersion() != null) {
-            ref2.setMaintainableParentVersion(ref.getMaintainableParentVersion().toString());
-        }
-        if (ref.getContainerId() != null) {
-            ref2.setContainerID(ref.getContainerId().toString());
+        if (ref.getVersion() != null) {
+            ref2.setMaintainableParentVersion(ref.getVersion().toString());
         }
     }
 
@@ -287,7 +284,7 @@ public class Sdmx21StructureWriter {
     }
 
     public static void toItemSchemeReference(ItemSchemeReferenceBaseType reference2, sdmx.commonreferences.ItemSchemeReferenceBaseType reference) {
-        toRef(reference2.addNewRef(), reference.getRef());
+        toRef(reference2.addNewRef(), reference);
         if (reference.getUrn() != null) {
             reference2.setURN(reference.getUrn().getString());
         }
@@ -482,7 +479,7 @@ public class Sdmx21StructureWriter {
 
     private static void toAttachGroup(LocalGroupKeyDescriptorReferenceType group2, sdmx.commonreferences.LocalGroupKeyDescriptorReferenceType group) {
         if (group.getRef() != null) {
-            toRef(group2.addNewRef(), group.getRef());
+            toRef(group2.addNewRef(), group);
         }
         if (group.getUrn() != null) {
             group2.setURN(group.getUrn().getString());
@@ -491,7 +488,7 @@ public class Sdmx21StructureWriter {
 
     private static void toLocalDimensionReferenceType(LocalDimensionReferenceType reference2, sdmx.commonreferences.LocalDimensionReferenceType reference) {
         if (reference.getRef() != null) {
-            toRef(reference2.addNewRef(), reference.getRef());
+            toRef(reference2.addNewRef(), reference);
         }
         if (reference.getUrn() != null) {
             reference2.setURN(reference.getUrn().getString());
@@ -500,7 +497,7 @@ public class Sdmx21StructureWriter {
 
     private static void toLocalGroupKeyDescriptorReference(LocalGroupKeyDescriptorReferenceType group2, sdmx.commonreferences.LocalGroupKeyDescriptorReferenceType group) {
         if (group.getRef() != null) {
-            toRef(group2.addNewRef(), group.getRef());
+            toRef(group2.addNewRef(), group);
         }
         if (group.getUrn() != null) {
             group2.setURN(group.getUrn().getString());
@@ -509,7 +506,7 @@ public class Sdmx21StructureWriter {
 
     private static void toConceptReferenceType(ConceptReferenceType reference2, sdmx.commonreferences.ConceptReferenceType reference) {
         if (reference.getRef() != null) {
-            toRef(reference2.addNewRef(), reference.getRef());
+            toRef(reference2.addNewRef(), reference);
         }
         if (reference.getUrn() != null) {
             reference2.setURN(reference.getUrn().getString());
@@ -602,7 +599,7 @@ public class Sdmx21StructureWriter {
 
     private static void toLocalPrimaryMeasureReferenceType(LocalPrimaryMeasureReferenceType reference2, sdmx.commonreferences.LocalPrimaryMeasureReferenceType reference) {
         if (reference.getRef() != null) {
-            toRef(reference2.addNewRef(), reference.getRef());
+            toRef(reference2.addNewRef(), reference);
         }
         if (reference.getUrn() != null) {
             reference2.setURN(reference.getUrn().getString());
@@ -736,7 +733,7 @@ public class Sdmx21StructureWriter {
 
     private static void toDataProvider(DataProviderReferenceType reference2, sdmx.commonreferences.DataProviderReferenceType reference) {
         if (reference.getRef() != null) {
-            toRef(reference2.addNewRef(), reference.getRef());
+            toRef(reference2.addNewRef(), reference);
         }
         if (reference.getUrn() != null) {
             reference2.setURN(reference.getUrn().getString());

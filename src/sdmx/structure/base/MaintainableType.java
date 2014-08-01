@@ -8,6 +8,7 @@ import java.lang.ref.Reference;
 import sdmx.common.Annotations;
 import sdmx.common.ExternalReferenceAttributeGroup;
 import sdmx.commonreferences.IDType;
+import sdmx.commonreferences.NestedIDType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.RefBaseType;
 import sdmx.commonreferences.ReferenceType;
@@ -146,7 +147,7 @@ public class MaintainableType extends MaintainableBaseType {
         return identifiesMe(new NestedNCNameIDType(agency2), new IDType(id2), new VersionType(vers2));
     }
 
-    public boolean identifiesMe(NestedNCNameIDType agency2, IDType id2, VersionType vers2) {
+    public boolean identifiesMe(NestedNCNameIDType agency2, NestedIDType id2, VersionType vers2) {
         //System.out.println("Left=" + this.agencyID + "." + this.getId() + "." + this.getVersion());
         //System.out.println("Right=" + agency2 + "." + id2 + "." + vers2);
         if (vers2 == null||this.getVersion()==null) {
@@ -166,7 +167,7 @@ public class MaintainableType extends MaintainableBaseType {
         }
     }
 
-    public boolean identifiesMe(NestedNCNameIDType agency2, IDType id2) {
+    public boolean identifiesMe(NestedNCNameIDType agency2, NestedIDType id2) {
         //System.out.println("Left=" + this.agencyID + "." + this.getId() + "." + this.getVersion());
         //System.out.println("Right=" + agency2 + "." + id2 + "." + vers2);
         if (this.agencyID.equals(agency2) && this.getId().equals(id2)) {

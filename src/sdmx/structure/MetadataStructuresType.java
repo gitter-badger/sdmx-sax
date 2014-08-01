@@ -7,6 +7,7 @@ package sdmx.structure;
 import java.util.ArrayList;
 import java.util.List;
 import sdmx.commonreferences.IDType;
+import sdmx.commonreferences.NestedIDType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.VersionType;
 import sdmx.structure.datastructure.DataStructureType;
@@ -57,7 +58,7 @@ public MetadataStructureType findMetadataStructure(String agency,String id,Strin
         VersionType ver = new VersionType(vers);
         return findMetadataStructure(ag,findid,ver);
     }
-    public MetadataStructureType findMetadataStructure(NestedNCNameIDType agency2,IDType findid,VersionType ver) {
+    public MetadataStructureType findMetadataStructure(NestedNCNameIDType agency2,NestedIDType findid,VersionType ver) {
         for(int i=0;i<metadataStructures.size();i++) {
             if( metadataStructures.get(i).identifiesMe(agency2,findid,ver)) {
                 return metadataStructures.get(i);

@@ -416,9 +416,9 @@ public class Sdmx20StructureReaderTools {
             ConceptType con = it.next();
             if (con.getParent() != null) {
                 ConceptType parent;
-                parent = con2.findConcept(con.getParent().getRef().getId());
+                parent = con2.findConcept(con.getParent().getId());
                 if (parent == null) {
-                    throw new RuntimeException("Cannot find parent concept referenced in concept:" + con1.getId() + ":parent:" + con.getParent().getRef().getId());
+                    throw new RuntimeException("Cannot find parent concept referenced in concept:" + con1.getId() + ":parent:" + con.getParent().getId());
                 } else {
                     it.remove();
                     parent.addConcept(con);
@@ -666,14 +666,14 @@ public class Sdmx20StructureReaderTools {
         ConceptSchemeType cscheme = getConceptScheme(d1);
         //System.out.println("Concept="+cscheme);
         ConceptType concept = getConcept(cscheme, d1);
+        /*
         if (cscheme.getId().equals("STANDALONE_CONCEPT_SCHEME")) {
             MeasureDimensionType measure = currentDataStructure.getMeasureList().getMeasures().get(0);
-            RefBaseType ref = measure.getLocalRepresentation().getEnumeration().getRef();
-            ConceptSchemeType cs = registry.findConceptScheme(ref.getAgencyId(), new IDType(ref.getId().toString()));
+            ConceptSchemeType cs = registry.findConceptScheme(measure.getLocalRepresentation().getEnumeration().getAgencyId(), measure.getLocalRepresentation().getEnumeration().getMaintainableParentId());
             concept.setCode(d1.getCode());
             cscheme.removeItem(concept);
             cs.addConcept(concept);
-        }
+        }*/
         return;
     }
 

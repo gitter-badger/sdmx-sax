@@ -4,13 +4,14 @@
  */
 package sdmx.structure;
 
-import sdmx.structure.dataflow.DataflowType;
 import java.util.ArrayList;
 import java.util.List;
 import sdmx.commonreferences.IDType;
+import sdmx.commonreferences.NestedIDType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.VersionType;
 import sdmx.structure.categorisation.CategorisationType;
+import sdmx.structure.dataflow.DataflowType;
 
 /**
  *
@@ -50,7 +51,7 @@ public class DataflowsType {
     public void setDataflows(List<DataflowType> dataflows) {
         this.dataflows = dataflows;
     }
-    public DataflowType findDataflow(IDType findid) {
+    public DataflowType findDataflow(NestedIDType findid) {
         for(int i=0;i<dataflows.size();i++) {
             if( dataflows.get(i).identifiesMe(findid)) return dataflows.get(i);
         }
@@ -62,7 +63,7 @@ public class DataflowsType {
         VersionType ver = new VersionType(vers);
         return findDataflow(ag,findid,ver);
     }
-    public DataflowType findDataflow(NestedNCNameIDType agency2,IDType findid,VersionType ver) {
+    public DataflowType findDataflow(NestedNCNameIDType agency2,NestedIDType findid,VersionType ver) {
         for(int i=0;i<dataflows.size();i++) {
             if( dataflows.get(i).identifiesMe(agency2,findid,ver)) {
                 return dataflows.get(i);

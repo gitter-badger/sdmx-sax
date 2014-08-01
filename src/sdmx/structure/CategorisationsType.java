@@ -4,12 +4,13 @@
  */
 package sdmx.structure;
 
-import sdmx.structure.categorisation.CategorisationType;
 import java.util.ArrayList;
 import java.util.List;
 import sdmx.commonreferences.IDType;
+import sdmx.commonreferences.NestedIDType;
 import sdmx.commonreferences.NestedNCNameIDType;
 import sdmx.commonreferences.VersionType;
+import sdmx.structure.categorisation.CategorisationType;
 
 /**
  *	<xs:complexType name="CategorisationsType">
@@ -66,7 +67,7 @@ public class CategorisationsType {
         VersionType ver = new VersionType(vers);
         return findCategorisation(ag,findid,ver);
     }
-    public CategorisationType findCategorisation(NestedNCNameIDType agency2,IDType findid,VersionType ver) {
+    public CategorisationType findCategorisation(NestedNCNameIDType agency2,NestedIDType findid,VersionType ver) {
         for(int i=0;i<categorisations.size();i++) {
             if( categorisations.get(i).identifiesMe(agency2,findid,ver)) {
                 return categorisations.get(i);
