@@ -246,7 +246,7 @@ public class ReferenceType {
      * @return the maintainedObjectVersion
      */
     public VersionType getVersion() {
-        return version;
+        return version==null?VersionType.ONE:version;
     }
 
     /**
@@ -264,7 +264,7 @@ public class ReferenceType {
      * @return the maintainedParentVersion
      */
     public VersionType getMaintainedParentVersion() {
-        return maintainedParentVersion;
+        return maintainedParentVersion==null?VersionType.ONE:maintainedParentVersion;
     }
     public IDType getMainID() {
         if( this.maintainedParentId==null ) return objectId!=null?objectId.asID():null;

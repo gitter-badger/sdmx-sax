@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import sdmx.commonreferences.ReferenceTypeTest;
 import sdmx.cube.CubeTest;
 import sdmx.data.StructuredDataTest;
 import sdmx.message.StructureTypeTest;
@@ -59,7 +60,8 @@ import sdmx.version.twopointzero.generic.GenericDataContentHandlerTest;
     StructureTypeTest.class,
     CompactDataEventHandlerTest.class,
     GenericDataContentHandlerTest.class,
-    CubeTest.class
+    CubeTest.class,
+    ReferenceTypeTest.class
 })
 public class SdmxSaxTestSuite {
     @BeforeClass
