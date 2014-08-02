@@ -29,7 +29,7 @@ import sdmx.structure.concept.ConceptSchemeType;
 public class ReferenceUtils {
 
     public static ConceptSchemeType findConceptScheme(Registry registry, ItemSchemeReferenceBaseType ref) {
-        ConceptSchemeType cs = registry.findConceptScheme(ref.getAgencyId(), ref.getMaintainableParentId());
+        ConceptSchemeType cs = registry.findConceptScheme(ref.getAgencyId(), ref.getMainID());
         return cs;
     }
 }

@@ -7,6 +7,8 @@ package sdmx.commonreferences;
 
 import sdmx.commonreferences.types.ItemSchemePackageTypeCodelistType;
 import sdmx.commonreferences.types.ItemSchemeTypeCodelistType;
+import sdmx.commonreferences.types.ObjectTypeCodelistType;
+import sdmx.commonreferences.types.PackageTypeCodelistType;
 
 /**
  *	<xs:complexType name="ConceptSchemeRefType">
@@ -41,7 +43,7 @@ import sdmx.commonreferences.types.ItemSchemeTypeCodelistType;
  *  Copyright James Gardner 2014
  */
 public class ConceptSchemeRefType extends ItemSchemeRefBaseType {
-    public ConceptSchemeRefType(ItemSchemeTypeCodelistType clazz,ItemSchemePackageTypeCodelistType pack) {
-        super(null,null,null,clazz,pack);
+    public ConceptSchemeRefType(NestedNCNameIDType agency, IDType id, VersionType version) {
+        super(agency,id,version,ItemSchemeTypeCodelistType.CONCEPTSCHEME,ItemSchemePackageTypeCodelistType.CONCEPTSCHEME);
     }
 }

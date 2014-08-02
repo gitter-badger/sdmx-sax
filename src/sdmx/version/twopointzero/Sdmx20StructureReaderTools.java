@@ -738,10 +738,7 @@ public class Sdmx20StructureReaderTools {
     }
 
     public ConceptSchemeRefType toConceptSchemeRefType(ConceptSchemeType cscheme) {
-        ConceptSchemeRefType ref = new ConceptSchemeRefType(ItemSchemeTypeCodelistType.CONCEPTSCHEME, ItemSchemePackageTypeCodelistType.CONCEPTSCHEME);
-        ref.setAgencyId(cscheme.getAgencyID());
-        ref.setId(cscheme.getId());
-        ref.setVersion(cscheme.getVersion());
+        ConceptSchemeRefType ref = new ConceptSchemeRefType(cscheme.getAgencyID(),cscheme.getId(),cscheme.getVersion());
         return ref;
     }
 
