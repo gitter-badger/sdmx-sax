@@ -136,7 +136,7 @@ public class Sdmx20StructureReaderTools {
 
     public StructureType parseStructure(InputStream in) throws XmlException, IOException, TypeValueNotFoundException {
         XmlOptions xmlOptions = new XmlOptions();
-        xmlOptions.setCharacterEncoding("utf-16");
+        //xmlOptions.setCharacterEncoding("utf-16");
         xmlOptions.setLoadStripComments();
         xmlOptions.setLoadTrimTextBuffer();
         xmlOptions.setLoadStripWhitespace();
@@ -147,7 +147,7 @@ public class Sdmx20StructureReaderTools {
 
     public StructureType parseStructure(Reader in) throws XmlException, IOException, TypeValueNotFoundException {
         XmlOptions xmlOptions = new XmlOptions();
-        xmlOptions.setCharacterEncoding("utf-16");
+        //xmlOptions.setCharacterEncoding("utf-16");
         xmlOptions.setLoadStripComments();
         xmlOptions.setLoadTrimTextBuffer();
         xmlOptions.setLoadStripWhitespace();

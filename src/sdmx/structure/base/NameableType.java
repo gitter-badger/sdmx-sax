@@ -7,6 +7,7 @@ package sdmx.structure.base;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import sdmx.SdmxIO;
 import sdmx.common.Description;
 import sdmx.common.Name;
 import sdmx.structure.concept.ConceptType;
@@ -143,10 +144,13 @@ public class NameableType extends IdentifiableType {
     }
 
     public String getName() {
-        return toString(this);
+        if (SdmxIO.isSanitiseNames()) {
+            return sanitise(toString(this));
+        } else {
+            return toString(this);
+        }
     }
-    
-    
+
     private static String toString(NameableType named) {
         Locale loc = Locale.getDefault();
         //if (concept.equals("FREQ")) {
@@ -166,19 +170,44 @@ public class NameableType extends IdentifiableType {
         }
         return desc.getText();
     }
+
     public static String toString(Object o) {
-        if( o == null ) return "";
-        if( o instanceof String ) return (String)o;
-        if( o instanceof NameableType ) return toString((NameableType)o);
-        throw new RuntimeException("Not String or Nameable "+o.getClass());
+        if (o == null) {
+            return "";
+        }
+        if (o instanceof String) {
+            return (String) o;
+        }
+        if (o instanceof NameableType) {
+            return toString((NameableType) o);
+        }
+        throw new RuntimeException("Not String or Nameable " + o.getClass());
     }
+
     private static String toIDString(NameableType named) {
         return named.getId().toString();
     }
+
     public static String toIDString(Object o) {
-        if( o == null ) return "";
-        if( o instanceof String ) return (String)o;
-        if( o instanceof NameableType ) return toIDString((NameableType)o);
-        throw new RuntimeException("Not String or Nameable "+o.getClass());
+        if (o == null) {
+            return "";
+        }
+        if (o instanceof String) {
+            return (String) o;
+        }
+        if (o instanceof NameableType) {
+            return toIDString((NameableType) o);
+        }
+        throw new RuntimeException("Not String or Nameable " + o.getClass());
+    }
+
+    public static String sanitise(String s) {
+        if (s.contains("'")) {
+            s = s.replace("'", "\\'");
+        }
+        if (s.contains("\"")) {
+            s = s.replace("\"", "\\\"");
+        }
+        return s;
     }
 }
