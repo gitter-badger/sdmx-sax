@@ -292,7 +292,7 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
 
     public void endSeries() {
         if (state != STATE_OBSEND) {
-            throw new RuntimeException("SeriesEnd does not follow Series");
+//            throw new RuntimeException("SeriesEnd does not follow Series");
         }
         state = STATE_SERIESEND;
         writer.finishSeries();

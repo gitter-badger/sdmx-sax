@@ -36,8 +36,10 @@ public class VersionQueryType extends VersionType {
     public static void main(String args[]) {}
     public static final VersionQueryType ALL = new VersionQueryType("*");
     boolean all = false;
+    private String s = null;
     public VersionQueryType(String s) {
         super("0");
+        this.s=s;
         if( "*".equals(s) ) all=true;
     }
     public boolean compare(VersionType v) {
@@ -45,4 +47,8 @@ public class VersionQueryType extends VersionType {
         if( v == null ) return true;
         else return getString().equals(v.getString());
     }
+    public String getString() {
+        return s;
+    }
+    public String toString() { return getString(); }
 }

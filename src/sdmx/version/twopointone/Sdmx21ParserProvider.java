@@ -85,7 +85,7 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public StructureType parseStructure(InputStream in) {
+    public StructureType parseStructure(InputStream in,String header) {
         try {
             return Sdmx21StructureReaderTools.toStructureDocument(in);
         } catch (XmlException ex) {
@@ -132,8 +132,8 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public StructureType parseStructure(Registry registry, InputStream in) throws IOException {
-        StructureType st = parseStructure(in);
+    public StructureType parseStructure(Registry registry, InputStream in,String header) throws IOException {
+        StructureType st = parseStructure(in,header);
         registry.load(st);
         return st;
     }
@@ -184,7 +184,7 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public StructureType parseStructure(Reader in) throws IOException {
+    public StructureType parseStructure(Reader in,String header) throws IOException {
         try {
             return Sdmx21StructureReaderTools.toStructureDocument(in);
         } catch (XmlException ex) {
@@ -196,8 +196,8 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public StructureType parseStructure(Registry registry, Reader in) throws IOException {
-        StructureType st = parseStructure(in);
+    public StructureType parseStructure(Registry registry, Reader in,String header) throws IOException {
+        StructureType st = parseStructure(in,header);
         registry.load(st);
         return st;
     }

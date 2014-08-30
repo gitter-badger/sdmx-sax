@@ -6,7 +6,7 @@ Sdmx Sax Parser
 This is a non-validating sdmx parser... it does not validate the sdmx file at all...
 it aims to abstract older version of sdmx into an sdmx 2.1 data model...
 
-there are wrappers to access ABS, OECD, ECB, ESTAT data sets...
+there are wrappers to access ABS, OECD, ECB, ESTAT, UN, INEGI, ISTAT data sets...
 the first place to start is to run the swingdemo...
 you can download a packaged version from sourceforge
 http://sourceforge.net/projects/sdmx-sax/
@@ -58,7 +58,7 @@ These are the steps you would need to do to query a sdmx data source, and obtain
 2. List the dataflows queryable.listDataflows();
 2. Create a DataQueryMessage
    fill in the DataWhere, start with an 'and' to hold everything,
-   add a datasetwhere to the dataflowid (taken from queryable.listDataflows().get(<index>).getId(); (this is likely to change in a future version as it should be dataflowid :(
+   add a dataflowwhere (taken from queryable.listDataflows().get(<index>).getId(); (for some services this is automagically changed to a 'datasetwhere' by the driver)
    for each dimension add an 'or',
    and inside that or, there should be one 'DimensionWhere' with a concept="<DimensionID>" value="<code>"
    for each value that you want to specify.. for multiple values, add more DimensionWhere's..

@@ -22,6 +22,7 @@ import sdmx.commonreferences.types.ItemSchemeTypeCodelistType;
 import sdmx.commonreferences.types.ObjectTypeCodelistType;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.structure.base.Component;
+import sdmx.structure.base.ItemBaseType;
 import sdmx.structure.base.ItemSchemeType;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.base.RepresentationType;
@@ -69,10 +70,10 @@ public class ValueTypeResolver {
         ConceptType concept = null;
         if (conceptRef != null) {
             ConceptSchemeType con = registry.findConceptScheme(conceptRef.getAgencyId() == null ? struct.getAgencyID() : conceptRef.getAgencyId(), conceptRef);
-            
+
             if (con == null) {
                 System.out.println("Cant find conceptScheme:" + conceptRef.getId().getString());
-                System.out.println(conceptRef.getAgencyId()+":"+conceptRef.getMaintainableParentId()+":"+ conceptRef.getId()+":"+conceptRef.getVersion());
+                System.out.println(conceptRef.getAgencyId() + ":" + conceptRef.getMaintainableParentId() + ":" + conceptRef.getId() + ":" + conceptRef.getVersion());
                 CodeType ct = new CodeType();
                 ct.setId(new IDType(value));
                 Name name = new Name("en", value);
@@ -82,9 +83,9 @@ public class ValueTypeResolver {
             concept = con.findConcept(dim.getConceptIdentity().getId());
             if (concept == null) {
                 System.out.println("Cant find concept:" + dim.getConceptIdentity().getId());
-                System.out.println(conceptRef.getAgencyId()+":"+conceptRef.getMaintainableParentId()+":"+ conceptRef.getId()+":"+conceptRef.getVersion());
-                for(int i=0;i<con.size();i++) {
-                    System.out.println("Concept:"+con.getConcept(i).getId());
+                System.out.println(conceptRef.getAgencyId() + ":" + conceptRef.getMaintainableParentId() + ":" + conceptRef.getId() + ":" + conceptRef.getVersion());
+                for (int i = 0; i < con.size(); i++) {
+                    System.out.println("Concept:" + con.getConcept(i).getId());
                 }
                 CodeType ct = new CodeType();
                 ct.setId(new IDType(value));
@@ -100,7 +101,7 @@ public class ValueTypeResolver {
         }
         if (rep != null) {
             if (rep.getEnumeration() != null) {
-                if (rep.getEnumeration().getRefClass().toInt()==ItemSchemeTypeCodelistType.CODELIST.toInt()) {
+                if (rep.getEnumeration().getRefClass().toInt() == ItemSchemeTypeCodelistType.CODELIST.toInt()) {
                     CodelistType codelist = registry.findCodelist(rep.getEnumeration());
                     IDType id = null;
                     try {
@@ -125,7 +126,7 @@ public class ValueTypeResolver {
                         return ct;
                     }
                 } else {
-                    rep.getEnumeration().dump();
+                    //rep.getEnumeration().dump();
                     ConceptSchemeType cs = ReferenceUtils.findConceptScheme(registry, rep.getEnumeration());
                     ConceptType conceptMeasure = null;
                     for (int i = 0; i < cs.size() && conceptMeasure == null; i++) {
@@ -145,9 +146,12 @@ public class ValueTypeResolver {
                 }
             }
         } else {
-            throw new RuntimeException("No Local Representation Type in Dimension");
+            CodeType itm = new CodeType();
+            Name name = new Name(Locale.getDefault().getLanguage(), value);
+            List<Name> names = Collections.singletonList(name);
+            itm.setNames(names);
+            return itm;
         }
-
         return null;
     }
 
@@ -157,7 +161,7 @@ public class ValueTypeResolver {
         RepresentationType rep = null;
         ConceptType concept = null;
         if (conceptRef != null) {
-            ConceptSchemeType con = registry.findConceptScheme(struct.getAgencyID(), conceptRef);
+            ConceptSchemeType con = registry.findConceptScheme(conceptRef.getAgencyId(), conceptRef);
             if (con == null) {
                 System.out.println("Cant find concept:" + conceptRef.getId().getString());
             }

@@ -147,6 +147,9 @@ public class ConceptsType {
     }
 
     public ConceptSchemeType findConceptScheme(NestedNCNameIDType agency, ConceptReferenceType ref) {
+        //System.out.println("Looking for Ref:"+agency.toString()+":"+ref.getMaintainableParentId().toString()+":"+ref.getVersion());
+        //ConceptSchemeType cs = findConceptScheme(agency, ref.getMaintainableParentId());
+        //System.out.println("cs="+cs);
         return findConceptScheme(agency, ref.getMaintainableParentId(), ref.getVersion());
     }
 

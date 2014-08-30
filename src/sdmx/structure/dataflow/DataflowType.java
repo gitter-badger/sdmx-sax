@@ -5,6 +5,10 @@
 package sdmx.structure.dataflow;
 
 import sdmx.commonreferences.DataStructureReferenceType;
+import sdmx.commonreferences.DataflowRefType;
+import sdmx.commonreferences.DataflowReferenceType;
+import sdmx.commonreferences.RefBaseType;
+import sdmx.commonreferences.ReferenceType;
 import sdmx.structure.base.StructureUsageType;
 
 /**
@@ -54,5 +58,10 @@ public class DataflowType extends StructureUsageType {
     }
 
     public void dump() {
+    }
+    public DataflowReferenceType asReference() {
+        DataflowRefType ref = new DataflowRefType(this.getAgencyID(),getId(),getVersion());
+        DataflowReferenceType reference = new DataflowReferenceType(ref,getUri());
+        return reference;
     }
 }

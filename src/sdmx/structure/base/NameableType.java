@@ -170,6 +170,24 @@ public class NameableType extends IdentifiableType {
         }
         return desc.getText();
     }
+    private static String toString(NameableType named,Locale loc) {
+        //if (concept.equals("FREQ")) {
+        //    ItemType code2 = getCode();
+        //    System.out.println("FREQ Code=" + code2);
+        //}
+        if (named == null) {
+            return "";
+        }
+        Description desc = named.findDescription(loc.getLanguage());
+        if (desc == null) {
+            Name name = named.findName(loc.getLanguage());
+            if (name == null) {
+                return named.getId().toString();
+            }
+            return name.getText();
+        }
+        return desc.getText();
+    }
 
     public static String toString(Object o) {
         if (o == null) {
@@ -180,6 +198,18 @@ public class NameableType extends IdentifiableType {
         }
         if (o instanceof NameableType) {
             return toString((NameableType) o);
+        }
+        throw new RuntimeException("Not String or Nameable " + o.getClass());
+    }
+    public static String toString(Object o,Locale loc) {
+        if (o == null) {
+            return "";
+        }
+        if (o instanceof String) {
+            return (String) o;
+        }
+        if (o instanceof NameableType) {
+            return toString((NameableType) o,loc);
         }
         throw new RuntimeException("Not String or Nameable " + o.getClass());
     }

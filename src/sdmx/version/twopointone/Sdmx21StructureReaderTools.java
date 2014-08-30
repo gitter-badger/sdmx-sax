@@ -1216,7 +1216,7 @@ public class Sdmx21StructureReaderTools {
     }
 
     public static DataflowRefType toDataflowRef(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType dft1) {
-        DataflowRefType dft2 = new DataflowRefType(toIDType(dft1.getId()));
+        DataflowRefType dft2 = new DataflowRefType(toNestedNCNameIDType(dft1.getAgencyID()),toIDType(dft1.getId()),toVersionType(dft1.getVersion()));
         return dft2;
     }
 

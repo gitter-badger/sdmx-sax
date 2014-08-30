@@ -45,6 +45,7 @@ import sdmx.version.twopointzero.Sdmx20ParserProvider;
  */
 public class SdmxIO {
     private static boolean SAVE_XML = false;
+    private static boolean DUMP_QUERY = false;
     private static boolean SANITISE_NAMES = false;
     private static List<SdmxParserProvider> list = new ArrayList<SdmxParserProvider>(0);
     public static void register(SdmxParserProvider pp) {
@@ -128,7 +129,7 @@ public class SdmxIO {
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider header="+header);
         }
-        StructureType struct =  prov.parseStructure(registry,push);
+        StructureType struct =  prov.parseStructure(registry,push,header);
         registry.load(struct);
         return struct;
     }
@@ -140,7 +141,7 @@ public class SdmxIO {
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider");
         }
-        StructureType struct =  prov.parseStructure(push);
+        StructureType struct =  prov.parseStructure(push,header);
         registry.load(struct);
         return struct;
     }
@@ -150,7 +151,7 @@ public class SdmxIO {
         String header = getHeader(push);
         SdmxParserProvider prov = findProvider(header);
         if( prov==null ) {
-            throw new ParseException("Unable to find Parser provider");
+            throw new ParseException("Unable to find Parser provider"+header);
         }
         return prov.parseData(header,push);
     }
@@ -192,6 +193,8 @@ public class SdmxIO {
     }
     public static boolean isSaveXml() { return SAVE_XML; }
     public static void setSaveXml(boolean b) { SAVE_XML =b; }
+    public static boolean isDumpQuery() { return DUMP_QUERY; }
+    public static void setDumpQuery(boolean b) { DUMP_QUERY =b; }
     public static boolean isSanitiseNames() { return SANITISE_NAMES; }
     public static void setSanitiseNames(boolean b) { SANITISE_NAMES =b; }
 }

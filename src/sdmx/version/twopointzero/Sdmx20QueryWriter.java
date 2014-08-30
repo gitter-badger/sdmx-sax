@@ -9,6 +9,7 @@ import java.util.List;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
+import sdmx.commonreferences.DataflowReferenceType;
 import sdmx.message.DataQueryMessage;
 import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.QueryMessage;
@@ -23,28 +24,28 @@ import sdmx.query.data.DataParametersType;
 import sdmx.query.data.DataQueryType;
 import sdmx.query.data.DimensionValueType;
 import sdmx.query.data.TimeDimensionValueType;
+import sdmx.structure.dataflow.DataflowType;
 
 /**
  *
  * @author James
  */
 /**
- *  This file is part of SdmxSax.
+ * This file is part of SdmxSax.
  *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *   SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * SdmxSax is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ * SdmxSax is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  Copyright James Gardner 2014
+ * You should have received a copy of the GNU General Public License along with
+ * SdmxSax. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright James Gardner 2014
  */
 public class Sdmx20QueryWriter {
 
@@ -106,17 +107,66 @@ public class Sdmx20QueryWriter {
         Element kf = new Element("KeyFamily");
         kf.setNamespace(queryNamespace);
         and.setNamespace(queryNamespace);
-        if (query.getDataStructureWhereType() != null&&query.getDataStructureWhereType().getId()!=null) {
+        if (query.getDataStructureWhereType() != null && query.getDataStructureWhereType().getId() != null) {
             kf.setText(query.getDataStructureWhereType().getId().get(0).toString());
             and.addContent(kf);
         }
         keyfamilyWhere.addContent(and);
         //or.addContent(kf);
-        
+
         //keyfamilyWhere.addContent(or);
         queryElement.addContent(keyfamilyWhere);
         root.addContent(getHeader(query));
         root.addContent(queryElement);
+        doc.setRootElement(root);
+        return doc;
+    }
+
+    public static Document toListDataflows(DataStructureQueryMessage query) {
+        Document doc = new Document();
+        Element root = new Element("RegistryInterface");
+        Namespace message = Namespace.getNamespace("message", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message");
+        root.setNamespace(message);
+        Namespace registryNamespace = Namespace.getNamespace("registry", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/registry");
+        root.addContent(getHeader(query));
+        Element req = new Element("QueryStructureRequest");
+        req.setAttribute("resolveReferences", "false");
+        req.setNamespace(message);
+        Element dataflowWhere = new Element("DataflowRef");
+        dataflowWhere.setNamespace(registryNamespace);
+        req.addContent(dataflowWhere);
+        root.addContent(req);
+        doc.setRootElement(root);
+        return doc;
+    }
+
+    public static Document toQueryDataStructure(DataStructureQueryMessage query) {
+        Document doc = new Document();
+        Element root = new Element("RegistryInterface");
+        Namespace message = Namespace.getNamespace("message", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message");
+        root.setNamespace(message);
+        Namespace registryNamespace = Namespace.getNamespace("registry", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/registry");
+        root.addContent(getHeader(query));
+        Element req = new Element("QueryStructureRequest");
+        req.setAttribute("resolveReferences", "true");
+        req.setNamespace(message);
+        Element kfWhere = new Element("KeyFamilyRef");
+        kfWhere.setNamespace(registryNamespace);
+        Element agency = new Element("AgencyID");
+        agency.setText(query.getDataStructureWhereType().getAgencyId().toString());
+        agency.setNamespace(registryNamespace);
+        Element id = new Element("KeyFamilyID");
+        id.setText(query.getDataStructureWhereType().getId().get(0).toString());
+        id.setNamespace(registryNamespace);
+        Element ver = new Element("Version");
+        ver.setNamespace(registryNamespace);
+        ver.setText(query.getDataStructureWhereType().getVersion().getString());
+
+        kfWhere.addContent(agency);
+        kfWhere.addContent(id);
+        kfWhere.addContent(ver);
+        req.addContent(kfWhere);
+        root.addContent(req);
         doc.setRootElement(root);
         return doc;
     }
@@ -137,10 +187,26 @@ public class Sdmx20QueryWriter {
         return doc;
     }
 
+    public static Document toNSIDocument(DataQueryMessage query) {
+        Document doc = new Document();
+        Element root = new Element("QueryMessage");
+        Namespace message = Namespace.getNamespace("message", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message");
+        Namespace queryNamespace = Namespace.getNamespace("query", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/query");
+        root.setNamespace(message);
+        Element queryElement = new Element("Query");
+        queryElement.setNamespace(message);
+        Element dataWhere = toNSIDataWhere(query.getQuery().getDataWhere());
+        queryElement.addContent(dataWhere);
+        root.addContent(getHeader(query));
+        root.addContent(queryElement);
+        doc.setRootElement(root);
+        return doc;
+    }
+
     public static Element toDataWhere(DataParametersType dw) {
         Element dataWhere = new Element("DataWhere");
-        if (dw.getDataSetId() != null) {
-            dataWhere.addContent(toQueryIDType("DataSet", dw.getDataSetId()));
+        if (dw.getDataflow() != null) {
+            dataWhere.addContent(toDataflow("DataSet", dw.getDataflow().get(0)));
         }
         if (dw.getAttributeValue() != null) {
             dataWhere.addContent(toAttributeValue(dw.getAttributeValue()));
@@ -161,6 +227,32 @@ public class Sdmx20QueryWriter {
         return dataWhere;
     }
 
+    public static Element toNSIDataWhere(DataParametersType dw) {
+        Element dataWhere = new Element("DataWhere");
+        if (dw.getTimeDimensionValue() != null) {
+            dataWhere.addContent(toTimeDimensionElement(dw.getTimeDimensionValue()));
+        }
+        if (dw.getDataflow() != null) {
+            dataWhere.addContent(toDataflowType("Dataflow", dw.getDataflow()));
+        }
+        if (dw.getAttributeValue() != null) {
+            dataWhere.addContent(toAttributeValue(dw.getAttributeValue()));
+        }
+        if (dw.getDimensionValue() != null) {
+            dataWhere.addContent(toDimensionValue(dw.getDimensionValue()));
+        }
+        if (dw.getAnd() != null) {
+            dataWhere.addContent(toNSIAndElement(dw.getAnd()));
+        }
+        if (dw.getOr() != null) {
+            if (dw.getOr().size() > 0) {
+                dataWhere.addContent(toNSIOrElement(dw.getOr()));
+            }
+        }
+        dataWhere.setNamespace(Namespace.getNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/query"));
+        return dataWhere;
+    }
+
     public static List<Element> toOrElement(List<DataParametersOrType> q) {
         List<Element> list = new ArrayList<Element>();
         for (DataParametersOrType qi : q) {
@@ -168,11 +260,18 @@ public class Sdmx20QueryWriter {
         }
         return list;
     }
+    public static List<Element> toNSIOrElement(List<DataParametersOrType> q) {
+        List<Element> list = new ArrayList<Element>();
+        for (DataParametersOrType qi : q) {
+            list.add(toNSIOrElement(qi));
+        }
+        return list;
+    }
 
     public static Element toOrElement(DataParametersOrType dw) {
         Element e = new Element("Or");
-        if (dw.getDataSetId() != null) {
-            e.addContent(toQueryIDType("DataSet", dw.getDataSetId()));
+        if (dw.getDataflow() != null) {
+            e.addContent(toDataflow("DataSet", dw.getDataflow().get(0)));
         }
         if (dw.getAttributeValue() != null) {
             e.addContent(toAttributeValue(dw.getAttributeValue()));
@@ -189,6 +288,26 @@ public class Sdmx20QueryWriter {
         e.setNamespace(Namespace.getNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/query"));
         return e;
     }
+    public static Element toNSIOrElement(DataParametersOrType dw) {
+        Element e = new Element("Or");
+        if (dw.getTimeDimensionValue() != null) {
+            e.addContent(toTimeDimensionElement(dw.getTimeDimensionValue()));
+        }
+        if (dw.getDataflow() != null) {
+            e.addContent(toDataflowType("Dataflow", dw.getDataflow()));
+        }
+        if (dw.getAttributeValue() != null) {
+            e.addContent(toAttributeValue(dw.getAttributeValue()));
+        }
+        if (dw.getDimensionValue() != null) {
+            e.addContent(toDimensionValue(dw.getDimensionValue()));
+        }
+        if (dw.getAnd() != null) {
+            e.addContent(toNSIAndElement(dw.getAnd()));
+        }
+        e.setNamespace(Namespace.getNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/query"));
+        return e;
+    }
 
     public static List<Element> toAndElement(List<DataParametersAndType> q) {
         List<Element> list = new ArrayList<Element>();
@@ -197,11 +316,18 @@ public class Sdmx20QueryWriter {
         }
         return list;
     }
+    public static List<Element> toNSIAndElement(List<DataParametersAndType> q) {
+        List<Element> list = new ArrayList<Element>();
+        for (DataParametersAndType qi : q) {
+            list.add(toNSIAndElement(qi));
+        }
+        return list;
+    }
 
     public static Element toAndElement(DataParametersAndType dw) {
         Element e = new Element("And");
-        if (dw.getDataSetId() != null) {
-            e.addContent(toQueryIDType("DataSet", dw.getDataSetId()));
+        if (dw.getDataflow() != null) {
+            e.addContent(toDataflow("DataSet", dw.getDataflow().get(0)));
         }
         if (dw.getAttributeValue() != null) {
             e.addContent(toAttributeValue(dw.getAttributeValue()));
@@ -218,11 +344,39 @@ public class Sdmx20QueryWriter {
         e.setNamespace(Namespace.getNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/query"));
         return e;
     }
+    public static Element toNSIAndElement(DataParametersAndType dw) {
+        Element e = new Element("And");
+        if (dw.getTimeDimensionValue() != null) {
+            e.addContent(toTimeDimensionElement(dw.getTimeDimensionValue()));
+        }
+        if (dw.getDataflow() != null) {
+            e.addContent(toDataflowType("Dataflow", dw.getDataflow()));
+        }
+        if (dw.getAttributeValue() != null) {
+            e.addContent(toAttributeValue(dw.getAttributeValue()));
+        }
+        if (dw.getDimensionValue() != null) {
+            e.addContent(toDimensionValue(dw.getDimensionValue()));
+        }
+
+        if (dw.getOr() != null) {
+            e.addContent(toNSIOrElement(dw.getOr()));
+        }
+        e.setNamespace(Namespace.getNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/query"));
+        return e;
+    }
 
     public static List<Element> toQueryIDType(String s, List<QueryIDType> q) {
         List<Element> list = new ArrayList<Element>();
         for (QueryIDType qi : q) {
             list.add(toQueryIDType(s, qi));
+        }
+        return list;
+    }
+    public static List<Element> toDataflowType(String s, List<DataflowReferenceType> q) {
+        List<Element> list = new ArrayList<Element>();
+        for (DataflowReferenceType qi : q) {
+            list.add(toDataflow(s, qi));
         }
         return list;
     }
@@ -351,5 +505,12 @@ public class Sdmx20QueryWriter {
         e.addContent(end);
         e.setNamespace(Namespace.getNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/query"));
         return e;
+    }
+
+    private static Element toDataflow(String s, DataflowReferenceType qi) {
+        Element elem = new Element(s);
+        elem.setNamespace(Namespace.getNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/query"));
+        elem.setText(qi.getId().toString());
+        return elem;
     }
 }

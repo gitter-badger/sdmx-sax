@@ -42,11 +42,11 @@ public interface SdmxParserProvider {
     public boolean isStructure(String header);
     public boolean isData(String header);
     public boolean isMetadata(String header);
-    public StructureType parseStructure(InputStream in)throws IOException ;
-    public StructureType parseStructure(Reader in)throws IOException ;
+    public StructureType parseStructure(InputStream in,String header)throws IOException ;
+    public StructureType parseStructure(Reader in,String header)throws IOException ;
     
-    public StructureType parseStructure(Registry registry,InputStream in)throws IOException ;
-    public StructureType parseStructure(Registry registry,Reader in)throws IOException ;
+    public StructureType parseStructure(Registry registry,InputStream in,String header)throws IOException ;
+    public StructureType parseStructure(Registry registry,Reader in,String header)throws IOException ;
     
     public DataMessage parseData(String header,InputStream in)throws IOException ;
     public DataMessage parseData(String header,Reader in)throws IOException ;

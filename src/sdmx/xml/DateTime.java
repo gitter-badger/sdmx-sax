@@ -37,8 +37,8 @@ import sdmx.version.twopointzero.compact.CompactDataEventHandler;
  */
 public class DateTime {
 
-    private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-    private static final SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    public static final SimpleDateFormat DF = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+    public static final SimpleDateFormat DF2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private String baseString = null;
     java.util.Date date = null;
     Calendar calendar = null;
@@ -68,10 +68,10 @@ public class DateTime {
         }
         Calendar cal = Calendar.getInstance();
         try {
-            cal.setTime(df.parse(s));
+            cal.setTime(DF.parse(s));
         } catch (ParseException ex) {
             try {
-                cal.setTime(df2.parse(s));
+                cal.setTime(DF2.parse(s));
             } catch (ParseException ex2) {
                 Logger.getLogger(CompactDataEventHandler.class
                         .getName()).log(Level.SEVERE, null, ex2);
@@ -83,7 +83,7 @@ public class DateTime {
     }
     public String toString() {
         if( baseString!=null) return baseString;
-        return df.format(calendar.getTime());
+        return DF.format(calendar.getTime());
     }
     public static DateTime now() {
         return new DateTime(Calendar.getInstance());

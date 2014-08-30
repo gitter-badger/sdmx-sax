@@ -27,8 +27,9 @@ package sdmx.commonreferences.types;
  *  Copyright James Gardner 2014
  */
 public class StructureUsagePackageTypeCodelistType extends PackageTypeCodelistType {
-    public static final StructureUsagePackageTypeCodelistType DATASTRUCTURE = new StructureUsagePackageTypeCodelistType();
-    public StructureUsagePackageTypeCodelistType(){
-        super("");
+    public static final String TARGET_DATASTRUCTURE = "datastructure";
+    public static final StructureUsagePackageTypeCodelistType DATASTRUCTURE = new StructureUsagePackageTypeCodelistType(TARGET_DATASTRUCTURE);
+    public StructureUsagePackageTypeCodelistType(String s){
+        super(s);
     }
 }

@@ -18,8 +18,10 @@ import java.util.logging.Logger;
 import org.apache.xmlbeans.GDuration;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
+import org.sdmx.resources.sdmxml.schemas.v20.message.RegistryInterfaceDocument;
 import org.sdmx.resources.sdmxml.schemas.v20.structure.ComponentsType;
 import org.sdmx.resources.sdmxml.schemas.v20.structure.CrossSectionalMeasureType;
+import org.sdmx.resources.sdmxml.schemas.v20.structure.KeyFamilyRefType;
 import org.sdmx.resources.sdmxml.schemas.v20.structure.PrimaryMeasureType;
 import sdmx.Registry;
 import sdmx.common.ActionType;
@@ -37,6 +39,8 @@ import sdmx.commonreferences.ConceptRefType;
 import sdmx.commonreferences.ConceptReferenceType;
 import sdmx.commonreferences.ConceptSchemeRefType;
 import sdmx.commonreferences.ConceptSchemeReferenceType;
+import sdmx.commonreferences.DataStructureRefType;
+import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.ItemSchemeRefBaseType;
 import sdmx.commonreferences.ItemSchemeReferenceBaseType;
@@ -65,6 +69,7 @@ import sdmx.registry.LocalRegistry;
 import sdmx.structure.CodelistsType;
 import sdmx.structure.ConceptsType;
 import sdmx.structure.DataStructuresType;
+import sdmx.structure.DataflowsType;
 import sdmx.structure.StructuresType;
 import sdmx.structure.base.RepresentationType;
 import sdmx.structure.base.TextFormatType;
@@ -74,6 +79,7 @@ import sdmx.structure.concept.ConceptRepresentation;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
 import sdmx.structure.concept.ISOConceptReferenceType;
+import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.AttributeListType;
 import sdmx.structure.datastructure.AttributeType;
 import sdmx.structure.datastructure.DataStructureComponents;
@@ -131,6 +137,7 @@ public class Sdmx20StructureReaderTools {
         this.registry = registry;
     }
     org.sdmx.resources.sdmxml.schemas.v20.message.StructureDocument structDoc = null;
+    org.sdmx.resources.sdmxml.schemas.v20.message.RegistryInterfaceDocument regDoc = null;
     NestedNCNameIDType mainAgencyId = null;
     NestedNCNameIDType currentKeyFamilyAgency = null;
 
@@ -159,6 +166,27 @@ public class Sdmx20StructureReaderTools {
     StructureType sd = new StructureType();
     StructuresType struct = new StructuresType();
 
+    public StructureType parseRegistry(InputStream in) throws XmlException, IOException, TypeValueNotFoundException {
+        XmlOptions xmlOptions = new XmlOptions();
+        //xmlOptions.setCharacterEncoding("utf-16");
+        xmlOptions.setLoadStripComments();
+        xmlOptions.setLoadTrimTextBuffer();
+        xmlOptions.setLoadStripWhitespace();
+        regDoc = org.sdmx.resources.sdmxml.schemas.v20.message.RegistryInterfaceDocument.Factory.parse(in,xmlOptions);
+        mainAgencyId = new NestedNCNameIDType(regDoc.getRegistryInterface().getHeader().getSenderArray(0).getId());
+        return parseRegistry(regDoc);
+    }
+    public StructureType parseRegistry(Reader in) throws XmlException, IOException, TypeValueNotFoundException {
+        XmlOptions xmlOptions = new XmlOptions();
+        //xmlOptions.setCharacterEncoding("utf-16");
+        xmlOptions.setLoadStripComments();
+        xmlOptions.setLoadTrimTextBuffer();
+        xmlOptions.setLoadStripWhitespace();
+        regDoc = org.sdmx.resources.sdmxml.schemas.v20.message.RegistryInterfaceDocument.Factory.parse(in,xmlOptions);
+        mainAgencyId = new NestedNCNameIDType(regDoc.getRegistryInterface().getHeader().getSenderArray(0).getId());
+        return parseRegistry(regDoc);
+    }
+    
     public StructureType parseStructure(org.sdmx.resources.sdmxml.schemas.v20.message.StructureDocument structDoc) throws TypeValueNotFoundException {
         if (!(registry instanceof DoubleRegistry)) {
             registry = new DoubleRegistry(struct, registry);
@@ -786,7 +814,13 @@ public class Sdmx20StructureReaderTools {
         if (concept != null) {
             a2.setConceptIdentity(toConceptReference(cscheme, concept));
             //a2.setId(concept.getId());
-            a2.setAssignmentStatus(UsageStatusType.fromString(a1.getAssignmentStatus().toString()));
+            if( a1.getAssignmentStatus()!=null) {
+               a2.setAssignmentStatus(UsageStatusType.fromString(a1.getAssignmentStatus().toString()));
+            }else{
+                // There is not default assignment status set in schema, 
+                // this is a required attribute!! but it should ben safe to put this in;
+               a2.setAssignmentStatus(UsageStatusType.CONDITIONAL);
+            }
         }
         if (code != null) {
             a2.setLocalRepresentation(toLocalRepresentation(code, toTextFormatType(a1.getTextFormat())));
@@ -817,6 +851,9 @@ public class Sdmx20StructureReaderTools {
         }
         if (tft1.getTimeInterval() != null) {
             tft2.setTimeInterval(toDuration(tft1.getTimeInterval()));
+        }
+        if( tft1.getTextType()!=null) {
+            tft2.setTextType(DataType.fromString(tft1.getTextType().toString()));
         }
         return tft2;
     }
@@ -1270,4 +1307,60 @@ public class Sdmx20StructureReaderTools {
         return reference;
     }
 
+    public StructureType parseRegistry(RegistryInterfaceDocument regDoc) throws TypeValueNotFoundException {
+        if (!(registry instanceof DoubleRegistry)) {
+            registry = new DoubleRegistry(struct, registry);
+        }
+        sd.setStructures(struct);
+        try {
+            struct.setCodelists(toCodelists(regDoc.getRegistryInterface().getQueryStructureResponse().getCodeLists()));
+            struct.setConcepts(toConcepts(regDoc.getRegistryInterface().getQueryStructureResponse().getConcepts()));
+            struct.setDataStructures(toDataStructures(regDoc.getRegistryInterface().getQueryStructureResponse().getKeyFamilies()));
+            struct.setDataflows(toDataflows(regDoc.getRegistryInterface().getQueryStructureResponse().getDataflows()));
+            sd.setHeader(toHeaderType(regDoc.getRegistryInterface().getHeader()));
+        } catch (URISyntaxException ex) {
+            //System.out.println("Exception!");
+            ex.printStackTrace();
+            Logger.getLogger(Sdmx20StructureReaderTools.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        sd.setStructures(struct);
+        return sd;
+    }
+
+    public DataflowsType toDataflows(org.sdmx.resources.sdmxml.schemas.v20.structure.DataflowsType dataflows) throws URISyntaxException {
+        if( dataflows == null ) return null;
+        DataflowsType flows = new DataflowsType(); 
+        List<DataflowType> flowsList = new ArrayList<DataflowType>();
+        for(int i=0;i<dataflows.sizeOfDataflowArray();i++) {
+          flowsList.add(toDataflow(dataflows.getDataflowArray(i)));     
+        }
+        flows.setDataflows(flowsList);
+        return flows;
+    }
+
+    public DataflowType toDataflow(org.sdmx.resources.sdmxml.schemas.v20.structure.DataflowType df) throws URISyntaxException {
+        DataflowType dataflow = new DataflowType();
+        dataflow.setNames(toNames(df.getNameArray()));
+        dataflow.setDescriptions(toDescriptions(df.getDescriptionArray()));
+        dataflow.setAnnotations(toAnnotations(df.getAnnotations()));
+        dataflow.setExternalReference(df.getIsExternalReference());
+        dataflow.setFinal(df.getIsFinal());
+        dataflow.setAgencyID(toNestedNCNameIDType(df.getAgencyID()));
+        dataflow.setId(toIDType(df.getId()));
+        dataflow.setVersion(toVersionType(df.getVersion()));
+        dataflow.setStructure(toDataStructureRefeference(df.getKeyFamilyRef()));
+        dataflow.setUri(toAnyURI(df.getUri()));
+        dataflow.setUrn(toAnyURI(df.getUrn()));
+        //dataflow.setValidFrom(toDateTime(df.getValidFrom()));
+        //dataflow.setValidTo(toDateTime(df.getValidTo()));
+        return dataflow;
+        
+    }
+
+    public StructureReferenceBaseType toDataStructureRefeference(KeyFamilyRefType keyFamilyRef) throws URISyntaxException {
+        DataStructureRefType ref = new DataStructureRefType(toNestedNCNameIDType(keyFamilyRef.getKeyFamilyAgencyID()),toIDType(keyFamilyRef.getKeyFamilyID()),toVersionType(keyFamilyRef.getVersion()));
+        DataStructureReferenceType reference = new DataStructureReferenceType(ref,toAnyURI(keyFamilyRef.getURN()));
+        return reference;
+        
+    }
 }

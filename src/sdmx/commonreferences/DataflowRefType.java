@@ -41,8 +41,8 @@ import sdmx.commonreferences.types.StructureUsageTypeCodelistType;
  *  Copyright James Gardner 2014
  */
 public class DataflowRefType extends StructureUsageRefBaseType {
-    public DataflowRefType(IDType id) {
-        super(null,id,null,StructureUsageTypeCodelistType.DATAFLOW,StructureUsagePackageTypeCodelistType.DATASTRUCTURE);
+    public DataflowRefType(NestedNCNameIDType agency,IDType id,VersionType version) {
+        super(agency,id,version,StructureUsageTypeCodelistType.DATAFLOW,StructureUsagePackageTypeCodelistType.DATASTRUCTURE);
     }
     
 }

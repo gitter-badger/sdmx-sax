@@ -37,22 +37,21 @@ import sdmx.Registry;
  * @author James
  */
 /**
- *  This file is part of SdmxSax.
+ * This file is part of SdmxSax.
  *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *   SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * SdmxSax is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ * SdmxSax is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  Copyright James Gardner 2014
+ * You should have received a copy of the GNU General Public License along with
+ * SdmxSax. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright James Gardner 2014
  */
 public class Sdmx20ParserProvider implements SdmxParserProvider {
 
@@ -63,9 +62,11 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
     public static boolean isSdmx20(String header) {
         if (header.indexOf("CompactData") != -1) {
             return true;
-        }else if (header.indexOf("MessageGroup") != -1) {
+        } else if (header.indexOf("MessageGroup") != -1) {
             return true;
         } else if (header.indexOf("GenericData") != -1) {
+            return true;
+        } else if (header.indexOf("RegistryInterface") != -1) {
             return true;
         } else if (header.indexOf("GenericData") != -1) {
             return true;
@@ -96,10 +97,14 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public StructureType parseStructure(InputStream in) throws IOException {
+    public StructureType parseStructure(InputStream in, String header) throws IOException {
         try {
             StructureType doc;
-            doc = new Sdmx20StructureReaderTools(LocalRegistry.getDefaultWorkspace()).parseStructure(in);
+            if (!isRegistryInterface(header)) {
+                doc = new Sdmx20StructureReaderTools(LocalRegistry.getDefaultWorkspace()).parseStructure(in);
+            } else {
+                doc = new Sdmx20StructureReaderTools(LocalRegistry.getDefaultWorkspace()).parseRegistry(in);
+            }
             return doc;
         } catch (XmlException | IOException ex) {
             Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
@@ -110,11 +115,16 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         }
         return null;
     }
+
     @Override
-    public StructureType parseStructure(Reader in) {
+    public StructureType parseStructure(Reader in, String header) {
         try {
             StructureType doc;
-            doc = new Sdmx20StructureReaderTools(LocalRegistry.getDefaultWorkspace()).parseStructure(in);
+            if (!isRegistryInterface(header)) {
+                doc = new Sdmx20StructureReaderTools(LocalRegistry.getDefaultWorkspace()).parseStructure(in);
+            } else {
+                doc = new Sdmx20StructureReaderTools(LocalRegistry.getDefaultWorkspace()).parseRegistry(in);
+            }
             return doc;
         } catch (XmlException | IOException ex) {
             Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
@@ -128,9 +138,17 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
 
     @Override
     public boolean isStructure(String header) {
-        if (header.indexOf("<message:Structure xmlns=\"http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message\"") != -1) {
+        if (header.indexOf("Structure ") != -1) {
             return true;
-        } else if (header.indexOf("<message:Structure xmlns:message=\"http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message\"") != -1) {
+        } else if (header.indexOf("RegistryInterface ") != -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isRegistryInterface(String header) {
+        if (header.indexOf("RegistryInterface ") != -1) {
             return true;
         } else {
             return false;
@@ -161,11 +179,12 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
             return false;
         }
     }
-    
+
     public boolean isGenericData(String header) {
         if (header.indexOf("GenericData") != -1) {
             return true;
-        }if (header.indexOf("MessageGroup") != -1) {
+        }
+        if (header.indexOf("MessageGroup") != -1) {
             return true;
         } else {
             return false;
@@ -178,17 +197,25 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public DataMessage parseData(String header,InputStream in) throws IOException {
-       if( isCompactData(header))return parseCompactData(in);
-       if( isGenericData(header))return parseGenericData(in);
-       return null;
+    public DataMessage parseData(String header, InputStream in) throws IOException {
+        if (isCompactData(header)) {
+            return parseCompactData(in);
+        }
+        if (isGenericData(header)) {
+            return parseGenericData(in);
+        }
+        return null;
     }
 
     @Override
-    public StructureType parseStructure(Registry registry, InputStream in) throws IOException {
+    public StructureType parseStructure(Registry registry, InputStream in, String header) throws IOException {
         try {
             StructureType doc;
-            doc = new Sdmx20StructureReaderTools(registry).parseStructure(in);
+            if (!isRegistryInterface(header)) {
+                doc = new Sdmx20StructureReaderTools(registry).parseStructure(in);
+            } else {
+                doc = new Sdmx20StructureReaderTools(registry).parseRegistry(in);
+            }
             return doc;
         } catch (XmlException | IOException ex) {
             Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
@@ -197,11 +224,16 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         }
         return null;
     }
+
     @Override
-    public StructureType parseStructure(Registry registry, Reader in) throws IOException {
+    public StructureType parseStructure(Registry registry, Reader in, String header) throws IOException {
         try {
             StructureType doc;
-            doc = new Sdmx20StructureReaderTools(registry).parseStructure(in);
+            if (!isRegistryInterface(header)) {
+                doc = new Sdmx20StructureReaderTools(registry).parseStructure(in);
+            } else {
+                doc = new Sdmx20StructureReaderTools(registry).parseRegistry(in);
+            }
             return doc;
         } catch (XmlException | IOException ex) {
             Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
@@ -224,7 +256,7 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         }
         return null;
     }
-    
+
     public DataMessage parseGenericData(InputStream in) throws IOException {
         GenericDataContentHandler handler = new GenericDataContentHandler(in);
         try {
@@ -237,8 +269,9 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         }
         return null;
     }
-    public DataMessage parseCompactData(InputStream in,boolean flat) throws IOException {
-        DataSetWriter writer = flat?new FlatDataSetWriter():new StructuredDataWriter();
+
+    public DataMessage parseCompactData(InputStream in, boolean flat) throws IOException {
+        DataSetWriter writer = flat ? new FlatDataSetWriter() : new StructuredDataWriter();
         CompactDataEventHandler event = new CompactDataEventHandler(writer);
         CompactDataContentHandler handler = new CompactDataContentHandler(in, event);
         try {
@@ -251,11 +284,11 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         }
         return null;
     }
-    
-    public DataMessage parseGenericData(InputStream in,boolean flat) throws IOException {
-        DataSetWriter writer = flat?new FlatDataSetWriter():new StructuredDataWriter();
+
+    public DataMessage parseGenericData(InputStream in, boolean flat) throws IOException {
+        DataSetWriter writer = flat ? new FlatDataSetWriter() : new StructuredDataWriter();
         GenericDataEventHandler event = new GenericDataEventHandler(writer);
-        GenericDataContentHandler handler = new GenericDataContentHandler(event,in);
+        GenericDataContentHandler handler = new GenericDataContentHandler(event, in);
         try {
             return handler.parse();
         } catch (SAXException ex) {
@@ -266,6 +299,7 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         }
         return null;
     }
+
     public DataMessage parseCompactData(Reader in) throws IOException {
         CompactDataEventHandler event = new CompactDataEventHandler();
         CompactDataContentHandler handler = new CompactDataContentHandler(in, event);
@@ -279,7 +313,7 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         }
         return null;
     }
-    
+
     public DataMessage parseGenericData(Reader in) throws IOException {
         GenericDataContentHandler handler = new GenericDataContentHandler(in);
         try {
@@ -292,9 +326,9 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         }
         return null;
     }
-    
-    public DataMessage parseCompactData(Reader in,boolean flat) throws IOException {
-        DataSetWriter writer = flat?new FlatDataSetWriter():new StructuredDataWriter();
+
+    public DataMessage parseCompactData(Reader in, boolean flat) throws IOException {
+        DataSetWriter writer = flat ? new FlatDataSetWriter() : new StructuredDataWriter();
         CompactDataEventHandler event = new CompactDataEventHandler(writer);
 
         CompactDataContentHandler handler = new CompactDataContentHandler(in, event);
@@ -308,11 +342,11 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         }
         return null;
     }
-    
-    public DataMessage parseGenericData(Reader in,boolean flat) throws IOException {
-        DataSetWriter writer = flat?new FlatDataSetWriter():new StructuredDataWriter();
+
+    public DataMessage parseGenericData(Reader in, boolean flat) throws IOException {
+        DataSetWriter writer = flat ? new FlatDataSetWriter() : new StructuredDataWriter();
         GenericDataEventHandler event = new GenericDataEventHandler(writer);
-        GenericDataContentHandler handler = new GenericDataContentHandler(event,in);
+        GenericDataContentHandler handler = new GenericDataContentHandler(event, in);
         try {
             return handler.parse();
         } catch (SAXException ex) {
@@ -326,25 +360,38 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
 
     @Override
     public DataMessage parseData(String header, Reader in) throws IOException {
-       if( isCompactData(header))return parseCompactData(in);
-       if( isGenericData(header))return parseGenericData(in);
-       return null;
+        if (isCompactData(header)) {
+            return parseCompactData(in);
+        }
+        if (isGenericData(header)) {
+            return parseGenericData(in);
+        }
+        return null;
     }
 
     @Override
     public DataMessage parseData(String header, InputStream in, boolean flat) throws IOException {
-       if( isCompactData(header))return parseCompactData(in,flat);
-       if( isGenericData(header))return parseGenericData(in,flat);
-       return null;
+        if (isCompactData(header)) {
+            return parseCompactData(in, flat);
+        }
+        if (isGenericData(header)) {
+            return parseGenericData(in, flat);
+        }
+        return null;
     }
 
     @Override
     public DataMessage parseData(String header, Reader in, boolean flat) throws IOException {
-       if( isCompactData(header))return parseCompactData(in,flat);
-       if( isGenericData(header))return parseGenericData(in,flat);
-       return null;
+        if (isCompactData(header)) {
+            return parseCompactData(in, flat);
+        }
+        if (isGenericData(header)) {
+            return parseGenericData(in, flat);
+        }
+        return null;
     }
-    public void writeDataMessage(DataMessage msg,OutputStream out) throws XMLStreamException {
-        CompactDataWriter.write(msg,out);
+
+    public void writeDataMessage(DataMessage msg, OutputStream out) throws XMLStreamException {
+        CompactDataWriter.write(msg, out);
     }
 }
