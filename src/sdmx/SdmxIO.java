@@ -46,6 +46,7 @@ import sdmx.version.twopointzero.Sdmx20ParserProvider;
 public class SdmxIO {
     private static boolean SAVE_XML = false;
     private static boolean DUMP_QUERY = false;
+    private static boolean DUMP_XML = false;
     private static boolean SANITISE_NAMES = false;
     private static List<SdmxParserProvider> list = new ArrayList<SdmxParserProvider>(0);
     public static void register(SdmxParserProvider pp) {
@@ -195,6 +196,8 @@ public class SdmxIO {
     public static void setSaveXml(boolean b) { SAVE_XML =b; }
     public static boolean isDumpQuery() { return DUMP_QUERY; }
     public static void setDumpQuery(boolean b) { DUMP_QUERY =b; }
+    public static boolean isDumpXml() { return DUMP_XML; }
+    public static void setDumpXml(boolean b) { DUMP_XML =b; }
     public static boolean isSanitiseNames() { return SANITISE_NAMES; }
     public static void setSanitiseNames(boolean b) { SANITISE_NAMES =b; }
 }

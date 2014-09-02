@@ -90,6 +90,8 @@ public class ObservationalTimePeriodType {
         }
         else if( REGEX_DAY.matcher(s).matches()) {
             state=DAY;
+        }else {
+            System.out.println("Warning:'"+s+"' does not match Observational Time Period Regex");
         }
     }
     public String toString() {

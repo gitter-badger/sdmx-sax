@@ -232,12 +232,16 @@ public class NameableType extends IdentifiableType {
     }
 
     public static String sanitise(String s) {
+        return s;
+        /*
         if (s.contains("'")) {
-            s = s.replace("'", "\\'");
+            s = s.replace("'", "&apos;");
         }
         if (s.contains("\"")) {
-            s = s.replace("\"", "\\\"");
+            s = s.replace("\"", "&quot;");
         }
         return s;
+                */
+        
     }
 }

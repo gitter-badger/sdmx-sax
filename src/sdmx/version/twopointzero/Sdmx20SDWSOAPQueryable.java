@@ -155,6 +155,7 @@ public class Sdmx20SDWSOAPQueryable implements Queryable {
             byte[] bytes = baos.toByteArray();
             if (SdmxIO.isDumpQuery()) {
                 try {
+                    System.out.write(bytes);
                     String name = "query-" + System.currentTimeMillis() + ".xml";
                     FileOutputStream fos = new FileOutputStream(name);
                     fos.write(bytes);
@@ -200,6 +201,7 @@ public class Sdmx20SDWSOAPQueryable implements Queryable {
             byte[] bytes = baos.toByteArray();
             if (SdmxIO.isDumpQuery()) {
                 try {
+                    System.out.write(bytes);
                     String name = "query-" + System.currentTimeMillis() + ".xml";
                     FileOutputStream fos = new FileOutputStream(name);
                     fos.write(bytes);

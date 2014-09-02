@@ -4,8 +4,13 @@
  */
 package sdmx.version.twopointzero;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -25,6 +30,7 @@ import sdmx.query.data.DataQueryType;
 import sdmx.query.data.DimensionValueType;
 import sdmx.query.data.TimeDimensionValueType;
 import sdmx.structure.dataflow.DataflowType;
+import sdmx.xml.DateTime;
 
 /**
  *
@@ -48,7 +54,8 @@ import sdmx.structure.dataflow.DataflowType;
  * Copyright James Gardner 2014
  */
 public class Sdmx20QueryWriter {
-
+    public static final SimpleDateFormat displayFormat = new SimpleDateFormat("yyyy-MM-dd");
+    
     public static Element getHeader(QueryMessage query) {
         Namespace message = Namespace.getNamespace("message", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message");
         Element header = new Element("Header");
@@ -230,7 +237,7 @@ public class Sdmx20QueryWriter {
     public static Element toNSIDataWhere(DataParametersType dw) {
         Element dataWhere = new Element("DataWhere");
         if (dw.getTimeDimensionValue() != null) {
-            dataWhere.addContent(toTimeDimensionElement(dw.getTimeDimensionValue()));
+            dataWhere.addContent(toNSITimeDimensionElement(dw.getTimeDimensionValue()));
         }
         if (dw.getDataflow() != null) {
             dataWhere.addContent(toDataflowType("Dataflow", dw.getDataflow()));
@@ -291,7 +298,7 @@ public class Sdmx20QueryWriter {
     public static Element toNSIOrElement(DataParametersOrType dw) {
         Element e = new Element("Or");
         if (dw.getTimeDimensionValue() != null) {
-            e.addContent(toTimeDimensionElement(dw.getTimeDimensionValue()));
+            e.addContent(toNSITimeDimensionElement(dw.getTimeDimensionValue()));
         }
         if (dw.getDataflow() != null) {
             e.addContent(toDataflowType("Dataflow", dw.getDataflow()));
@@ -347,7 +354,7 @@ public class Sdmx20QueryWriter {
     public static Element toNSIAndElement(DataParametersAndType dw) {
         Element e = new Element("And");
         if (dw.getTimeDimensionValue() != null) {
-            e.addContent(toTimeDimensionElement(dw.getTimeDimensionValue()));
+            e.addContent(toNSITimeDimensionElement(dw.getTimeDimensionValue()));
         }
         if (dw.getDataflow() != null) {
             e.addContent(toDataflowType("Dataflow", dw.getDataflow()));
@@ -484,11 +491,32 @@ public class Sdmx20QueryWriter {
         e.setNamespace(Namespace.getNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/query"));
         return e;
     }
+    public static Element toNSITimeValue(TimeValue tv) {
+        Element e = new Element("TimeValue");
+        try {
+            DateTime dt = DateTime.fromString(tv.toString());
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(dt.getDate());
+            e.setText(Integer.toString(cal.get(Calendar.YEAR)));
+        } catch (ParseException ex) {
+            Logger.getLogger(Sdmx20QueryWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        e.setNamespace(Namespace.getNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/query"));
+        return e;
+    }
 
     public static List<Element> toTimeDimensionElement(List<TimeDimensionValueType> timeDimensionValues) {
         List<Element> list = new ArrayList<Element>();
         for (TimeDimensionValueType tm : timeDimensionValues) {
             list.add(toTimeValueElement(tm));
+        }
+        return list;
+    }
+    public static List<Element> toNSITimeDimensionElement(List<TimeDimensionValueType> timeDimensionValues) {
+        List<Element> list = new ArrayList<Element>();
+        for (TimeDimensionValueType tm : timeDimensionValues) {
+            list.add(toNSITimeValueElement(tm));
         }
         return list;
     }
@@ -499,6 +527,31 @@ public class Sdmx20QueryWriter {
         start.setText(tv.getStart().toString());
         Element end = new Element("EndTime");
         end.setText(tv.getEnd().toString());
+        start.setNamespace(Namespace.getNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/query"));
+        end.setNamespace(Namespace.getNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/query"));
+        e.addContent(start);
+        e.addContent(end);
+        e.setNamespace(Namespace.getNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/query"));
+        return e;
+    }
+    public static Element toNSITimeValueElement(TimeDimensionValueType tv) {
+        Element e = new Element("Time");
+        Element start = new Element("StartTime");
+        try {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(displayFormat.parse(tv.getStart().toString()));
+            start.setText(Integer.toString(cal.get(Calendar.YEAR)));
+        } catch (ParseException ex) {
+            Logger.getLogger(Sdmx20QueryWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Element end = new Element("EndTime");
+        try {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(displayFormat.parse(tv.getEnd().toString()));
+            end.setText(Integer.toString(cal.get(Calendar.YEAR)));
+        } catch (ParseException ex) {
+            Logger.getLogger(Sdmx20QueryWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
         start.setNamespace(Namespace.getNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/query"));
         end.setNamespace(Namespace.getNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/query"));
         e.addContent(start);
