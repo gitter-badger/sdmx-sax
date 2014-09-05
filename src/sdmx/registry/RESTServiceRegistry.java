@@ -393,7 +393,7 @@ public class RESTServiceRegistry implements Registry {
 
     @Override
     public DataMessage query(DataQueryMessage message) {
-        IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataSetId().get(0);
+        IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataflow().get(0).getId().asID();
         NestedNCNameIDType agency = new NestedNCNameIDType(this.getAgencyId());
         DataStructureType dst = null;
         for (int i = 0; i < dataflowList.size(); i++) {

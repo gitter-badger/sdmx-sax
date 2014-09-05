@@ -192,6 +192,6 @@ public class ValueTypeResolver {
                 }
             }
         }
-        throw new RuntimeException("Problem occurred looking for codelist");
+        throw new RuntimeException("Problem occurred looking for codelist:"+column);
     }
 }
