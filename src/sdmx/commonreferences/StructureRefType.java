@@ -43,8 +43,8 @@ import sdmx.commonreferences.types.ObjectTypeCodelistType;
  *  Copyright James Gardner 2014
  */
 public class StructureRefType extends StructureRefBaseType {
-   public StructureRefType(ObjectTypeCodelistType obs,PackageTypeCodelistType pack) {
-       super(null,null,null,obs,pack);
+   public StructureRefType(NestedNCNameIDType agency,IDType id,VersionType version,ObjectTypeCodelistType obs,PackageTypeCodelistType pack) {
+       super(agency,id,version,obs,pack);
    }
 
 }

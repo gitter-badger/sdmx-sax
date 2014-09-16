@@ -171,9 +171,12 @@ public class MaintainableType extends MaintainableBaseType {
         //System.out.println("Left=" + this.agencyID + "." + this.getId() + "." + this.getVersion());
         //System.out.println("Right=" + agency2 + "." + id2 + "." + vers2);
         if (this.agencyID.equals(agency2) && this.getId().equals(id2)) {
+           // System.out.println("Match!"+agency2+":"+id2);
             return true;
         } else {
             //System.out.println("Doesn't Match!!");
+            //System.out.println("My Agency:Id="+this.agencyID+":"+this.getId().toString());
+            //System.out.println("Find Agency:Id="+agency2.toString()+":"+id2.toString());
             return false;
         }
     }

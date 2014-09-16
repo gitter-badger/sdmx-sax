@@ -140,7 +140,7 @@ public class RESTServiceRegistry implements Registry {
         CodelistType dst = local.findCodelist(enumeration);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/codelist/" + enumeration.getAgencyId() + "/" + enumeration.getId() + "/" + enumeration.getVersion());
+                StructureType st = retrieve(getServiceURL() + "/codelist/" + enumeration.getAgencyId() + "/" + enumeration.getMaintainableParentId() + "/" + enumeration.getMaintainedParentVersion());
                 load(st);
                 return local.findCodelist(enumeration);
             } catch (MalformedURLException ex) {
@@ -393,12 +393,12 @@ public class RESTServiceRegistry implements Registry {
 
     @Override
     public DataMessage query(DataQueryMessage message) {
-        IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataflow().get(0).getId().asID();
+        IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataflow().get(0).getMaintainableParentId();
         NestedNCNameIDType agency = new NestedNCNameIDType(this.getAgencyId());
         DataStructureType dst = null;
         for (int i = 0; i < dataflowList.size(); i++) {
             if (dataflowList.get(i).getId().equals(flowid)) {
-                dst = findDataStructure(dataflowList.get(i).getStructure().getAgencyId(), dataflowList.get(i).getStructure().getId().asID(), dataflowList.get(i).getStructure().getVersion());
+                dst = findDataStructure(dataflowList.get(i).getStructure().getAgencyId(), dataflowList.get(i).getStructure().getMaintainableParentId(), dataflowList.get(i).getStructure().getMaintainedParentVersion());
             }
         }
         DataStructureType structure = dst;

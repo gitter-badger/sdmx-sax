@@ -583,7 +583,7 @@ public class Sdmx21StructureReaderTools {
     public static StructureRefBaseType toStructureRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref1) throws TypeValueNotFoundException {
         ItemTypeCodelistType obj = toItemTypeCodelistType(ref1.getClass1());
         StructureRefType ref2 = null;
-        ref2 = new StructureRefType(obj, toItemSchemePackageTypeCodelistType(ref1.getPackage()));
+        ref2 = new StructureRefType(toNestedNCNameIDType(ref1.getAgencyID()),toIDType(ref1.getId()),toVersionType(ref1.getVersion()),obj, toItemSchemePackageTypeCodelistType(ref1.getPackage()));
         return ref2;
 
     }

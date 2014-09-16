@@ -37,8 +37,8 @@ public class RegistryUtil {
     public static MaintainableType resolve(Registry registry, StructureReferenceType ref) {
         if (ref.getRef() != null) {
             NestedNCNameIDType agency = ref.getAgencyId();
-            NestedIDType id = ref.getId();
-            VersionType version = ref.getVersion();
+            NestedIDType id = ref.getMaintainableParentId();
+            VersionType version = ref.getMaintainedParentVersion();
             ObjectTypeCodelistType object = ref.getRefClass();
             PackageTypeCodelistType pack = ref.getPack();
             System.out.println(ObjectTypeCodelistType.INT_AGENCY);

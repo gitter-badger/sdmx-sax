@@ -152,8 +152,8 @@ public class LocalRegistryTest {
     public void testFindCodelist_ItemSchemeReferenceBaseType() {
         ItemSchemeRefType ref = new ItemSchemeRefType(ItemSchemeTypeCodelistType.CODELIST, ItemSchemePackageTypeCodelistType.CODELIST);
         ref.setAgencyId(new NestedNCNameIDType("BIS"));
-        ref.setId(new IDType("CL_COLLECTION"));
-        ref.setVersion(new VersionType("1.0"));
+        ref.setMaintainableParentId(new IDType("CL_COLLECTION"));
+        ref.setMaintainableParentVersion(new VersionType("1.0"));
         ref.setMaintainableParentVersion(VersionType.ONE);
         ItemSchemeReferenceBaseType cref = new ItemSchemeReferenceBaseType(ref, null);
         CodelistType cl = doc.findCodelist(cref);

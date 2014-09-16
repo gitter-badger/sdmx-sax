@@ -266,10 +266,10 @@ public class ReferenceType {
     public VersionType getMaintainedParentVersion() {
         return maintainedParentVersion==null?VersionType.ONE:maintainedParentVersion;
     }
-    public IDType getMainID() {
-        if( this.maintainedParentId==null ) return objectId!=null?objectId.asID():null;
-        else return maintainedParentId;
-    }
+    //public IDType getMainID() {
+    //    if( this.maintainedParentId==null ) return objectId!=null?objectId.asID():null;
+    //    else return maintainedParentId;
+    //}
 
     public void dump() {
         System.out.println("Reference");

@@ -16,6 +16,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,19 +30,27 @@ import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import sdmx.Registry;
 import sdmx.SdmxIO;
+import sdmx.common.Description;
+import sdmx.common.Name;
 import sdmx.commonreferences.ConceptReferenceType;
+import sdmx.commonreferences.DataStructureRefType;
+import sdmx.commonreferences.DataStructureReferenceType;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.ItemSchemeReferenceBaseType;
 import sdmx.commonreferences.NestedIDType;
 import sdmx.commonreferences.NestedNCNameIDType;
+import sdmx.commonreferences.StructureRefType;
 import sdmx.commonreferences.StructureReferenceType;
 import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.types.PackageTypeCodelistType;
+import sdmx.commonreferences.types.StructureTypeCodelistType;
 import sdmx.exception.ParseException;
 import sdmx.message.DataMessage;
 import sdmx.message.DataQueryMessage;
 import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.StructureType;
 import sdmx.structure.base.MaintainableType;
+import sdmx.structure.codelist.CodeType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
@@ -72,11 +81,13 @@ import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
  *
  * Copyright James Gardner 2014
  */
-public class FAORESTServiceRegistry implements Registry {
+public class ILORESTServiceRegistry implements Registry {
 
     public static void main(String args[]) {
-        FAORESTServiceRegistry registry = new FAORESTServiceRegistry("FAO", "http://www.fao.org/figis/sdmx");
-        System.out.println("DataStructure=" + registry.findDataStructure(new NestedNCNameIDType("FAO"), new IDType("CAPTURE_DATASTRUCTURE"), new VersionType("0.1")));
+        SdmxIO.setStrictRegex(false);
+        ILORESTServiceRegistry registry = new ILORESTServiceRegistry("ILO", "http://www.ilo.org/ilostat/sdmx/ws/rest");
+        registry.listDataflows();
+
     }
     private String agency = "";
     private String serviceURL = "";
@@ -84,9 +95,13 @@ public class FAORESTServiceRegistry implements Registry {
 
     private List<DataflowType> dataflowList = null;
 
-    public FAORESTServiceRegistry(String agency, String service) {
+    ConceptSchemeType classifications = null;
+    HashMap<String, CodelistType> indicators = new HashMap<String, CodelistType>();
+
+    public ILORESTServiceRegistry(String agency, String service) {
         this.serviceURL = service;
         this.agency = agency;
+        SdmxIO.setStrictRegex(false);
     }
 
     public void load(StructureType struct) {
@@ -101,17 +116,17 @@ public class FAORESTServiceRegistry implements Registry {
         DataStructureType dst = local.findDataStructure(agency, id, version);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/registry/datastructure/" + agency.getString() + "/" + id.getString() + "/" + version.getString());
+                StructureType st = retrieve(getServiceURL() + "/datastructure/" + agency.getString() + "/" + id.getString() + "/" + version.getString());
                 load(st);
                 return local.findDataStructure(agency, id, version);
             } catch (MalformedURLException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
             } catch (IOException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
             } catch (ParseException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
             }
         }
@@ -122,15 +137,15 @@ public class FAORESTServiceRegistry implements Registry {
         ConceptSchemeType dst = local.findConceptScheme(agencyID, conceptRef);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/registry/conceptscheme/" + agencyID.getString() + "/" + conceptRef.getMaintainableParentId() + "/" + conceptRef.getVersion());
+                StructureType st = retrieve(getServiceURL() + "/conceptscheme/" + agencyID.getString() + "/" + conceptRef.getMaintainableParentId() + "/" + conceptRef.getVersion());
                 load(st);
                 return local.findConceptScheme(agencyID, conceptRef);
             } catch (MalformedURLException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return dst;
@@ -140,15 +155,15 @@ public class FAORESTServiceRegistry implements Registry {
         CodelistType dst = local.findCodelist(enumeration);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/registry/codelist/" + enumeration.getAgencyId() + "/" + enumeration.getMaintainableParentId() + "/" + enumeration.getMaintainedParentVersion());
+                StructureType st = retrieve(getServiceURL() + "/codelist/" + enumeration.getAgencyId() + "/" + enumeration.getMaintainableParentId() + "/" + enumeration.getMaintainedParentVersion());
                 load(st);
                 return local.findCodelist(enumeration);
             } catch (MalformedURLException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return dst;
@@ -162,15 +177,15 @@ public class FAORESTServiceRegistry implements Registry {
         CodelistType dst = local.findCodelist(codelistAgency, codelist, codelistVersion);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/registry/codelist/" + codelistAgency.getString() + "/" + codelist.getString() + "/" + codelistVersion.getString());
+                StructureType st = retrieve(getServiceURL() + "/codelist/" + codelistAgency.getString() + "/" + codelist.getString() + "/" + codelistVersion.getString());
                 load(st);
                 return local.findCodelist(codelistAgency, codelist, codelistVersion);
             } catch (MalformedURLException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return dst;
@@ -184,16 +199,16 @@ public class FAORESTServiceRegistry implements Registry {
         ConceptSchemeType dst = local.findConceptScheme(csa, csi);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/registry/conceptscheme/" + csa.getString() + "/" + csi.getString() + "/latest");
+                StructureType st = retrieve(getServiceURL() + "/conceptscheme/" + csa.getString() + "/" + csi.getString() + "/latest");
                 System.out.println("Loaded CSA/CSI struc:" + st.findConceptScheme(csa, csi));
                 load(st);
                 return local.findConceptScheme(csa, csi);
             } catch (MalformedURLException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return dst;
@@ -246,6 +261,7 @@ public class FAORESTServiceRegistry implements Registry {
         }
         return st;
     }
+
     private DataMessage query(String urlString) throws MalformedURLException, IOException, ParseException {
         System.out.println("Query:" + urlString);
         HttpClient client = new DefaultHttpClient();
@@ -254,19 +270,19 @@ public class FAORESTServiceRegistry implements Registry {
         get.addHeader("User-Agent", "Sdmx-Sax");
         HttpResponse response = client.execute(get);
         /*
-        URL url = new URL(urlString);
-        HttpURLConnection conn
-                = (HttpURLConnection) url.openConnection();
-        //if (conn.getResponseCode() != 200) {
-        //    return null;
-        //}
-        conn.setDoInput(true);
-        conn.setDoOutput(false);
-        conn.addRequestProperty("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
-        conn.addRequestProperty("User-Agent", "Sdmx-Sax");
-        conn.connect();
-        InputStream in = conn.getInputStream();
-        */
+         URL url = new URL(urlString);
+         HttpURLConnection conn
+         = (HttpURLConnection) url.openConnection();
+         //if (conn.getResponseCode() != 200) {
+         //    return null;
+         //}
+         conn.setDoInput(true);
+         conn.setDoOutput(false);
+         conn.addRequestProperty("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
+         conn.addRequestProperty("User-Agent", "Sdmx-Sax");
+         conn.connect();
+         InputStream in = conn.getInputStream();
+         */
         InputStream in = response.getEntity().getContent();
         if (SdmxIO.isSaveXml()) {
             String name = System.currentTimeMillis() + ".xml";
@@ -319,15 +335,15 @@ public class FAORESTServiceRegistry implements Registry {
         CodelistType dst = local.findCodelist(codelistAgency, codelist);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/registry/codelist/" + codelistAgency.getString() + "/" + codelist.getString() + "/latest");
+                StructureType st = retrieve(getServiceURL() + "/codelist/" + codelistAgency.getString() + "/" + codelist.getString() + "/latest");
                 load(st);
                 return local.findCodelist(codelistAgency, codelist);
             } catch (MalformedURLException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return dst;
@@ -347,11 +363,11 @@ public class FAORESTServiceRegistry implements Registry {
                 load(st);
                 return local.findDataStructure(agency, id);
             } catch (MalformedURLException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
             }
         }
@@ -423,11 +439,11 @@ public class FAORESTServiceRegistry implements Registry {
         String endTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getEnd().toString();
         DataMessage msg = null;
         try {
-            msg = query(getServiceURL() + "/repository/data/" + flowid + "/" + q.toString() + "/FAO/?startPeriod=" + startTime + "&endPeriod=" + endTime);
+            msg = query(getServiceURL() + "/data/" + flowid + "/" + q.toString() + "?startPeriod=" + startTime + "&endPeriod=" + endTime);
         } catch (IOException ex) {
-            Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
-            Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
         }
         return msg;
     }
@@ -437,18 +453,43 @@ public class FAORESTServiceRegistry implements Registry {
         if (dataflowList != null) {
             return dataflowList;
         }
+        this.classifications = findConceptScheme(new NestedNCNameIDType(agency), new IDType("CS_CLASSIF_TYPE"));
+        for (int i = 0; i < classifications.size(); i++) {
+            ConceptType concept = classifications.getConcept(i);
+            String con = concept.getId().toString().substring("CLASSIF_".length(), concept.getId().toString().length());
+            CodelistType ind = findCodelist(agency, "CL_" + con);
+            if (ind != null) {
+                indicators.put(con, ind);
+            }else {
+                System.out.println("Ind Is Null:"+con);
+            }
+        }
         dataflowList = new ArrayList<DataflowType>();
-        try {
-            StructureType st = SdmxIO.parseStructure(FAORESTServiceRegistry.class.getResourceAsStream("fao_dataflows.xml"));
-            dataflowList = st.getStructures().getDataflows().getDataflows();
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-            //dataflowList = null;
-        } catch (IOException ex) {
-            Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-            //dataflowList = null;
-        } catch (ParseException ex) {
-            Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+        for (int i = 0; i < classifications.size(); i++) {
+            ConceptType concept = classifications.getConcept(i);
+            String con = concept.getId().toString().substring("CLASSIF_".length(), concept.getId().toString().length());
+            CodelistType indic = indicators.get(con);
+            System.out.println("INDI="+indic);
+            if (indic != null) {
+                for (int j = 0; j < indic.size(); j++) {
+                    CodeType indicator = indic.getCode(j);
+                    DataflowType dataflow = new DataflowType();
+                    dataflow.setAgencyID(classifications.getAgencyID());
+                    dataflow.setId(new IDType(con + "_ALL_" + indicator.getId().toString()));
+                    DataStructureRefType ref = new DataStructureRefType(classifications.getAgencyID(), dataflow.getId(), VersionType.ONE);
+                    DataStructureReferenceType reference = new DataStructureReferenceType(ref, null);
+                    dataflow.setStructure(reference);
+                    List<Name> names = new ArrayList<Name>();
+                    Name name = new Name("en", dataflow.getId().toString());
+                    names.add(name);
+                    dataflow.setNames(names);
+                    Description desc = new Description("en",dataflow.getId().toString());
+                    List<Description> descs = new ArrayList<Description>();
+                    descs.add(desc);
+                    dataflow.setDescriptions(descs);
+                    dataflowList.add(dataflow);
+                }
+            }
         }
         return dataflowList;
     }
@@ -472,11 +513,11 @@ public class FAORESTServiceRegistry implements Registry {
                 load(st);
                 return local.findDataflow(agency, id, vers);
             } catch (MalformedURLException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
-                Logger.getLogger(FAORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
             }
         }

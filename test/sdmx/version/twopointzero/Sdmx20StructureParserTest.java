@@ -810,13 +810,13 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample113() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("CL_JD_CATEGORY", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getId().toString());
+        assertEquals("CL_JD_CATEGORY", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
     }
 
     @Test
     public void testStructureSample114() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getMaintainedParentVersion().toString());
     }
 
     @Test
@@ -847,13 +847,13 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample119() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("CL_BIS_IF_REF_AREA", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getLocalRepresentation().getEnumeration().getId().toString());
+        assertEquals("CL_BIS_IF_REF_AREA", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
     }
 
     @Test
     public void testStructureSample120() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getLocalRepresentation().getEnumeration().getVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getLocalRepresentation().getEnumeration().getMaintainedParentVersion().toString());
     }
 
     @Test

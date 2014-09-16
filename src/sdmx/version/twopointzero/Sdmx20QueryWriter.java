@@ -563,7 +563,7 @@ public class Sdmx20QueryWriter {
     private static Element toDataflow(String s, DataflowReferenceType qi) {
         Element elem = new Element(s);
         elem.setNamespace(Namespace.getNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/query"));
-        elem.setText(qi.getId().toString());
+        elem.setText(qi.getMaintainableParentId().toString());
         return elem;
     }
 }

@@ -72,7 +72,7 @@ public class ValueTypeResolver {
             ConceptSchemeType con = registry.findConceptScheme(conceptRef.getAgencyId() == null ? struct.getAgencyID() : conceptRef.getAgencyId(), conceptRef);
 
             if (con == null) {
-                System.out.println("Cant find conceptScheme:" + conceptRef.getId().getString());
+                System.out.println("Cant find conceptScheme:" + conceptRef.getMaintainableParentId().getString());
                 System.out.println(conceptRef.getAgencyId() + ":" + conceptRef.getMaintainableParentId() + ":" + conceptRef.getId() + ":" + conceptRef.getVersion());
                 CodeType ct = new CodeType();
                 ct.setId(new IDType(value));
@@ -177,9 +177,9 @@ public class ValueTypeResolver {
         if (rep != null) {
             if (rep.getEnumeration() != null) {
                 if (rep.getEnumeration().getRefClass() == ObjectTypeCodelistType.CONCEPTSCHEME) {
-                    ConceptSchemeType cscheme = registry.findConceptScheme(rep.getEnumeration().getAgencyId(), rep.getEnumeration().getId().asID());
+                    ConceptSchemeType cscheme = registry.findConceptScheme(rep.getEnumeration().getAgencyId(), rep.getEnumeration().getMaintainableParentId());
                     if (cscheme == null) {
-                        throw new RuntimeException("Can't find ConceptScheme!" + rep.getEnumeration().getId().toString());
+                        throw new RuntimeException("Can't find ConceptScheme!" + rep.getEnumeration().getMaintainableParentId().toString());
                     }
                     return cscheme;
                 } else {

@@ -48,6 +48,8 @@ public class SdmxIO {
     private static boolean DUMP_QUERY = false;
     private static boolean DUMP_XML = false;
     private static boolean SANITISE_NAMES = false;
+    private static boolean STRICT_REGEX = true;
+    
     private static List<SdmxParserProvider> list = new ArrayList<SdmxParserProvider>(0);
     public static void register(SdmxParserProvider pp) {
         list.add(pp);
@@ -200,4 +202,6 @@ public class SdmxIO {
     public static void setDumpXml(boolean b) { DUMP_XML =b; }
     public static boolean isSanitiseNames() { return SANITISE_NAMES; }
     public static void setSanitiseNames(boolean b) { SANITISE_NAMES =b; }
+    public static boolean isStrictRegex() { return STRICT_REGEX; }
+    public static void setStrictRegex(boolean b) { STRICT_REGEX =b; }
 }

@@ -136,6 +136,6 @@ public class CodelistsType {
         return cl;
     }
     public CodelistType findCodelist(ItemSchemeReferenceBaseType ref) {
-        return findCodelist(ref.getAgencyId(),ref.getId(), ref.getVersion());
+        return findCodelist(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getMaintainedParentVersion());
     }
 }

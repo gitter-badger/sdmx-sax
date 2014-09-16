@@ -50,6 +50,6 @@ import sdmx.commonreferences.types.ObjectTypeCodelistType;
 
 public class MaintainableRefBaseType extends RefBaseType {
    public MaintainableRefBaseType(NestedNCNameIDType agencyId,IDType id,VersionType vers,ObjectTypeCodelistType obs,PackageTypeCodelistType pack) {
-       super(agencyId,id,vers,null,null,null,false,obs,pack);
+       super(agencyId,null,null,id,vers,null,false,obs,pack);
    }
 }

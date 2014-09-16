@@ -692,10 +692,8 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
     }
 
     public void startRef(Attributes atts) {
-        StructureRefType ref = new StructureRefType(ObjectTypeCodelistType.DATASTRUCTURE, PackageTypeCodelistType.DATASTRUCTURE);
-        ref.setAgencyId(new NestedNCNameIDType(atts.getValue("agencyID")));
-        ref.setId(new NestedIDType(atts.getValue("id")));
-        ref.setVersion(new VersionType(atts.getValue("version")));
+        StructureRefType ref = new StructureRefType(new NestedNCNameIDType(atts.getValue("agencyID")),
+                new IDType(atts.getValue("id")),new VersionType(atts.getValue("version")),ObjectTypeCodelistType.DATASTRUCTURE, PackageTypeCodelistType.DATASTRUCTURE);
         StructureReferenceType reference = new StructureReferenceType(ref, null);
         payload.setStructure(reference);
     }

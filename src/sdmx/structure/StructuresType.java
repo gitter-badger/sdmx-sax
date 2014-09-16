@@ -351,6 +351,7 @@ public class StructuresType implements Registry {
 
     @Override
     public CodelistType findCodelist(NestedNCNameIDType codelistAgency, IDType codelist) {
+        if( getCodelists() == null ) return null;
         CodelistType cl = getCodelists().findCodelist(codelistAgency, codelist);
         if (cl != null) {
             return cl;
