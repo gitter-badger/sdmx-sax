@@ -304,6 +304,7 @@ public class StructuresType implements Registry {
 
     @Override
     public DataStructureType findDataStructure(NestedNCNameIDType agency, IDType id) {
+        if( getDataStructures()==null)return null;
         DataStructureType found = getDataStructures().findDataStructure(agency, id);
         if (found != null) {
             return found;

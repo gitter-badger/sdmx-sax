@@ -40,6 +40,9 @@ public class FullKey extends AbstractKey {
     public FullKey(LinkedHashMap<String,Object> map) {
         super(map);
     }
+    public FullKey(LinkedHashMap<String,Object> map,LinkedHashMap<String,Object> attrs) {
+        super(map,attrs);
+    }
     public FullKey(FlatObs obs, ColumnMapper mapper) {
         for(int i=0;i<mapper.size();i++) {
             //System.out.println("Cname="+mapper.getColumnName(i)+":ov="+obs.getValue(i));

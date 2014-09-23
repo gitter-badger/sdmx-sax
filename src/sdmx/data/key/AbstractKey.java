@@ -37,10 +37,15 @@ import sdmx.data.flat.FlatObs;
 public class AbstractKey implements Key {
 
     protected LinkedHashMap<String,Object> map = new LinkedHashMap<String,Object>();
+    protected LinkedHashMap<String,Object> attrs = new LinkedHashMap<String,Object>();
 
     public AbstractKey(){}
     public AbstractKey(LinkedHashMap<String,Object> map){
         this.map=map;
+    }
+    public AbstractKey(LinkedHashMap<String,Object> map,LinkedHashMap<String,Object> attrs){
+        this.map=map;
+        this.attrs=attrs;
     }
     
     @Override
@@ -51,6 +56,18 @@ public class AbstractKey implements Key {
     @Override
     public void setComponent(String dim, Object o) {
         map.put(dim, o);
+    }
+    @Override
+    public Object getAttribute(String dim) {
+        return attrs.get(dim);
+    }
+
+    @Override
+    public void setAttribute(String dim, Object o) {
+        attrs.put(dim, o);
+    }
+    public void clearAttributes(){
+        attrs.clear();
     }
 
     @Override
@@ -90,12 +107,20 @@ public class AbstractKey implements Key {
     public Set<String> keySet() {
         return map.keySet();
     }
+    public Set<String> attributeKeySet() {
+        return attrs.keySet();
+    }
     public void dump() {
         System.out.println("Dump Key");
         Iterator<String> it = keySet().iterator();
         while(it.hasNext()) {
             String s = it.next();
             System.out.println("Key:"+s+":"+getComponent(s));
+        }
+        it = attrs.keySet().iterator();
+        while(it.hasNext()) {
+            String s = it.next();
+            System.out.println("Attribute:"+s+":"+getAttribute(s));
         }
     }
 }

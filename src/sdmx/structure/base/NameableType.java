@@ -170,7 +170,8 @@ public class NameableType extends IdentifiableType {
         }
         return desc.getText();
     }
-    private static String toString(NameableType named,Locale loc) {
+
+    private static String toString(NameableType named, Locale loc) {
         //if (concept.equals("FREQ")) {
         //    ItemType code2 = getCode();
         //    System.out.println("FREQ Code=" + code2);
@@ -178,15 +179,16 @@ public class NameableType extends IdentifiableType {
         if (named == null) {
             return "";
         }
-        Description desc = named.findDescription(loc.getLanguage());
-        if (desc == null) {
-            Name name = named.findName(loc.getLanguage());
-            if (name == null) {
+        Name name = named.findName(loc.getLanguage());
+        if (name == null) {
+            Description desc = named.findDescription(loc.getLanguage());
+            if (desc == null) {
                 return named.getId().toString();
             }
-            return name.getText();
+            return desc.getText();
         }
-        return desc.getText();
+        return name.getText();
+
     }
 
     public static String toString(Object o) {
@@ -201,7 +203,8 @@ public class NameableType extends IdentifiableType {
         }
         throw new RuntimeException("Not String or Nameable " + o.getClass());
     }
-    public static String toString(Object o,Locale loc) {
+
+    public static String toString(Object o, Locale loc) {
         if (o == null) {
             return "";
         }
@@ -209,7 +212,7 @@ public class NameableType extends IdentifiableType {
             return (String) o;
         }
         if (o instanceof NameableType) {
-            return toString((NameableType) o,loc);
+            return toString((NameableType) o, loc);
         }
         throw new RuntimeException("Not String or Nameable " + o.getClass());
     }
@@ -234,14 +237,14 @@ public class NameableType extends IdentifiableType {
     public static String sanitise(String s) {
         return s;
         /*
-        if (s.contains("'")) {
-            s = s.replace("'", "&apos;");
-        }
-        if (s.contains("\"")) {
-            s = s.replace("\"", "&quot;");
-        }
-        return s;
-                */
-        
+         if (s.contains("'")) {
+         s = s.replace("'", "&apos;");
+         }
+         if (s.contains("\"")) {
+         s = s.replace("\"", "&quot;");
+         }
+         return s;
+         */
+
     }
 }

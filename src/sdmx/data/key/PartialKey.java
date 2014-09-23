@@ -37,4 +37,7 @@ public class PartialKey extends AbstractKey {
     public PartialKey(LinkedHashMap<String,Object> map) {
         super(map);
     }
+    public PartialKey(LinkedHashMap<String,Object> map,LinkedHashMap<String,Object> attrs) {
+        super(map,attrs);
+    }
 }

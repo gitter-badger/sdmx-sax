@@ -6,6 +6,7 @@
 
 package sdmx.data.key;
 
+import java.util.Set;
 import sdmx.data.ColumnMapper;
 import sdmx.data.flat.FlatObs;
 
@@ -34,6 +35,11 @@ import sdmx.data.flat.FlatObs;
 public interface Key {
     public Object getComponent(String dim);
     public void setComponent(String dim, Object o);
+    public Object getAttribute(String dim);
+    public void setAttribute(String dim, Object o);
+    public Set<String> keySet();
+    public Set<String> attributeKeySet();
+    public void clearAttributes();
     public boolean equals(Key key);
     public int hashCode();
     public boolean matches(FlatObs obs,ColumnMapper mapper);

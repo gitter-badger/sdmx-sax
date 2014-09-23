@@ -457,7 +457,7 @@ public class ILORESTServiceRegistry implements Registry {
         for (int i = 0; i < classifications.size(); i++) {
             ConceptType concept = classifications.getConcept(i);
             String con = concept.getId().toString().substring("CLASSIF_".length(), concept.getId().toString().length());
-            CodelistType ind = findCodelist(agency, "CL_" + con);
+            CodelistType ind = findCodelist(agency, "CL_INDICATOR_" + con);
             if (ind != null) {
                 indicators.put(con, ind);
             }else {
@@ -475,7 +475,9 @@ public class ILORESTServiceRegistry implements Registry {
                     CodeType indicator = indic.getCode(j);
                     DataflowType dataflow = new DataflowType();
                     dataflow.setAgencyID(classifications.getAgencyID());
-                    dataflow.setId(new IDType(con + "_ALL_" + indicator.getId().toString()));
+                    String indicid = indicator.getId().toString();
+                    indicid = indicid.substring(con.length()+1,indicid.length());
+                    dataflow.setId(new IDType(con + "_ALL_" + indicid));
                     DataStructureRefType ref = new DataStructureRefType(classifications.getAgencyID(), dataflow.getId(), VersionType.ONE);
                     DataStructureReferenceType reference = new DataStructureReferenceType(ref, null);
                     dataflow.setStructure(reference);
@@ -488,6 +490,8 @@ public class ILORESTServiceRegistry implements Registry {
                     descs.add(desc);
                     dataflow.setDescriptions(descs);
                     dataflowList.add(dataflow);
+                    DataStructureType dst = findDataStructure(dataflow.getAgencyID(), dataflow.getId());
+                    dst.dump();
                 }
             }
         }
