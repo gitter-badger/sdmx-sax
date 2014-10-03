@@ -95,7 +95,7 @@ public class ILORESTServiceRegistry implements Registry {
 
     private List<DataflowType> dataflowList = null;
 
-    ConceptSchemeType classifications = null;
+    CodelistType classifications = null;
     HashMap<String, CodelistType> indicators = new HashMap<String, CodelistType>();
 
     public ILORESTServiceRegistry(String agency, String service) {
@@ -105,20 +105,25 @@ public class ILORESTServiceRegistry implements Registry {
     }
 
     public void load(StructureType struct) {
+        System.out.println("ILO Load:"+struct);
         local.load(struct);
     }
 
     public void unload(StructureType struct) {
         local.unload(struct);
     }
-
+   /*
+      This function ignores the version argument!!!
+      ILO stat does not use version numbers.. simply take the latest
+    */
     public DataStructureType findDataStructure(NestedNCNameIDType agency, IDType id, VersionType version) {
-        DataStructureType dst = local.findDataStructure(agency, id, version);
+        DataStructureType dst = local.findDataStructure(agency, id);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/datastructure/" + agency.getString() + "/" + id.getString() + "/" + version.getString());
+                StructureType st = retrieve(getServiceURL() + "/datastructure/" + agency.getString() + "/" + id.getString() + "/latest");
+                DataStructureType dst2 = st.findDataStructure(agency, id);
                 load(st);
-                return local.findDataStructure(agency, id, version);
+                return local.findDataStructure(agency, id);
             } catch (MalformedURLException ex) {
                 Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
@@ -356,11 +361,15 @@ public class ILORESTServiceRegistry implements Registry {
 
     @Override
     public DataStructureType findDataStructure(NestedNCNameIDType agency, IDType id) {
+        System.out.println("Find DataStructure!!!");
         DataStructureType dst = local.findDataStructure(agency, id);
         if (dst == null) {
             try {
+                System.out.println("Find DataStructure2!!!");
                 StructureType st = retrieve(getServiceURL() + "/registry/datastructure/" + agency.getString() + "/" + id.getString() + "/latest");
                 load(st);
+                DataStructureType dst2 = st.findDataStructure(agency, id);
+                System.out.println("Dst="+dst2);
                 return local.findDataStructure(agency, id);
             } catch (MalformedURLException ex) {
                 Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
@@ -439,7 +448,7 @@ public class ILORESTServiceRegistry implements Registry {
         String endTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getEnd().toString();
         DataMessage msg = null;
         try {
-            msg = query(getServiceURL() + "/data/" + flowid + "/" + q.toString() + "?startPeriod=" + startTime + "&endPeriod=" + endTime);
+            msg = query(getServiceURL() + "/data/"+this.agency+"," + flowid + "/" + q.toString() + "?startPeriod=" + startTime + "&endPeriod=" + endTime);
         } catch (IOException ex) {
             Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
@@ -453,45 +462,38 @@ public class ILORESTServiceRegistry implements Registry {
         if (dataflowList != null) {
             return dataflowList;
         }
-        this.classifications = findConceptScheme(new NestedNCNameIDType(agency), new IDType("CS_CLASSIF_TYPE"));
+        this.classifications = findCodelist(new NestedNCNameIDType(agency), new IDType("CL_COLLECTION"));
         for (int i = 0; i < classifications.size(); i++) {
-            ConceptType concept = classifications.getConcept(i);
-            String con = concept.getId().toString().substring("CLASSIF_".length(), concept.getId().toString().length());
-            CodelistType ind = findCodelist(agency, "CL_INDICATOR_" + con);
+            CodeType code = classifications.getCode(i);
+            String cod = code.getId().toString();
+            CodelistType ind = findCodelist(agency, "CL_INDICATOR_"+cod);
             if (ind != null) {
-                indicators.put(con, ind);
+                indicators.put(cod, ind);
             }else {
-                System.out.println("Ind Is Null:"+con);
+                System.out.println("Ind Is Null:"+cod);
             }
         }
         dataflowList = new ArrayList<DataflowType>();
         for (int i = 0; i < classifications.size(); i++) {
-            ConceptType concept = classifications.getConcept(i);
-            String con = concept.getId().toString().substring("CLASSIF_".length(), concept.getId().toString().length());
+            CodeType coll = classifications.getCode(i);
+            String con = coll.getId().toString();
             CodelistType indic = indicators.get(con);
-            System.out.println("INDI="+indic);
             if (indic != null) {
                 for (int j = 0; j < indic.size(); j++) {
                     CodeType indicator = indic.getCode(j);
                     DataflowType dataflow = new DataflowType();
                     dataflow.setAgencyID(classifications.getAgencyID());
                     String indicid = indicator.getId().toString();
-                    indicid = indicid.substring(con.length()+1,indicid.length());
-                    dataflow.setId(new IDType(con + "_ALL_" + indicid));
-                    DataStructureRefType ref = new DataStructureRefType(classifications.getAgencyID(), dataflow.getId(), VersionType.ONE);
+                    dataflow.setId(new IDType("DF_"+con + "_ALL_" + indicid));
+                    dataflow.setVersion(null);
+                    DataStructureRefType ref = new DataStructureRefType(classifications.getAgencyID(), new IDType(con + "_ALL_" + indicid), VersionType.ONE);
                     DataStructureReferenceType reference = new DataStructureReferenceType(ref, null);
                     dataflow.setStructure(reference);
                     List<Name> names = new ArrayList<Name>();
-                    Name name = new Name("en", dataflow.getId().toString());
+                    Name name = new Name("en", coll.findName("en").toString()+" - "+indicator.findName("en").toString());
                     names.add(name);
                     dataflow.setNames(names);
-                    Description desc = new Description("en",dataflow.getId().toString());
-                    List<Description> descs = new ArrayList<Description>();
-                    descs.add(desc);
-                    dataflow.setDescriptions(descs);
                     dataflowList.add(dataflow);
-                    DataStructureType dst = findDataStructure(dataflow.getAgencyID(), dataflow.getId());
-                    dst.dump();
                 }
             }
         }
