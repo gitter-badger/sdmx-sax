@@ -294,31 +294,37 @@ public class StructuresType implements NewRegistry {
 
     @Override
     public DataStructureType find(DataStructureReference ref) {
+        if( getDataStructures()==null) return null;
         return getDataStructures().find(ref);
     }
 
     @Override
     public DataflowType find(DataflowReference ref) {
+        if( getDataflows()==null)return null;
         return getDataflows().find(ref);
     }
 
     @Override
     public CodeType find(CodeReference ref) {
+        if( getCodelists()==null)return null;
         return getCodelists().find(ref);
     }
 
     @Override
     public CodelistType find(CodelistReference ref) {
+        if( getCodelists()==null)return null;
         return getCodelists().find(ref);
     }
 
     @Override
     public ConceptType find(ConceptReference ref) {
+        if( getConcepts()==null)return null;
         return getConcepts().find(ref);
     }
 
     @Override
     public ConceptSchemeType find(ConceptSchemeReference ref) {
+        if( getConcepts()==null) return null;
         return getConcepts().find(ref);
     }
 
@@ -334,6 +340,7 @@ public class StructuresType implements NewRegistry {
 
     @Override
     public List<DataflowType> listDataflows() {
+        if( getDataflows()==null) return Collections.EMPTY_LIST;
         return getDataflows().getDataflows();
     }
 }

@@ -117,7 +117,7 @@ public class KnoemaRESTServiceRegistry implements NewRegistry,NewRepository,Quer
         DataStructureType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/"+ref.getId().toString());
+                StructureType st = retrieve(getServiceURL() + "/"+ref.getMaintainableParentId().toString());
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {

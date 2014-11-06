@@ -33,7 +33,7 @@ import sdmx.query.data.DataQueryType;
 import sdmx.query.data.DimensionValueType;
 import sdmx.query.data.TimeDimensionValueType;
 import sdmx.net.LocalRegistry;
-import sdmx.net.sdw.Sdmx20SOAPQueryable;
+import sdmx.net.service.sdw.Sdmx20SOAPQueryable;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structureddata.ValueTypeResolver;

@@ -52,4 +52,5 @@ public class StructureReference extends StructureReferenceBase {
     public StructureReference(anyURI urn) {
         super(urn);
     }
+
 }

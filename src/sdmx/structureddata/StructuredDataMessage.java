@@ -61,7 +61,7 @@ public class StructuredDataMessage {
         //IDType id = dataMessage.getHeader().getStructures().get(0).getStructure().getMaintainableParentId();
         //Version vers = dataMessage.getHeader().getStructures().get(0).getStructure().getMaintainedParentVersion();
         //System.out.println("Ref="+agency+":"+id+":"+vers);
-        DataStructureType structure = registry.find((DataStructureReference)dataMessage.getHeader().getStructures().get(0).getStructure());
+        DataStructureType structure = registry.find(dataMessage.getHeader().getStructures().get(0).getStructure().asDataStructureReference());
         //System.out.println("Structure="+structure);
         return new StructuredDataSet(dataMessage.getDataSets().get(i),registry,structure);
     }

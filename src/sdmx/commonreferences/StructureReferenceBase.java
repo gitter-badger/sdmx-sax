@@ -52,5 +52,7 @@ public class StructureReferenceBase extends MaintainableReferenceBase {
     public StructureReferenceBase(anyURI urn) {
         super(urn);
     }
-
+    public DataStructureReference asDataStructureReference() {
+        return DataStructureReference.create(getAgencyId(), getMaintainableParentId(), getVersion());
+    }
 }

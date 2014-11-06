@@ -119,7 +119,7 @@ public class LocalRegistry implements NewRegistry {
             //System.out.println("Looking for DS");
             if (structures.get(i).getStructures().getDataStructures() != null) {
                 //System.out.println("Got a Structure with a DataStructure");
-                found = structures.get(i).getStructures().getDataStructures().find(ref);
+                found = structures.get(i).find(ref);
                 if (found != null) {
                     return found;
                 }
@@ -133,7 +133,7 @@ public class LocalRegistry implements NewRegistry {
         Logger.getLogger("sdmx").log(Level.FINE,"LocalRegistry.find(DataflowReference-"+ref.getAgencyId()+":"+ref.getMaintainableParentId()+":"+ref.getVersion()+")");
         DataflowType df = null;
         for(int i=0;i<structures.size();i++) {
-            df = structures.get(i).getStructures().getDataflows().find(ref);
+            df = structures.get(i).find(ref);
             if( df!=null ) return df;
         }
         return null;
@@ -143,7 +143,7 @@ public class LocalRegistry implements NewRegistry {
     public CodeType find(CodeReference ref) {
         Logger.getLogger("sdmx").log(Level.FINE,"LocalRegistry.find(CodeReference-"+ref.getAgencyId()+":"+ref.getMaintainableParentId()+":"+ref.getVersion()+")");
         for (int i = 0; i < structures.size(); i++) {
-            CodeType cl = structures.get(i).getStructures().getCodelists().find(ref);
+            CodeType cl = structures.get(i).find(ref);
             if (cl != null) {
                 return cl;
             }
@@ -155,7 +155,7 @@ public class LocalRegistry implements NewRegistry {
     public CodelistType find(CodelistReference ref) {
         Logger.getLogger("sdmx").log(Level.FINE,"LocalRegistry.find(CodelistReference-"+ref.getAgencyId()+":"+ref.getMaintainableParentId()+":"+ref.getVersion()+")");
         for (int i = 0; i < structures.size(); i++) {
-            CodelistType cl = structures.get(i).getStructures().getCodelists().find(ref);
+            CodelistType cl = structures.get(i).find(ref);
             if (cl != null&&(cl.isExternalReference()==null||!cl.isExternalReference())) {
                 return cl;
             }
@@ -167,7 +167,7 @@ public class LocalRegistry implements NewRegistry {
     public ConceptType find(ConceptReference ref) {
         Logger.getLogger("sdmx").log(Level.FINE,"LocalRegistry.find(ConceptReference-"+ref.getAgencyId()+":"+ref.getMaintainableParentId()+":"+ref.getVersion()+")");
         for (int i = 0; i < structures.size(); i++) {
-            ConceptType cl = structures.get(i).getStructures().getConcepts().find(ref);
+            ConceptType cl = structures.get(i).find(ref);
             if (cl != null ) {
                 return cl;
             }
@@ -179,7 +179,7 @@ public class LocalRegistry implements NewRegistry {
     public ConceptSchemeType find(ConceptSchemeReference ref) {
         Logger.getLogger("sdmx").log(Level.FINE,"LocalRegistry.find(ConceptSchemeReference-"+ref.getAgencyId()+":"+ref.getMaintainableParentId()+":"+ref.getVersion()+")");
         for (int i = 0; i < structures.size(); i++) {
-            ConceptSchemeType cl = structures.get(i).getStructures().getConcepts().find(ref);
+            ConceptSchemeType cl = structures.get(i).find(ref);
             if (cl != null ) {
                 Logger.getLogger("sdmx").log(Level.FINE,"LocalRegistry.find(ConceptSchemeReference-found ConceptScheme");
                 return cl;

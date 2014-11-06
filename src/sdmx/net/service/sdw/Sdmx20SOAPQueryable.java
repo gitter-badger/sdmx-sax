@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sdmx.net.sdw;
+package sdmx.net.service.sdw;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -119,80 +119,47 @@ public class Sdmx20SOAPQueryable implements NewRegistry,NewRepository,Queryable 
         dataflowList = new ArrayList<DataflowType>();
         DataStructureQueryMessage qm = new DataStructureQueryMessage();
         qm.setHeader(getBaseHeader());
-        StructureType st = queryDataflows(qm);
+        DataStructureWhereType dsw = new DataStructureWhereType();
+        qm.setDataStructureWhereType(dsw);
+        StructureType st = query(qm);
         if (st == null) {
             dataflowList = null;
             return Collections.EMPTY_LIST;
         }
-        dataflowList = st.getStructures().getDataflows().getDataflows();
+        Iterator<DataStructureType> it = st.getStructures().getDataStructures().getDataStructures().iterator();
+        while (it.hasNext()) {
+            DataStructureType ds = it.next();
+            DataflowType flow = new DataflowType();
+            flow.setAgencyID(ds.getAgencyID());
+            flow.setId(ds.getId());
+            flow.setVersion(ds.getVersion());
+            flow.setNames(ds.getNames());
+            flow.setDescriptions(ds.getDescriptions());
+            flow.setStructure(ds.asReference());
+            flow.setAnnotations(ds.getAnnotations());
+            dataflowList.add(flow);
+        }
         return dataflowList;
     }
 
-    public StructureType queryDataflows(DataStructureQueryMessage message) {
-        message.setHeader(getBaseHeader());
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            Document doc = Sdmx20QueryWriter.toListDataflows(message);
-            String soapStart = "<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:sdmx=\"" + soapNamespace + "\">\n"
-                    //+ "   <soap:Header/>\n"
-                    + "   <soap:Body>\n"
-                    + "      <sdmx:QueryStructure>\n"
-                    + "         <sdmx:Query>";
-            baos.write(soapStart.getBytes());
-            Format format = Format.getCompactFormat();
-            format.setOmitEncoding(true);
-            format.setOmitDeclaration(true);
-            XMLOutputter output = new XMLOutputter(format);
-            output.output(doc, baos);
-            String soapEnd = "</sdmx:Query>\n"
-                    + "      </sdmx:QueryStructure>\n"
-                    + "   </soap:Body>\n"
-                    + "</soap:Envelope>";
-            baos.write(soapEnd.getBytes());
-            // Create a response handler
-            byte[] bytes = baos.toByteArray();
-            if (SdmxIO.isDumpQuery()) {
-                try {
-                    String name = "query-" + System.currentTimeMillis() + ".xml";
-                    FileOutputStream fos = new FileOutputStream(name);
-                    fos.write(bytes);
-                    fos.close();
-                } catch (IOException io) {
-                }
-            }
-            ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-            StructureType st = SdmxIO.parseStructure(query("QueryStructureResult", bais, bytes.length));
-            if (SdmxIO.isSaveXml() && st != null) {
-                String name = System.currentTimeMillis() + "-21.xml";
-                FileOutputStream file = new FileOutputStream(name);
-                Sdmx21StructureWriter.write(st, file);
-            }
-            return st;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
-
-    
     public StructureType query(DataStructureQueryMessage message) {
         message.setHeader(getBaseHeader());
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            Document doc = Sdmx20QueryWriter.toQueryDataStructure(message);
+            Document doc = Sdmx20QueryWriter.toDocument(message);
             String soapStart = "<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:sdmx=\"" + soapNamespace + "\">\n"
                     //+ "   <soap:Header/>\n"
                     + "   <soap:Body>\n"
-                    + "      <sdmx:QueryStructure>\n"
-                    + "         <sdmx:Query>";
+                    + "      <sdmx:GetDataStructureDefinition>\n"
+                    + "         <sdmx:QueryMessage>";
             baos.write(soapStart.getBytes());
             Format format = Format.getCompactFormat();
             format.setOmitEncoding(true);
             format.setOmitDeclaration(true);
             XMLOutputter output = new XMLOutputter(format);
             output.output(doc, baos);
-            String soapEnd = "</sdmx:Query>\n"
-                    + "      </sdmx:QueryStructure>\n"
+            String soapEnd = "</sdmx:QueryMessage>\n"
+                    + "      </sdmx:GetDataStructureDefinition>\n"
                     + "   </soap:Body>\n"
                     + "</soap:Envelope>";
             baos.write(soapEnd.getBytes());
@@ -200,6 +167,7 @@ public class Sdmx20SOAPQueryable implements NewRegistry,NewRepository,Queryable 
             byte[] bytes = baos.toByteArray();
             if (SdmxIO.isDumpQuery()) {
                 try {
+                    System.out.write(bytes);
                     String name = "query-" + System.currentTimeMillis() + ".xml";
                     FileOutputStream fos = new FileOutputStream(name);
                     fos.write(bytes);
@@ -208,11 +176,13 @@ public class Sdmx20SOAPQueryable implements NewRegistry,NewRepository,Queryable 
                 }
             }
             ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-            StructureType st = SdmxIO.parseStructure(query2("QueryStructureResult", bais, bytes.length));
+            StructureType st = SdmxIO.parseStructure(query("GetDataStructureDefinitionResult", bais, bytes.length));
             if (SdmxIO.isSaveXml() && st != null) {
                 String name = System.currentTimeMillis() + "-21.xml";
                 FileOutputStream file = new FileOutputStream(name);
                 Sdmx21StructureWriter.write(st, file);
+                file.flush();
+                file.close();
             }
             return st;
         } catch (Exception ex) {
@@ -229,14 +199,14 @@ public class Sdmx20SOAPQueryable implements NewRegistry,NewRepository,Queryable 
             String soapStart = "<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n"
                     + "  <soap12:Body>\n"
                     + "    <GetCompactData xmlns=\"" + soapNamespace + "\">\n"
-                    + "      <Query>";
+                    + "      <QueryMessage>";
             baos.write(soapStart.getBytes());
             Format format = Format.getCompactFormat();
             format.setOmitEncoding(true);
             format.setOmitDeclaration(true);
             XMLOutputter output = new XMLOutputter(format);
             output.output(doc, baos);
-            String soapEnd = "</Query>\n"
+            String soapEnd = "</QueryMessage>\n"
                     + "    </GetCompactData>\n"
                     + "  </soap12:Body>\n"
                     + "</soap12:Envelope>";
@@ -245,6 +215,7 @@ public class Sdmx20SOAPQueryable implements NewRegistry,NewRepository,Queryable 
             byte[] bytes = baos.toByteArray();
             if (SdmxIO.isDumpQuery()) {
                 try {
+                    System.out.write(bytes);
                     String name = "query-" + System.currentTimeMillis() + ".xml";
                     FileOutputStream fos = new FileOutputStream(name);
                     fos.write(bytes);

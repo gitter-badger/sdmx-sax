@@ -125,7 +125,8 @@ public class ILORESTServiceRegistry implements NewRegistry,NewRepository,Queryab
         DataStructureType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/datastructure/" + ref.getAgencyId() + "/" + ref.getMaintainableParentId().toString() + "/"+ref.getVersion()==null?"latest":ref.getVersion().toString());
+                ref.dump();
+                StructureType st = retrieve(getServiceURL() + "/datastructure/" + ref.getAgencyId() + "/" + ref.getMaintainableParentId().toString() + "/"+(ref.getVersion()==null?"latest":ref.getVersion().toString()));
                 DataStructureType dst2 = st.find(ref);
                 load(st);
                 return local.find(ref);
@@ -147,7 +148,7 @@ public class ILORESTServiceRegistry implements NewRegistry,NewRepository,Queryab
         ConceptSchemeType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/conceptscheme/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + ref.getVersion()==null?"latest":ref.getVersion().toString());
+                StructureType st = retrieve(getServiceURL() + "/conceptscheme/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion()==null?"latest":ref.getVersion().toString()));
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {
@@ -165,7 +166,7 @@ public class ILORESTServiceRegistry implements NewRegistry,NewRepository,Queryab
         CodelistType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/codelist/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + ref.getVersion()==null?"latest":ref.getVersion().toString());
+                StructureType st = retrieve(getServiceURL() + "/codelist/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion()==null?"latest":ref.getVersion().toString()));
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {
@@ -332,6 +333,7 @@ public class ILORESTServiceRegistry implements NewRegistry,NewRepository,Queryab
             return dataflowList;
         }
         CodelistReference ref = CodelistReference.create(new NestedNCNameID(agency), new IDType("CL_COLLECTION"),null);
+        ref.dump();
         this.classifications = find(ref);
         for (int i = 0; i < classifications.size(); i++) {
             CodeType code = classifications.getCode(i);
@@ -375,7 +377,7 @@ public class ILORESTServiceRegistry implements NewRegistry,NewRepository,Queryab
         DataflowType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/registry/dataflow/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + ref.getVersion() != null ? ref.getVersion().toString() : "latest");
+                StructureType st = retrieve(getServiceURL() + "/registry/dataflow/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion() != null ? ref.getVersion().toString() : "latest"));
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {

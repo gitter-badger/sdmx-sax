@@ -399,7 +399,9 @@ public class RESTQueryable implements Queryable, NewRegistry, NewRepository {
 
     @Override
     public ConceptType find(ConceptReference ref) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ConceptSchemeReference ref2 = ConceptSchemeReference.create(ref.getAgencyId(),ref.getMaintainableParentId(),ref.getVersion());
+        ConceptSchemeType cs = find(ref2);
+        return cs.findConcept(ref.getId());
     }
 
     @Override

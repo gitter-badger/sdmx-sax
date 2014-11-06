@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sdmx.net.service.fao;
+package sdmx.net.service.opensdmx;
 
 import sdmx.net.service.*;
 import sdmx.net.*;
@@ -83,10 +83,10 @@ import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
  *
  * Copyright James Gardner 2014
  */
-public class FAORESTQueryable implements Queryable, NewRegistry, NewRepository {
+public class OpenSDMXRESTQueryable implements Queryable, NewRegistry, NewRepository {
 
     public static void main(String args[]) {
-        FAORESTQueryable registry = new FAORESTQueryable("FAO", "http://data.fao.org/sdmx");
+        OpenSDMXRESTQueryable registry = new OpenSDMXRESTQueryable("FAO", "http://data.fao.org/sdmx");
         //SdmxIO.setSaveXml(true);
         SdmxIO.setLogLevel(7);
         Logger.getLogger("sdmx").setLevel(Level.ALL);
@@ -99,7 +99,7 @@ public class FAORESTQueryable implements Queryable, NewRegistry, NewRepository {
 
     private List<DataflowType> dataflowList = null;
 
-    public FAORESTQueryable(String agency, String service) {
+    public OpenSDMXRESTQueryable(String agency, String service) {
         this.serviceURL = service;
         this.agency = agency;
     }
@@ -231,9 +231,9 @@ public class FAORESTQueryable implements Queryable, NewRegistry, NewRepository {
         try {
             msg = query(getServiceURL() + "/data/" + flowid + "/" + q.toString() + "?startPeriod=" + startTime + "&endPeriod=" + endTime);
         } catch (IOException ex) {
-            Logger.getLogger(FAORESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OpenSDMXRESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
-            Logger.getLogger(FAORESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OpenSDMXRESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
         }
         return msg;
     }
@@ -245,16 +245,16 @@ public class FAORESTQueryable implements Queryable, NewRegistry, NewRepository {
         }
         dataflowList = new ArrayList<DataflowType>();
         try {
-            StructureType st = SdmxIO.parseStructure(FAORESTQueryable.class.getResourceAsStream("fao_dataflows.xml"));
+            StructureType st = SdmxIO.parseStructure(OpenSDMXRESTQueryable.class.getResourceAsStream("fao_dataflows.xml"));
             dataflowList = st.getStructures().getDataflows().getDataflows();
         } catch (MalformedURLException ex) {
-            Logger.getLogger(FAORESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OpenSDMXRESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
             //dataflowList = null;
         } catch (IOException ex) {
-            Logger.getLogger(FAORESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OpenSDMXRESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
             //dataflowList = null;
         } catch (ParseException ex) {
-            Logger.getLogger(FAORESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OpenSDMXRESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
         }
         return dataflowList;
 
