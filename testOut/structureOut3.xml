@@ -22126,41 +22126,49 @@
                     <str:DimensionList>
                         <str:Dimension id="REGION">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="REGION" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
+                                <Ref agencyID="ABS" id="REGION" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ABS:STANDALONE_CONCEPT_SCHEME(1.0).REGION</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_8NRPVER5_REGION" version="1.0" maintainableParentVersion="1.0"/>
+                                    <Ref agencyID="ABS" version="1.0" maintainableParentID="CL_8NRPVER5_REGION" maintainableParentVersion="1.0"/>
+                                    <URN>urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ABS:CL_8NRPVER5_REGION(1.0)</URN>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
                         <str:Dimension id="DATA_ITEM">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="DATA_ITEM" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
+                                <Ref agencyID="ABS" id="DATA_ITEM" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ABS:STANDALONE_CONCEPT_SCHEME(1.0).DATA_ITEM</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_8NRPVER5_DATA_ITEM" version="1.0" maintainableParentVersion="1.0"/>
+                                    <Ref agencyID="ABS" version="1.0" maintainableParentID="CL_8NRPVER5_DATA_ITEM" maintainableParentVersion="1.0"/>
+                                    <URN>urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ABS:CL_8NRPVER5_DATA_ITEM(1.0)</URN>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
                         <str:Dimension id="FREQUENCY">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="FREQUENCY" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
+                                <Ref agencyID="ABS" id="FREQUENCY" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ABS:STANDALONE_CONCEPT_SCHEME(1.0).FREQUENCY</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_8NRPVER5_FREQUENCY" version="1.0" maintainableParentVersion="1.0"/>
+                                    <Ref agencyID="ABS" version="1.0" maintainableParentID="CL_8NRPVER5_FREQUENCY" maintainableParentVersion="1.0"/>
+                                    <URN>urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ABS:CL_8NRPVER5_FREQUENCY(1.0)</URN>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
                         <str:TimeDimension id="TIME">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="TIME" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
+                                <Ref agencyID="ABS" id="TIME" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ABS:STANDALONE_CONCEPT_SCHEME(1.0).TIME</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_8NRPVER5_TIME" version="1.0" maintainableParentVersion="1.0"/>
+                                    <Ref agencyID="ABS" version="1.0" maintainableParentID="CL_8NRPVER5_TIME" maintainableParentVersion="1.0"/>
+                                    <URN>urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ABS:CL_8NRPVER5_TIME(1.0)</URN>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:TimeDimension>
@@ -22168,21 +22176,25 @@
                     <str:AttributeList>
                         <str:Attribute id="OBS_STATUS" assignmentStatus="Conditional">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="OBS_STATUS" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
+                                <Ref agencyID="ABS" id="OBS_STATUS" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ABS:STANDALONE_CONCEPT_SCHEME(1.0).OBS_STATUS</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_8NRPVER5_OBS_STATUS" version="1.0" maintainableParentVersion="1.0"/>
+                                    <Ref agencyID="ABS" version="1.0" maintainableParentID="CL_8NRPVER5_OBS_STATUS" maintainableParentVersion="1.0"/>
+                                    <URN>urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ABS:CL_8NRPVER5_OBS_STATUS(1.0)</URN>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Attribute>
                         <str:Attribute id="TIME_FORMAT" assignmentStatus="Conditional">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="TIME_FORMAT" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
+                                <Ref agencyID="ABS" id="TIME_FORMAT" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ABS:STANDALONE_CONCEPT_SCHEME(1.0).TIME_FORMAT</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" id="CL_8NRPVER5_TIME_FORMAT" version="1.0" maintainableParentVersion="1.0"/>
+                                    <Ref agencyID="ABS" version="1.0" maintainableParentID="CL_8NRPVER5_TIME_FORMAT" maintainableParentVersion="1.0"/>
+                                    <URN>urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ABS:CL_8NRPVER5_TIME_FORMAT(1.0)</URN>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Attribute>
@@ -22190,7 +22202,8 @@
                     <str:MeasureList>
                         <str:PrimaryMeasure id="OBS_VALUE">
                             <str:ConceptIdentity>
-                                <Ref agencyID="OECD" id="OBS_VALUE" maintainableParentID="STANDALONE_CONCEPT_SCHEME"/>
+                                <Ref agencyID="OECD" id="OBS_VALUE" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=OECD:STANDALONE_CONCEPT_SCHEME(1.0).OBS_VALUE</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:TextFormat endValue="0.0" interval="0.0" startValue="0.0" textType="Double"/>

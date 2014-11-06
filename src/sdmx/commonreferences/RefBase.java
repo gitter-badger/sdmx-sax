@@ -79,7 +79,16 @@ import sdmx.commonreferences.types.ObjectTypeCodelistType;
  *
  *  Copyright James Gardner 2014
  */
-
+/*
+  James G 7/11/2014
+  maintainedParentVersion is ignored, it only seems to be used for ChildObjectRef's..
+  for ChilObjectRefs, the 'version' field is ignored.. there is currently no case where
+  both version and maintainedParentVersion exist on a single reference...
+  so I will reuse the 'version' field for both uses of the 'version' name..
+  if you want to change this,  go to ChildObjectRef and change the 'vpar' constructor attribute
+  to go into the 'maintainableParentVersion' field in the super(..) call on the first line.
+  then start changing tests.. =D
+*/
 public class RefBase {
     private NestedNCNameID agencyId = null;
     private IDType maintainableParentId = null;

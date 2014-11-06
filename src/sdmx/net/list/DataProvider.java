@@ -26,7 +26,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import sdmx.NewRegistry;
 import sdmx.Queryable;
-import sdmx.Registry;
 
 /**
  *

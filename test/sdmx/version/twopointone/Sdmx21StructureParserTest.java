@@ -456,33 +456,33 @@ public class Sdmx21StructureParserTest {
         System.out.println("Test=" + dlt.getDimension(0).getConceptIdentity().getAgencyId());
         assertEquals("SDMX", dlt.getDimensions().get(0).getConceptIdentity().getAgencyId().toString());
         assertEquals("CROSS_DOMAIN_CONCEPTS", dlt.getDimensions().get(0).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", dlt.getDimensions().get(0).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", dlt.getDimensions().get(0).getConceptIdentity().getVersion().toString());
         assertEquals("FREQ", dlt.getDimensions().get(0).getConceptIdentity().getId().toString());
 
         assertEquals("ESTAT", dlt.getDimensions().get(1).getConceptIdentity().getAgencyId().toString());
         assertEquals("DEMO_CONCEPTS", dlt.getDimensions().get(1).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", dlt.getDimensions().get(1).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", dlt.getDimensions().get(1).getConceptIdentity().getVersion().toString());
         assertEquals("COUNTRY", dlt.getDimensions().get(1).getConceptIdentity().getId().toString());
         assertEquals("ESTAT", dlt.getDimensions().get(1).getLocalRepresentation().getEnumeration().getAgencyId().toString());
 
         assertEquals("CL_COUNTRY", dlt.getDimensions().get(1).getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
-        assertEquals("1.0", dlt.getDimensions().get(1).getLocalRepresentation().getEnumeration().getMaintainedParentVersion().toString());
+        assertEquals("1.0", dlt.getDimensions().get(1).getLocalRepresentation().getEnumeration().getVersion().toString());
 
         assertEquals("ESTAT", dlt.getDimensions().get(2).getConceptIdentity().getAgencyId().toString());
         assertEquals("DEMO_CONCEPTS", dlt.getDimensions().get(2).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", dlt.getDimensions().get(2).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", dlt.getDimensions().get(2).getConceptIdentity().getVersion().toString());
         assertEquals("SEX", dlt.getDimensions().get(2).getConceptIdentity().getId().toString());
         assertEquals("ESTAT", dlt.getDimensions().get(2).getLocalRepresentation().getEnumeration().getAgencyId().toString());
         assertEquals("CL_SEX", dlt.getDimensions().get(2).getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
-        assertEquals("1.0", dlt.getDimensions().get(2).getLocalRepresentation().getEnumeration().getMaintainedParentVersion().toString());
+        assertEquals("1.0", dlt.getDimensions().get(2).getLocalRepresentation().getEnumeration().getVersion().toString());
 
         assertEquals("ESTAT", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getAgencyId().toString());
         assertEquals("DEMO_CONCEPTS", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getVersion().toString());
         assertEquals("DEMO", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getId().toString());
         assertEquals("ESTAT", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getLocalRepresentation().getEnumeration().getAgencyId().toString());
         assertEquals("DEMO_MEASURES", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
-        assertEquals("1.0", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getLocalRepresentation().getEnumeration().getMaintainedParentVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getLocalRepresentation().getEnumeration().getVersion().toString());
         assertEquals("ConceptScheme", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getLocalRepresentation().getEnumeration().getRefClass().toString());
         List<AttributeType> atts = ds.getDataStructureComponents().getAttributeList().getAttributes();
         assertEquals("Mandatory", atts.get(0).getAssignmentStatus().toString());
@@ -492,26 +492,26 @@ public class Sdmx21StructureParserTest {
         assertEquals("CROSS_DOMAIN_CONCEPTS", atts.get(0).getConceptIdentity().getMaintainableParentId().toString());
         assertEquals("SDMX", atts.get(0).getLocalRepresentation().getEnumeration().getAgencyId().toString());
         assertEquals("CL_DECIMALS", atts.get(0).getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
-        assertEquals("1.0", atts.get(0).getLocalRepresentation().getEnumeration().getMaintainedParentVersion().toString());
+        assertEquals("1.0", atts.get(0).getLocalRepresentation().getEnumeration().getVersion().toString());
         assertEquals("DEMO", atts.get(0).getRelationshipType().getDimensions().get(0).getId().toString());
         assertEquals("Mandatory", atts.get(1).getAssignmentStatus().toString());
         assertEquals("SDMX", atts.get(1).getConceptIdentity().getAgencyId().toString());
         assertEquals("CROSS_DOMAIN_CONCEPTS", atts.get(1).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", atts.get(1).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", atts.get(1).getConceptIdentity().getVersion().toString());
         assertEquals("UNIT_MEASURE", atts.get(1).getConceptIdentity().getId().toString());
         assertEquals("CL_UNIT", atts.get(1).getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
         assertEquals("ESTAT", atts.get(1).getLocalRepresentation().getEnumeration().getAgencyId().toString());
-        assertEquals("1.0", atts.get(1).getLocalRepresentation().getEnumeration().getMaintainedParentVersion().toString());
+        assertEquals("1.0", atts.get(1).getLocalRepresentation().getEnumeration().getVersion().toString());
 
         assertEquals("Mandatory", atts.get(2).getAssignmentStatus().toString());
         assertEquals("UNIT_MULT", atts.get(2).getId().toString());
 
         assertEquals("SDMX", atts.get(2).getConceptIdentity().getAgencyId().toString());
         assertEquals("CROSS_DOMAIN_CONCEPTS", atts.get(2).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", atts.get(2).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", atts.get(2).getConceptIdentity().getVersion().toString());
         assertEquals("UNIT_MULT", atts.get(2).getConceptIdentity().getId().toString());
         assertEquals("SDMX", atts.get(2).getLocalRepresentation().getEnumeration().getAgencyId().toString());
-        assertEquals("1.0", atts.get(2).getLocalRepresentation().getEnumeration().getMaintainedParentVersion().toString());
+        assertEquals("1.0", atts.get(2).getLocalRepresentation().getEnumeration().getVersion().toString());
         assertEquals("CL_UNIT_MULT", atts.get(2).getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
         assertEquals("DEMO", atts.get(2).getRelationshipType().getDimensions().get(0).getId().toString());
 
@@ -519,14 +519,14 @@ public class Sdmx21StructureParserTest {
         assertEquals("OBS_STATUS", atts.get(3).getId().toString());
         assertEquals("SDMX", atts.get(3).getConceptIdentity().getAgencyId().toString());
         assertEquals("CROSS_DOMAIN_CONCEPTS", atts.get(3).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", atts.get(3).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", atts.get(3).getConceptIdentity().getVersion().toString());
         assertEquals("OBS_STATUS", atts.get(3).getConceptIdentity().getId().toString());
         assertEquals("OBS_VALUE", atts.get(3).getRelationshipType().getPrimaryMeasure().getId().toString());
 
         assertEquals("OBS_VALUE", ds.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getConceptIdentity().getId().toString());
         assertEquals("SDMX", ds.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getConceptIdentity().getAgencyId().toString());
         assertEquals("CROSS_DOMAIN_CONCEPTS", ds.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", ds.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getConceptIdentity().getVersion().toString());
         assertEquals("Decimal", ds.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getLocalRepresentation().getTextFormat().getTextType().toString());
     }
 
@@ -545,7 +545,7 @@ public class Sdmx21StructureParserTest {
         CategoryReference crt = ct.getTarget();
         assertEquals("ESTAT", crt.getAgencyId().toString());
         assertEquals("DATAFLOWS_SCHEME", crt.getMaintainableParentId().toString());
-        assertEquals("1.0", crt.getMaintainedParentVersion().toString());
+        assertEquals("1.0", crt.getVersion().toString());
         assertEquals("PSC.DEM.TOT", crt.getId().toString());
 
         assertNotNull(crt);
@@ -553,7 +553,7 @@ public class Sdmx21StructureParserTest {
         assertNotNull(df);
         assertEquals("ESTAT", df.getStructure().getAgencyId().toString());
         assertEquals("DEMOGRAPHY", df.getStructure().getMaintainableParentId().toString());
-        assertEquals("1.0", df.getStructure().getMaintainedParentVersion().toString());
+        assertEquals("1.0", df.getStructure().getVersion().toString());
         Name name = df.findName("en");
         assertEquals("Demography totals", name.getText());
         CategorySchemeType scheme = doc2.getStructures().getCategorySchemes().findCategoryScheme("ESTAT", "DATAFLOWS_SCHEME", "1.0");
@@ -619,7 +619,7 @@ public class Sdmx21StructureParserTest {
         assertEquals("Category", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getTargets().get(0).getIdentifiableObjectTarget().get(1).getObjectType().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getTargets().get(0).getIdentifiableObjectTarget().get(1).getLocalRepresentation().getEnumeration().getAgencyId().toString());
         assertEquals("DATAFLOWS_SCHEME", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getTargets().get(0).getIdentifiableObjectTarget().get(1).getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getTargets().get(0).getIdentifiableObjectTarget().get(1).getLocalRepresentation().getEnumeration().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getTargets().get(0).getIdentifiableObjectTarget().get(1).getLocalRepresentation().getEnumeration().getVersion().toString());
         assertEquals("CategoryScheme", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getTargets().get(0).getIdentifiableObjectTarget().get(1).getLocalRepresentation().getEnumeration().getRefClass().toString());
         assertEquals("categoryscheme", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getTargets().get(0).getIdentifiableObjectTarget().get(1).getLocalRepresentation().getEnumeration().getPack().toString());
 
@@ -640,90 +640,90 @@ public class Sdmx21StructureParserTest {
 
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getConceptIdentity().getVersion().toString());
         assertEquals("CONTACT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getConceptIdentity().getId().toString());
 
         assertEquals("ORGANISATION", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(0).getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(0).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(0).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(0).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(0).getConceptIdentity().getVersion().toString());
         assertEquals("ORGANISATION", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(0).getConceptIdentity().getId().toString());
         assertEquals("String", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(0).getLocalRepresentation().getTextFormat().getTextType().toString());
 
         assertEquals("ORGANISATION_UNIT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getConceptIdentity().getVersion().toString());
         assertEquals("ORGANISATION_UNIT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getConceptIdentity().getId().toString());
         assertEquals("String", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getLocalRepresentation().getTextFormat().getTextType().toString());
 
         assertEquals("NAME", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getConceptIdentity().getVersion().toString());
         assertEquals("CONTACT_NAME", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getConceptIdentity().getId().toString());
         assertEquals("String", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getLocalRepresentation().getTextFormat().getTextType().toString());
 
         assertEquals("ADDRESS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getConceptIdentity().getVersion().toString());
         assertEquals("ADDRESS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getConceptIdentity().getId().toString());
 
         assertEquals("STREET", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(0).getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(0).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(0).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(0).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(0).getConceptIdentity().getVersion().toString());
         assertEquals("ADDRESS_STREET", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(0).getConceptIdentity().getId().toString());
         assertEquals("String", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(0).getLocalRepresentation().getTextFormat().getTextType().toString());
 
         assertEquals("CITY", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(1).getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(1).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(1).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(1).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(1).getConceptIdentity().getVersion().toString());
         assertEquals("ADDRESS_CITY", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(1).getConceptIdentity().getId().toString());
         assertEquals("String", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(1).getLocalRepresentation().getTextFormat().getTextType().toString());
 
         assertEquals("POSTAL_CODE", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(2).getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(2).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(2).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(2).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(2).getConceptIdentity().getVersion().toString());
         assertEquals("ADDRESS_POST_CODE", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(2).getConceptIdentity().getId().toString());
         assertEquals("String", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(2).getLocalRepresentation().getTextFormat().getTextType().toString());
 
         assertEquals("COUNTRY", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(3).getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(3).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(3).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(3).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(3).getConceptIdentity().getVersion().toString());
         assertEquals("ADDRESS_COUNTRY", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(3).getConceptIdentity().getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(3).getLocalRepresentation().getEnumeration().getAgencyId().toString());
         assertEquals("CL_COUNTRY", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(3).getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(3).getLocalRepresentation().getEnumeration().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(3).getMetadataAttributes().get(3).getLocalRepresentation().getEnumeration().getVersion().toString());
 
         assertEquals("PHONE", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(4).getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(4).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(4).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(4).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(4).getConceptIdentity().getVersion().toString());
         assertEquals("CONTACT_PHONE", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(4).getConceptIdentity().getId().toString());
 
         assertEquals("EMAIL", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(5).getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(5).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(5).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(5).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(5).getConceptIdentity().getVersion().toString());
         assertEquals("CONTACT_EMAIL", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(0).getMetadataAttributes().get(5).getConceptIdentity().getId().toString());
 
         assertEquals("META_UPDATE", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getId().toString());
         assertTrue(doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).isPresentational());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getConceptIdentity().getVersion().toString());
         assertEquals("META_UPDATE", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getConceptIdentity().getId().toString());
 
         assertEquals("CERTIFIED", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getId().toString());
         assertFalse(doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(0).isPresentational());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getConceptIdentity().getVersion().toString());
         assertEquals("META_CERTIFIED", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getConceptIdentity().getId().toString());
         assertEquals("GregorianDay", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getLocalRepresentation().getTextFormat().getTextType().toString());
 
@@ -731,7 +731,7 @@ public class Sdmx21StructureParserTest {
         assertFalse(doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(1).isPresentational());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(1).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(1).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(1).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(1).getConceptIdentity().getVersion().toString());
         assertEquals("META_POSTED", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(1).getConceptIdentity().getId().toString());
         assertEquals("DateTime", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(1).getLocalRepresentation().getTextFormat().getTextType().toString());
 
@@ -739,7 +739,7 @@ public class Sdmx21StructureParserTest {
         assertFalse(doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(1).isPresentational());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getConceptIdentity().getVersion().toString());
         assertEquals("NEXT_DATE", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getConceptIdentity().getId().toString());
         assertEquals("DateTime", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getLocalRepresentation().getTextFormat().getTextType().toString());
 
@@ -747,7 +747,7 @@ public class Sdmx21StructureParserTest {
         assertFalse(doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(2).isPresentational());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(2).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(2).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(2).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(2).getConceptIdentity().getVersion().toString());
         assertEquals("META_LAST_UPDATE", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(2).getConceptIdentity().getId().toString());
         assertEquals("DateTime", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(2).getLocalRepresentation().getTextFormat().getTextType().toString());
 
@@ -755,7 +755,7 @@ public class Sdmx21StructureParserTest {
         assertFalse(doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(2).isPresentational());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getConceptIdentity().getVersion().toString());
         assertEquals("NEXT_DATE", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getConceptIdentity().getId().toString());
         assertEquals("DateTime", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getLocalRepresentation().getTextFormat().getTextType().toString());
 
@@ -763,13 +763,13 @@ public class Sdmx21StructureParserTest {
         assertTrue(doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(2).isPresentational());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(2).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(2).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(2).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(2).getConceptIdentity().getVersion().toString());
         assertEquals("STAT_PRES", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(2).getConceptIdentity().getId().toString());
 
         assertEquals("DATA_DESCR", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getConceptIdentity().getVersion().toString());
         assertEquals("DATA_DESCR", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getConceptIdentity().getId().toString());
         assertEquals("XHTML", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(0).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getLocalRepresentation().getTextFormat().getTextType().toString());
 
@@ -780,41 +780,41 @@ public class Sdmx21StructureParserTest {
         assertEquals("META_UPDATE", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getConceptIdentity().getVersion().toString());
         assertEquals("META_UPDATE", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getConceptIdentity().getId().toString());
 
         assertEquals("CERTIFIED", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(0).getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(0).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(0).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(0).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(0).getConceptIdentity().getVersion().toString());
         assertEquals("META_CERTIFIED", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(0).getConceptIdentity().getId().toString());
         assertEquals("GregorianDay", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(0).getLocalRepresentation().getTextFormat().getTextType().toString());
 
         assertEquals("POSTED", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getConceptIdentity().getVersion().toString());
         assertEquals("META_POSTED", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getConceptIdentity().getId().toString());
         assertEquals("DateTime", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getLocalRepresentation().getTextFormat().getTextType().toString());
 
         assertEquals("NEXT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getConceptIdentity().getVersion().toString());
         assertEquals("NEXT_DATE", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getConceptIdentity().getId().toString());
         assertEquals("DateTime", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(1).getMetadataAttributes().get(0).getLocalRepresentation().getTextFormat().getTextType().toString());
 
         assertEquals("UPDATED", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getConceptIdentity().getVersion().toString());
         assertEquals("META_LAST_UPDATE", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getConceptIdentity().getId().toString());
         assertEquals("DateTime", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getLocalRepresentation().getTextFormat().getTextType().toString());
 
         assertEquals("NEXT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getId().toString());
         assertEquals("ESTAT", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getConceptIdentity().getAgencyId().toString());
         assertEquals("ESMS_CONCEPTS", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getConceptIdentity().getVersion().toString());
         assertEquals("NEXT_DATE", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getConceptIdentity().getId().toString());
         assertEquals("DateTime", doc2.getStructures().getMetadataStructures().getMetadataStructures().get(0).getReports().get(1).getMetadataAttributes().get(0).getMetadataAttributes().get(2).getMetadataAttributes().get(0).getLocalRepresentation().getTextFormat().getTextType().toString());
 

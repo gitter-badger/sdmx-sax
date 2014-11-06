@@ -111,7 +111,9 @@ public class ReferenceType {
         }
         if (this.urn == null) {
             try {
-                produce();
+                if (this.getAgencyId() != null) {
+                    produce();
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -163,16 +165,20 @@ public class ReferenceType {
         if (getClazz() != null) {
             sb.append(getClazz().toString());
         }
-        sb.append(":");
+        sb.append("=");
         if (getAgencyId() != null) {
             sb.append(getAgencyId().toString());
+        }
+        if (getMaintainableParentId() != null) {
+            sb.append(":");
+            sb.append(getMaintainableParentId().toString());
+        }
+        if (getVersion() != null) {
+            sb.append("(" + getVersion().toString() + ")");
         }
         if (getId() != null) {
             sb.append(".");
             sb.append(getId().toString());
-        }
-        if (getVersion() != null) {
-            sb.append("(" + getVersion().toString() + ")");
         }
         this.urn = new anyURI(sb.toString());
     }
@@ -331,16 +337,17 @@ public class ReferenceType {
         System.out.println("Class:" + this.getClazz());
         System.out.println("Pack:" + this.getPack());
     }
+
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append(this.getClass().getName());
-        sb.append(":"+this.getAgencyId());
-        sb.append(":"+this.getMaintainableParentId());
-        sb.append(":"+this.getMaintainedParentVersion());
-        sb.append(":"+this.getId());
-        sb.append(":"+this.getVersion());
-        sb.append(":"+this.getClazz());
-        sb.append(":"+this.getPack());
+        sb.append(":" + this.getAgencyId());
+        sb.append(":" + this.getMaintainableParentId());
+        sb.append(":" + this.getMaintainedParentVersion());
+        sb.append(":" + this.getId());
+        sb.append(":" + this.getVersion());
+        sb.append(":" + this.getClazz());
+        sb.append(":" + this.getPack());
         return sb.toString();
     }
 }

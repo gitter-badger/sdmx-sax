@@ -740,7 +740,7 @@ public class Sdmx20StructureParserTest {
     public void testStructureSample102() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
         // 1.0 is filled in from the conceptRef field.
-        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(0).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(0).getConceptIdentity().getVersion().toString());
     }
 
     @Test
@@ -759,7 +759,7 @@ public class Sdmx20StructureParserTest {
     public void testStructureSample105() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
         // 1.0 is filled in from the conceptRef field.
-        assertEquals("1.0", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getVersion().toString());
     }
 
     @Test
@@ -798,7 +798,7 @@ public class Sdmx20StructureParserTest {
     public void testStructureSample111() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
         // 1.0 is filled in from the conceptRef field.
-        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getConceptIdentity().getVersion().toString());
     }
 
     @Test
@@ -816,7 +816,7 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample114() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getMaintainedParentVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getVersion().toString());
     }
 
     @Test
@@ -835,7 +835,7 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample117() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getConceptIdentity().getMaintainedParentVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getConceptIdentity().getVersion().toString());
     }
 
     @Test
@@ -853,7 +853,7 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample120() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getLocalRepresentation().getEnumeration().getMaintainedParentVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getLocalRepresentation().getEnumeration().getVersion().toString());
     }
 
     @Test

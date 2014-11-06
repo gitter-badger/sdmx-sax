@@ -49,6 +49,6 @@ import sdmx.commonreferences.types.ObjectTypeCodelistType;
  */
 public class ChildObjectRefBase extends RefBase {
       public ChildObjectRefBase(NestedNCNameID agencyID,IDType mainParent,Version pvers,NestedID id,ObjectTypeCodelistType obs, PackageTypeCodelistType pack){ 
-          super(agencyID,id,null,mainParent,pvers,null,false,obs,pack);
+          super(agencyID,id,pvers,mainParent,null,null,false,obs,pack);
       }
 }

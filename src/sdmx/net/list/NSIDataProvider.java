@@ -21,7 +21,6 @@ package sdmx.net.list;
 import java.net.MalformedURLException;
 import java.net.URL;
 import sdmx.Queryable;
-import sdmx.Registry;
 import sdmx.net.service.nsi.Sdmx20NSIQueryable;
 
 /**

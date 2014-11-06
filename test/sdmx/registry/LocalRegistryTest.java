@@ -269,7 +269,7 @@ public class LocalRegistryTest {
     public void testListDataSets() {
         System.out.println("listDataSets");
         try {
-            assertEquals(1,doc.listDataflows().size());
+            assertEquals(0,doc.listDataflows().size());
         } catch (Exception ex) {
         }
     }
