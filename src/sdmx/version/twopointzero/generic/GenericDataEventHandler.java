@@ -22,7 +22,6 @@ import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import sdmx.Registry;
 import sdmx.common.ActionType;
 import sdmx.common.Name;
 import sdmx.common.ObservationalTimePeriodType;

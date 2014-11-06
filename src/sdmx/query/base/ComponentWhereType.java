@@ -4,8 +4,8 @@
  */
 package sdmx.query.base;
 
-import sdmx.commonreferences.ConceptReferenceType;
-import sdmx.commonreferences.ItemSchemeReferenceBaseType;
+import sdmx.commonreferences.ConceptReference;
+import sdmx.commonreferences.ItemSchemeReferenceBase;
 
 /**
  *	<xs:complexType name="ComponentWhereType" abstract="true">
@@ -51,34 +51,34 @@ import sdmx.commonreferences.ItemSchemeReferenceBaseType;
  *  Copyright James Gardner 2014
  */
 public class ComponentWhereType extends IdentifiableWhereType {
-    private ConceptReferenceType conceptIdentity = null;
-    private ItemSchemeReferenceBaseType enumeration = null;
+    private ConceptReference conceptIdentity = null;
+    private ItemSchemeReferenceBase enumeration = null;
 
     /**
      * @return the conceptIdentity
      */
-    public ConceptReferenceType getConceptIdentity() {
+    public ConceptReference getConceptIdentity() {
         return conceptIdentity;
     }
 
     /**
      * @param conceptIdentity the conceptIdentity to set
      */
-    public void setConceptIdentity(ConceptReferenceType conceptIdentity) {
+    public void setConceptIdentity(ConceptReference conceptIdentity) {
         this.conceptIdentity = conceptIdentity;
     }
 
     /**
      * @return the enumeration
      */
-    public ItemSchemeReferenceBaseType getEnumeration() {
+    public ItemSchemeReferenceBase getEnumeration() {
         return enumeration;
     }
 
     /**
      * @param enumeration the enumeration to set
      */
-    public void setEnumeration(ItemSchemeReferenceBaseType enumeration) {
+    public void setEnumeration(ItemSchemeReferenceBase enumeration) {
         this.enumeration = enumeration;
     }
 }

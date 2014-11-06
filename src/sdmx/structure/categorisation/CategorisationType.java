@@ -11,11 +11,11 @@ import sdmx.common.AnnotationsType;
 import sdmx.common.Description;
 import sdmx.common.Name;
 import sdmx.common.TextType;
-import sdmx.commonreferences.CategoryReferenceType;
+import sdmx.commonreferences.CategoryReference;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.ObjectReferenceType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.ObjectReference;
+import sdmx.commonreferences.Version;
 import sdmx.structure.base.MaintainableType;
 import sdmx.xml.DateTime;
 import sdmx.xml.anyURI;
@@ -68,7 +68,7 @@ public class CategorisationType extends MaintainableType {
     public CategorisationType() {
         
     }
-    public CategorisationType(NestedNCNameIDType agencyId,Annotations annotations,List<Description> descriptions,IDType id,boolean isExternalReference,boolean isFinal,List<Name> nameArray,ObjectReferenceType source,CategoryReferenceType target,anyURI uri,anyURI urn,DateTime validFrom,DateTime validTo,VersionType version) {
+    public CategorisationType(NestedNCNameID agencyId,Annotations annotations,List<Description> descriptions,IDType id,boolean isExternalReference,boolean isFinal,List<Name> nameArray,ObjectReference source,CategoryReference target,anyURI uri,anyURI urn,DateTime validFrom,DateTime validTo,Version version) {
         super.setAgencyID(agencyId);
         super.setAnnotations(annotations);
         super.setDescriptions(descriptions);
@@ -85,34 +85,34 @@ public class CategorisationType extends MaintainableType {
         super.setVersion(version);
     }
     
-    private ObjectReferenceType source = null;
-    private CategoryReferenceType target = null;
+    private ObjectReference source = null;
+    private CategoryReference target = null;
 
     /**
      * @return the source
      */
-    public ObjectReferenceType getSource() {
+    public ObjectReference getSource() {
         return source;
     }
 
     /**
      * @param source the source to set
      */
-    public void setSource(ObjectReferenceType source) {
+    public void setSource(ObjectReference source) {
         this.source = source;
     }
 
     /**
      * @return the target
      */
-    public CategoryReferenceType getTarget() {
+    public CategoryReference getTarget() {
         return target;
     }
 
     /**
      * @param target the target to set
      */
-    public void setTarget(CategoryReferenceType target) {
+    public void setTarget(CategoryReference target) {
         this.target = target;
     }
 

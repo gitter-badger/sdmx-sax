@@ -4,8 +4,8 @@
  */
 package sdmx.structure.datastructure;
 
-import sdmx.commonreferences.DataStructureRefType;
-import sdmx.commonreferences.DataStructureReferenceType;
+import sdmx.commonreferences.DataStructureRef;
+import sdmx.commonreferences.DataStructureReference;
 import sdmx.commonreferences.IDType;
 import sdmx.structure.base.Component;
 import sdmx.structure.base.StructureType;
@@ -176,9 +176,9 @@ public class DataStructureType extends StructureType {
         if( dim2.identifiesMe(col))return dim2;
         return null;
     }
-    public DataStructureReferenceType asReference() {
-        DataStructureRefType ref = new DataStructureRefType(getAgencyID(),getId(),getVersion());
-        DataStructureReferenceType reference = new DataStructureReferenceType(ref,getUri());
+    public DataStructureReference asReference() {
+        DataStructureRef ref = new DataStructureRef(getAgencyID(),getId(),getVersion());
+        DataStructureReference reference = new DataStructureReference(ref,getUri());
         return reference;
     }
     public DataflowType asDataflow() {

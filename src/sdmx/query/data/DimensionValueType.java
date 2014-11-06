@@ -4,8 +4,8 @@
  */
 package sdmx.query.data;
 
-import sdmx.commonreferences.NCNameIDType;
-import sdmx.commonreferences.NestedNCNameIDType;
+import sdmx.commonreferences.NCNameID;
+import sdmx.commonreferences.NestedNCNameID;
 
 /**
  *
@@ -31,7 +31,7 @@ import sdmx.commonreferences.NestedNCNameIDType;
  */
 public class DimensionValueType extends DataStructureComponentValueQueryType {
     public DimensionValueType(String id, String val) {
-        super.setId(new NCNameIDType(id));
+        super.setId(new NCNameID(id));
         super.setValue(val);
     }
      public boolean match(String value) {

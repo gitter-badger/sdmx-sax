@@ -4,7 +4,7 @@
  */
 package sdmx.structure.base;
 
-import sdmx.commonreferences.ConceptReferenceType;
+import sdmx.commonreferences.ConceptReference;
 import sdmx.commonreferences.IDType;
 
 /**
@@ -51,7 +51,7 @@ import sdmx.commonreferences.IDType;
  *  Copyright James Gardner 2014
  */
 public class ComponentType extends ComponentBaseType {
-    private ConceptReferenceType conceptIdentity = null;
+    private ConceptReference conceptIdentity = null;
     private RepresentationType localRepresentation = null;
 
     /**
@@ -66,14 +66,14 @@ public class ComponentType extends ComponentBaseType {
     /**
      * @return the conceptIdentity
      */
-    public ConceptReferenceType getConceptIdentity() {
+    public ConceptReference getConceptIdentity() {
         return conceptIdentity;
     }
 
     /**
      * @param conceptIdentity the conceptIdentity to set
      */
-    public void setConceptIdentity(ConceptReferenceType conceptIdentity) {
+    public void setConceptIdentity(ConceptReference conceptIdentity) {
         this.conceptIdentity = conceptIdentity;
     }
 

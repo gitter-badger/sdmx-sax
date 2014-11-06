@@ -4,7 +4,7 @@
  */
 package sdmx.structure.base;
 
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.Version;
 import sdmx.xml.DateTime;
 
 /**
@@ -55,21 +55,21 @@ import sdmx.xml.DateTime;
  */
 public class VersionableType extends NameableType {
     public static void main(String args[]) {}
-    private VersionType version = VersionType.ONE;
+    private Version version = Version.ONE;
     private DateTime validFrom;
     private DateTime validTo;
 
     /**
      * @return the version
      */
-    public VersionType getVersion() {
+    public Version getVersion() {
         return version;
     }
 
     /**
      * @param version the version to set
      */
-    public void setVersion(VersionType version) {
+    public void setVersion(Version version) {
         this.version = version;
     }
 

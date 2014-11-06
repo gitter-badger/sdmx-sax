@@ -6,8 +6,8 @@
 package sdmx.common;
 
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.MetadataStructureRefType;
-import sdmx.commonreferences.StructureReferenceBaseType;
+import sdmx.commonreferences.MetadataStructureRef;
+import sdmx.commonreferences.StructureReferenceBase;
 import sdmx.structure.constraint.ConstraintAttachmentTypeChoice;
 import sdmx.xml.anyURI;
 
@@ -29,8 +29,8 @@ import sdmx.xml.anyURI;
  *
  *  Copyright James Gardner 2014
  */
-public class MetadataStructureReferenceType extends StructureReferenceBaseType implements ConstraintAttachmentTypeChoice {
-   public MetadataStructureReferenceType(MetadataStructureRefType ref, anyURI uri) {
+public class MetadataStructureReferenceType extends StructureReferenceBase implements ConstraintAttachmentTypeChoice {
+   public MetadataStructureReferenceType(MetadataStructureRef ref, anyURI uri) {
        super(ref,uri);
    }
    public MetadataStructureReferenceType(anyURI uri) {

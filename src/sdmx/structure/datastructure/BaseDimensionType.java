@@ -6,7 +6,7 @@ package sdmx.structure.datastructure;
 
 import java.util.List;
 import sdmx.common.DimensionTypeType;
-import sdmx.commonreferences.ConceptReferenceType;
+import sdmx.commonreferences.ConceptReference;
 
 /**
  *
@@ -31,21 +31,21 @@ import sdmx.commonreferences.ConceptReferenceType;
  *  Copyright James Gardner 2014
  */
 public class BaseDimensionType extends BaseDimensionBaseType {
-    private List<ConceptReferenceType> roles = null;
+    private List<ConceptReference> roles = null;
     private Integer position = null;
     private DimensionTypeType type = null;
 
     /**
      * @return the roles
      */
-    public List<ConceptReferenceType> getRoles() {
+    public List<ConceptReference> getRoles() {
         return roles;
     }
 
     /**
      * @param roles the roles to set
      */
-    public void setRoles(List<ConceptReferenceType> roles) {
+    public void setRoles(List<ConceptReference> roles) {
         this.roles = roles;
     }
 

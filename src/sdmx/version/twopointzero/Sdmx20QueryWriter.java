@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import sdmx.commonreferences.DataflowReferenceType;
+import sdmx.commonreferences.DataflowReference;
 import sdmx.message.DataQueryMessage;
 import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.QueryMessage;
@@ -380,9 +380,9 @@ public class Sdmx20QueryWriter {
         }
         return list;
     }
-    public static List<Element> toDataflowType(String s, List<DataflowReferenceType> q) {
+    public static List<Element> toDataflowType(String s, List<DataflowReference> q) {
         List<Element> list = new ArrayList<Element>();
-        for (DataflowReferenceType qi : q) {
+        for (DataflowReference qi : q) {
             list.add(toDataflow(s, qi));
         }
         return list;
@@ -524,6 +524,8 @@ public class Sdmx20QueryWriter {
     public static Element toTimeValueElement(TimeDimensionValueType tv) {
         Element e = new Element("Time");
         Element start = new Element("StartTime");
+        System.out.println("Start Time="+tv.getStart().toString());
+        System.out.println("End Time="+tv.getEnd().toString());
         start.setText(tv.getStart().toString());
         Element end = new Element("EndTime");
         end.setText(tv.getEnd().toString());
@@ -560,7 +562,7 @@ public class Sdmx20QueryWriter {
         return e;
     }
 
-    private static Element toDataflow(String s, DataflowReferenceType qi) {
+    private static Element toDataflow(String s, DataflowReference qi) {
         Element elem = new Element(s);
         elem.setNamespace(Namespace.getNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/query"));
         elem.setText(qi.getMaintainableParentId().toString());

@@ -5,7 +5,7 @@
 package sdmx.structure.base;
 
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NCNameIDType;
+import sdmx.commonreferences.NCNameID;
 
 /**
  *	<xs:complexType name="ComponentBaseType" abstract="true">

@@ -11,14 +11,14 @@ import java.util.logging.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import sdmx.NewRegistry;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
 import sdmx.SdmxIO;
 import sdmx.version.twopointzero.Sdmx20DataParserTest;
 import sdmx.version.twopointzero.Sdmx20StructureParserTest;
-import sdmx.registry.LocalRegistry;
-import sdmx.Registry;
 import sdmx.exception.ParseException;
+import sdmx.net.LocalRegistry;
 
 /**
  *
@@ -43,7 +43,7 @@ import sdmx.exception.ParseException;
  *  Copyright James Gardner 2014
  */
 public class StructuredDataTest {
-    Registry registry = LocalRegistry.getDefaultWorkspace();
+    NewRegistry registry = LocalRegistry.getDefaultWorkspace();
     
     @BeforeClass
     public static void setUpClass() {

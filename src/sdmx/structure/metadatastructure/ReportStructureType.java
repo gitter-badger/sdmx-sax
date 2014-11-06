@@ -5,7 +5,7 @@
 package sdmx.structure.metadatastructure;
 
 import java.util.List;
-import sdmx.commonreferences.LocalMetadataTargetReferenceType;
+import sdmx.commonreferences.LocalMetadataTargetReference;
 
 /**
  *	<xs:complexType name="ReportStructureType">
@@ -47,19 +47,19 @@ import sdmx.commonreferences.LocalMetadataTargetReferenceType;
  */
 public class ReportStructureType extends ReportStructureBaseType {
     
-    private List<LocalMetadataTargetReferenceType> localMetadataTarget = null;
+    private List<LocalMetadataTargetReference> localMetadataTarget = null;
 
     /**
      * @return the localMetadataTarget
      */
-    public List<LocalMetadataTargetReferenceType> getLocalMetadataTarget() {
+    public List<LocalMetadataTargetReference> getLocalMetadataTarget() {
         return localMetadataTarget;
     }
 
     /**
      * @param localMetadataTarget the localMetadataTarget to set
      */
-    public void setLocalMetadataTarget(List<LocalMetadataTargetReferenceType> localMetadataTarget) {
+    public void setLocalMetadataTarget(List<LocalMetadataTargetReference> localMetadataTarget) {
         this.localMetadataTarget = localMetadataTarget;
     }
     

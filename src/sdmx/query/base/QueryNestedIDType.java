@@ -5,7 +5,7 @@
 package sdmx.query.base;
 
 import sdmx.common.TextOperatorType;
-import sdmx.commonreferences.NestedIDType;
+import sdmx.commonreferences.NestedID;
 
 /**
  *	<xs:complexType name="QueryNestedIDType">
@@ -42,7 +42,7 @@ import sdmx.commonreferences.NestedIDType;
  *
  *  Copyright James Gardner 2014
  */
-public class QueryNestedIDType extends NestedIDType {
+public class QueryNestedIDType extends NestedID {
     private TextOperatorType operator = TextOperatorType.EQUAL;
     public QueryNestedIDType(String s,TextOperatorType operator) {
         super(s);

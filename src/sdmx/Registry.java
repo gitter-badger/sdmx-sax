@@ -6,14 +6,14 @@ package sdmx;
 
 import java.util.ArrayList;
 import java.util.List;
-import sdmx.commonreferences.ConceptReferenceType;
-import sdmx.commonreferences.DataStructureReferenceType;
+import sdmx.commonreferences.ConceptReference;
+import sdmx.commonreferences.DataStructureReference;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.ItemSchemeReferenceBaseType;
-import sdmx.commonreferences.NestedIDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.StructureReferenceType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.ItemSchemeReferenceBase;
+import sdmx.commonreferences.NestedID;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.StructureReference;
+import sdmx.commonreferences.Version;
 import sdmx.message.DataStructure;
 import sdmx.message.StructureType;
 import sdmx.structure.StructuresType;
@@ -24,7 +24,6 @@ import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
-import sdmx.version.common.Queryable;
 import sdmx.version.twopointone.Sdmx21StructureReaderTools;
 import sdmx.xml.anyURI;
 /**
@@ -45,25 +44,25 @@ import sdmx.xml.anyURI;
  *
  *  Copyright James Gardner 2014
  */
-public interface Registry extends Queryable {
+public interface Registry {
     public void load(StructureType struct);
     public void unload(StructureType struct);
 //    public IdentifiableType findIdentifiable(String agency, String id, String version);
-    public DataStructureType findDataStructure(NestedNCNameIDType agency,IDType id,VersionType version);
-    public DataStructureType findDataStructure(NestedNCNameIDType agency,IDType id);
-    public ConceptSchemeType findConceptScheme(NestedNCNameIDType agencyID, ConceptReferenceType conceptRef);
-    public CodelistType findCodelist(ItemSchemeReferenceBaseType enumeration);
+    public DataStructureType findDataStructure(NestedNCNameID agency,IDType id,Version version);
+    public DataStructureType findDataStructure(NestedNCNameID agency,IDType id);
+    public ConceptSchemeType findConceptScheme(NestedNCNameID agencyID, ConceptReference conceptRef);
+    public CodelistType findCodelist(ItemSchemeReferenceBase enumeration);
     public CodelistType findCodelistById(IDType id);
-    public CodelistType findCodelist(NestedNCNameIDType codelistAgency, IDType codelist, VersionType codelistVersion);
-    public CodelistType findCodelist(NestedNCNameIDType codelistAgency, IDType codelist);
+    public CodelistType findCodelist(NestedNCNameID codelistAgency, IDType codelist, Version codelistVersion);
+    public CodelistType findCodelist(NestedNCNameID codelistAgency, IDType codelist);
     public CodelistType findCodelist(String codelistAgency, String codelist, String codelistVersion);
     public CodelistType findCodelist(String codelistAgency, String codelist);
-    public ConceptSchemeType findConceptScheme(NestedNCNameIDType csa, IDType csi);
+    public ConceptSchemeType findConceptScheme(NestedNCNameID csa, IDType csi);
     public ConceptSchemeType findConceptSchemeById(IDType id);
-    public ConceptType findConcept(NestedNCNameIDType agency, IDType id);
-    public DataflowType findDataflow(NestedNCNameIDType agency, IDType id,VersionType vers);
+    public ConceptType findConcept(NestedNCNameID agency, IDType id);
+    public DataflowType findDataflow(NestedNCNameID agency, IDType id,Version vers);
     public ConceptType findConcept(IDType id);
     public List<DataflowType> listDataflows();
-    public MaintainableType resolve(StructureReferenceType ref);
+    public MaintainableType resolve(StructureReference ref);
     public void reset();
 }

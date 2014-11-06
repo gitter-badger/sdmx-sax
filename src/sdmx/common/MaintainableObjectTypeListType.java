@@ -4,7 +4,7 @@
  */
 package sdmx.common;
 
-import sdmx.commonreferences.ObjectTypeListType;
+import sdmx.commonreferences.ObjectTypeList;
 
 /**
  *	<xs:complexType name="MaintainableObjectTypeListType">
@@ -58,6 +58,6 @@ import sdmx.commonreferences.ObjectTypeListType;
  *
  *  Copyright James Gardner 2014
  */
-public class MaintainableObjectTypeListType extends ObjectTypeListType {
+public class MaintainableObjectTypeListType extends ObjectTypeList {
     
 }

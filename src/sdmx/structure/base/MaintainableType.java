@@ -4,15 +4,14 @@
  */
 package sdmx.structure.base;
 
-import java.lang.ref.Reference;
 import sdmx.common.Annotations;
 import sdmx.common.ExternalReferenceAttributeGroup;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NestedIDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.RefBaseType;
+import sdmx.commonreferences.NestedID;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.RefBase;
 import sdmx.commonreferences.ReferenceType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.Version;
 
 /**
  * <xs:complexType name="MaintainableType" abstract="true">
@@ -82,7 +81,7 @@ import sdmx.commonreferences.VersionType;
  */
 public class MaintainableType extends MaintainableBaseType {
 
-    private NestedNCNameIDType agencyID=null;
+    private NestedNCNameID agencyID=null;
     private Boolean isFinal = null;
     private Boolean isExternalReference = null;
     private ExternalReferenceAttributeGroup externalReferences = null;
@@ -90,14 +89,14 @@ public class MaintainableType extends MaintainableBaseType {
     /**
      * @return the agencyID
      */
-    public NestedNCNameIDType getAgencyID() {
+    public NestedNCNameID getAgencyID() {
         return agencyID;
     }
 
     /**
      * @param agencyID the agencyID to set
      */
-    public void setAgencyID(NestedNCNameIDType agencyID) {
+    public void setAgencyID(NestedNCNameID agencyID) {
         this.agencyID = agencyID;
     }
 
@@ -144,10 +143,10 @@ public class MaintainableType extends MaintainableBaseType {
     }
 
     public boolean identifiesMe(String agency2, String id2, String vers2) {
-        return identifiesMe(new NestedNCNameIDType(agency2), new IDType(id2), new VersionType(vers2));
+        return identifiesMe(new NestedNCNameID(agency2), new IDType(id2), new Version(vers2));
     }
 
-    public boolean identifiesMe(NestedNCNameIDType agency2, NestedIDType id2, VersionType vers2) {
+    public boolean identifiesMe(NestedNCNameID agency2, NestedID id2, Version vers2) {
         //System.out.println("Left=" + this.agencyID + "." + this.getId() + "." + this.getVersion());
         //System.out.println("Right=" + agency2 + "." + id2 + "." + vers2);
         if (vers2 == null||this.getVersion()==null) {
@@ -167,7 +166,7 @@ public class MaintainableType extends MaintainableBaseType {
         }
     }
 
-    public boolean identifiesMe(NestedNCNameIDType agency2, NestedIDType id2) {
+    public boolean identifiesMe(NestedNCNameID agency2, NestedID id2) {
         //System.out.println("Left=" + this.agencyID + "." + this.getId() + "." + this.getVersion());
         //System.out.println("Right=" + agency2 + "." + id2 + "." + vers2);
         if (this.agencyID.equals(agency2) && this.getId().equals(id2)) {
@@ -181,7 +180,7 @@ public class MaintainableType extends MaintainableBaseType {
         }
     }
     public ReferenceType asReference() {
-        RefBaseType ref = new RefBaseType(agencyID,getId(),getVersion(),null,null,null,false,null,null);
+        RefBase ref = new RefBase(agencyID,getId(),getVersion(),null,null,null,false,null,null);
         ReferenceType reference = new ReferenceType(ref,getUri());
         return reference;
     }

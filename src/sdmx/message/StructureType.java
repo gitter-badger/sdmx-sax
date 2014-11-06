@@ -5,18 +5,22 @@
 package sdmx.message;
 
 import java.util.List;
-import sdmx.Registry;
-import sdmx.commonreferences.ConceptReferenceType;
-import sdmx.commonreferences.DataStructureReferenceType;
+import sdmx.NewRegistry;
+import sdmx.commonreferences.CodeReference;
+import sdmx.commonreferences.CodelistReference;
+import sdmx.commonreferences.ConceptReference;
+import sdmx.commonreferences.ConceptSchemeReference;
+import sdmx.commonreferences.DataStructureReference;
+import sdmx.commonreferences.DataflowReference;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.ItemSchemeReferenceBaseType;
-import sdmx.commonreferences.NestedIDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.StructureReferenceType;
-import sdmx.commonreferences.VersionType;
-import sdmx.registry.RegistryUtil;
+import sdmx.commonreferences.ItemSchemeReferenceBase;
+import sdmx.commonreferences.NestedID;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.StructureReference;
+import sdmx.commonreferences.Version;
 import sdmx.structure.StructuresType;
 import sdmx.structure.base.MaintainableType;
+import sdmx.structure.codelist.CodeType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
@@ -59,7 +63,7 @@ import sdmx.structure.datastructure.DataStructureType;
  *
  *  Copyright James Gardner 2014
  */
-public class StructureType extends MessageType implements Registry {
+public class StructureType extends MessageType implements NewRegistry {
     private StructuresType structures = null;
     public StructureType(){
     }
@@ -74,115 +78,57 @@ public class StructureType extends MessageType implements Registry {
         return structures;
     }
 
-    /**
-     * @param structures the structures to set
-     */
-    public void setStructures(StructuresType structures) {
-        this.structures = structures;
+    @Override
+    public void clear() {
+    }
+
+    @Override
+    public DataStructureType find(DataStructureReference ref) {
+        return structures.find(ref);
+    }
+
+    @Override
+    public DataflowType find(DataflowReference ref) {
+        return structures.find(ref);
+    }
+
+    @Override
+    public CodeType find(CodeReference ref) {
+        return structures.find(ref);
+    }
+
+    @Override
+    public CodelistType find(CodelistReference ref) {
+        return structures.find(ref);
+    }
+
+    @Override
+    public ConceptType find(ConceptReference ref) {
+        return structures.find(ref);
+    }
+
+    @Override
+    public ConceptSchemeType find(ConceptSchemeReference ref) {
+        return structures.find(ref);
     }
 
     @Override
     public void load(StructureType struct) {
-        structures.load(struct);
-    }
-
-    @Override
-    public void unload(StructureType struct) {
-        structures.unload(struct);
-    }
-
-    @Override
-    public DataStructureType findDataStructure(NestedNCNameIDType agency, IDType id, VersionType version) {
-        return structures.findDataStructure(agency, id, version);
-    }
-
-    @Override
-    public DataStructureType findDataStructure(NestedNCNameIDType agency, IDType id) {
-        return structures.findDataStructure(agency, id);
-    }
-
-    @Override
-    public ConceptSchemeType findConceptScheme(NestedNCNameIDType agencyID, ConceptReferenceType conceptRef) {
-        return structures.findConceptScheme(agencyID, conceptRef);
-    }
-
-    @Override
-    public CodelistType findCodelist(ItemSchemeReferenceBaseType enumeration) {
-        return structures.findCodelist(enumeration);
-    }
-
-    @Override
-    public CodelistType findCodelistById(IDType id) {
-        return structures.findCodelistById(id);
-    }
-
-    @Override
-    public CodelistType findCodelist(NestedNCNameIDType codelistAgency, IDType codelist, VersionType codelistVersion) {
-        return structures.findCodelist(codelistAgency, codelist, codelistVersion);
-    }
-
-    @Override
-    public CodelistType findCodelist(NestedNCNameIDType codelistAgency, IDType codelist) {
-        return structures.findCodelist(codelistAgency, codelist);
-    }
-
-    @Override
-    public CodelistType findCodelist(String codelistAgency, String codelist, String codelistVersion) {
-        return structures.findCodelist(codelistAgency, codelist, codelistVersion);
-    }
-
-    @Override
-    public CodelistType findCodelist(String codelistAgency, String codelist) {
-        return structures.findCodelist(codelistAgency, codelist);
-    }
-
-    @Override
-    public ConceptSchemeType findConceptScheme(NestedNCNameIDType csa, IDType csi) {
-        return structures.findConceptScheme(csa, csi);
-    }
-
-    @Override
-    public ConceptSchemeType findConceptSchemeById(IDType id) {
-        return structures.findConceptSchemeById(id);
-    }
-
-    @Override
-    public ConceptType findConcept(NestedNCNameIDType agency, IDType id) {
-        return structures.findConcept(agency, id);
-    }
-
-    @Override
-    public ConceptType findConcept(IDType id) {
-        return structures.findConcept(id);
-    }
-
-    @Override
-    public StructureType query(DataStructureQueryMessage message) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public DataMessage query(DataQueryMessage message) {
+    public void unload(StructureType struct) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public List<DataflowType> listDataflows() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return structures.listDataflows();
     }
 
-    @Override
-    public void reset() {
-        
-    }
-
-    @Override
-    public MaintainableType resolve(StructureReferenceType ref) {
-        return RegistryUtil.resolve(this, ref);
-    }
-
-    public DataflowType findDataflow(NestedNCNameIDType agency, IDType id, VersionType vers) {
-        return structures.findDataflow(agency, id, vers);
+    public void setStructures(StructuresType struct) {
+        this.structures=struct;
     }
 
 }

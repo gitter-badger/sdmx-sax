@@ -5,7 +5,7 @@
 package sdmx.query.base;
 
 import java.util.List;
-import sdmx.commonreferences.LocalItemReferenceType;
+import sdmx.commonreferences.LocalItemReference;
 
 /**
  *	<xs:complexType name="ItemWhereType" abstract="true">
@@ -49,20 +49,20 @@ import sdmx.commonreferences.LocalItemReferenceType;
  *  Copyright James Gardner 2014
  */
 public class ItemWhereType extends NameableWhereType {
-    private LocalItemReferenceType parent = null;
+    private LocalItemReference parent = null;
     private List<ItemWhereType> itemWheres = null;
 
     /**
      * @return the parent
      */
-    public LocalItemReferenceType getParent() {
+    public LocalItemReference getParent() {
         return parent;
     }
 
     /**
      * @param parent the parent to set
      */
-    public void setParent(LocalItemReferenceType parent) {
+    public void setParent(LocalItemReference parent) {
         this.parent = parent;
     }
 

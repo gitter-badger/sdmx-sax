@@ -9,10 +9,10 @@ import java.net.URI;
 import sdmx.common.ExternalReferenceAttributeGroup;
 import sdmx.common.ObservationDimensionType;
 import sdmx.common.PayloadStructureType;
-import sdmx.commonreferences.ProvisionAgreementReferenceType;
+import sdmx.commonreferences.ProvisionAgreementReference;
 import sdmx.xml.ID;
-import sdmx.commonreferences.DataStructureReferenceType;
-import sdmx.commonreferences.DataflowReferenceType;
+import sdmx.commonreferences.DataStructureReference;
+import sdmx.commonreferences.DataflowReference;
 import sdmx.xml.anyURI;
 /**
  *	<xs:complexType name="DataStructureType" abstract="true">
@@ -65,9 +65,9 @@ import sdmx.xml.anyURI;
  *  Copyright James Gardner 2014
  */
 public class DataStructureType extends PayloadStructureType {
-    private ProvisionAgreementReferenceType provisionAgreement = null;
-    private DataflowReferenceType structureUsage = null;
-    private DataStructureReferenceType structure = null;
+    private ProvisionAgreementReference provisionAgreement = null;
+    private DataflowReference structureUsage = null;
+    private DataStructureReference structure = null;
     public DataStructureType(ID struct,anyURI schema,anyURI namespace,ObservationDimensionType dim,boolean explicit,anyURI serviceURL, anyURI structureURL){
         super(struct,schema,namespace,dim,explicit,serviceURL,structureURL);
     }
@@ -75,42 +75,42 @@ public class DataStructureType extends PayloadStructureType {
     /**
      * @return the provisionAgreement
      */
-    public ProvisionAgreementReferenceType getProvisionAgreement() {
+    public ProvisionAgreementReference getProvisionAgreement() {
         return provisionAgreement;
     }
 
     /**
      * @param provisionAgreement the provisionAgreement to set
      */
-    public void setProvisionAgreement(ProvisionAgreementReferenceType provisionAgreement) {
+    public void setProvisionAgreement(ProvisionAgreementReference provisionAgreement) {
         this.provisionAgreement = provisionAgreement;
     }
 
     /**
      * @return the structureUsage
      */
-    public DataflowReferenceType getStructureUsage() {
+    public DataflowReference getStructureUsage() {
         return structureUsage;
     }
 
     /**
      * @param structureUsage the structureUsage to set
      */
-    public void setStructureUsage(DataflowReferenceType structureUsage) {
+    public void setStructureUsage(DataflowReference structureUsage) {
         this.structureUsage = structureUsage;
     }
 
     /**
      * @return the structure
      */
-    public DataStructureReferenceType getStructure() {
+    public DataStructureReference getStructure() {
         return structure;
     }
 
     /**
      * @param structure the structure to set
      */
-    public void setStructure(DataStructureReferenceType structure) {
+    public void setStructure(DataStructureReference structure) {
         this.structure = structure;
     }
 }

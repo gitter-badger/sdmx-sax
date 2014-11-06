@@ -4,7 +4,7 @@
  */
 package sdmx.common;
 
-import sdmx.commonreferences.NestedNCNameIDType;
+import sdmx.commonreferences.NestedNCNameID;
 import java.util.ArrayList;
 import java.util.List;
 import sdmx.common.choice.ComponentValueSetTypeChoice;
@@ -77,10 +77,10 @@ public class ComponentValueSetType {
 
     ComponentValueSetTypeChoice choice = null;
 
-    private NestedNCNameIDType id=null;// Required
+    private NestedNCNameID id=null;// Required
     private boolean include = true;
 
-    public ComponentValueSetType(ComponentValueSetTypeChoice value,NestedNCNameIDType id) {
+    public ComponentValueSetType(ComponentValueSetTypeChoice value,NestedNCNameID id) {
         this.choice=value;
         this.id=id;
     }

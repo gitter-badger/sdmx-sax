@@ -7,7 +7,7 @@ package sdmx.common.collection;
 
 import java.util.ArrayList;
 import java.util.List;
-import sdmx.commonreferences.SetReferenceType;
+import sdmx.commonreferences.SetReference;
 import sdmx.common.choice.MetadataTargetRegionKeyTypeChoice;
 
 /**
@@ -29,5 +29,5 @@ import sdmx.common.choice.MetadataTargetRegionKeyTypeChoice;
  *  Copyright James Gardner 2014
  */
 public class SetReferenceTypeArray implements MetadataTargetRegionKeyTypeChoice {
-     public List<SetReferenceType> list = new ArrayList<SetReferenceType>();
+     public List<SetReference> list = new ArrayList<SetReference>();
 }

@@ -7,8 +7,8 @@ package sdmx.xml;
 import java.net.URI;
 import java.net.URISyntaxException;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.Version;
 
 /**
  *
@@ -41,5 +41,6 @@ public class anyURI {
     }
     public String getString() {return s; }
     public URI getURI() { return uri; }
+    public String toString() { return this.s;}
 
 }

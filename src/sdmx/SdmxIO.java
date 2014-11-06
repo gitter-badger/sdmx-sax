@@ -12,6 +12,8 @@ import java.io.PushbackReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
@@ -20,7 +22,7 @@ import sdmx.data.flat.FlatDataSet;
 import sdmx.exception.ParseException;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
-import sdmx.registry.LocalRegistry;
+import sdmx.net.LocalRegistry;
 import sdmx.version.common.SdmxParserProvider;
 import sdmx.version.twopointone.Sdmx21ParserProvider;
 import sdmx.version.twopointzero.Sdmx20ParserProvider;
@@ -49,7 +51,15 @@ public class SdmxIO {
     private static boolean DUMP_XML = false;
     private static boolean SANITISE_NAMES = false;
     private static boolean STRICT_REGEX = true;
-    
+    private static boolean IGNORE_CASE = false;
+    private static boolean CHECK_URN = true;
+    private static int LOG_LEVEL = 7;
+    private static Handler h = new ConsoleHandler();
+    static{
+        SdmxIO.setLogLevel(LOG_LEVEL);
+        h.setLevel(Level.ALL);
+        Logger.getLogger("sdmx").addHandler(h);
+    }
     private static List<SdmxParserProvider> list = new ArrayList<SdmxParserProvider>(0);
     public static void register(SdmxParserProvider pp) {
         list.add(pp);
@@ -124,7 +134,7 @@ public class SdmxIO {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         return parseStructure(new LocalRegistry(),in);
     }
-    public static StructureType parseStructure(Registry registry,InputStream in) throws IOException,ParseException {
+    public static StructureType parseStructure(NewRegistry registry,InputStream in) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackInputStream push = new PushbackInputStream(in,8192);
         String header = getHeader(push);
@@ -136,7 +146,7 @@ public class SdmxIO {
         registry.load(struct);
         return struct;
     }
-    public static StructureType parseStructure(Registry registry,Reader in) throws IOException,ParseException {
+    public static StructureType parseStructure(NewRegistry registry,Reader in) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackReader push = new PushbackReader(in,8192);
         String header = getHeader(push);
@@ -204,4 +214,25 @@ public class SdmxIO {
     public static void setSanitiseNames(boolean b) { SANITISE_NAMES =b; }
     public static boolean isStrictRegex() { return STRICT_REGEX; }
     public static void setStrictRegex(boolean b) { STRICT_REGEX =b; }
+    public static boolean isIgnoreCase() { return IGNORE_CASE; }
+    public static void setIgnoreCase(boolean b) { IGNORE_CASE=b; }
+    public static boolean isCheckURN() { return CHECK_URN; }
+    public static void setCheckURN(boolean b) { CHECK_URN=b; }
+    public static int getLogLevel() { return LOG_LEVEL; }
+    public static void setLogLevel(int i) { 
+        LOG_LEVEL=i; 
+        Level level = Level.ALL;
+        switch(LOG_LEVEL){
+            case 0:level=Level.OFF;break;
+            case 1:level=Level.INFO;break;
+            case 2:level=Level.CONFIG;break;
+            case 3:level=Level.WARNING;break;
+            case 4:level=Level.FINE;break;
+            case 5:level=Level.FINER;break;
+            case 6:level=Level.FINEST;break;
+            case 7:level=Level.ALL;break;
+        }
+        Logger.getLogger("sdmx").setLevel(level);
+        Logger.getLogger("sdmx").setUseParentHandlers(false);
+    }
 }

@@ -55,47 +55,47 @@ import sdmx.common.PayloadStructureType;
 import sdmx.common.StandardTimePeriodType;
 import sdmx.common.TextType;
 import sdmx.common.TimezoneType;
-import sdmx.commonreferences.CategoryRefType;
-import sdmx.commonreferences.CategoryReferenceType;
-import sdmx.commonreferences.ConceptRefType;
-import sdmx.commonreferences.ConceptReferenceType;
-import sdmx.commonreferences.DataProviderRefType;
-import sdmx.commonreferences.DataProviderReferenceType;
-import sdmx.commonreferences.DataStructureRefType;
-import sdmx.commonreferences.DataStructureReferenceType;
-import sdmx.commonreferences.DataflowRefType;
-import sdmx.commonreferences.DataflowReferenceType;
-import sdmx.commonreferences.DimensionRefType;
-import sdmx.commonreferences.DimensionReferenceType;
+import sdmx.commonreferences.CategoryRef;
+import sdmx.commonreferences.CategoryReference;
+import sdmx.commonreferences.ConceptRef;
+import sdmx.commonreferences.ConceptReference;
+import sdmx.commonreferences.DataProviderRef;
+import sdmx.commonreferences.DataProviderReference;
+import sdmx.commonreferences.DataStructureRef;
+import sdmx.commonreferences.DataStructureReference;
+import sdmx.commonreferences.DataflowRef;
+import sdmx.commonreferences.DataflowReference;
+import sdmx.commonreferences.DimensionRef;
+import sdmx.commonreferences.DimensionReference;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.ItemSchemeRefBaseType;
-import sdmx.commonreferences.ItemSchemeReferenceBaseType;
-import sdmx.commonreferences.LocalDimensionRefType;
-import sdmx.commonreferences.LocalDimensionReferenceType;
-import sdmx.commonreferences.LocalGroupKeyDescriptorRefType;
-import sdmx.commonreferences.LocalGroupKeyDescriptorReferenceType;
-import sdmx.commonreferences.LocalItemRefBaseType;
-import sdmx.commonreferences.LocalItemReferenceType;
-import sdmx.commonreferences.LocalMetadataTargetRefType;
-import sdmx.commonreferences.LocalMetadataTargetReferenceType;
-import sdmx.commonreferences.LocalPrimaryMeasureRefType;
-import sdmx.commonreferences.LocalPrimaryMeasureReferenceType;
-import sdmx.commonreferences.MetadataStructureRefType;
-import sdmx.commonreferences.MetadataStructureReferenceType;
-import sdmx.commonreferences.NCNameIDType;
-import sdmx.commonreferences.NestedIDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.ObjectReferenceType;
-import sdmx.commonreferences.ProvisionAgreementRefType;
-import sdmx.commonreferences.ProvisionAgreementReferenceType;
-import sdmx.commonreferences.RefBaseType;
-import sdmx.commonreferences.SetReferenceType;
-import sdmx.commonreferences.StructureRefBaseType;
-import sdmx.commonreferences.StructureRefType;
-import sdmx.commonreferences.StructureReferenceBaseType;
-import sdmx.commonreferences.StructureUsageRefBaseType;
-import sdmx.commonreferences.StructureUsageReferenceBaseType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.ItemSchemeRefBase;
+import sdmx.commonreferences.ItemSchemeReferenceBase;
+import sdmx.commonreferences.LocalDimensionRef;
+import sdmx.commonreferences.LocalDimensionReference;
+import sdmx.commonreferences.LocalGroupKeyDescriptorRef;
+import sdmx.commonreferences.LocalGroupKeyDescriptorReference;
+import sdmx.commonreferences.LocalItemRefBase;
+import sdmx.commonreferences.LocalItemReference;
+import sdmx.commonreferences.LocalMetadataTargetRef;
+import sdmx.commonreferences.LocalMetadataTargetReference;
+import sdmx.commonreferences.LocalPrimaryMeasureRef;
+import sdmx.commonreferences.LocalPrimaryMeasureReference;
+import sdmx.commonreferences.MetadataStructureRef;
+import sdmx.commonreferences.MetadataStructureReference;
+import sdmx.commonreferences.NCNameID;
+import sdmx.commonreferences.NestedID;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.ObjectReference;
+import sdmx.commonreferences.ProvisionAgreementRef;
+import sdmx.commonreferences.ProvisionAgreementReference;
+import sdmx.commonreferences.RefBase;
+import sdmx.commonreferences.SetReference;
+import sdmx.commonreferences.StructureRefBase;
+import sdmx.commonreferences.StructureRef;
+import sdmx.commonreferences.StructureReferenceBase;
+import sdmx.commonreferences.StructureUsageRefBase;
+import sdmx.commonreferences.StructureUsageReferenceBase;
+import sdmx.commonreferences.Version;
 import sdmx.commonreferences.types.ItemSchemePackageTypeCodelistType;
 import sdmx.commonreferences.types.ItemSchemeTypeCodelistType;
 import sdmx.commonreferences.types.ItemTypeCodelistType;
@@ -260,12 +260,12 @@ public class Sdmx21StructureReaderTools {
         return list;
     }
 
-    public static NestedNCNameIDType toNCName(String s) {
-        return new NestedNCNameIDType(s);
+    public static NestedNCNameID toNCName(String s) {
+        return new NestedNCNameID(s);
     }
 
-    public static NCNameIDType toNCNameIDType(String s) {
-        return new NCNameIDType(s);
+    public static NCNameID toNCNameIDType(String s) {
+        return new NCNameID(s);
     }
 
     public static IDType toIDType(String s) {
@@ -363,52 +363,52 @@ public class Sdmx21StructureReaderTools {
 
     }
 
-    public static ObjectReferenceType toObjectReferenceType(org.sdmx.resources.sdmxml.schemas.v21.common.ObjectReferenceType ort1) throws URISyntaxException, TypeValueNotFoundException {
+    public static ObjectReference toObjectReferenceType(org.sdmx.resources.sdmxml.schemas.v21.common.ObjectReferenceType ort1) throws URISyntaxException, TypeValueNotFoundException {
         if (ort1.getRef() != null) {
-            ObjectReferenceType ort2 = new ObjectReferenceType(toRefBaseType(ort1.getRef()), toAnyURI(ort1.getURN()));
+            ObjectReference ort2 = new ObjectReference(toRefBaseType(ort1.getRef()), toAnyURI(ort1.getURN()));
             return ort2;
         } else {
-            ObjectReferenceType ort2 = new ObjectReferenceType(toAnyURI(ort1.getURN()));
+            ObjectReference ort2 = new ObjectReference(toAnyURI(ort1.getURN()));
             return ort2;
         }
     }
 
-    public static CategoryReferenceType toCategoryReferenceType(org.sdmx.resources.sdmxml.schemas.v21.common.CategoryReferenceType crt1) throws URISyntaxException, TypeValueNotFoundException {
+    public static CategoryReference toCategoryReferenceType(org.sdmx.resources.sdmxml.schemas.v21.common.CategoryReferenceType crt1) throws URISyntaxException, TypeValueNotFoundException {
         if (crt1.getRef() != null) {
-            CategoryReferenceType crt2 = new CategoryReferenceType(toCategoryRefType(crt1.getRef()), toAnyURI(crt1.getURN()));
+            CategoryReference crt2 = new CategoryReference(toCategoryRefType(crt1.getRef()), toAnyURI(crt1.getURN()));
             return crt2;
         } else {
-            CategoryReferenceType crt2 = new CategoryReferenceType(new anyURI(crt1.getURN()));
+            CategoryReference crt2 = new CategoryReference(new anyURI(crt1.getURN()));
             return crt2;
         }
     }
 
-    public static RefBaseType toRefBaseType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref1) throws TypeValueNotFoundException {
+    public static RefBase toRefBaseType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref1) throws TypeValueNotFoundException {
         ObjectTypeCodelistType obj = toObjectReferenceCodelistType(ref1.getClass1());
-        RefBaseType ref2 = null;
-        ref2 = new RefBaseType(toNCName(ref1.getAgencyID()), toNestedIDType(ref1.getId()), toVersionType(ref1.getVersion()), toIDType(ref1.getMaintainableParentID()), toVersionType(ref1.getMaintainableParentVersion()), toNestedIDType(ref1.getContainerID()), ref1.getLocal(), obj, toPackageTypeCodelistType(ref1.getPackage()));
+        RefBase ref2 = null;
+        ref2 = new RefBase(toNCName(ref1.getAgencyID()), toNestedIDType(ref1.getId()), toVersionType(ref1.getVersion()), toIDType(ref1.getMaintainableParentID()), toVersionType(ref1.getMaintainableParentVersion()), toNestedIDType(ref1.getContainerID()), ref1.getLocal(), obj, toPackageTypeCodelistType(ref1.getPackage()));
         return ref2;
     }
 
-    public static CategoryRefType toCategoryRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref1) throws TypeValueNotFoundException {
+    public static CategoryRef toCategoryRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref1) throws TypeValueNotFoundException {
         ItemTypeCodelistType obj = toItemTypeCodelistType(ref1.getClass1());
-        CategoryRefType ref2 = null;
-        ref2 = new CategoryRefType(toNestedNCNameIDType(ref1.getAgencyID()), toNestedIDType(ref1.getId()), toIDType(ref1.getMaintainableParentID()), toVersionType(ref1.getMaintainableParentVersion()), obj, toItemSchemePackageTypeCodelistType(ref1.getPackage()));
+        CategoryRef ref2 = null;
+        ref2 = new CategoryRef(toNestedNCNameIDType(ref1.getAgencyID()), toNestedIDType(ref1.getId()), toIDType(ref1.getMaintainableParentID()), toVersionType(ref1.getMaintainableParentVersion()), obj, toItemSchemePackageTypeCodelistType(ref1.getPackage()));
         return ref2;
     }
 
-    public static VersionType toVersionType(String s) {
+    public static Version toVersionType(String s) {
         if (s == null) {
             return null;
         }
-        return new VersionType(s);
+        return new Version(s);
     }
 
-    public static NestedIDType toNestedIDType(String s) {
+    public static NestedID toNestedIDType(String s) {
         if (s == null) {
             return null;
         }
-        return new NestedIDType(s);
+        return new NestedID(s);
     }
 
     public static PackageTypeCodelistType toPackageTypeCodelistType(org.sdmx.resources.sdmxml.schemas.v21.common.PackageTypeCodelistType.Enum pk) throws TypeValueNotFoundException {
@@ -502,8 +502,8 @@ public class Sdmx21StructureReaderTools {
         return codelist;
     }
 
-    public static NestedNCNameIDType toNestedNCNameIDType(String ncname) {
-        return new NestedNCNameIDType(ncname);
+    public static NestedNCNameID toNestedNCNameIDType(String ncname) {
+        return new NestedNCNameID(ncname);
     }
 
     public static List<sdmx.common.Name> toNames(org.sdmx.resources.sdmxml.schemas.v21.common.TextType[] tt) {
@@ -570,37 +570,37 @@ public class Sdmx21StructureReaderTools {
 
     }
 
-    public static StructureReferenceBaseType toStructureReference(org.sdmx.resources.sdmxml.schemas.v21.common.StructureReferenceBaseType srt1) throws TypeValueNotFoundException, URISyntaxException {
+    public static StructureReferenceBase toStructureReference(org.sdmx.resources.sdmxml.schemas.v21.common.StructureReferenceBaseType srt1) throws TypeValueNotFoundException, URISyntaxException {
         if (srt1.getRef() != null) {
-            StructureReferenceBaseType srt2 = new StructureReferenceBaseType(toStructureRefType(srt1.getRef()), toAnyURI(srt1.getURN()));
+            StructureReferenceBase srt2 = new StructureReferenceBase(toStructureRefType(srt1.getRef()), toAnyURI(srt1.getURN()));
             return srt2;
         } else {
-            StructureReferenceBaseType srt2 = new StructureReferenceBaseType(new anyURI(srt1.getURN()));
+            StructureReferenceBase srt2 = new StructureReferenceBase(new anyURI(srt1.getURN()));
             return srt2;
         }
     }
 
-    public static StructureRefBaseType toStructureRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref1) throws TypeValueNotFoundException {
+    public static StructureRefBase toStructureRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref1) throws TypeValueNotFoundException {
         ItemTypeCodelistType obj = toItemTypeCodelistType(ref1.getClass1());
-        StructureRefType ref2 = null;
-        ref2 = new StructureRefType(toNestedNCNameIDType(ref1.getAgencyID()),toIDType(ref1.getId()),toVersionType(ref1.getVersion()),obj, toItemSchemePackageTypeCodelistType(ref1.getPackage()));
+        StructureRef ref2 = null;
+        ref2 = new StructureRef(toNestedNCNameIDType(ref1.getAgencyID()),toIDType(ref1.getId()),toVersionType(ref1.getVersion()),obj, toItemSchemePackageTypeCodelistType(ref1.getPackage()));
         return ref2;
 
     }
 
-    public static DataStructureReferenceType toDataStructureReference(org.sdmx.resources.sdmxml.schemas.v21.common.StructureReferenceBaseType srt1) throws TypeValueNotFoundException, URISyntaxException {
+    public static DataStructureReference toDataStructureReference(org.sdmx.resources.sdmxml.schemas.v21.common.StructureReferenceBaseType srt1) throws TypeValueNotFoundException, URISyntaxException {
         if (srt1.getRef() != null) {
-            DataStructureReferenceType srt2 = new DataStructureReferenceType(toDataStructureRefType(srt1.getRef()), toAnyURI(srt1.getURN()));
+            DataStructureReference srt2 = new DataStructureReference(toDataStructureRefType(srt1.getRef()), toAnyURI(srt1.getURN()));
             return srt2;
         } else {
-            DataStructureReferenceType srt2 = new DataStructureReferenceType(new anyURI(srt1.getURN()));
+            DataStructureReference srt2 = new DataStructureReference(new anyURI(srt1.getURN()));
             return srt2;
         }
     }
 
-    public static DataStructureRefType toDataStructureRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref1) throws TypeValueNotFoundException {
-        DataStructureRefType ref2 = null;
-        ref2 = new DataStructureRefType(toNestedNCNameIDType(ref1.getAgencyID()), toIDType(ref1.getId()), toVersionType(ref1.getVersion()));
+    public static DataStructureRef toDataStructureRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref1) throws TypeValueNotFoundException {
+        DataStructureRef ref2 = null;
+        ref2 = new DataStructureRef(toNestedNCNameIDType(ref1.getAgencyID()), toIDType(ref1.getId()), toVersionType(ref1.getVersion()));
         return ref2;
     }
 
@@ -773,11 +773,11 @@ public class Sdmx21StructureReaderTools {
         return con2;
     }
 
-    public static LocalItemReferenceType toLocalItemReferenceType(org.sdmx.resources.sdmxml.schemas.v21.common.LocalItemReferenceType lrt1) throws TypeValueNotFoundException {
+    public static LocalItemReference toLocalItemReferenceType(org.sdmx.resources.sdmxml.schemas.v21.common.LocalItemReferenceType lrt1) throws TypeValueNotFoundException {
         if (lrt1 == null) {
             return null;
         }
-        LocalItemReferenceType lrt2 = new LocalItemReferenceType(new LocalItemRefBaseType(toIDType(lrt1.getRef().getId()), ItemTypeCodelistType.fromStringWithException(lrt1.getRef().getClass1().toString()), ItemSchemePackageTypeCodelistType.fromStringWithException(lrt1.getRef().getPackage().toString())));
+        LocalItemReference lrt2 = new LocalItemReference(new LocalItemRefBase(toIDType(lrt1.getRef().getId()), ItemTypeCodelistType.fromStringWithException(lrt1.getRef().getClass1().toString()), ItemSchemePackageTypeCodelistType.fromStringWithException(lrt1.getRef().getPackage().toString())));
         return lrt2;
     }
 
@@ -884,23 +884,22 @@ public class Sdmx21StructureReaderTools {
         return ds2;
     }
 
-    public static ConceptReferenceType toConceptReference(org.sdmx.resources.sdmxml.schemas.v21.common.ConceptReferenceType srt1) throws TypeValueNotFoundException, URISyntaxException {
+    public static ConceptReference toConceptReference(org.sdmx.resources.sdmxml.schemas.v21.common.ConceptReferenceType srt1) throws TypeValueNotFoundException, URISyntaxException {
         if (srt1 == null) {
             return null;
         }
         if (srt1.getRef() != null) {
-            ConceptReferenceType srt2 = new ConceptReferenceType(toConceptRefType(srt1.getRef()), toAnyURI(srt1.getURN()));
+            ConceptReference srt2 = new ConceptReference(toConceptRefType(srt1.getRef()), toAnyURI(srt1.getURN()));
             return srt2;
         } else {
-            ConceptReferenceType srt2 = new ConceptReferenceType(new anyURI(srt1.getURN()));
+            ConceptReference srt2 = new ConceptReference(new anyURI(srt1.getURN()));
             return srt2;
         }
     }
 
-    public static ConceptRefType toConceptRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref1) {
-        ConceptRefType ref2 = new ConceptRefType(toIDType(ref1.getMaintainableParentID()), toVersionType(ref1.getMaintainableParentVersion()), toIDType(ref1.getId()));
+    public static ConceptRef toConceptRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref1) {
+        ConceptRef ref2 = new ConceptRef(toNestedNCNameIDType(ref1.getAgencyID()),toIDType(ref1.getMaintainableParentID()), toVersionType(ref1.getMaintainableParentVersion()), toIDType(ref1.getId()));
         // This field is not declared on ConceptRefType in the spec!!!
-        ref2.setAgencyId(toNestedNCNameIDType(ref1.getAgencyID()));
         return ref2;
     }
 
@@ -934,22 +933,22 @@ public class Sdmx21StructureReaderTools {
         return lr2;
     }
 
-    public static ItemSchemeReferenceBaseType toItemSchemeReference(org.sdmx.resources.sdmxml.schemas.v21.common.ItemSchemeReferenceBaseType srt1) throws URISyntaxException, TypeValueNotFoundException {
+    public static ItemSchemeReferenceBase toItemSchemeReference(org.sdmx.resources.sdmxml.schemas.v21.common.ItemSchemeReferenceBaseType srt1) throws URISyntaxException, TypeValueNotFoundException {
         if (srt1 == null) {
             return null;
         }
         if (srt1.getRef() != null) {
-            ItemSchemeReferenceBaseType srt2 = new ItemSchemeReferenceBaseType(toItemSchemeRefBaseType(srt1.getRef()), toAnyURI(srt1.getURN()));
+            ItemSchemeReferenceBase srt2 = new ItemSchemeReferenceBase(toItemSchemeRefBaseType(srt1.getRef()), toAnyURI(srt1.getURN()));
             return srt2;
         } else {
-            ItemSchemeReferenceBaseType srt2 = new ItemSchemeReferenceBaseType(new anyURI(srt1.getURN()));
+            ItemSchemeReferenceBase srt2 = new ItemSchemeReferenceBase(new anyURI(srt1.getURN()));
             return srt2;
         }
     }
 
-    public static ItemSchemeRefBaseType toItemSchemeRefBaseType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref1) throws TypeValueNotFoundException {
-        ItemSchemeRefBaseType ref2;
-        ref2 = new ItemSchemeRefBaseType(toNestedNCNameIDType(ref1.getAgencyID()), toIDType(ref1.getId()), toVersionType(ref1.getVersion()), toItemSchemeTypeCodelistType(ref1.getClass1()), toItemSchemePackageTypeCodelistType(ref1.getPackage()));
+    public static ItemSchemeRefBase toItemSchemeRefBaseType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref1) throws TypeValueNotFoundException {
+        ItemSchemeRefBase ref2;
+        ref2 = new ItemSchemeRefBase(toNestedNCNameIDType(ref1.getAgencyID()), toIDType(ref1.getId()), toVersionType(ref1.getVersion()), toItemSchemeTypeCodelistType(ref1.getClass1()), toItemSchemePackageTypeCodelistType(ref1.getPackage()));
         return ref2;
     }
 
@@ -991,7 +990,7 @@ public class Sdmx21StructureReaderTools {
         if (at1.getNone() != null) {
             at2.setEmpty(true);
         } else if (at1.getDimensionArray().length > 0) {
-            List<LocalDimensionReferenceType> dims = new ArrayList<LocalDimensionReferenceType>();
+            List<LocalDimensionReference> dims = new ArrayList<LocalDimensionReference>();
             for (int i = 0; i < at1.getDimensionArray().length; i++) {
                 dims.add(toLocalDimensionReference(at1.getDimensionArray()[i]));
                 toLocalDimensionReference(at1.getDimensionArray(i));
@@ -999,7 +998,7 @@ public class Sdmx21StructureReaderTools {
             at2.setDimensions(dims);
             at2.setAttachGroup(toAttachGroup(at1.getGroup()));
         } else if (at1.getAttachmentGroupArray().length > 0) {
-            List<LocalGroupKeyDescriptorReferenceType> groups = new ArrayList<LocalGroupKeyDescriptorReferenceType>();
+            List<LocalGroupKeyDescriptorReference> groups = new ArrayList<LocalGroupKeyDescriptorReference>();
             for (int i = 0; i < at1.getAttachmentGroupArray().length; i++) {
                 groups.add(toAttachGroup(at1.getAttachmentGroupArray(i)));
             }
@@ -1013,51 +1012,51 @@ public class Sdmx21StructureReaderTools {
         return at2;
     }
 
-    public static DimensionReferenceType toDimensionReference(org.sdmx.resources.sdmxml.schemas.v21.common.DimensionReferenceType drt1) throws URISyntaxException, TypeValueNotFoundException {
+    public static DimensionReference toDimensionReference(org.sdmx.resources.sdmxml.schemas.v21.common.DimensionReferenceType drt1) throws URISyntaxException, TypeValueNotFoundException {
         if (drt1.getRef() != null) {
-            DimensionReferenceType drt2 = new DimensionReferenceType(toDimensionRefType(drt1.getRef()), toAnyURI(drt1.getURN()));
+            DimensionReference drt2 = new DimensionReference(toDimensionRefType(drt1.getRef()), toAnyURI(drt1.getURN()));
             return drt2;
         } else {
-            DimensionReferenceType drt2 = new DimensionReferenceType(new anyURI(drt1.getURN()));
+            DimensionReference drt2 = new DimensionReference(new anyURI(drt1.getURN()));
             return drt2;
         }
     }
 
-    public static DimensionRefType toDimensionRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref1) {
-        DimensionRefType ref2 = new DimensionRefType(toIDType(ref1.getId()));
+    public static DimensionRef toDimensionRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref1) {
+        DimensionRef ref2 = new DimensionRef(toIDType(ref1.getId()));
         return ref2;
     }
 
-    public static LocalDimensionReferenceType toLocalDimensionReference(org.sdmx.resources.sdmxml.schemas.v21.common.LocalDimensionReferenceType drt1) throws URISyntaxException, TypeValueNotFoundException {
-        LocalDimensionReferenceType drt2 = new LocalDimensionReferenceType(toLocalDimensionRefType(drt1.getRef()));
+    public static LocalDimensionReference toLocalDimensionReference(org.sdmx.resources.sdmxml.schemas.v21.common.LocalDimensionReferenceType drt1) throws URISyntaxException, TypeValueNotFoundException {
+        LocalDimensionReference drt2 = new LocalDimensionReference(toLocalDimensionRefType(drt1.getRef()));
         return drt2;
     }
 
-    public static LocalGroupKeyDescriptorReferenceType toAttachGroup(org.sdmx.resources.sdmxml.schemas.v21.common.LocalGroupKeyDescriptorReferenceType lgk1) {
+    public static LocalGroupKeyDescriptorReference toAttachGroup(org.sdmx.resources.sdmxml.schemas.v21.common.LocalGroupKeyDescriptorReferenceType lgk1) {
         if (lgk1 == null) {
             return null;
         }
-        LocalGroupKeyDescriptorReferenceType lgk2 = new LocalGroupKeyDescriptorReferenceType(toLocalGroupKeyDescriptorRefType(lgk1.getRef()));
+        LocalGroupKeyDescriptorReference lgk2 = new LocalGroupKeyDescriptorReference(toLocalGroupKeyDescriptorRefType(lgk1.getRef()));
         return lgk2;
     }
 
-    public static LocalGroupKeyDescriptorRefType toLocalGroupKeyDescriptorRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref) {
-        LocalGroupKeyDescriptorRefType lgk2 = new LocalGroupKeyDescriptorRefType(toIDType(ref.getId()));
+    public static LocalGroupKeyDescriptorRef toLocalGroupKeyDescriptorRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref) {
+        LocalGroupKeyDescriptorRef lgk2 = new LocalGroupKeyDescriptorRef(toIDType(ref.getId()));
         return lgk2;
     }
 
-    public static LocalPrimaryMeasureReferenceType toLocalPrimaryMeasureType(org.sdmx.resources.sdmxml.schemas.v21.common.LocalPrimaryMeasureReferenceType lpmr1) {
-        LocalPrimaryMeasureReferenceType lpmr2 = new LocalPrimaryMeasureReferenceType(toLocalPrimaryMeasureRefType(lpmr1.getRef()));
+    public static LocalPrimaryMeasureReference toLocalPrimaryMeasureType(org.sdmx.resources.sdmxml.schemas.v21.common.LocalPrimaryMeasureReferenceType lpmr1) {
+        LocalPrimaryMeasureReference lpmr2 = new LocalPrimaryMeasureReference(toLocalPrimaryMeasureRefType(lpmr1.getRef()));
         return lpmr2;
     }
 
-    public static LocalPrimaryMeasureRefType toLocalPrimaryMeasureRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref) {
-        LocalPrimaryMeasureRefType lpmrt = new LocalPrimaryMeasureRefType(toIDType(ref.getId()));
+    public static LocalPrimaryMeasureRef toLocalPrimaryMeasureRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref) {
+        LocalPrimaryMeasureRef lpmrt = new LocalPrimaryMeasureRef(toIDType(ref.getId()));
         return lpmrt;
     }
 
-    public static LocalDimensionRefType toLocalDimensionRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref) {
-        LocalDimensionRefType ref2 = new LocalDimensionRefType(toIDType(ref.getId().toString()));
+    public static LocalDimensionRef toLocalDimensionRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref) {
+        LocalDimensionRef ref2 = new LocalDimensionRef(toIDType(ref.getId().toString()));
         return ref2;
 
     }
@@ -1105,14 +1104,14 @@ public class Sdmx21StructureReaderTools {
             act2.setDataProvider(toDataProviderReferenceType(act1.getDataProvider()));
             return act2;
         } else if (act1.getDataSetArray().length > 0) {
-            List<SetReferenceType> dataSets = new ArrayList<SetReferenceType>();
+            List<SetReference> dataSets = new ArrayList<SetReference>();
             for (int i = 0; i < act1.getDataSetArray().length; i++) {
                 dataSets.add(toSetReferenceType(act1.getDataSetArray(i)));
             }
             act2.setDataSets(dataSets);
             return act2;
         } else if (act1.getMetadataSetArray().length > 0) {
-            List<SetReferenceType> mdataSets = new ArrayList<SetReferenceType>();
+            List<SetReference> mdataSets = new ArrayList<SetReference>();
             for (int i = 0; i < act1.getMetadataSetArray().length; i++) {
                 mdataSets.add(toSetReferenceType(act1.getMetadataSetArray(i)));
             }
@@ -1126,21 +1125,21 @@ public class Sdmx21StructureReaderTools {
             act2.setSimpleDataSources(uris);
             return act2;
         } else if (act1.getDataStructureArray().length > 0) {
-            List<DataStructureReferenceType> dsrs = new ArrayList<DataStructureReferenceType>();
+            List<DataStructureReference> dsrs = new ArrayList<DataStructureReference>();
             for (int i = 0; i < act1.getDataStructureArray().length; i++) {
                 dsrs.add(toDataStructureReference(act1.getDataStructureArray(i)));
             }
             act2.setDataStructures(dsrs);
             return act2;
         } else if (act1.getDataflowArray().length > 0) {
-            List<DataflowReferenceType> dfs = new ArrayList<DataflowReferenceType>();
+            List<DataflowReference> dfs = new ArrayList<DataflowReference>();
             for (int i = 0; i < act1.getDataflowArray().length; i++) {
                 dfs.add(toDataflowReference(act1.getDataflowArray(i)));
             }
             act2.setDataflows(dfs);
             return act2;
         } else if (act1.getMetadataflowArray().length > 0) {
-            List<MetadataStructureReferenceType> mfs = new ArrayList<MetadataStructureReferenceType>();
+            List<MetadataStructureReference> mfs = new ArrayList<MetadataStructureReference>();
             for (int i = 0; i < act1.getMetadataflowArray().length; i++) {
                 mfs.add(toMetadataStructureReferenceType(act1.getMetadataStructureArray(i)));
             }
@@ -1150,73 +1149,73 @@ public class Sdmx21StructureReaderTools {
         return act2;
     }
 
-    public static SetReferenceType toSetReferenceType(org.sdmx.resources.sdmxml.schemas.v21.common.SetReferenceType srt1) throws URISyntaxException {
+    public static SetReference toSetReferenceType(org.sdmx.resources.sdmxml.schemas.v21.common.SetReferenceType srt1) throws URISyntaxException {
         if (srt1 == null) {
             return null;
         }
-        SetReferenceType srt2 = new SetReferenceType(toDataProviderReferenceType(srt1.getDataProvider()), toIDType(srt1.getID()));
+        SetReference srt2 = new SetReference(toDataProviderReferenceType(srt1.getDataProvider()), toIDType(srt1.getID()));
         return srt2;
     }
 
-    public static DataProviderReferenceType toDataProviderReferenceType(org.sdmx.resources.sdmxml.schemas.v21.common.DataProviderReferenceType dp1) throws URISyntaxException {
+    public static DataProviderReference toDataProviderReferenceType(org.sdmx.resources.sdmxml.schemas.v21.common.DataProviderReferenceType dp1) throws URISyntaxException {
         if (dp1 == null) {
             return null;
         }
         if (dp1.getRef() != null) {
-            DataProviderReferenceType dp2 = new DataProviderReferenceType(toDataProviderReferenceType(dp1.getRef()), toAnyURI(dp1.getURN()));
+            DataProviderReference dp2 = new DataProviderReference(toDataProviderReferenceType(dp1.getRef()), toAnyURI(dp1.getURN()));
             return dp2;
         } else {
-            DataProviderReferenceType dp2 = new DataProviderReferenceType(toAnyURI(dp1.getURN()));
+            DataProviderReference dp2 = new DataProviderReference(toAnyURI(dp1.getURN()));
             return dp2;
         }
 
     }
 
-    public static DataProviderRefType toDataProviderReferenceType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref) {
+    public static DataProviderRef toDataProviderReferenceType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref) {
         if (ref == null) {
             return null;
         }
-        DataProviderRefType dp2 = new DataProviderRefType(toIDType(ref.getId()));
+        DataProviderRef dp2 = new DataProviderRef(toIDType(ref.getId()));
         return dp2;
     }
 
-    public static DataflowReferenceType toDataflowReference(org.sdmx.resources.sdmxml.schemas.v21.common.DataflowReferenceType dft1) throws URISyntaxException {
+    public static DataflowReference toDataflowReference(org.sdmx.resources.sdmxml.schemas.v21.common.DataflowReferenceType dft1) throws URISyntaxException {
         if (dft1 == null) {
             return null;
         }
         if (dft1.getRef() != null) {
-            DataflowReferenceType dft2;
-            dft2 = new DataflowReferenceType(toDataflowRef(dft1.getRef()), toAnyURI(dft1.getURN()));
+            DataflowReference dft2;
+            dft2 = new DataflowReference(toDataflowRef(dft1.getRef()), toAnyURI(dft1.getURN()));
             return dft2;
         } else {
-            DataflowReferenceType dft2 = new DataflowReferenceType(toAnyURI(dft1.getURN()));
+            DataflowReference dft2 = new DataflowReference(toAnyURI(dft1.getURN()));
             return dft2;
         }
     }
 
-    public static MetadataStructureReferenceType toMetadataStructureReferenceType(org.sdmx.resources.sdmxml.schemas.v21.common.MetadataStructureReferenceType msr1) throws URISyntaxException {
+    public static MetadataStructureReference toMetadataStructureReferenceType(org.sdmx.resources.sdmxml.schemas.v21.common.MetadataStructureReferenceType msr1) throws URISyntaxException {
         if (msr1 == null) {
             return null;
         }
         if (msr1.getRef() != null) {
-            MetadataStructureReferenceType msr2 = new MetadataStructureReferenceType(toMetadataStructureRef(msr1.getRef()), toAnyURI(msr1.getURN()));
+            MetadataStructureReference msr2 = new MetadataStructureReference(toMetadataStructureRef(msr1.getRef()), toAnyURI(msr1.getURN()));
             return msr2;
         } else {
-            MetadataStructureReferenceType msr2 = new MetadataStructureReferenceType(toMetadataStructureRef(msr1.getRef()), toAnyURI(msr1.getURN()));
+            MetadataStructureReference msr2 = new MetadataStructureReference(toMetadataStructureRef(msr1.getRef()), toAnyURI(msr1.getURN()));
             return msr2;
         }
     }
 
-    public static MetadataStructureRefType toMetadataStructureRef(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType msr1) {
+    public static MetadataStructureRef toMetadataStructureRef(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType msr1) {
         if (msr1 == null) {
             return null;
         }
-        MetadataStructureRefType msr2 = new MetadataStructureRefType(toIDType(msr1.getId()));
+        MetadataStructureRef msr2 = new MetadataStructureRef(toIDType(msr1.getId()));
         return msr2;
     }
 
-    public static DataflowRefType toDataflowRef(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType dft1) {
-        DataflowRefType dft2 = new DataflowRefType(toNestedNCNameIDType(dft1.getAgencyID()),toIDType(dft1.getId()),toVersionType(dft1.getVersion()));
+    public static DataflowRef toDataflowRef(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType dft1) {
+        DataflowRef dft2 = new DataflowRef(toNestedNCNameIDType(dft1.getAgencyID()),toIDType(dft1.getId()),toVersionType(dft1.getVersion()));
         return dft2;
     }
 
@@ -1344,7 +1343,7 @@ public class Sdmx21StructureReaderTools {
             attributes.add(toMetadataAttribute(rs1.getMetadataAttributeArray(i)));
         }
         rs2.setMetadataAttributes(attributes);
-        List<LocalMetadataTargetReferenceType> targets = new ArrayList<LocalMetadataTargetReferenceType>();
+        List<LocalMetadataTargetReference> targets = new ArrayList<LocalMetadataTargetReference>();
         for (int i = 0; i < rs1.getMetadataTargetArray().length; i++) {
             targets.add(toLocalMetadataTargetReferenceType(rs1.getMetadataTargetArray(i)));
         }
@@ -1368,14 +1367,14 @@ public class Sdmx21StructureReaderTools {
         return ma2;
     }
 
-    public static LocalMetadataTargetReferenceType toLocalMetadataTargetReferenceType(org.sdmx.resources.sdmxml.schemas.v21.common.LocalMetadataTargetReferenceType mt1) {
-        LocalMetadataTargetReferenceType mt2 = new LocalMetadataTargetReferenceType(toLocalMetadataRef(mt1.getRef()));
+    public static LocalMetadataTargetReference toLocalMetadataTargetReferenceType(org.sdmx.resources.sdmxml.schemas.v21.common.LocalMetadataTargetReferenceType mt1) {
+        LocalMetadataTargetReference mt2 = new LocalMetadataTargetReference(toLocalMetadataRef(mt1.getRef()));
         return mt2;
 
     }
 
-    public static LocalMetadataTargetRefType toLocalMetadataRef(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref) {
-        LocalMetadataTargetRefType ref2 = new LocalMetadataTargetRefType(toIDType(ref.getId()));
+    public static LocalMetadataTargetRef toLocalMetadataRef(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref) {
+        LocalMetadataTargetRef ref2 = new LocalMetadataTargetRef(toIDType(ref.getId()));
         return ref2;
     }
 
@@ -1469,46 +1468,46 @@ public class Sdmx21StructureReaderTools {
         return new ObservationDimensionType(dimensionAtObservation);
     }
 
-    public static ProvisionAgreementReferenceType toProvisionAgreement(org.sdmx.resources.sdmxml.schemas.v21.common.ProvisionAgreementReferenceType provisionAgrement) throws URISyntaxException {
+    public static ProvisionAgreementReference toProvisionAgreement(org.sdmx.resources.sdmxml.schemas.v21.common.ProvisionAgreementReferenceType provisionAgrement) throws URISyntaxException {
         if (provisionAgrement == null) {
             return null;
         }
         if (provisionAgrement.getRef() != null) {
-            ProvisionAgreementReferenceType part = new ProvisionAgreementReferenceType(toProvisionAgreementRefType(provisionAgrement.getRef()), toAnyURI(provisionAgrement.getURN()));
+            ProvisionAgreementReference part = new ProvisionAgreementReference(toProvisionAgreementRefType(provisionAgrement.getRef()), toAnyURI(provisionAgrement.getURN()));
             return part;
         } else {
-            ProvisionAgreementReferenceType part = new ProvisionAgreementReferenceType(toAnyURI(provisionAgrement.getURN()));
+            ProvisionAgreementReference part = new ProvisionAgreementReference(toAnyURI(provisionAgrement.getURN()));
             return part;
         }
 
     }
 
-    public static ProvisionAgreementRefType toProvisionAgreementRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref) {
+    public static ProvisionAgreementRef toProvisionAgreementRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref) {
         if (ref == null) {
             return null;
         }
-        ProvisionAgreementRefType pref = new ProvisionAgreementRefType();
+        ProvisionAgreementRef pref = new ProvisionAgreementRef();
         return pref;
     }
 
-    public static StructureUsageReferenceBaseType toStructureUsage(org.sdmx.resources.sdmxml.schemas.v21.common.StructureUsageReferenceBaseType structureUsage) throws URISyntaxException {
+    public static StructureUsageReferenceBase toStructureUsage(org.sdmx.resources.sdmxml.schemas.v21.common.StructureUsageReferenceBaseType structureUsage) throws URISyntaxException {
         if (structureUsage == null) {
             return null;
         }
         if (structureUsage.getRef() != null) {
-            StructureUsageReferenceBaseType part = new StructureUsageReferenceBaseType(toStructureUsageRefType(structureUsage.getRef()), toAnyURI(structureUsage.getURN()));
+            StructureUsageReferenceBase part = new StructureUsageReferenceBase(toStructureUsageRefType(structureUsage.getRef()), toAnyURI(structureUsage.getURN()));
             return part;
         } else {
-            StructureUsageReferenceBaseType part = new StructureUsageReferenceBaseType(toAnyURI(structureUsage.getURN()));
+            StructureUsageReferenceBase part = new StructureUsageReferenceBase(toAnyURI(structureUsage.getURN()));
             return part;
         }
     }
 
-    public static StructureUsageRefBaseType toStructureUsageRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref) {
+    public static StructureUsageRefBase toStructureUsageRefType(org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType ref) {
         if (ref == null) {
             return null;
         }
-        StructureUsageRefBaseType ref2 = new StructureUsageRefBaseType(toNestedNCNameIDType(ref.getAgencyID()), toIDType(ref.getId()), toVersionType(ref.getVersion()), ObjectTypeCodelistType.fromString(ref.getClass1().toString()), PackageTypeCodelistType.fromString(ref.getPackage().toString()));
+        StructureUsageRefBase ref2 = new StructureUsageRefBase(toNestedNCNameIDType(ref.getAgencyID()), toIDType(ref.getId()), toVersionType(ref.getVersion()), ObjectTypeCodelistType.fromString(ref.getClass1().toString()), PackageTypeCodelistType.fromString(ref.getPackage().toString()));
         return ref2;
     }
 

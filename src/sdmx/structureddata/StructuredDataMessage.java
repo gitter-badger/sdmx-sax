@@ -8,11 +8,12 @@ package sdmx.structureddata;
 
 import java.util.ArrayList;
 import java.util.List;
-import sdmx.Registry;
+import sdmx.NewRegistry;
+import sdmx.commonreferences.DataStructureReference;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NestedIDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.NestedID;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.Version;
 import sdmx.message.DataMessage;
 import sdmx.structure.datastructure.DataStructureType;
 
@@ -36,12 +37,12 @@ import sdmx.structure.datastructure.DataStructureType;
  */
 public class StructuredDataMessage {
     private DataMessage dataMessage = null;
-    private Registry registry = null;
+    private NewRegistry registry = null;
     
     
     private List<StructuredDataSet> list = new ArrayList<StructuredDataSet>();
     
-    public StructuredDataMessage(DataMessage dat,Registry reg) {
+    public StructuredDataMessage(DataMessage dat,NewRegistry reg) {
         this.dataMessage=dat;
         this.registry=reg;
         for(int i=0;i<dataMessage.getDataSets().size();i++) {
@@ -55,13 +56,13 @@ public class StructuredDataMessage {
         return list.get(i);
     }
     public StructuredDataSet buildStructuredDataSet(int i) {
-        dataMessage.getHeader().getStructures().get(0).getStructure().dump();
-        NestedNCNameIDType agency = dataMessage.getHeader().getStructures().get(0).getStructure().getAgencyId();
-        IDType id = dataMessage.getHeader().getStructures().get(0).getStructure().getMaintainableParentId();
-        VersionType vers = dataMessage.getHeader().getStructures().get(0).getStructure().getMaintainedParentVersion();
-        System.out.println("Ref="+agency+":"+id+":"+vers);
-        DataStructureType structure = registry.findDataStructure(agency, id, vers);
-        System.out.println("Structure="+structure);
+        //dataMessage.getHeader().getStructures().get(0).getStructure().dump();
+        //NestedNCNameID agency = dataMessage.getHeader().getStructures().get(0).getStructure().getAgencyId();
+        //IDType id = dataMessage.getHeader().getStructures().get(0).getStructure().getMaintainableParentId();
+        //Version vers = dataMessage.getHeader().getStructures().get(0).getStructure().getMaintainedParentVersion();
+        //System.out.println("Ref="+agency+":"+id+":"+vers);
+        DataStructureType structure = registry.find((DataStructureReference)dataMessage.getHeader().getStructures().get(0).getStructure());
+        //System.out.println("Structure="+structure);
         return new StructuredDataSet(dataMessage.getDataSets().get(i),registry,structure);
     }
 }

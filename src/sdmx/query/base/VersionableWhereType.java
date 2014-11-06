@@ -5,7 +5,7 @@
 package sdmx.query.base;
 
 import sdmx.common.TimeRangeValueType;
-import sdmx.commonreferences.VersionQueryType;
+import sdmx.commonreferences.VersionQuery;
 
 /**
  *	<xs:complexType name="VersionableWhereType" abstract="true">
@@ -61,7 +61,7 @@ import sdmx.commonreferences.VersionQueryType;
  *  Copyright James Gardner 2014
  */
 public class VersionableWhereType extends NameableWhereType {
-    private VersionQueryType version = null;
+    private VersionQuery version = null;
     private TimeRangeValueType versionTo = null;
     private TimeRangeValueType versionFrom = null;
     private Boolean versionActive = null;
@@ -69,14 +69,14 @@ public class VersionableWhereType extends NameableWhereType {
     /**
      * @return the version
      */
-    public VersionQueryType getVersion() {
+    public VersionQuery getVersion() {
         return version;
     }
 
     /**
      * @param version the version to set
      */
-    public void setVersion(VersionQueryType version) {
+    public void setVersion(VersionQuery version) {
         this.version = version;
     }
 

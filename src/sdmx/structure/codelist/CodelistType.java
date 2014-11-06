@@ -7,9 +7,9 @@ package sdmx.structure.codelist;
 import java.util.ArrayList;
 import java.util.List;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NCNameIDType;
-import sdmx.commonreferences.NestedIDType;
-import sdmx.commonreferences.NestedNCNameIDType;
+import sdmx.commonreferences.NCNameID;
+import sdmx.commonreferences.NestedID;
+import sdmx.commonreferences.NestedNCNameID;
 import sdmx.structure.base.ItemSchemeType;
 import sdmx.structure.base.ItemType;
 

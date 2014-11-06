@@ -6,9 +6,9 @@
 package sdmx.common;
 
 import java.net.URI;
-import sdmx.commonreferences.ProvisionAgreementReferenceType;
-import sdmx.commonreferences.StructureReferenceBaseType;
-import sdmx.commonreferences.StructureUsageReferenceBaseType;
+import sdmx.commonreferences.ProvisionAgreementReference;
+import sdmx.commonreferences.StructureReferenceBase;
+import sdmx.commonreferences.StructureUsageReferenceBase;
 import sdmx.xml.ID;
 import sdmx.xml.anyURI;
 
@@ -93,9 +93,9 @@ public class PayloadStructureType {
     private anyURI structureURL;
 
     // Choice of 1
-    private ProvisionAgreementReferenceType provisionAgreement;
-    private StructureUsageReferenceBaseType structureUsage;
-    private StructureReferenceBaseType structure;
+    private ProvisionAgreementReference provisionAgreement;
+    private StructureUsageReferenceBase structureUsage;
+    private StructureReferenceBase structure;
     
 
 
@@ -135,42 +135,42 @@ public class PayloadStructureType {
     /**
      * @return the provisionAgreement
      */
-    public ProvisionAgreementReferenceType getProvisionAgreement() {
+    public ProvisionAgreementReference getProvisionAgreement() {
         return provisionAgreement;
     }
 
     /**
      * @param provisionAgreement the provisionAgreement to set
      */
-    public void setProvisionAgreement(ProvisionAgreementReferenceType provisionAgreement) {
+    public void setProvisionAgreement(ProvisionAgreementReference provisionAgreement) {
         this.provisionAgreement = provisionAgreement;
     }
 
     /**
      * @return the structureUsage
      */
-    public StructureUsageReferenceBaseType getStructureUsage() {
+    public StructureUsageReferenceBase getStructureUsage() {
         return structureUsage;
     }
 
     /**
      * @param structureUsage the structureUsage to set
      */
-    public void setStructureUsage(StructureUsageReferenceBaseType structureUsage) {
+    public void setStructureUsage(StructureUsageReferenceBase structureUsage) {
         this.structureUsage = structureUsage;
     }
 
     /**
      * @return the structure
      */
-    public StructureReferenceBaseType getStructure() {
+    public StructureReferenceBase getStructure() {
         return structure;
     }
 
     /**
      * @param structure the structure to set
      */
-    public void setStructure(StructureReferenceBaseType structure) {
+    public void setStructure(StructureReferenceBase structure) {
         this.structure = structure;
     }
 

@@ -7,8 +7,8 @@ package sdmx.structure.concept;
 import java.util.ArrayList;
 import java.util.List;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.LocalConceptReferenceType;
-import sdmx.commonreferences.NCNameIDType;
+import sdmx.commonreferences.LocalConceptReference;
+import sdmx.commonreferences.NCNameID;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.codelist.CodeType;
 
@@ -61,7 +61,7 @@ import sdmx.structure.codelist.CodeType;
  *  Copyright James Gardner 2014
  */
 public class ConceptBaseType extends ItemType {
-    LocalConceptReferenceType parent = null;
+    LocalConceptReference parent = null;
     public ConceptBaseType() {
     }
     public ConceptType getConcept(int i) {

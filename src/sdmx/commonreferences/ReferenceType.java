@@ -9,6 +9,7 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sdmx.SdmxIO;
 import sdmx.commonreferences.types.PackageTypeCodelistType;
 import sdmx.commonreferences.types.ObjectTypeCodelistType;
 import sdmx.xml.anyURI;
@@ -78,19 +79,19 @@ import sdmx.xml.anyURI;
  */
 public class ReferenceType {
 
-    private RefBaseType ref = null;
+    private RefBase ref = null;
     private anyURI urn = null;
 
     private transient PackageTypeCodelistType pack = null;
     private transient ObjectTypeCodelistType clazz = null;
-    private transient NestedNCNameIDType agency = null;
+    private transient NestedNCNameID agency = null;
     private transient IDType maintainedParentId = null;
-    private transient VersionType maintainedParentVersion = null;
-    private transient VersionType version = null;
+    private transient Version maintainedParentVersion = null;
+    private transient Version version = null;
     private transient IDType[] containedIds = null;
-    private transient NestedIDType objectId = null;
+    private transient NestedID objectId = null;
 
-    public ReferenceType(RefBaseType ref, anyURI urn) {
+    public ReferenceType(RefBase ref, anyURI urn) {
         this.ref = ref;
         this.urn = urn;
         if (this.ref != null) {
@@ -102,12 +103,18 @@ public class ReferenceType {
             this.maintainedParentId = ref.getMaintainableParentId();
             this.maintainedParentVersion = ref.getMaintainableParentVersion();
             this.version = ref.getVersion();
-            //produce();
             //} catch (URISyntaxException ex) {
             //    Logger.getLogger(ReferenceType.class.getName()).log(Level.SEVERE, null, ex);
             //}
         } else {
             parse();
+        }
+        if (this.urn == null) {
+            try {
+                produce();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -120,14 +127,14 @@ public class ReferenceType {
     /**
      * @return the ref
      */
-    public RefBaseType getRef() {
+    public RefBase getRef() {
         return ref;
     }
 
     /**
      * @param ref the ref to set
      */
-    public void setRef(RefBaseType ref) {
+    public void setRef(RefBase ref) {
         this.ref = ref;
     }
 
@@ -149,9 +156,13 @@ public class ReferenceType {
         StringBuffer sb = new StringBuffer();
         sb.append(URN_START);
         sb.append(".infomodel.");
-        sb.append(getPack().toString());
+        if (getPack() != null) {
+            sb.append(getPack().toString());
+        }
         sb.append(".");
-        sb.append(getClazz().toString());
+        if (getClazz() != null) {
+            sb.append(getClazz().toString());
+        }
         sb.append(":");
         if (getAgencyId() != null) {
             sb.append(getAgencyId().toString());
@@ -178,17 +189,56 @@ public class ReferenceType {
         String packageAndClass = s.substring(URN_START.length(), firstEquals);
         int firstDot = packageAndClass.lastIndexOf(".");
         String pack = packageAndClass.substring(packageAndClass.lastIndexOf(".", firstDot - 1) + 1, firstDot);
-        this.pack = PackageTypeCodelistType.fromString(pack);
+        if (SdmxIO.isCheckURN() && this.pack != null) {
+            PackageTypeCodelistType pack2 = PackageTypeCodelistType.fromString(pack);
+            if (this.pack != pack2) {
+                throw new RuntimeException("Package in URN not same as Package in Ref " + this.pack.toString() + ":" + pack2.toString());
+            } else {
+                this.pack = pack2;
+            }
+        } else {
+            this.pack = PackageTypeCodelistType.fromString(pack);
+        }
         String clazz = packageAndClass.substring(firstDot + 1, packageAndClass.length());
-        this.clazz = ObjectTypeCodelistType.fromString(clazz);
+        if (SdmxIO.isCheckURN() && this.clazz != null) {
+            ObjectTypeCodelistType clazz2 = ObjectTypeCodelistType.fromString(clazz);
+            if (this.clazz != clazz2) {
+                throw new RuntimeException("Class in URN not same as Class in Ref " + this.clazz.toString() + ":" + clazz2.toString());
+            } else {
+                this.clazz = clazz2;
+            }
+        } else {
+            this.clazz = ObjectTypeCodelistType.fromString(clazz);
+        }
         String ag = s.substring(firstEquals + 1, s.indexOf(":", firstEquals));
-        this.agency = new NestedNCNameIDType(ag);
+        if (SdmxIO.isCheckURN() && this.agency != null) {
+            NestedNCNameID agency2 = new NestedNCNameID(ag);
+            if (!this.agency.equals(agency2)) {
+                throw new RuntimeException("Agency in URN not equals to Agency in REf:" + this.agency.toString() + ":" + agency2.toString());
+            }
+        } else {
+            this.agency = new NestedNCNameID(ag);
+        }
         int loc = s.indexOf(ag) + ag.length() + 1;
         String idAndVersion = s.substring(loc, s.length());
         String id = idAndVersion.substring(0, idAndVersion.indexOf("("));
-        this.maintainedParentId = new IDType(id);
+        if (SdmxIO.isCheckURN() && this.maintainedParentId != null) {
+            IDType mparent2 = new IDType(id);
+            if (!this.maintainedParentId.equals(mparent2)) {
+                throw new RuntimeException("MaintainedParentId in URN not equal to Ref " + this.maintainedParentId.toString() + ":" + mparent2.toString());
+            }
+        } else {
+            this.maintainedParentId = new IDType(id);
+        }
         String vers = idAndVersion.substring(idAndVersion.indexOf("(") + 1, idAndVersion.indexOf(")"));
-        this.version = new VersionType(vers);
+        if (SdmxIO.isCheckURN() && this.version != null) {
+            Version vers2 = new Version(vers);
+            if (!this.version.equals(vers2)) {
+                throw new RuntimeException("VersionType in URN not equals to VersionType in Ref " + this.version.toString() + ":" + vers2.toString());
+            }
+        } else {
+            this.version = new Version(vers);
+        }
         if (idAndVersion.indexOf(").") != -1) {
             id = idAndVersion.substring(idAndVersion.indexOf(").") + 2, idAndVersion.length());
             String[] array = id.split("\\.");
@@ -231,7 +281,7 @@ public class ReferenceType {
     /**
      * @return the agency
      */
-    public NestedNCNameIDType getAgencyId() {
+    public NestedNCNameID getAgencyId() {
         return agency;
     }
 
@@ -245,14 +295,14 @@ public class ReferenceType {
     /**
      * @return the maintainedObjectVersion
      */
-    public VersionType getVersion() {
-        return version==null?VersionType.ONE:version;
+    public Version getVersion() {
+        return version;
     }
 
     /**
      * @return the objectId
      */
-    public NestedIDType getId() {
+    public NestedID getId() {
         return objectId;
     }
 
@@ -263,8 +313,8 @@ public class ReferenceType {
     /**
      * @return the maintainedParentVersion
      */
-    public VersionType getMaintainedParentVersion() {
-        return maintainedParentVersion==null?VersionType.ONE:maintainedParentVersion;
+    public Version getMaintainedParentVersion() {
+        return maintainedParentVersion;
     }
     //public IDType getMainID() {
     //    if( this.maintainedParentId==null ) return objectId!=null?objectId.asID():null;
@@ -280,5 +330,17 @@ public class ReferenceType {
         System.out.println("Vers:" + this.getVersion());
         System.out.println("Class:" + this.getClazz());
         System.out.println("Pack:" + this.getPack());
+    }
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(this.getClass().getName());
+        sb.append(":"+this.getAgencyId());
+        sb.append(":"+this.getMaintainableParentId());
+        sb.append(":"+this.getMaintainedParentVersion());
+        sb.append(":"+this.getId());
+        sb.append(":"+this.getVersion());
+        sb.append(":"+this.getClazz());
+        sb.append(":"+this.getPack());
+        return sb.toString();
     }
 }

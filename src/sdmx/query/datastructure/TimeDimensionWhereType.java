@@ -4,7 +4,7 @@
  */
 package sdmx.query.datastructure;
 
-import sdmx.commonreferences.ConceptReferenceType;
+import sdmx.commonreferences.ConceptReference;
 import sdmx.query.base.AnnotationWhereType;
 import sdmx.query.base.ComponentWhereType;
 

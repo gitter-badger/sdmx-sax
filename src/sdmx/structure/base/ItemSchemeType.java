@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import sdmx.common.Name;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NestedIDType;
+import sdmx.commonreferences.NestedID;
 import sdmx.structure.codelist.CodeType;
 
 /**
@@ -133,7 +133,7 @@ public class ItemSchemeType extends MaintainableType {
         return null;
     }
 
-    public ItemType findItem(NestedIDType id) {
+    public ItemType findItem(NestedID id) {
         if (id == null) {
             return null;
         }
@@ -174,7 +174,7 @@ public class ItemSchemeType extends MaintainableType {
         }
         return result;
     }
-     public List<ItemType> findSubItems(NestedIDType id) {
+     public List<ItemType> findSubItems(NestedID id) {
         List<ItemType> result = new LinkedList<ItemType>();
         if (id == null) {
             Iterator<ItemType> it = items.iterator();

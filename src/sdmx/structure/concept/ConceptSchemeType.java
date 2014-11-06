@@ -7,7 +7,7 @@ package sdmx.structure.concept;
 import java.util.ArrayList;
 import java.util.List;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NestedIDType;
+import sdmx.commonreferences.NestedID;
 import sdmx.structure.base.ItemSchemeType;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.codelist.CodeType;
@@ -80,7 +80,7 @@ public class ConceptSchemeType extends ItemSchemeType {
         //System.out.println("CT:"+super.findItem(id));
         return (ConceptType)super.findItem(id);
     }
-    public ConceptType findConcept(NestedIDType id) {
+    public ConceptType findConcept(NestedID id) {
         return (ConceptType)super.findItem(id);
     }
     public void addConcept(ConceptType cat) {

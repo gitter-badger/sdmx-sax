@@ -6,8 +6,8 @@ package sdmx.structure.base;
 
 import sdmx.common.AnnotableType;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NestedIDType;
-import sdmx.commonreferences.RefBaseType;
+import sdmx.commonreferences.NestedID;
+import sdmx.commonreferences.RefBase;
 import sdmx.xml.anyURI;
 
 /**
@@ -106,7 +106,7 @@ public class IdentifiableType extends AnnotableType {
         if( this.getId()==null) return false;
         return this.getId().equals(id2);
     }
-    public boolean identifiesMe(NestedIDType id2){
+    public boolean identifiesMe(NestedID id2){
         if( this.getId()==null) return false;
         return this.getId().equals(id2);
     }

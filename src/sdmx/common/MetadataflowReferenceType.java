@@ -5,8 +5,8 @@
 
 package sdmx.common;
 
-import sdmx.commonreferences.MetadataflowRefType;
-import sdmx.commonreferences.StructureUsageReferenceBaseType;
+import sdmx.commonreferences.MetadataflowRef;
+import sdmx.commonreferences.StructureUsageReferenceBase;
 import sdmx.structure.constraint.ConstraintAttachmentTypeChoice;
 import sdmx.xml.anyURI;
 
@@ -47,11 +47,11 @@ import sdmx.xml.anyURI;
  *
  *  Copyright James Gardner 2014
  */
-public class MetadataflowReferenceType extends StructureUsageReferenceBaseType implements ConstraintAttachmentTypeChoice{
+public class MetadataflowReferenceType extends StructureUsageReferenceBase implements ConstraintAttachmentTypeChoice{
      public MetadataflowReferenceType(anyURI uri) {
          super(uri);
      }
-     public MetadataflowReferenceType(MetadataflowRefType ref, anyURI uri) {
+     public MetadataflowReferenceType(MetadataflowRef ref, anyURI uri) {
          super(ref,uri);
      }
 }

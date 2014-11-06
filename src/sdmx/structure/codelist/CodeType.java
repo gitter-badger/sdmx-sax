@@ -6,7 +6,7 @@ package sdmx.structure.codelist;
 
 import java.util.ArrayList;
 import java.util.List;
-import sdmx.commonreferences.LocalCodeReferenceType;
+import sdmx.commonreferences.LocalCodeReference;
 import sdmx.structure.base.ItemType;
 
 /**
@@ -33,7 +33,7 @@ import sdmx.structure.base.ItemType;
  */
 public class CodeType extends ItemType {
 
-    LocalCodeReferenceType parent = null;
+    LocalCodeReference parent = null;
 
     public CodeType getCode(int i) {
         return (CodeType) super.getItem(i);

@@ -4,9 +4,9 @@
  */
 package sdmx.structure.concept;
 
-import sdmx.commonreferences.NCNameIDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.NCNameID;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.Version;
 import sdmx.structure.base.ItemType;
 
 /**
@@ -57,9 +57,9 @@ public class ConceptType extends ConceptBaseType {
     private ConceptRepresentation coreRep = null;
     private ISOConceptReferenceType isoConceptRef = null;
     
-    private NestedNCNameIDType agencyID;
+    private NestedNCNameID agencyID;
     
-    private VersionType version = VersionType.ONE;
+    private Version version = Version.ONE;
     
     
     
@@ -96,27 +96,27 @@ public class ConceptType extends ConceptBaseType {
     /**
      * @return the agencyID
      */
-    public NestedNCNameIDType getAgencyID() {
+    public NestedNCNameID getAgencyID() {
         return agencyID;
     }
 
     /**
      * @param agencyID the agencyID to set
      */
-    public void setAgencyID(NestedNCNameIDType agencyId) {
+    public void setAgencyID(NestedNCNameID agencyId) {
         this.agencyID = agencyId;
     }
     /**
      * @return the version
      */
-    public VersionType getVersion() {
+    public Version getVersion() {
         return version;
     }
 
     /**
      * @param version the version to set
      */
-    public void setVersion(VersionType version) {
+    public void setVersion(Version version) {
         this.version = version;
     }
     // Sdmx 2.0 only field

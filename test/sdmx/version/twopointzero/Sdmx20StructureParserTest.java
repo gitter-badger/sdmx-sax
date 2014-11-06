@@ -18,9 +18,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import sdmx.SdmxIO;
-import sdmx.commonreferences.ConceptRefType;
-import sdmx.commonreferences.RefBaseType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.ConceptRef;
+import sdmx.commonreferences.RefBase;
+import sdmx.commonreferences.Version;
 import sdmx.message.StructureType;
 import sdmx.structure.ConceptsType;
 import sdmx.structure.codelist.CodelistType;
@@ -720,7 +720,7 @@ public class Sdmx20StructureParserTest {
     public void testStructureSample99() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
         // "BIS" is filled in from the conceptRef field
-        RefBaseType ref = ds.getDataStructureComponents().getDimensionList().getDimension(0).getConceptIdentity().getRef();
+        RefBase ref = ds.getDataStructureComponents().getDimensionList().getDimension(0).getConceptIdentity().getRef();
         //System.out.println(ref.getMaintainableParentId()+":"+ref.getMaintainableParentVersion()+":"+ref.getAgencyId()+":"+ref.getId()+":"+ref.getVersion());
     }
 

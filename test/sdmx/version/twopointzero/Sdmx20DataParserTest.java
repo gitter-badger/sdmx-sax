@@ -16,16 +16,15 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import sdmx.Registry;
+import sdmx.NewRegistry;
 import sdmx.SdmxIO;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.Version;
 import sdmx.exception.ParseException;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
-import sdmx.registry.LocalRegistry;
-import sdmx.registry.RESTServiceRegistry;
+import sdmx.net.LocalRegistry;
 import sdmx.structure.base.Component;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structureddata.ValueTypeResolver;
@@ -63,7 +62,7 @@ public class Sdmx20DataParserTest {
         System.out.println("Finish Test Data Parsing");
     }
     
-    Registry registry = LocalRegistry.getDefaultWorkspace();
+    NewRegistry registry = LocalRegistry.getDefaultWorkspace();
     
     @Before
     public void setUp() throws IOException {

@@ -6,8 +6,7 @@
 
 package sdmx.registry;
 
-import sdmx.registry.LocalRegistry;
-import sdmx.Registry;
+import sdmx.net.LocalRegistry;
 import java.io.InputStream;
 import java.util.List;
 import java.util.logging.Level;
@@ -18,14 +17,15 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import sdmx.commonreferences.ConceptRefType;
-import sdmx.commonreferences.ConceptReferenceType;
-import sdmx.commonreferences.DataStructureReferenceType;
+import sdmx.NewRegistry;
+import sdmx.commonreferences.ConceptRef;
+import sdmx.commonreferences.ConceptReference;
+import sdmx.commonreferences.DataStructureReference;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.ItemSchemeRefType;
-import sdmx.commonreferences.ItemSchemeReferenceBaseType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.ItemSchemeRef;
+import sdmx.commonreferences.ItemSchemeReferenceBase;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.Version;
 import sdmx.commonreferences.types.ItemSchemePackageTypeCodelistType;
 import sdmx.commonreferences.types.ItemSchemeTypeCodelistType;
 import sdmx.message.StructureType;
@@ -35,6 +35,8 @@ import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.SdmxIO;
+import sdmx.commonreferences.CodelistReference;
+import sdmx.commonreferences.ConceptSchemeReference;
 import sdmx.version.twopointzero.Sdmx20StructureParserTest;
 import sdmx.xml.anyURI;
 
@@ -65,7 +67,7 @@ public class LocalRegistryTest {
     public LocalRegistryTest() {
     }
     
-    public static final Registry doc = new LocalRegistry();
+    public static final NewRegistry doc = new LocalRegistry();
     
     @BeforeClass
     public static void setUpClass() {
@@ -112,7 +114,8 @@ public class LocalRegistryTest {
      */
     @Test
     public void testFindDataStructure_3args() {
-        DataStructureType ds = doc.findDataStructure(new NestedNCNameIDType("BIS"), new IDType("BIS_JOINT_DEBT"), new VersionType("1.0"));
+        DataStructureReference ref = DataStructureReference.create(new NestedNCNameID("BIS"), new IDType("BIS_JOINT_DEBT"), new Version("1.0"));
+        DataStructureType ds = doc.find(ref);
         assertNotNull(ds);
     }
 
@@ -121,7 +124,8 @@ public class LocalRegistryTest {
      */
     @Test
     public void testFindDataStructure_3args2() {
-        DataStructureType ds = doc.findDataStructure(new NestedNCNameIDType("BIS"), new IDType("BIS_JOINT_DEBT"), null);
+        DataStructureReference ref = DataStructureReference.create(new NestedNCNameID("BIS"), new IDType("BIS_JOINT_DEBT"), null);
+        DataStructureType ds = doc.find(ref);
         assertNotNull(ds);
     }
 
@@ -130,7 +134,8 @@ public class LocalRegistryTest {
      */
     @Test
     public void testFindDataStructure_NestedNCNameIDType_IDType() {
-        DataStructureType ds = doc.findDataStructure(new NestedNCNameIDType("BIS"), new IDType("BIS_JOINT_DEBT"));
+        DataStructureReference ref = DataStructureReference.create(new NestedNCNameID("BIS"), new IDType("BIS_JOINT_DEBT"),null);
+        DataStructureType ds = doc.find(ref);
         assertNotNull(ds);
     }
 
@@ -139,9 +144,8 @@ public class LocalRegistryTest {
      */
     @Test
     public void testFindConceptScheme_NestedNCNameIDType_ConceptReferenceType() {
-        ConceptRefType ref = new ConceptRefType(new IDType("STANDALONE_CONCEPT_SCHEME"), new VersionType("1.0"), new IDType("STOCKS"));
-        ConceptReferenceType cref = new ConceptReferenceType(ref, null);
-        ConceptSchemeType cs = doc.findConceptScheme(new NestedNCNameIDType("BIS"), cref);
+        ConceptReference ref = ConceptReference.create(new NestedNCNameID("BIS"),new IDType("STANDALONE_CONCEPT_SCHEME"), new Version("1.0"), new IDType("STOCKS"));
+        ConceptType cs = doc.find(ref);
         assertNotNull(cs);
     }
 
@@ -150,13 +154,8 @@ public class LocalRegistryTest {
      */
     @Test
     public void testFindCodelist_ItemSchemeReferenceBaseType() {
-        ItemSchemeRefType ref = new ItemSchemeRefType(ItemSchemeTypeCodelistType.CODELIST, ItemSchemePackageTypeCodelistType.CODELIST);
-        ref.setAgencyId(new NestedNCNameIDType("BIS"));
-        ref.setMaintainableParentId(new IDType("CL_COLLECTION"));
-        ref.setMaintainableParentVersion(new VersionType("1.0"));
-        ref.setMaintainableParentVersion(VersionType.ONE);
-        ItemSchemeReferenceBaseType cref = new ItemSchemeReferenceBaseType(ref, null);
-        CodelistType cl = doc.findCodelist(cref);
+        CodelistReference ref = CodelistReference.create(new NestedNCNameID("BIS"), new IDType("CL_COLLECTION"),new Version("1.0"));
+        CodelistType cl = doc.find(ref);
         assertNotNull(cl);
     }
 
@@ -167,7 +166,8 @@ public class LocalRegistryTest {
     public void testFindCodelistById() {
         System.out.println("findCodelistById");
         IDType id = new IDType("CL_COLLECTION");
-        CodelistType cl = doc.findCodelistById(id);
+        CodelistReference ref = CodelistReference.create(null, id, null);
+        CodelistType cl = doc.find(ref);
         assertNotNull(cl);
     }
 
@@ -177,10 +177,11 @@ public class LocalRegistryTest {
     @Test
     public void testFindCodelist_3args_1() {
         System.out.println("findCodelist");
-        NestedNCNameIDType codelistAgency = new NestedNCNameIDType("BIS");
+        NestedNCNameID codelistAgency = new NestedNCNameID("BIS");
         IDType codelist = new IDType("CL_COLLECTION");
-        VersionType codelistVersion = new VersionType("1.0");
-        CodelistType result = doc.findCodelist(codelistAgency, codelist, codelistVersion);
+        Version codelistVersion = new Version("1.0");
+        CodelistReference ref = CodelistReference.create(codelistAgency, codelist, codelistVersion);
+        CodelistType result = doc.find(ref);
         assertNotNull(result);
     }
 
@@ -190,10 +191,11 @@ public class LocalRegistryTest {
     @Test
     public void testFindCodelist_NestedNCNameIDType_IDType() {
         System.out.println("findCodelist");
-        NestedNCNameIDType codelistAgency = new NestedNCNameIDType("BIS");
+        NestedNCNameID codelistAgency = new NestedNCNameID("BIS");
         IDType codelist = new IDType("CL_COLLECTION");
         StructureType instance = new StructureType();
-        CodelistType result = doc.findCodelist(codelistAgency, codelist);
+        CodelistReference ref = CodelistReference.create(codelistAgency, codelist, null);
+        CodelistType result = doc.find(ref);
         assertNotNull(result);
     }
 
@@ -205,7 +207,8 @@ public class LocalRegistryTest {
         System.out.println("findCodelist");
         String codelistAgency = "BIS";
         String codelist = "CL_COLLECTION";
-        CodelistType result = doc.findCodelist(codelistAgency, codelist);
+        CodelistReference ref = CodelistReference.create(new NestedNCNameID(codelistAgency),new IDType(codelist), null);
+        CodelistType result = doc.find(ref);
         assertNotNull(result);
     }
 
@@ -215,9 +218,10 @@ public class LocalRegistryTest {
     @Test
     public void testFindConceptScheme_NestedNCNameIDType_IDType() {
         System.out.println("findConceptScheme");
-        NestedNCNameIDType csa = new NestedNCNameIDType("BIS");
+        NestedNCNameID csa = new NestedNCNameID("BIS");
         IDType csi = new IDType("STANDALONE_CONCEPT_SCHEME");
-        ConceptSchemeType result = doc.findConceptScheme(csa, csi);
+        ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, null);
+        ConceptSchemeType result = doc.find(ref);
         assertNotNull(result);
     }
 
@@ -228,7 +232,8 @@ public class LocalRegistryTest {
     public void testFindConceptSchemeById() {
         System.out.println("findConceptSchemeById");
         IDType id = new IDType("JD_CATEGORY");
-        ConceptSchemeType result = doc.findConceptSchemeById(id);
+        ConceptSchemeReference ref = ConceptSchemeReference.create(null, id, null);
+        ConceptSchemeType result = doc.find(ref);
         assertNotNull(id);
     }
 
@@ -238,9 +243,10 @@ public class LocalRegistryTest {
     @Test
     public void testFindConcept_NestedNCNameIDType_IDType() {
         System.out.println("findConcept");
-        NestedNCNameIDType agency = new NestedNCNameIDType("BIS");
+        NestedNCNameID agency = new NestedNCNameID("BIS");
         IDType id = new IDType("JD_CATEGORY");
-        ConceptType result = doc.findConcept(agency, id);
+        ConceptReference ref = ConceptReference.create(agency, null, null, id);
+        ConceptType result = doc.find(ref);
         assertNotNull(result);
     }
 
@@ -251,7 +257,8 @@ public class LocalRegistryTest {
     public void testFindConcept_IDType() {
         System.out.println("findConcept");
         IDType id = new IDType("JD_CATEGORY");
-        ConceptType result = doc.findConcept(id);
+        ConceptReference ref = ConceptReference.create(null, null, null, id);
+        ConceptType result = doc.find(ref);
         assertNotNull(result);
     }
 

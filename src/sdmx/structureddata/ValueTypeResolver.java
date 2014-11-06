@@ -8,16 +8,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import sdmx.Registry;
+import sdmx.NewRegistry;
 import sdmx.common.DataType;
 import sdmx.common.Name;
-import sdmx.commonreferences.ConceptReferenceType;
-import sdmx.commonreferences.ConceptSchemeReferenceType;
+import sdmx.commonreferences.ConceptReference;
+import sdmx.commonreferences.ConceptSchemeReference;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.ItemSchemeReferenceBaseType;
-import sdmx.commonreferences.NestedIDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.RefBaseType;
+import sdmx.commonreferences.ItemSchemeReferenceBase;
+import sdmx.commonreferences.NestedID;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.RefBase;
 import sdmx.commonreferences.types.ItemSchemeTypeCodelistType;
 import sdmx.commonreferences.types.ObjectTypeCodelistType;
 import sdmx.data.flat.FlatDataSet;
@@ -36,7 +36,6 @@ import sdmx.structure.datastructure.DimensionType;
 import sdmx.structure.datastructure.MeasureDimensionType;
 import sdmx.structure.datastructure.PrimaryMeasure;
 import sdmx.structure.datastructure.TimeDimensionType;
-import sdmx.version.common.ReferenceUtils;
 
 /**
  * This file is part of SdmxSax.
@@ -57,7 +56,7 @@ import sdmx.version.common.ReferenceUtils;
  */
 public class ValueTypeResolver {
 
-    public static ItemType resolveCode(Registry registry, DataStructureType struct, String column, String value) {
+    public static ItemType resolveCode(NewRegistry registry, DataStructureType struct, String column, String value) {
         if (value == null) {
             return null;
         }
@@ -65,28 +64,14 @@ public class ValueTypeResolver {
         if (dim == null && "type".equals(column)) {
             dim = struct.getDataStructureComponents().getMeasureList().getMeasure(0);
         }
-        ConceptReferenceType conceptRef = dim.getConceptIdentity();
+        ConceptReference conceptRef = dim.getConceptIdentity();
         RepresentationType rep = null;
         ConceptType concept = null;
         if (conceptRef != null) {
-            ConceptSchemeType con = registry.findConceptScheme(conceptRef.getAgencyId() == null ? struct.getAgencyID() : conceptRef.getAgencyId(), conceptRef);
-
-            if (con == null) {
-                System.out.println("Cant find conceptScheme:" + conceptRef.getMaintainableParentId().getString());
-                System.out.println(conceptRef.getAgencyId() + ":" + conceptRef.getMaintainableParentId() + ":" + conceptRef.getId() + ":" + conceptRef.getVersion());
-                CodeType ct = new CodeType();
-                ct.setId(new IDType(value));
-                Name name = new Name("en", value);
-                ct.setNames(Collections.singletonList(name));
-                return ct;
-            }
-            concept = con.findConcept(dim.getConceptIdentity().getId());
+            concept = registry.find(conceptRef);
             if (concept == null) {
                 System.out.println("Cant find concept:" + dim.getConceptIdentity().getId());
                 System.out.println(conceptRef.getAgencyId() + ":" + conceptRef.getMaintainableParentId() + ":" + conceptRef.getId() + ":" + conceptRef.getVersion());
-                for (int i = 0; i < con.size(); i++) {
-                    System.out.println("Concept:" + con.getConcept(i).getId());
-                }
                 CodeType ct = new CodeType();
                 ct.setId(new IDType(value));
                 Name name = new Name("en", value);
@@ -102,7 +87,7 @@ public class ValueTypeResolver {
         if (rep != null) {
             if (rep.getEnumeration() != null) {
                 if (rep.getEnumeration().getRefClass().toInt() == ItemSchemeTypeCodelistType.CODELIST.toInt()) {
-                    CodelistType codelist = registry.findCodelist(rep.getEnumeration());
+                    CodelistType codelist = registry.find(rep.getEnumeration().asCodelistReference());
                     IDType id = null;
                     try {
                         id = new IDType(value);
@@ -126,8 +111,7 @@ public class ValueTypeResolver {
                         return ct;
                     }
                 } else {
-                    //rep.getEnumeration().dump();
-                    ConceptSchemeType cs = ReferenceUtils.findConceptScheme(registry, rep.getEnumeration());
+                    ConceptSchemeType cs = registry.find(rep.getEnumeration().asConceptSchemeReference());
                     ConceptType conceptMeasure = null;
                     for (int i = 0; i < cs.size() && conceptMeasure == null; i++) {
                         ConceptType tempConcept = cs.getConcept(i);
@@ -155,17 +139,13 @@ public class ValueTypeResolver {
         return null;
     }
 
-    public static ItemSchemeType getPossibleCodes(Registry registry, DataStructureType struct, String column) {
+    public static ItemSchemeType getPossibleCodes(NewRegistry registry, DataStructureType struct, String column) {
         Component dim = struct.getDataStructureComponents().findDimension(column);
-        ConceptReferenceType conceptRef = dim.getConceptIdentity();
+        ConceptReference conceptRef = dim.getConceptIdentity();
         RepresentationType rep = null;
         ConceptType concept = null;
         if (conceptRef != null) {
-            ConceptSchemeType con = registry.findConceptScheme(conceptRef.getAgencyId(), conceptRef);
-            if (con == null) {
-                System.out.println("Cant find concept:" + conceptRef.getId().getString());
-            }
-            concept = con.findConcept(dim.getConceptIdentity().getId());
+            concept = registry.find(conceptRef);
             if (concept != null) {
                 rep = concept.getCoreRepresentation();
             }
@@ -177,13 +157,13 @@ public class ValueTypeResolver {
         if (rep != null) {
             if (rep.getEnumeration() != null) {
                 if (rep.getEnumeration().getRefClass() == ObjectTypeCodelistType.CONCEPTSCHEME) {
-                    ConceptSchemeType cscheme = registry.findConceptScheme(rep.getEnumeration().getAgencyId(), rep.getEnumeration().getMaintainableParentId());
+                    ConceptSchemeType cscheme = registry.find(rep.getEnumeration().asConceptSchemeReference());
                     if (cscheme == null) {
                         throw new RuntimeException("Can't find ConceptScheme!" + rep.getEnumeration().getMaintainableParentId().toString());
                     }
                     return cscheme;
                 } else {
-                    CodelistType codelist = registry.findCodelist(rep.getEnumeration());
+                    CodelistType codelist = registry.find(rep.getEnumeration().asCodelistReference());
                     if (codelist == null) {
                         throw new RuntimeException("Cant find codelist");
                     } else {

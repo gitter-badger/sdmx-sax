@@ -7,12 +7,12 @@ package sdmx.version.common;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import sdmx.NewRegistry;
 import sdmx.message.DataStructure;
 import sdmx.message.MetadataStructure;
 import sdmx.message.StructureType;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.message.DataMessage;
-import sdmx.Registry;
 
 /**
  *
@@ -45,8 +45,8 @@ public interface SdmxParserProvider {
     public StructureType parseStructure(InputStream in,String header)throws IOException ;
     public StructureType parseStructure(Reader in,String header)throws IOException ;
     
-    public StructureType parseStructure(Registry registry,InputStream in,String header)throws IOException ;
-    public StructureType parseStructure(Registry registry,Reader in,String header)throws IOException ;
+    public StructureType parseStructure(NewRegistry registry,InputStream in,String header)throws IOException ;
+    public StructureType parseStructure(NewRegistry registry,Reader in,String header)throws IOException ;
     
     public DataMessage parseData(String header,InputStream in)throws IOException ;
     public DataMessage parseData(String header,Reader in)throws IOException ;

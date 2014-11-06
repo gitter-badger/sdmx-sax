@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
-import sdmx.Registry;
+import sdmx.NewRegistry;
 import sdmx.SdmxIO;
-import sdmx.commonreferences.DataStructureReferenceType;
+import sdmx.commonreferences.DataStructureReference;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.Version;
 import sdmx.message.DataMessage;
 import sdmx.message.DataQueryMessage;
 import sdmx.message.StructureType;
@@ -32,9 +32,8 @@ import sdmx.query.data.DataQuery;
 import sdmx.query.data.DataQueryType;
 import sdmx.query.data.DimensionValueType;
 import sdmx.query.data.TimeDimensionValueType;
-import sdmx.registry.LocalRegistry;
-import sdmx.registry.QueryableServiceRegistry;
-import sdmx.registry.RESTServiceRegistry;
+import sdmx.net.LocalRegistry;
+import sdmx.net.sdw.Sdmx20SOAPQueryable;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structureddata.ValueTypeResolver;
@@ -223,17 +222,17 @@ public class Sdmx20ServiceTest {
     public void testABSList() throws IOException {
         //System.out.println("Waiting 4 seconds");
         //try{Thread.sleep(4000);}catch(InterruptedException io) {}
-        Sdmx20SDWSOAPQueryable queryable = new Sdmx20SDWSOAPQueryable("ABS", "http://stat.abs.gov.au/sdmxws/sdmx.asmx");
+        Sdmx20SOAPQueryable queryable = new Sdmx20SOAPQueryable("ABS", "http://stat.abs.gov.au/sdmxws/sdmx.asmx");
         queryable.setSoapNamespace("http://stats.oecd.org/OECDStatWS/SDMX/");
-        QueryableServiceRegistry registry = new QueryableServiceRegistry(queryable);
+        NewRegistry registry = queryable;
         List<DataflowType> list = registry.listDataflows();
         Iterator<DataflowType> it = list.iterator();
         while(it.hasNext()){
             DataflowType flow = it.next();
             System.out.println("Flow "+flow.getAgencyID()+":"+flow.getId()+":"+flow.getVersion());
-            DataStructureReferenceType ref = flow.getStructure();
+            DataStructureReference ref = flow.getStructure();
             try{
-            DataStructureType ds = registry.findDataStructure(ref.getAgencyId(), new IDType(ref.getId().toString()),ref.getVersion());
+            DataStructureType ds = registry.find(ref);
             ds.dump();
             }catch(Exception ie) {}
         }

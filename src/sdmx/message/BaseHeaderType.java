@@ -11,7 +11,7 @@ import sdmx.common.Name;
 import sdmx.common.ObservationalTimePeriodType;
 import sdmx.common.PayloadStructureType;
 import sdmx.common.TextType;
-import sdmx.commonreferences.DataProviderReferenceType;
+import sdmx.commonreferences.DataProviderReference;
 import sdmx.commonreferences.IDType;
 import sdmx.xml.DateTime;
 
@@ -128,7 +128,7 @@ public class BaseHeaderType {
     private List<PartyType> receivers;
     private List<Name> names;
     private List<PayloadStructureType> structures;
-    private DataProviderReferenceType dataProvider;
+    private DataProviderReference dataProvider;
     private ActionType dataSetAction;
     private List<IDType> dataSetID;
     private DateTime extracted;
@@ -198,14 +198,14 @@ public class BaseHeaderType {
     /**
      * @return the dataProvider
      */
-    public DataProviderReferenceType getDataProvider() {
+    public DataProviderReference getDataProvider() {
         return dataProvider;
     }
 
     /**
      * @param dataProvider the dataProvider to set
      */
-    public void setDataProvider(DataProviderReferenceType dataProvider) {
+    public void setDataProvider(DataProviderReference dataProvider) {
         this.dataProvider = dataProvider;
     }
 

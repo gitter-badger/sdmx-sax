@@ -4,7 +4,7 @@
  */
 package sdmx.query.data;
 
-import sdmx.commonreferences.NCNameIDType;
+import sdmx.commonreferences.NCNameID;
 
 /**
  *
@@ -30,7 +30,7 @@ import sdmx.commonreferences.NCNameIDType;
  */
 public class PrimaryMeasureValueType extends DataStructureComponentValueQueryType{
     public PrimaryMeasureValueType(String id, String val) {
-        super.setId(new NCNameIDType(id));
+        super.setId(new NCNameID(id));
         super.setValue(val);
     }
     public boolean match(String value) {

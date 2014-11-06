@@ -4,7 +4,7 @@
  */
 package sdmx.query.base;
 
-import sdmx.commonreferences.CodelistReferenceType;
+import sdmx.commonreferences.CodelistReference;
 
 /**
  *	<xs:complexType name="CodeValueType">
@@ -46,20 +46,20 @@ import sdmx.commonreferences.CodelistReferenceType;
  *  Copyright James Gardner 2014
  */
 public class CodeValueType {
-    private CodelistReferenceType codelist = null;
+    private CodelistReference codelist = null;
     private String value = null;
 
     /**
      * @return the codelist
      */
-    public CodelistReferenceType getCodelist() {
+    public CodelistReference getCodelist() {
         return codelist;
     }
 
     /**
      * @param codelist the codelist to set
      */
-    public void setCodelist(CodelistReferenceType codelist) {
+    public void setCodelist(CodelistReference codelist) {
         this.codelist = codelist;
     }
 

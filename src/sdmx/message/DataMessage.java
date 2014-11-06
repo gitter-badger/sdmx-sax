@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import sdmx.common.PayloadStructureType;
 import sdmx.common.StructureUsage;
-import sdmx.commonreferences.DataStructureRefType;
-import sdmx.commonreferences.DataStructureReferenceType;
-import sdmx.commonreferences.StructureUsageRefType;
-import sdmx.commonreferences.StructureUsageReferenceBaseType;
-import sdmx.commonreferences.StructureUsageReferenceType;
+import sdmx.commonreferences.DataStructureRef;
+import sdmx.commonreferences.DataStructureReference;
+import sdmx.commonreferences.StructureUsageRef;
+import sdmx.commonreferences.StructureUsageReferenceBase;
+import sdmx.commonreferences.StructureUsageReference;
 import sdmx.commonreferences.types.StructurePackageTypeCodelistType;
 import sdmx.commonreferences.types.StructureUsageTypeCodelistType;
 import sdmx.data.DataSet;
@@ -114,7 +114,7 @@ public class DataMessage extends MessageType {
     public void setNamespacePrefix(String namespacePrefix) {
         this.namespacePrefix = namespacePrefix;
     }
-    public void setDataStructure(DataStructureReferenceType ref,anyURI uri) {
+    public void setDataStructure(DataStructureReference ref,anyURI uri) {
         List<PayloadStructureType> structures = this.getHeader().getStructures();
         if( structures == null ) {
             structures = new ArrayList<PayloadStructureType>();

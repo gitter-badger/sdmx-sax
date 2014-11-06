@@ -4,7 +4,7 @@
  */
 package sdmx.query.base;
 
-import sdmx.commonreferences.StructureReferenceBaseType;
+import sdmx.commonreferences.StructureReferenceBase;
 
 /**
  *	<xs:complexType name="StructureUsageWhereType" abstract="true">
@@ -44,19 +44,19 @@ import sdmx.commonreferences.StructureReferenceBaseType;
  *  Copyright James Gardner 2014
  */
 public class StructureUsageWhereType extends MaintainableWhereType {
-    private StructureReferenceBaseType structure = null;
+    private StructureReferenceBase structure = null;
 
     /**
      * @return the structure
      */
-    public StructureReferenceBaseType getStructure() {
+    public StructureReferenceBase getStructure() {
         return structure;
     }
 
     /**
      * @param structure the structure to set
      */
-    public void setStructure(StructureReferenceBaseType structure) {
+    public void setStructure(StructureReferenceBase structure) {
         this.structure = structure;
     }
     

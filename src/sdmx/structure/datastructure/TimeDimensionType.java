@@ -4,7 +4,7 @@
  */
 package sdmx.structure.datastructure;
 
-import sdmx.commonreferences.NestedNCNameIDType;
+import sdmx.commonreferences.NestedNCNameID;
 
 /**
  *
@@ -29,5 +29,5 @@ import sdmx.commonreferences.NestedNCNameIDType;
  *  Copyright James Gardner 2014
  */
 public class TimeDimensionType extends BaseDimensionType  {
-    public static final NestedNCNameIDType ID = new NestedNCNameIDType("TIME_PERIOD");
+    public static final NestedNCNameID ID = new NestedNCNameID("TIME_PERIOD");
 }

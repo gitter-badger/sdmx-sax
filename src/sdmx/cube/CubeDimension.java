@@ -16,7 +16,7 @@ import java.util.SortedSet;
 import sdmx.common.DataType;
 import sdmx.common.Description;
 import sdmx.common.Name;
-import sdmx.commonreferences.ConceptReferenceType;
+import sdmx.commonreferences.ConceptReference;
 import sdmx.structure.base.Component;
 import sdmx.structure.base.RepresentationType;
 import sdmx.structure.codelist.CodeType;

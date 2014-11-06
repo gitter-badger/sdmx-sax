@@ -19,7 +19,6 @@ import sdmx.message.StructureType;
 import sdmx.query.data.DataQuery;
 import sdmx.structure.codelist.CodeType;
 import sdmx.structure.datastructure.DataStructureType;
-import sdmx.Registry;
 import sdmx.cube.Cube;
 
 /**

@@ -5,7 +5,7 @@
 
 package sdmx.common;
 
-import sdmx.commonreferences.NestedNCNameIDType;
+import sdmx.commonreferences.NestedNCNameID;
 import sdmx.common.choice.MetadataTargetRegionKeyTypeChoice;
 
 /**
@@ -52,7 +52,7 @@ public class MetadataTargetRegionKeyType extends ComponentValueSetType {
     private MetadataTargetRegionKeyTypeChoice choice  = null;
     SingleNCNameIDType id = null;
 
-    public MetadataTargetRegionKeyType(MetadataTargetRegionKeyTypeChoice val,NestedNCNameIDType id){
+    public MetadataTargetRegionKeyType(MetadataTargetRegionKeyTypeChoice val,NestedNCNameID id){
         super(null,id);
         this.choice=val;
     }

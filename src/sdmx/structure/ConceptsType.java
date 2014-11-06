@@ -7,11 +7,13 @@ package sdmx.structure;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import sdmx.commonreferences.ConceptReferenceType;
+import java.util.logging.Logger;
+import sdmx.commonreferences.ConceptReference;
+import sdmx.commonreferences.ConceptSchemeReference;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NestedIDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.NestedID;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.Version;
 import sdmx.structure.categorisation.CategorisationType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
@@ -84,12 +86,12 @@ public class ConceptsType {
 
     public ConceptSchemeType findConceptScheme(String agency, String id, String vers) {
         IDType findid = new IDType(id);
-        NestedNCNameIDType ag = new NestedNCNameIDType(agency);
-        VersionType ver = new VersionType(vers);
+        NestedNCNameID ag = new NestedNCNameID(agency);
+        Version ver = new Version(vers);
         return findConceptScheme(ag, findid, ver);
     }
 
-    public ConceptSchemeType findConceptScheme(NestedNCNameIDType agency2, NestedIDType findid, VersionType ver) {
+    public ConceptSchemeType findConceptScheme(NestedNCNameID agency2, NestedID findid, Version ver) {
         for (int i = 0; i < conceptSchemes.size(); i++) {
             if (conceptSchemes.get(i).identifiesMe(agency2, findid, ver)) {
                 return conceptSchemes.get(i);
@@ -110,7 +112,7 @@ public class ConceptsType {
      * ConceptReference out of it with it's AgencyID and Version.
      */
 
-    public ConceptSchemeType findConceptSchemeById(NestedIDType id) {
+    public ConceptSchemeType findConceptSchemeById(NestedID id) {
         ConceptSchemeType cs = null;
         for (int i = 0; i < conceptSchemes.size(); i++) {
             if (conceptSchemes.get(i).identifiesMe(id)) {
@@ -146,31 +148,69 @@ public class ConceptsType {
         return cs;
     }
 
-    public ConceptSchemeType findConceptScheme(NestedNCNameIDType agency, ConceptReferenceType ref) {
+    public ConceptSchemeType findConceptScheme(NestedNCNameID agency, ConceptReference ref) {
         //System.out.println("Looking for Ref:"+agency.toString()+":"+ref.getMaintainableParentId().toString()+":"+ref.getVersion());
         //ConceptSchemeType cs = findConceptScheme(agency, ref.getMaintainableParentId());
         //System.out.println("cs="+cs);
         return findConceptScheme(agency, ref.getMaintainableParentId(), ref.getVersion());
     }
 
-    public ConceptType findConcept(NestedNCNameIDType agency, ConceptReferenceType ref) {
+    public ConceptType findConcept(NestedNCNameID agency, ConceptReference ref) {
         ConceptSchemeType cs = findConceptScheme(agency, ref);
         return cs.findConcept(ref.getId());
     }
     public ConceptType findConcept(IDType id) {
         for(int i=0;i<conceptSchemes.size();i++) {
             ConceptType ct = conceptSchemes.get(i).findConcept(id);
-            if( ct!=null) return ct;
+            if( ct!=null) {
+                Logger.getLogger("sdmx").fine("ConceptsType found concept:"+id.toString());
+                return ct;
+            }
         }
         return null;
     }
 
-    public ConceptSchemeType findConceptScheme(NestedNCNameIDType mainAgencyId, NestedIDType id) {
+    public ConceptSchemeType findConceptScheme(NestedNCNameID mainAgencyId, NestedID id) {
         for (int i = 0; i < conceptSchemes.size(); i++) {
             if (conceptSchemes.get(i).getAgencyID().equals(mainAgencyId) && conceptSchemes.get(i).getId().equals(id)) {
                 return conceptSchemes.get(i);
             }
         }
         return null;
+    }
+    public ConceptSchemeType find(ConceptSchemeReference ref) {
+        if( ref.getAgencyId()==null) {
+            return this.findConceptSchemeById(ref.getId());
+        }
+        for (int i = 0; i < conceptSchemes.size(); i++) {
+            Logger.getLogger("sdmx").finest("comparing "+ref.getAgencyId()+":"+conceptSchemes.get(i).getAgencyID()+" anf "+ref.getMaintainableParentId()+":"+conceptSchemes.get(i).getId());
+            if (conceptSchemes.get(i).getAgencyID().equals(ref.getAgencyId()) && conceptSchemes.get(i).getId().equals(ref.getMaintainableParentId())) {
+                Logger.getLogger("sdmx").fine("ConceptsType:find(ConceptScheme)"+ref.toString()+": found:"+conceptSchemes.get(i).getName());
+                return conceptSchemes.get(i);
+            }
+        }
+        return null;
+    }
+    public ConceptType find(ConceptReference ref) {
+        Logger.getLogger("sdmx").fine("ConceptsType find(ConceptReference)"+ref.toString());
+        if( ref.getAgencyId()==null&&ref.getMaintainableParentId()==null) {
+            ConceptType ct = findConcept(ref.getId().asID());
+            Logger.getLogger("sdmx").fine("ConceptsType find(ConceptReference)"+ref.toString()+": returning"+ct);
+            return ct;
+        }
+        if( ref.getMaintainableParentId()==null) {
+            ConceptType ct = findConcept(ref.getId().asID());
+            Logger.getLogger("sdmx").fine("ConceptsType find(ConceptReference)"+ref.toString()+": returning"+ct);
+            return ct;
+        }
+        ConceptSchemeType conceptScheme = find(ConceptSchemeReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion()));
+        if( conceptScheme!=null) {
+            ConceptType ct = conceptScheme.findConcept(ref.getId());
+            Logger.getLogger("sdmx").fine("ConceptsType find(ConceptReference)"+ref.toString()+": returning"+ct);
+            return ct;
+        } else {
+            Logger.getLogger("sdmx").fine("ConceptsType find(ConceptReference)"+ref.toString()+": returning"+null);
+            return null;
+        }
     }
 }

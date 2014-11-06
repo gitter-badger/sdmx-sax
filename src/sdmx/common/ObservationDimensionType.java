@@ -5,7 +5,7 @@
 
 package sdmx.common;
 
-import sdmx.commonreferences.NCNameIDType;
+import sdmx.commonreferences.NCNameID;
 
 /**
  *	<xs:simpleType name="ObservationDimensionType">
@@ -34,7 +34,7 @@ import sdmx.commonreferences.NCNameIDType;
  *
  *  Copyright James Gardner 2014
  */
-public class ObservationDimensionType extends NCNameIDType {
+public class ObservationDimensionType extends NCNameID {
     ObsDimensionsCodeType code;
     public ObservationDimensionType(String s) {
         super(s);

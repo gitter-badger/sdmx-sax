@@ -38,6 +38,8 @@ public class RegexXMLString extends XMLString {
             if (!patterns[i].matcher(s).matches()) {
                 if (SdmxIO.isStrictRegex()) {
                     throw new ExceptionInInitializerError("Input " + s + " does not match Pattern:" + patterns[i].pattern());
+                }else {
+                    System.out.println("Input "+s+" does not match Pattern:"+patterns[i].pattern()+" for class:"+getClass().getSimpleName());
                 }
             }
         }

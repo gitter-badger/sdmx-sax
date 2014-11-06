@@ -6,8 +6,8 @@
 package sdmx.common;
 
 import java.net.URI;
-import sdmx.commonreferences.StructureReferenceBaseType;
-import sdmx.commonreferences.StructureUsageReferenceBaseType;
+import sdmx.commonreferences.StructureReferenceBase;
+import sdmx.commonreferences.StructureUsageReferenceBase;
 import sdmx.xml.ID;
 
 /**

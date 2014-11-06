@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import sdmx.Registry;
 import sdmx.common.ActionType;
 import sdmx.common.Name;
 import sdmx.common.ObservationDimensionType;
@@ -31,11 +30,11 @@ import sdmx.common.ObservationalTimePeriodType;
 import sdmx.common.PayloadStructureType;
 import sdmx.common.TextType;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NestedIDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.StructureRefType;
-import sdmx.commonreferences.StructureReferenceType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.NestedID;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.StructureRef;
+import sdmx.commonreferences.StructureReference;
+import sdmx.commonreferences.Version;
 import sdmx.commonreferences.types.ObjectTypeCodelistType;
 import sdmx.commonreferences.types.PackageTypeCodelistType;
 import sdmx.data.DataSet;
@@ -410,7 +409,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
                 } catch (URISyntaxException ex) {
                     Logger.getLogger(StructureSpecificEventHandler.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                StructureReferenceType reference = new StructureReferenceType(uri);
+                StructureReference reference = new StructureReference(uri);
                 payload.setStructure(reference);
                 break;
         }
@@ -692,9 +691,9 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
     }
 
     public void startRef(Attributes atts) {
-        StructureRefType ref = new StructureRefType(new NestedNCNameIDType(atts.getValue("agencyID")),
-                new IDType(atts.getValue("id")),new VersionType(atts.getValue("version")),ObjectTypeCodelistType.DATASTRUCTURE, PackageTypeCodelistType.DATASTRUCTURE);
-        StructureReferenceType reference = new StructureReferenceType(ref, null);
+        StructureRef ref = new StructureRef(new NestedNCNameID(atts.getValue("agencyID")),
+                new IDType(atts.getValue("id")),new Version(atts.getValue("version")),ObjectTypeCodelistType.DATASTRUCTURE, PackageTypeCodelistType.DATASTRUCTURE);
+        StructureReference reference = new StructureReference(ref, null);
         payload.setStructure(reference);
     }
 

@@ -7,9 +7,9 @@ package sdmx.structure;
 import java.util.ArrayList;
 import java.util.List;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NestedIDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.NestedID;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.Version;
 import sdmx.structure.categorisation.CategorisationType;
 import sdmx.structure.category.CategorySchemeType;
 
@@ -53,11 +53,11 @@ public class CategorySchemesType {
     }
     public CategorySchemeType findCategoryScheme(String agency,String id,String vers) {
         IDType findid = new IDType(id);
-        NestedNCNameIDType ag = new NestedNCNameIDType(agency);
-        VersionType ver = new VersionType(vers);
+        NestedNCNameID ag = new NestedNCNameID(agency);
+        Version ver = new Version(vers);
         return findCategoryScheme(ag,findid,ver);
     }
-    public CategorySchemeType findCategoryScheme(NestedNCNameIDType agency2,NestedIDType findid,VersionType ver) {
+    public CategorySchemeType findCategoryScheme(NestedNCNameID agency2,NestedID findid,Version ver) {
         for(int i=0;i<categorySchemes.size();i++) {
             if( categorySchemes.get(i).identifiesMe(agency2,findid,ver)) {
                 return categorySchemes.get(i);

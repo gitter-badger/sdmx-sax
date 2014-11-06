@@ -5,13 +5,13 @@
 package sdmx.structure.constraint;
 
 import java.util.List;
-import sdmx.commonreferences.ProvisionAgreementReferenceType;
+import sdmx.commonreferences.ProvisionAgreementReference;
 import sdmx.common.QueryableDataSourceType;
-import sdmx.commonreferences.DataProviderReferenceType;
-import sdmx.commonreferences.DataStructureReferenceType;
-import sdmx.commonreferences.MetadataStructureReferenceType;
-import sdmx.commonreferences.MetadataflowReferenceType;
-import sdmx.commonreferences.SetReferenceType;
+import sdmx.commonreferences.DataProviderReference;
+import sdmx.commonreferences.DataStructureReference;
+import sdmx.commonreferences.MetadataStructureReference;
+import sdmx.commonreferences.MetadataflowReference;
+import sdmx.commonreferences.SetReference;
 import sdmx.xml.anyURI;
 
 /**

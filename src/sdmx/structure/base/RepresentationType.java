@@ -4,7 +4,7 @@
  */
 package sdmx.structure.base;
 
-import sdmx.commonreferences.ItemSchemeReferenceBaseType;
+import sdmx.commonreferences.ItemSchemeReferenceBase;
 
 /**
  *	<xs:complexType name="RepresentationType" abstract="true">
@@ -55,7 +55,7 @@ import sdmx.commonreferences.ItemSchemeReferenceBaseType;
 public class RepresentationType {
    
     private TextFormatType textFormat = null;
-    private ItemSchemeReferenceBaseType enumeration = null;
+    private ItemSchemeReferenceBase enumeration = null;
     private CodededTextFormatType enumerationFormat = null;
 
     /**
@@ -75,14 +75,14 @@ public class RepresentationType {
     /**
      * @return the enumeration
      */
-    public ItemSchemeReferenceBaseType getEnumeration() {
+    public ItemSchemeReferenceBase getEnumeration() {
         return enumeration;
     }
 
     /**
      * @param enumeration the enumeration to set
      */
-    public void setEnumeration(ItemSchemeReferenceBaseType enumeration) {
+    public void setEnumeration(ItemSchemeReferenceBase enumeration) {
         this.enumeration = enumeration;
     }
 

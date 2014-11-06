@@ -7,9 +7,9 @@ package sdmx.structure;
 import java.util.ArrayList;
 import java.util.List;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NestedIDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.NestedID;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.Version;
 import sdmx.structure.categorisation.CategorisationType;
 
 /**
@@ -63,11 +63,11 @@ public class CategorisationsType {
     }
     public CategorisationType findCategorisation(String agency,String id,String vers) {
         IDType findid = new IDType(id);
-        NestedNCNameIDType ag = new NestedNCNameIDType(agency);
-        VersionType ver = new VersionType(vers);
+        NestedNCNameID ag = new NestedNCNameID(agency);
+        Version ver = new Version(vers);
         return findCategorisation(ag,findid,ver);
     }
-    public CategorisationType findCategorisation(NestedNCNameIDType agency2,NestedIDType findid,VersionType ver) {
+    public CategorisationType findCategorisation(NestedNCNameID agency2,NestedID findid,Version ver) {
         for(int i=0;i<categorisations.size();i++) {
             if( categorisations.get(i).identifiesMe(agency2,findid,ver)) {
                 return categorisations.get(i);

@@ -6,13 +6,13 @@
 package sdmx.structureddata;
 
 import java.util.Locale;
-import sdmx.Registry;
+import sdmx.NewRegistry;
 import sdmx.common.Name;
-import sdmx.commonreferences.ConceptReferenceType;
+import sdmx.commonreferences.ConceptReference;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NestedIDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.NestedID;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.Version;
 import sdmx.data.DataSet;
 import sdmx.structure.base.Component;
 import sdmx.structure.concept.ConceptSchemeType;
@@ -39,10 +39,10 @@ import sdmx.structure.datastructure.DataStructureType;
 public class StructuredDataSet {
 
     private DataSet dataSet = null;
-    private Registry registry = null;
+    private NewRegistry registry = null;
     private DataStructureType structure = null;
 
-    public StructuredDataSet(DataSet ds, Registry reg, DataStructureType struct) {
+    public StructuredDataSet(DataSet ds, NewRegistry reg, DataStructureType struct) {
         this.dataSet = ds;
         this.registry = reg;
         this.structure = struct;
@@ -70,15 +70,10 @@ public class StructuredDataSet {
             System.out.println("Component is null conceptRef:" + conceptString);
             return conceptString;
         }
-        ConceptReferenceType conceptRef = c.getConceptIdentity();
+        ConceptReference conceptRef = c.getConceptIdentity();
         ConceptType concept = null;
         if (conceptRef != null) {
-            ConceptSchemeType con = registry.findConceptScheme(conceptRef.getAgencyId(), conceptRef.getMaintainableParentId());
-            if (con == null) {
-                System.out.println("Cant find concept:" + conceptRef.getAgencyId()+":"+conceptRef.getMaintainableParentId());
-            }
-            concept = con.findConcept(c.getConceptIdentity().getId());
-//            System.out.println("Concept=" + concept);
+            concept = registry.find(conceptRef);
             Locale loc = Locale.getDefault();
             Name name = concept == null ? null : concept.findName(loc.getLanguage());
             if (name == null) {

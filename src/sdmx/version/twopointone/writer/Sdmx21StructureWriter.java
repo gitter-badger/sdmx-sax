@@ -210,7 +210,7 @@ public class Sdmx21StructureWriter {
         }
     }
 
-    public static LocalItemReferenceType toLocalItemReference(LocalItemReferenceType ref2, sdmx.commonreferences.LocalItemReferenceType ref) {
+    public static LocalItemReferenceType toLocalItemReference(LocalItemReferenceType ref2, sdmx.commonreferences.LocalItemReference ref) {
         if (ref.getRef() != null) {
             toRef(ref2.addNewRef(), ref);
         }
@@ -283,7 +283,7 @@ public class Sdmx21StructureWriter {
         }
     }
 
-    public static void toItemSchemeReference(ItemSchemeReferenceBaseType reference2, sdmx.commonreferences.ItemSchemeReferenceBaseType reference) {
+    public static void toItemSchemeReference(ItemSchemeReferenceBaseType reference2, sdmx.commonreferences.ItemSchemeReferenceBase reference) {
         toRef(reference2.addNewRef(), reference);
         if (reference.getUrn() != null) {
             reference2.setURN(reference.getUrn().getString());
@@ -461,13 +461,13 @@ public class Sdmx21StructureWriter {
             toAttachGroup(rel2.addNewAttachmentGroup(), rel.getAttachGroup());
         }
         if (rel.getDimensions() != null) {
-            Iterator<sdmx.commonreferences.LocalDimensionReferenceType> it = rel.getDimensions().iterator();
+            Iterator<sdmx.commonreferences.LocalDimensionReference> it = rel.getDimensions().iterator();
             while (it.hasNext()) {
                 toLocalDimensionReferenceType(rel2.addNewDimension(), it.next());
             }
         }
         if (rel.getGroups() != null) {
-            Iterator<sdmx.commonreferences.LocalGroupKeyDescriptorReferenceType> it = rel.getGroups().iterator();
+            Iterator<sdmx.commonreferences.LocalGroupKeyDescriptorReference> it = rel.getGroups().iterator();
             while (it.hasNext()) {
                 toLocalGroupKeyDescriptorReference(rel2.addNewGroup(), it.next());
             }
@@ -477,7 +477,7 @@ public class Sdmx21StructureWriter {
         }
     }
 
-    private static void toAttachGroup(LocalGroupKeyDescriptorReferenceType group2, sdmx.commonreferences.LocalGroupKeyDescriptorReferenceType group) {
+    private static void toAttachGroup(LocalGroupKeyDescriptorReferenceType group2, sdmx.commonreferences.LocalGroupKeyDescriptorReference group) {
         if (group.getRef() != null) {
             toRef(group2.addNewRef(), group);
         }
@@ -486,7 +486,7 @@ public class Sdmx21StructureWriter {
         }
     }
 
-    private static void toLocalDimensionReferenceType(LocalDimensionReferenceType reference2, sdmx.commonreferences.LocalDimensionReferenceType reference) {
+    private static void toLocalDimensionReferenceType(LocalDimensionReferenceType reference2, sdmx.commonreferences.LocalDimensionReference reference) {
         if (reference.getRef() != null) {
             toRef(reference2.addNewRef(), reference);
         }
@@ -495,7 +495,7 @@ public class Sdmx21StructureWriter {
         }
     }
 
-    private static void toLocalGroupKeyDescriptorReference(LocalGroupKeyDescriptorReferenceType group2, sdmx.commonreferences.LocalGroupKeyDescriptorReferenceType group) {
+    private static void toLocalGroupKeyDescriptorReference(LocalGroupKeyDescriptorReferenceType group2, sdmx.commonreferences.LocalGroupKeyDescriptorReference group) {
         if (group.getRef() != null) {
             toRef(group2.addNewRef(), group);
         }
@@ -504,7 +504,7 @@ public class Sdmx21StructureWriter {
         }
     }
 
-    private static void toConceptReferenceType(ConceptReferenceType reference2, sdmx.commonreferences.ConceptReferenceType reference) {
+    private static void toConceptReferenceType(ConceptReferenceType reference2, sdmx.commonreferences.ConceptReference reference) {
         if (reference.getRef() != null) {
             toRef(reference2.addNewRef(), reference);
         }
@@ -590,14 +590,14 @@ public class Sdmx21StructureWriter {
             dim2.setPosition(dim.getPosition());
         }
         if (dim.getRoles() != null) {
-            Iterator<sdmx.commonreferences.ConceptReferenceType> it = dim.getRoles().iterator();
+            Iterator<sdmx.commonreferences.ConceptReference> it = dim.getRoles().iterator();
             while (it.hasNext()) {
                 toConceptReferenceType(dim2.addNewConceptRole(), it.next());
             }
         }
     }
 
-    private static void toLocalPrimaryMeasureReferenceType(LocalPrimaryMeasureReferenceType reference2, sdmx.commonreferences.LocalPrimaryMeasureReferenceType reference) {
+    private static void toLocalPrimaryMeasureReferenceType(LocalPrimaryMeasureReferenceType reference2, sdmx.commonreferences.LocalPrimaryMeasureReference reference) {
         if (reference.getRef() != null) {
             toRef(reference2.addNewRef(), reference);
         }
@@ -731,7 +731,7 @@ public class Sdmx21StructureWriter {
         }
     }
 
-    private static void toDataProvider(DataProviderReferenceType reference2, sdmx.commonreferences.DataProviderReferenceType reference) {
+    private static void toDataProvider(DataProviderReferenceType reference2, sdmx.commonreferences.DataProviderReference reference) {
         if (reference.getRef() != null) {
             toRef(reference2.addNewRef(), reference);
         }

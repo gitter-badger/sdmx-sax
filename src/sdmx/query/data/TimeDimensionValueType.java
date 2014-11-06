@@ -4,7 +4,7 @@
  */
 package sdmx.query.data;
 
-import sdmx.commonreferences.NestedNCNameIDType;
+import sdmx.commonreferences.NestedNCNameID;
 import sdmx.query.base.TimeValue;
 import sdmx.structure.datastructure.TimeDimensionType;
 
@@ -39,7 +39,7 @@ public class TimeDimensionValueType {
         this.end=end;
     }
 
-   public NestedNCNameIDType getId() {
+   public NestedNCNameID getId() {
      return TimeDimensionType.ID;
    }
     

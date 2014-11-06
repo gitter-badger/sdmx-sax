@@ -6,13 +6,16 @@ package sdmx.structure;
 
 import java.util.ArrayList;
 import java.util.List;
+import sdmx.commonreferences.CodeReference;
+import sdmx.commonreferences.CodelistReference;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.ItemSchemeReferenceBaseType;
-import sdmx.commonreferences.NestedIDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.RefBaseType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.ItemSchemeReferenceBase;
+import sdmx.commonreferences.NestedID;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.RefBase;
+import sdmx.commonreferences.Version;
 import sdmx.structure.categorisation.CategorisationType;
+import sdmx.structure.codelist.CodeType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.xml.anyURI;
@@ -76,11 +79,11 @@ public class CodelistsType {
     }
     public CodelistType findCodelist(String agency,String id,String vers) {
         IDType findid = new IDType(id);
-        NestedNCNameIDType ag = new NestedNCNameIDType(agency);
-        VersionType ver = vers==null?null:new VersionType(vers);
+        NestedNCNameID ag = new NestedNCNameID(agency);
+        Version ver = vers==null?null:new Version(vers);
         return findCodelist(ag,findid,ver);
     }
-    public CodelistType findCodelist(NestedNCNameIDType agency2,NestedIDType findid,VersionType ver) {
+    public CodelistType findCodelist(NestedNCNameID agency2,NestedID findid,Version ver) {
         for(int i=0;i<codelists.size();i++) {
             CodelistType cl2 = codelists.get(i);
             if( codelists.get(i).identifiesMe(agency2,findid,ver)) {
@@ -89,7 +92,7 @@ public class CodelistsType {
         }
         return null;
     }
-    public CodelistType findCodelist(NestedNCNameIDType agency2,NestedIDType findid) {
+    public CodelistType findCodelist(NestedNCNameID agency2,NestedID findid) {
         for(int i=0;i<codelists.size();i++) {
             if( codelists.get(i).identifiesMe(agency2,findid)) {
                 return codelists.get(i);
@@ -113,7 +116,7 @@ public class CodelistsType {
      * only an ID.. we lookup the Codelist by it's ID, when we find a match, we can make a 
      * LocalItemSchemeReference out of it with it's AgencyID and Version.
      */
-    public CodelistType findCodelistById(NestedIDType id) {
+    public CodelistType findCodelistById(NestedID id) {
         CodelistType cl = null;
         for(int i=0;i<codelists.size();i++) {
             if( codelists.get(i).identifiesMe(id)) {
@@ -135,7 +138,28 @@ public class CodelistsType {
         }
         return cl;
     }
-    public CodelistType findCodelist(ItemSchemeReferenceBaseType ref) {
+    public CodelistType findCodelist(ItemSchemeReferenceBase ref) {
         return findCodelist(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getMaintainedParentVersion());
+    }
+    
+    public CodelistType find(CodelistReference ref) {
+        if( ref.getAgencyId()==null&&ref.getVersion()==null) {
+            return findCodelistById(ref.getMaintainableParentId());
+        }
+        for(int i=0;i<codelists.size();i++) {
+            CodelistType cl2 = codelists.get(i);
+            if( codelists.get(i).identifiesMe(ref.getAgencyId(),ref.getMaintainableParentId(),ref.getVersion())) {
+                return codelists.get(i);
+            }
+        }
+        return null;
+    }
+
+    public CodeType find(CodeReference ref) {
+        CodelistType cl = find(CodelistReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion()));
+        if( cl!=null) {
+            return cl.findCode(ref.getId().asID());
+        }
+        return null;
     }
 }

@@ -5,7 +5,7 @@
 package sdmx.query.data;
 
 import java.util.List;
-import sdmx.commonreferences.NCNameIDType;
+import sdmx.commonreferences.NCNameID;
 import sdmx.query.base.NumericValue;
 import sdmx.query.base.TextValue;
 import sdmx.query.base.TimeValue;
@@ -33,7 +33,7 @@ import sdmx.query.base.TimeValue;
  *  Copyright James Gardner 2014
  */
 public class DataStructureComponentValueQueryType {
-    private NCNameIDType id = null;
+    private NCNameID id = null;
     private List<NumericValue> numericValues = null;
     private List<TextValue> textValues = null;
     private List<TimeValue> timeValues = null;
@@ -42,14 +42,14 @@ public class DataStructureComponentValueQueryType {
     /**
      * @return the id
      */
-    public NCNameIDType getId() {
+    public NCNameID getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(NCNameIDType id) {
+    public void setId(NCNameID id) {
         this.id = id;
     }
 

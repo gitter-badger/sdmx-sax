@@ -5,8 +5,8 @@
 package sdmx.query.base;
 
 import java.util.List;
-import sdmx.commonreferences.ConceptReferenceType;
-import sdmx.commonreferences.ItemSchemeReferenceBaseType;
+import sdmx.commonreferences.ConceptReference;
+import sdmx.commonreferences.ItemSchemeReferenceBase;
 
 /**
  *	<xs:complexType name="StructureWhereType" abstract="true">
@@ -58,36 +58,36 @@ import sdmx.commonreferences.ItemSchemeReferenceBaseType;
  *  Copyright James Gardner 2014
  */
 public class StructureWhereType extends MaintainableWhereType {
-    private ConceptReferenceType usedConcept = null;
-    private ItemSchemeReferenceBaseType useRepresentation = null;
+    private ConceptReference usedConcept = null;
+    private ItemSchemeReferenceBase useRepresentation = null;
     private List<ComponentListWhereType> componentLists = null;
     private List<ComponentWhereType> components = null;
 
     /**
      * @return the usedConcept
      */
-    public ConceptReferenceType getUsedConcept() {
+    public ConceptReference getUsedConcept() {
         return usedConcept;
     }
 
     /**
      * @param usedConcept the usedConcept to set
      */
-    public void setUsedConcept(ConceptReferenceType usedConcept) {
+    public void setUsedConcept(ConceptReference usedConcept) {
         this.usedConcept = usedConcept;
     }
 
     /**
      * @return the useRepresentation
      */
-    public ItemSchemeReferenceBaseType getUseRepresentation() {
+    public ItemSchemeReferenceBase getUseRepresentation() {
         return useRepresentation;
     }
 
     /**
      * @param useRepresentation the useRepresentation to set
      */
-    public void setUseRepresentation(ItemSchemeReferenceBaseType useRepresentation) {
+    public void setUseRepresentation(ItemSchemeReferenceBase useRepresentation) {
         this.useRepresentation = useRepresentation;
     }
 

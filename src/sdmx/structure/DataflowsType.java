@@ -6,10 +6,11 @@ package sdmx.structure;
 
 import java.util.ArrayList;
 import java.util.List;
+import sdmx.commonreferences.DataflowReference;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.NestedIDType;
-import sdmx.commonreferences.NestedNCNameIDType;
-import sdmx.commonreferences.VersionType;
+import sdmx.commonreferences.NestedID;
+import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.Version;
 import sdmx.structure.categorisation.CategorisationType;
 import sdmx.structure.dataflow.DataflowType;
 
@@ -51,7 +52,7 @@ public class DataflowsType {
     public void setDataflows(List<DataflowType> dataflows) {
         this.dataflows = dataflows;
     }
-    public DataflowType findDataflow(NestedIDType findid) {
+    public DataflowType findDataflow(NestedID findid) {
         for(int i=0;i<dataflows.size();i++) {
             if( dataflows.get(i).identifiesMe(findid)) return dataflows.get(i);
         }
@@ -59,11 +60,11 @@ public class DataflowsType {
     }
     public DataflowType findDataflow(String agency,String id,String vers) {
         IDType findid = new IDType(id);
-        NestedNCNameIDType ag = new NestedNCNameIDType(agency);
-        VersionType ver = new VersionType(vers);
+        NestedNCNameID ag = new NestedNCNameID(agency);
+        Version ver = new Version(vers);
         return findDataflow(ag,findid,ver);
     }
-    public DataflowType findDataflow(NestedNCNameIDType agency2,NestedIDType findid,VersionType ver) {
+    public DataflowType findDataflow(NestedNCNameID agency2,NestedID findid,Version ver) {
         for(int i=0;i<dataflows.size();i++) {
             if( dataflows.get(i).identifiesMe(agency2,findid,ver)) {
                 return dataflows.get(i);
@@ -75,5 +76,13 @@ public class DataflowsType {
         for(int i=0;i<dataflows.size();i++) {
             dataflows.get(i).dump();
         }
+    }
+    public DataflowType find(DataflowReference ref) {
+        for(int i=0;i<dataflows.size();i++) {
+            if( dataflows.get(i).identifiesMe(ref.getAgencyId(),ref.getMaintainableParentId(),ref.getVersion())) {
+                return dataflows.get(i);
+            }
+        }
+        return null;
     }
 }

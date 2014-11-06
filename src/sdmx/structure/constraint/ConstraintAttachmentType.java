@@ -6,13 +6,13 @@ package sdmx.structure.constraint;
 
 import java.util.List;
 import sdmx.common.QueryableDataSourceType;
-import sdmx.commonreferences.DataProviderReferenceType;
-import sdmx.commonreferences.DataStructureReferenceType;
-import sdmx.commonreferences.DataflowReferenceType;
-import sdmx.commonreferences.MetadataStructureReferenceType;
-import sdmx.commonreferences.MetadataflowReferenceType;
-import sdmx.commonreferences.ProvisionAgreementReferenceType;
-import sdmx.commonreferences.SetReferenceType;
+import sdmx.commonreferences.DataProviderReference;
+import sdmx.commonreferences.DataStructureReference;
+import sdmx.commonreferences.DataflowReference;
+import sdmx.commonreferences.MetadataStructureReference;
+import sdmx.commonreferences.MetadataflowReference;
+import sdmx.commonreferences.ProvisionAgreementReference;
+import sdmx.commonreferences.SetReference;
 import sdmx.structure.base.MaintainableType;
 import sdmx.xml.anyURI;
 
@@ -128,100 +128,100 @@ import sdmx.xml.anyURI;
  *  Copyright James Gardner 2014
  */
 public abstract class ConstraintAttachmentType extends MaintainableType {
-    private DataProviderReferenceType dataProvider = null;
-    private List<SetReferenceType> dataSets=null;
-    private List<SetReferenceType> metadataSets=null;
+    private DataProviderReference dataProvider = null;
+    private List<SetReference> dataSets=null;
+    private List<SetReference> metadataSets=null;
     private List<anyURI> simpleDataSources =null;
 
     // or 1 of these and a queryable datasource
-   private List<DataStructureReferenceType> dataStructures=null;
-   private List<MetadataStructureReferenceType> metadataStructures = null;
-   private List<DataflowReferenceType> dataFlows = null;
-   private List<MetadataflowReferenceType> metadataFlows = null;
-   private List<ProvisionAgreementReferenceType> provisionAgreement = null;
+   private List<DataStructureReference> dataStructures=null;
+   private List<MetadataStructureReference> metadataStructures = null;
+   private List<DataflowReference> dataFlows = null;
+   private List<MetadataflowReference> metadataFlows = null;
+   private List<ProvisionAgreementReference> provisionAgreement = null;
    private QueryableDataSourceType queryableDataSource= null;
 
     /**
      * @return the dataProvider
      */
-    public DataProviderReferenceType getDataProvider() {
+    public DataProviderReference getDataProvider() {
         return dataProvider;
     }
 
     /**
      * @param dataProvider the dataProvider to set
      */
-    public void setDataProvider(DataProviderReferenceType dataProvider) {
+    public void setDataProvider(DataProviderReference dataProvider) {
         this.dataProvider = dataProvider;
     }
 
     /**
      * @return the dataStructures
      */
-    public List<DataStructureReferenceType> getDataStructures() {
+    public List<DataStructureReference> getDataStructures() {
         return dataStructures;
     }
 
     /**
      * @param dataStructures the dataStructures to set
      */
-    public void setDataStructures(List<DataStructureReferenceType> dataStructures) {
+    public void setDataStructures(List<DataStructureReference> dataStructures) {
         this.dataStructures = dataStructures;
     }
 
     /**
      * @return the metadataStructures
      */
-    public List<MetadataStructureReferenceType> getMetadataStructures() {
+    public List<MetadataStructureReference> getMetadataStructures() {
         return metadataStructures;
     }
 
     /**
      * @param metadataStructures the metadataStructures to set
      */
-    public void setMetadataStructures(List<MetadataStructureReferenceType> metadataStructures) {
+    public void setMetadataStructures(List<MetadataStructureReference> metadataStructures) {
         this.metadataStructures = metadataStructures;
     }
 
     /**
      * @return the dataFlows
      */
-    public List<DataflowReferenceType> getDataflows() {
+    public List<DataflowReference> getDataflows() {
         return dataFlows;
     }
 
     /**
      * @param dataFlows the dataFlows to set
      */
-    public void setDataflows(List<DataflowReferenceType> dataFlows) {
+    public void setDataflows(List<DataflowReference> dataFlows) {
         this.dataFlows = dataFlows;
     }
 
     /**
      * @return the metadataFlows
      */
-    public List<MetadataflowReferenceType> getMetadataFlows() {
+    public List<MetadataflowReference> getMetadataFlows() {
         return metadataFlows;
     }
 
     /**
      * @param metadataFlows the metadataFlows to set
      */
-    public void setMetadataFlows(List<MetadataflowReferenceType> metadataFlows) {
+    public void setMetadataFlows(List<MetadataflowReference> metadataFlows) {
         this.metadataFlows = metadataFlows;
     }
 
     /**
      * @return the provisionAgreement
      */
-    public List<ProvisionAgreementReferenceType> getProvisionAgreement() {
+    public List<ProvisionAgreementReference> getProvisionAgreement() {
         return provisionAgreement;
     }
 
     /**
      * @param provisionAgreement the provisionAgreement to set
      */
-    public void setProvisionAgreement(List<ProvisionAgreementReferenceType> provisionAgreement) {
+    public void setProvisionAgreement(List<ProvisionAgreementReference> provisionAgreement) {
         this.provisionAgreement = provisionAgreement;
     }
 
@@ -242,28 +242,28 @@ public abstract class ConstraintAttachmentType extends MaintainableType {
     /**
      * @return the dataSets
      */
-    public List<SetReferenceType> getDataSets() {
+    public List<SetReference> getDataSets() {
         return dataSets;
     }
 
     /**
      * @param dataSets the dataSets to set
      */
-    public void setDataSets(List<SetReferenceType> dataSets) {
+    public void setDataSets(List<SetReference> dataSets) {
         this.dataSets = dataSets;
     }
 
     /**
      * @return the metadataSets
      */
-    public List<SetReferenceType> getMetadataSets() {
+    public List<SetReference> getMetadataSets() {
         return metadataSets;
     }
 
     /**
      * @param metadataSets the metadataSets to set
      */
-    public void setMetadataSets(List<SetReferenceType> metadataSets) {
+    public void setMetadataSets(List<SetReference> metadataSets) {
         this.metadataSets = metadataSets;
     }
 

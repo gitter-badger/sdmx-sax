@@ -8,7 +8,7 @@ package sdmx.common.collection;
 import java.util.ArrayList;
 import java.util.List;
 import sdmx.common.choice.MetadataTargetRegionKeyTypeChoice;
-import sdmx.commonreferences.ObjectReferenceType;
+import sdmx.commonreferences.ObjectReference;
 
 /**
  *  This file is part of SdmxSax.
@@ -29,5 +29,5 @@ import sdmx.commonreferences.ObjectReferenceType;
  *  Copyright James Gardner 2014
  */
 public class ObjectReferenceTypeArray implements MetadataTargetRegionKeyTypeChoice {
-     public List<ObjectReferenceType> list = new ArrayList<ObjectReferenceType>();
+     public List<ObjectReference> list = new ArrayList<ObjectReference>();
 }

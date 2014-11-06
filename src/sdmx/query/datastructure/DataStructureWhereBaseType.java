@@ -5,9 +5,9 @@
 package sdmx.query.datastructure;
 
 import sdmx.common.TimeRangeValueType;
-import sdmx.commonreferences.ConceptReferenceType;
-import sdmx.commonreferences.DataStructureEnumerationSchemeReferenceType;
-import sdmx.commonreferences.VersionQueryType;
+import sdmx.commonreferences.ConceptReference;
+import sdmx.commonreferences.DataStructureEnumerationSchemeReference;
+import sdmx.commonreferences.VersionQuery;
 import sdmx.commonreferences.types.MaintainableTypeCodelistType;
 import sdmx.query.base.AnnotationWhereType;
 import sdmx.query.base.QueryIDType;

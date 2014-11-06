@@ -9,11 +9,11 @@ import java.util.Collections;
 import java.util.List;
 import sdmx.common.TimeDataType;
 import sdmx.common.TimeRangeValueType;
-import sdmx.commonreferences.CategoryReferenceType;
-import sdmx.commonreferences.DataProviderReferenceType;
-import sdmx.commonreferences.DataStructureReferenceType;
-import sdmx.commonreferences.DataflowReferenceType;
-import sdmx.commonreferences.ProvisionAgreementReferenceType;
+import sdmx.commonreferences.CategoryReference;
+import sdmx.commonreferences.DataProviderReference;
+import sdmx.commonreferences.DataStructureReference;
+import sdmx.commonreferences.DataflowReference;
+import sdmx.commonreferences.ProvisionAgreementReference;
 import sdmx.data.ColumnMapper;
 import sdmx.data.DataSet;
 import sdmx.query.base.CodeValueType;
@@ -43,11 +43,11 @@ import sdmx.query.base.QueryIDType;
  */
 public class DataParametersType  {
     private List<QueryIDType> dataSetId = null;
-    private List<DataProviderReferenceType> dataProvider = null;
-    private List<DataStructureReferenceType> dataStructure = null;
-    private List<DataflowReferenceType> dataflow = null;
-    private List<ProvisionAgreementReferenceType> provisionAgreement = null;
-    private List<CategoryReferenceType> category = null;
+    private List<DataProviderReference> dataProvider = null;
+    private List<DataStructureReference> dataStructure = null;
+    private List<DataflowReference> dataflow = null;
+    private List<ProvisionAgreementReference> provisionAgreement = null;
+    private List<CategoryReference> category = null;
     private List<TimeRangeValueType> updated = null;
     private List<ConceptValueType> conceptValue = null;
     private List<CodeValueType> representationValue = null;
@@ -77,70 +77,70 @@ public class DataParametersType  {
     /**
      * @return the dataProvider
      */
-    public List<DataProviderReferenceType> getDataProvider() {
+    public List<DataProviderReference> getDataProvider() {
         return dataProvider;
     }
 
     /**
      * @param dataProvider the dataProvider to set
      */
-    public void setDataProvider(List<DataProviderReferenceType> dataProvider) {
+    public void setDataProvider(List<DataProviderReference> dataProvider) {
         this.dataProvider = dataProvider;
     }
 
     /**
      * @return the dataStructure
      */
-    public List<DataStructureReferenceType> getDataStructure() {
+    public List<DataStructureReference> getDataStructure() {
         return dataStructure;
     }
 
     /**
      * @param dataStructure the dataStructure to set
      */
-    public void setDataStructure(List<DataStructureReferenceType> dataStructure) {
+    public void setDataStructure(List<DataStructureReference> dataStructure) {
         this.dataStructure = dataStructure;
     }
 
     /**
      * @return the dataflow
      */
-    public List<DataflowReferenceType> getDataflow() {
+    public List<DataflowReference> getDataflow() {
         return dataflow;
     }
 
     /**
      * @param dataflow the dataflow to set
      */
-    public void setDataflow(List<DataflowReferenceType> dataflow) {
+    public void setDataflow(List<DataflowReference> dataflow) {
         this.dataflow = dataflow;
     }
 
     /**
      * @return the provisionAgreement
      */
-    public List<ProvisionAgreementReferenceType> getProvisionAgreement() {
+    public List<ProvisionAgreementReference> getProvisionAgreement() {
         return provisionAgreement;
     }
 
     /**
      * @param provisionAgreement the provisionAgreement to set
      */
-    public void setProvisionAgreement(List<ProvisionAgreementReferenceType> provisionAgreement) {
+    public void setProvisionAgreement(List<ProvisionAgreementReference> provisionAgreement) {
         this.provisionAgreement = provisionAgreement;
     }
 
     /**
      * @return the category
      */
-    public List<CategoryReferenceType> getCategory() {
+    public List<CategoryReference> getCategory() {
         return category;
     }
 
     /**
      * @param category the category to set
      */
-    public void setCategory(List<CategoryReferenceType> category) {
+    public void setCategory(List<CategoryReference> category) {
         this.category = category;
     }
 

@@ -5,7 +5,7 @@
 package sdmx.query.datastructure;
 
 import java.util.List;
-import sdmx.commonreferences.ConceptReferenceType;
+import sdmx.commonreferences.ConceptReference;
 import sdmx.query.base.ComponentWhereType;
 
 /**
@@ -31,19 +31,19 @@ import sdmx.query.base.ComponentWhereType;
  *  Copyright James Gardner 2014
  */
 public class AttributeWhereType extends DataStructureComponentWhereType {
-    private List<ConceptReferenceType> roles = null;
+    private List<ConceptReference> roles = null;
 
     /**
      * @return the roles
      */
-    public List<ConceptReferenceType> getRoles() {
+    public List<ConceptReference> getRoles() {
         return roles;
     }
 
     /**
      * @param roles the roles to set
      */
-    public void setRoles(List<ConceptReferenceType> roles) {
+    public void setRoles(List<ConceptReference> roles) {
         this.roles = roles;
     }
 }

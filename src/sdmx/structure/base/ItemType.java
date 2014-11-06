@@ -9,8 +9,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import sdmx.commonreferences.IDType;
-import sdmx.commonreferences.LocalItemReferenceType;
-import sdmx.commonreferences.NestedIDType;
+import sdmx.commonreferences.LocalItemReference;
+import sdmx.commonreferences.NestedID;
 
 /**
  *
@@ -35,20 +35,20 @@ import sdmx.commonreferences.NestedIDType;
  */
 public abstract class ItemType extends ItemBaseType {
 
-    private LocalItemReferenceType parent = null;
+    private LocalItemReference parent = null;
     private List<ItemType> items = new ArrayList<ItemType>(0);
 
     /**
      * @return the parent
      */
-    public LocalItemReferenceType getParent() {
+    public LocalItemReference getParent() {
         return parent;
     }
 
     /**
      * @param parent the parent to set
      */
-    public void setParent(LocalItemReferenceType parent) {
+    public void setParent(LocalItemReference parent) {
         this.parent = parent;
     }
 
@@ -106,7 +106,7 @@ public abstract class ItemType extends ItemBaseType {
         return null;
     }
 
-    public ItemType findItem(NestedIDType id) {
+    public ItemType findItem(NestedID id) {
         if (id == null) {
             return null;
         }
