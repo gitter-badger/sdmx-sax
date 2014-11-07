@@ -6,7 +6,7 @@
 package sdmx.structureddata;
 
 import java.util.Locale;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.common.Name;
 import sdmx.commonreferences.ConceptReference;
 import sdmx.commonreferences.IDType;
@@ -39,10 +39,10 @@ import sdmx.structure.datastructure.DataStructureType;
 public class StructuredDataSet {
 
     private DataSet dataSet = null;
-    private NewRegistry registry = null;
+    private Registry registry = null;
     private DataStructureType structure = null;
 
-    public StructuredDataSet(DataSet ds, NewRegistry reg, DataStructureType struct) {
+    public StructuredDataSet(DataSet ds, Registry reg, DataStructureType struct) {
         this.dataSet = ds;
         this.registry = reg;
         this.structure = struct;

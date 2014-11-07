@@ -35,7 +35,8 @@ public class RESTDataProvider extends DataProvider {
     private URL serviceURL = null;
     private Queryable registry = null;
 
-    public RESTDataProvider(String agency, String serviceURL) throws MalformedURLException {
+    public RESTDataProvider(int indx,String agency, String serviceURL) throws MalformedURLException {
+        super(indx);
         this.agencyId = agency;
         this.serviceURL = new URL(serviceURL);
         this.registry = new RESTQueryable(agencyId, serviceURL.toString());
@@ -49,4 +50,6 @@ public class RESTDataProvider extends DataProvider {
         return registry;
     }
     public int getType() { return DataProvider.TYPE_REST; }
+    public String getServiceURL() { return this.serviceURL.toString(); }
+    public String getOptions() { return ""; }
 }

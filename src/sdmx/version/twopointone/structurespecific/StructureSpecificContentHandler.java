@@ -21,7 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
@@ -66,11 +66,11 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
         this.eh = handler;
     }
 
-    public StructureSpecificContentHandler(NewRegistry registry, InputStream in, StructureType struct) {
+    public StructureSpecificContentHandler(Registry registry, InputStream in, StructureType struct) {
         this(in, new StructureSpecificEventHandler());
     }
 
-    public StructureSpecificContentHandler(NewRegistry registry, Reader in, StructureType struct) {
+    public StructureSpecificContentHandler(Registry registry, Reader in, StructureType struct) {
         this(in, new StructureSpecificEventHandler());
     }
 

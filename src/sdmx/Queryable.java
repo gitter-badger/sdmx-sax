@@ -10,6 +10,6 @@ package sdmx;
  * @author James
  */
 public interface Queryable {
-    public NewRegistry getRegistry();
-    public NewRepository getRepository();
+    public Registry getRegistry();
+    public Repository getRepository();
 }

@@ -21,6 +21,6 @@ import sdmx.structure.datastructure.DimensionType;
  *
  * @author James
  */
-public interface NewRepository {
+public interface Repository {
     public DataMessage query(DataQueryMessage message);
 }

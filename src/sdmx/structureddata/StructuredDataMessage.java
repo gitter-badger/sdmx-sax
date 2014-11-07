@@ -8,7 +8,7 @@ package sdmx.structureddata;
 
 import java.util.ArrayList;
 import java.util.List;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.commonreferences.DataStructureReference;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.NestedID;
@@ -37,12 +37,12 @@ import sdmx.structure.datastructure.DataStructureType;
  */
 public class StructuredDataMessage {
     private DataMessage dataMessage = null;
-    private NewRegistry registry = null;
+    private Registry registry = null;
     
     
     private List<StructuredDataSet> list = new ArrayList<StructuredDataSet>();
     
-    public StructuredDataMessage(DataMessage dat,NewRegistry reg) {
+    public StructuredDataMessage(DataMessage dat,Registry reg) {
         this.dataMessage=dat;
         this.registry=reg;
         for(int i=0;i<dataMessage.getDataSets().size();i++) {

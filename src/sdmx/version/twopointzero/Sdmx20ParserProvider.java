@@ -14,7 +14,7 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.xmlbeans.XmlException;
 import org.jdom.Namespace;
 import org.xml.sax.SAXException;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.data.DataSetWriter;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.data.flat.FlatDataSetWriter;
@@ -208,7 +208,7 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public StructureType parseStructure(NewRegistry registry, InputStream in, String header) throws IOException {
+    public StructureType parseStructure(Registry registry, InputStream in, String header) throws IOException {
         try {
             StructureType doc;
             if (!isRegistryInterface(header)) {
@@ -226,7 +226,7 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public StructureType parseStructure(NewRegistry registry, Reader in, String header) throws IOException {
+    public StructureType parseStructure(Registry registry, Reader in, String header) throws IOException {
         try {
             StructureType doc;
             if (!isRegistryInterface(header)) {

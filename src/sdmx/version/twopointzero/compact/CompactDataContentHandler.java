@@ -20,7 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
@@ -65,11 +65,11 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
         this.eh = handler;
     }
 
-    public CompactDataContentHandler(NewRegistry registry, InputStream in, StructureType struct) {
+    public CompactDataContentHandler(Registry registry, InputStream in, StructureType struct) {
         this(in, new CompactDataEventHandler());
     }
 
-    public CompactDataContentHandler(NewRegistry registry, Reader in, StructureType struct) {
+    public CompactDataContentHandler(Registry registry, Reader in, StructureType struct) {
         this(in, new CompactDataEventHandler());
     }
 

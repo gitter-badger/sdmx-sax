@@ -6,7 +6,7 @@
 package sdmx.structureddata;
 
 import java.util.Locale;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.common.Description;
 import sdmx.common.Name;
 import sdmx.structure.base.Component;
@@ -39,10 +39,10 @@ public class StructuredValue {
 
     private String concept = null;
     private String value = null;
-    private NewRegistry registry = null;
+    private Registry registry = null;
     private DataStructureType structure = null;
 
-    public StructuredValue(String concept, String value, NewRegistry registry, DataStructureType struct) {
+    public StructuredValue(String concept, String value, Registry registry, DataStructureType struct) {
         //if (concept.equals("FREQ")) {
         //    System.out.println("Concept=" + concept);
         //    System.out.println("Value=" + value);

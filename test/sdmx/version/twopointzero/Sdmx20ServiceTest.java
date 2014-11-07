@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.SdmxIO;
 import sdmx.commonreferences.DataStructureReference;
 import sdmx.commonreferences.IDType;
@@ -224,7 +224,7 @@ public class Sdmx20ServiceTest {
         //try{Thread.sleep(4000);}catch(InterruptedException io) {}
         Sdmx20SOAPQueryable queryable = new Sdmx20SOAPQueryable("ABS", "http://stat.abs.gov.au/sdmxws/sdmx.asmx");
         queryable.setSoapNamespace("http://stats.oecd.org/OECDStatWS/SDMX/");
-        NewRegistry registry = queryable;
+        Registry registry = queryable;
         List<DataflowType> list = registry.listDataflows();
         Iterator<DataflowType> it = list.iterator();
         while(it.hasNext()){

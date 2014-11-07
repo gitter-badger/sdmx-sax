@@ -28,8 +28,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import sdmx.NewRegistry;
-import sdmx.NewRepository;
+import sdmx.Registry;
+import sdmx.Repository;
 import sdmx.Queryable;
 import sdmx.SdmxIO;
 import sdmx.commonreferences.CodeReference;
@@ -82,7 +82,7 @@ import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
  *
  * Copyright James Gardner 2014
  */
-public class RESTQueryable implements Queryable, NewRegistry, NewRepository {
+public class RESTQueryable implements Queryable, Registry, Repository {
 
     public static void main(String args[]) {
         RESTQueryable registry = new RESTQueryable("ESTAT", "http://www.ec.europa.eu/eurostat/SDMX/diss-web/rest");
@@ -93,7 +93,7 @@ public class RESTQueryable implements Queryable, NewRegistry, NewRepository {
     }
     private String agency = "";
     private String serviceURL = "";
-    NewRegistry local = new LocalRegistry();
+    Registry local = new LocalRegistry();
 
     private List<DataflowType> dataflowList = null;
 
@@ -102,11 +102,11 @@ public class RESTQueryable implements Queryable, NewRegistry, NewRepository {
         this.agency = agency;
     }
 
-    public NewRegistry getRegistry() {
+    public Registry getRegistry() {
         return this;
     }
 
-    public NewRepository getRepository() {
+    public Repository getRepository() {
         return this;
     }
 

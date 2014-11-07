@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.commonreferences.ConceptRef;
 import sdmx.commonreferences.ConceptReference;
 import sdmx.commonreferences.DataStructureReference;
@@ -67,7 +67,7 @@ public class LocalRegistryTest {
     public LocalRegistryTest() {
     }
     
-    public static final NewRegistry doc = new LocalRegistry();
+    public static final Registry doc = new LocalRegistry();
     
     @BeforeClass
     public static void setUpClass() {

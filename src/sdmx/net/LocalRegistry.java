@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.commonreferences.CodeReference;
 import sdmx.commonreferences.CodelistReference;
 import sdmx.commonreferences.ConceptReference;
@@ -62,7 +62,7 @@ import sdmx.xml.anyURI;
  *
  *  Copyright James Gardner 2014
  */
-public class LocalRegistry implements NewRegistry {
+public class LocalRegistry implements Registry {
 
     public static void main(String args[]) {
     }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.common.DataType;
 import sdmx.common.Name;
 import sdmx.commonreferences.ConceptReference;
@@ -56,7 +56,7 @@ import sdmx.structure.datastructure.TimeDimensionType;
  */
 public class ValueTypeResolver {
 
-    public static ItemType resolveCode(NewRegistry registry, DataStructureType struct, String column, String value) {
+    public static ItemType resolveCode(Registry registry, DataStructureType struct, String column, String value) {
         if (value == null) {
             return null;
         }
@@ -139,7 +139,7 @@ public class ValueTypeResolver {
         return null;
     }
 
-    public static ItemSchemeType getPossibleCodes(NewRegistry registry, DataStructureType struct, String column) {
+    public static ItemSchemeType getPossibleCodes(Registry registry, DataStructureType struct, String column) {
         Component dim = struct.getDataStructureComponents().findDimension(column);
         ConceptReference conceptRef = dim.getConceptIdentity();
         RepresentationType rep = null;

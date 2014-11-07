@@ -33,8 +33,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.jdom.Document;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-import sdmx.NewRegistry;
-import sdmx.NewRepository;
+import sdmx.Registry;
+import sdmx.Repository;
 import sdmx.Queryable;
 import sdmx.SdmxIO;
 import sdmx.common.TextOperatorType;
@@ -96,7 +96,7 @@ import sdmx.xml.DateTime;
  *
  * Copyright James Gardner 2014
  */
-public class Sdmx20NSIQueryable implements NewRegistry,NewRepository,Queryable {
+public class Sdmx20NSIQueryable implements Registry,Repository,Queryable {
 
     private String soapNamespace = "http://ec.europa.eu/eurostat/sri/service/2.0";
     private String mediaType = "application/soap+xml;charset=UTF-8";
@@ -374,7 +374,7 @@ public class Sdmx20NSIQueryable implements NewRegistry,NewRepository,Queryable {
         this.mediaType = mediaType;
     }
 
-    public NewRegistry getRegistry() {
+    public Registry getRegistry() {
         return this;
     }
 
@@ -458,7 +458,7 @@ public class Sdmx20NSIQueryable implements NewRegistry,NewRepository,Queryable {
     }
 
     @Override
-    public NewRepository getRepository() {
+    public Repository getRepository() {
         return this;
     }
 }

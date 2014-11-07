@@ -18,7 +18,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.structureddata.ValueTypeResolver;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
@@ -60,7 +60,7 @@ public class Sdmx20DataWriteTest {
         System.out.println("Finish Test Data Writing");
     }
     
-    NewRegistry registry = LocalRegistry.getDefaultWorkspace();
+    Registry registry = LocalRegistry.getDefaultWorkspace();
     
     @Before
     public void setUp() {

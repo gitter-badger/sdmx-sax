@@ -34,7 +34,8 @@ public class NSIDataProvider extends DataProvider {
     private String soapNamespace = null;
     Sdmx20NSIQueryable q = null;
 
-    public NSIDataProvider(String agency, String serviceURL, String soapNamespace) throws MalformedURLException {
+    public NSIDataProvider(int indx,String agency, String serviceURL, String soapNamespace) throws MalformedURLException {
+        super(indx);
         this.agencyId = agency;
         this.serviceURL = new URL(serviceURL);
         this.soapNamespace = soapNamespace;
@@ -53,4 +54,7 @@ public class NSIDataProvider extends DataProvider {
         return agencyId;
     }
     public int getType() { return DataProvider.TYPE_NSI; }
+    public String getServiceURL() { return this.serviceURL.toString(); }
+    @Override
+    public String getOptions() { return soapNamespace; }
 }

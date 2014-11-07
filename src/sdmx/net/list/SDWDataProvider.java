@@ -21,7 +21,7 @@ package sdmx.net.list;
 import java.net.MalformedURLException;
 import java.net.URL;
 import sdmx.Queryable;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.net.service.sdw.Sdmx20SOAPQueryable;
 
 /**
@@ -34,7 +34,8 @@ public class SDWDataProvider extends DataProvider {
     private URL serviceURL = null;
     private String soapNamespace = null;
 
-    public SDWDataProvider(String agency, String serviceURL, String soapNamespace) throws MalformedURLException {
+    public SDWDataProvider(int indx,String agency, String serviceURL, String soapNamespace) throws MalformedURLException {
+        super(indx);
         this.agencyId = agency;
         this.serviceURL = new URL(serviceURL);
         this.soapNamespace = soapNamespace;
@@ -51,4 +52,6 @@ public class SDWDataProvider extends DataProvider {
         return agencyId;
     }
     public int getType() { return DataProvider.TYPE_SDW; }
+    public String getServiceURL() { return this.serviceURL.toString(); }
+    public String getOptions() { return soapNamespace; }
 }

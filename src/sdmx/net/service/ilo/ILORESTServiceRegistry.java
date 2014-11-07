@@ -28,8 +28,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import sdmx.NewRegistry;
-import sdmx.NewRepository;
+import sdmx.Registry;
+import sdmx.Repository;
 import sdmx.Queryable;
 import sdmx.SdmxIO;
 import sdmx.common.Description;
@@ -88,7 +88,7 @@ import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
  *
  * Copyright James Gardner 2014
  */
-public class ILORESTServiceRegistry implements NewRegistry,NewRepository,Queryable {
+public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
 
     public static void main(String args[]) {
         ILORESTServiceRegistry registry = new ILORESTServiceRegistry("ILO", "http://www.ilo.org/ilostat/sdmx/ws/rest");
@@ -97,7 +97,7 @@ public class ILORESTServiceRegistry implements NewRegistry,NewRepository,Queryab
     }
     private String agency = "";
     private String serviceURL = "";
-    NewRegistry local = new LocalRegistry();
+    Registry local = new LocalRegistry();
 
     private List<DataflowType> dataflowList = null;
 
@@ -431,12 +431,12 @@ public class ILORESTServiceRegistry implements NewRegistry,NewRepository,Queryab
     }
 
     @Override
-    public NewRegistry getRegistry() {
+    public Registry getRegistry() {
         return this;
     }
 
     @Override
-    public NewRepository getRepository() {
+    public Repository getRepository() {
         return this;
     }
 }

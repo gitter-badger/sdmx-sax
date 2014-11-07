@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.common.TextOperatorType;
 import sdmx.commonreferences.CodeReference;
 import sdmx.commonreferences.CodelistReference;
@@ -65,10 +65,10 @@ import sdmx.xml.DateTime;
  *
  *  Copyright James Gardner 2014
  */
-public class DoubleRegistry implements NewRegistry {
-    NewRegistry left = LocalRegistry.getDefaultWorkspace();
-    NewRegistry right = LocalRegistry.getDefaultWorkspace();
-    public DoubleRegistry(NewRegistry left, NewRegistry right) {
+public class DoubleRegistry implements Registry {
+    Registry left = LocalRegistry.getDefaultWorkspace();
+    Registry right = LocalRegistry.getDefaultWorkspace();
+    public DoubleRegistry(Registry left, Registry right) {
         this.left = left;
         this.right=right;
         Logger.getLogger("sdmx").fine("DoubleRegistry:left="+left.getClass());

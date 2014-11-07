@@ -23,7 +23,7 @@ import org.sdmx.resources.sdmxml.schemas.v20.structure.ComponentsType;
 import org.sdmx.resources.sdmxml.schemas.v20.structure.CrossSectionalMeasureType;
 import org.sdmx.resources.sdmxml.schemas.v20.structure.KeyFamilyRefType;
 import org.sdmx.resources.sdmxml.schemas.v20.structure.PrimaryMeasureType;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.common.ActionType;
 import sdmx.common.AnnotationType;
 import sdmx.common.DataType;
@@ -128,12 +128,12 @@ import sdmx.xml.positiveInteger;
  */
 public class Sdmx20StructureReaderTools {
 
-    NewRegistry registry = null;
+    Registry registry = null;
 
     public Sdmx20StructureReaderTools() {
     }
 
-    public Sdmx20StructureReaderTools(NewRegistry registry) {
+    public Sdmx20StructureReaderTools(Registry registry) {
         // Temporary Registry for loading structure into before loading into main registry.
         this.registry = registry;
     }

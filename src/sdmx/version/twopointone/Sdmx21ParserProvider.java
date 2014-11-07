@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.xmlbeans.XmlException;
 import org.xml.sax.SAXException;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.message.StructureType;
 import sdmx.SdmxIO;
 import sdmx.version.common.SdmxParserProvider;
@@ -132,7 +132,7 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public StructureType parseStructure(NewRegistry registry, InputStream in,String header) throws IOException {
+    public StructureType parseStructure(Registry registry, InputStream in,String header) throws IOException {
         StructureType st = parseStructure(in,header);
         registry.load(st);
         return st;
@@ -196,7 +196,7 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public StructureType parseStructure(NewRegistry registry, Reader in,String header) throws IOException {
+    public StructureType parseStructure(Registry registry, Reader in,String header) throws IOException {
         StructureType st = parseStructure(in,header);
         registry.load(st);
         return st;

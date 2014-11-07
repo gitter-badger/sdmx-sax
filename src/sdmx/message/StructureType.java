@@ -5,7 +5,7 @@
 package sdmx.message;
 
 import java.util.List;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.commonreferences.CodeReference;
 import sdmx.commonreferences.CodelistReference;
 import sdmx.commonreferences.ConceptReference;
@@ -63,7 +63,7 @@ import sdmx.structure.datastructure.DataStructureType;
  *
  *  Copyright James Gardner 2014
  */
-public class StructureType extends MessageType implements NewRegistry {
+public class StructureType extends MessageType implements Registry {
     private StructuresType structures = null;
     public StructureType(){
     }

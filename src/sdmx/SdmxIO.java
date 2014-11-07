@@ -134,7 +134,7 @@ public class SdmxIO {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         return parseStructure(new LocalRegistry(),in);
     }
-    public static StructureType parseStructure(NewRegistry registry,InputStream in) throws IOException,ParseException {
+    public static StructureType parseStructure(Registry registry,InputStream in) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackInputStream push = new PushbackInputStream(in,8192);
         String header = getHeader(push);
@@ -146,7 +146,7 @@ public class SdmxIO {
         registry.load(struct);
         return struct;
     }
-    public static StructureType parseStructure(NewRegistry registry,Reader in) throws IOException,ParseException {
+    public static StructureType parseStructure(Registry registry,Reader in) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackReader push = new PushbackReader(in,8192);
         String header = getHeader(push);

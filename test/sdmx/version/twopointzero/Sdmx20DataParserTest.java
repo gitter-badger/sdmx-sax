@@ -16,7 +16,7 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.SdmxIO;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.NestedNCNameID;
@@ -62,7 +62,7 @@ public class Sdmx20DataParserTest {
         System.out.println("Finish Test Data Parsing");
     }
     
-    NewRegistry registry = LocalRegistry.getDefaultWorkspace();
+    Registry registry = LocalRegistry.getDefaultWorkspace();
     
     @Before
     public void setUp() throws IOException {

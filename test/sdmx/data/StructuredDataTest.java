@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import sdmx.NewRegistry;
+import sdmx.Registry;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
 import sdmx.SdmxIO;
@@ -43,7 +43,7 @@ import sdmx.net.LocalRegistry;
  *  Copyright James Gardner 2014
  */
 public class StructuredDataTest {
-    NewRegistry registry = LocalRegistry.getDefaultWorkspace();
+    Registry registry = LocalRegistry.getDefaultWorkspace();
     
     @BeforeClass
     public static void setUpClass() {
