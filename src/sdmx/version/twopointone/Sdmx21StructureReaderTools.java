@@ -461,7 +461,7 @@ public class Sdmx21StructureReaderTools {
 
     public static CodelistType toCodelist(org.sdmx.resources.sdmxml.schemas.v21.structure.CodelistType cl1) throws URISyntaxException {
         CodelistType cl2 = new CodelistType();
-        cl2.setId(toIDType(cl1.getId()));
+        cl2.setId(toNCNameIDType(cl1.getId()));
         cl2.setAgencyID(toNestedNCNameIDType(cl1.getAgencyID()));
         cl2.setAnnotations(toAnnotations(cl1.getAnnotations()));
         cl2.setDescriptions(toDescriptions(cl1.getDescriptionArray()));
@@ -766,7 +766,7 @@ public class Sdmx21StructureReaderTools {
         con2.setAnnotations(toAnnotations(con1.getAnnotations()));
         con2.setDescriptions(toDescriptions(con1.getDescriptionArray()));
         con2.setNames(toNames(con1.getNameArray()));
-        con2.setId(toIDType(con1.getId().toString()));
+        con2.setId(toNCNameIDType(con1.getId().toString()));
         con2.setParent(toLocalItemReferenceType(con1.getParent()));
         con2.setCoreRepresentation(toConceptRepresentation(con1.getCoreRepresentation()));
         con2.setIsoConceptRef(toISOConceptRef(con1.getISOConceptReference()));
@@ -849,11 +849,10 @@ public class Sdmx21StructureReaderTools {
         dimList.setDimensions(dims);
         List<MeasureDimensionType> meas = new ArrayList<MeasureDimensionType>();
         for (int i = 0; i < ds1.getDimensionList().sizeOfMeasureDimensionArray(); i++) {
-            meas.add(toMeasureDimension(ds1.getDimensionList().getMeasureDimensionArray()[i]));
+            dimList.setMeasureDimension(toMeasureDimension(ds1.getDimensionList().getMeasureDimensionArray()[i]));
         }
         MeasureListType measList = new MeasureListType();
         measList.setPrimaryMeasure(toPrimaryMeasure(ds1.getMeasureList().getPrimaryMeasure()));
-        measList.setMeasures(meas);
         AttributeListType atl = new AttributeListType();
         List<AttributeType> atts = new ArrayList<AttributeType>();
         for (int i = 0; i < ds1.getAttributeList().getAttributeArray().length; i++) {

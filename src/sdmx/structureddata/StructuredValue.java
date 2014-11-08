@@ -56,7 +56,7 @@ public class StructuredValue {
     public boolean isCoded() {
         Component comp = structure.getDataStructureComponents().findDimension(getConcept());
         if ("type".equals(getConcept())) {
-            comp = structure.getDataStructureComponents().getMeasureList().getMeasure(0);
+            comp = structure.getDataStructureComponents().getDimensionList().getMeasureDimension();
         }
         if (comp == null) {
             return false;

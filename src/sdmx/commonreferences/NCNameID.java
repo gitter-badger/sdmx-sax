@@ -6,6 +6,7 @@
 package sdmx.commonreferences;
 
 import java.util.regex.Pattern;
+import sdmx.SdmxIO;
 import sdmx.common.ObservationDimensionType;
 
 /**
@@ -39,13 +40,27 @@ import sdmx.common.ObservationDimensionType;
  */
 
 public class NCNameID extends IDType {
+    public static void main(String args[]) {
+        NCNameID id = new NCNameID("1");
+        Pattern[] patterns = id.getPatternArray();
+        for (int i = 0; i < patterns.length; i++) {
+            System.out.println("Check Pattern:"+"1"+":'"+patterns[i]+"'"+patterns[i].matcher("1").matches());
+            if (!patterns[i].matcher("1").matches()) {
+                if (SdmxIO.isStrictRegex()) {
+                    throw new ExceptionInInitializerError("Input " + "1" + " does not match Pattern:" + patterns[i].pattern());
+                }else {
+                    System.out.println("Input "+"1"+" does not match Pattern:"+patterns[i].pattern()+" for class:"+id.getClass().getSimpleName());
+                }
+            }
+        }
+    }
     public static final String PATTERN = "[A-z][A-z0-9_\\-]*";
     public static final Pattern REGEX_PATTERN = Pattern.compile(PATTERN);
     public static final Pattern[] PATTERN_ARRAY = new Pattern[]{REGEX_PATTERN};
     public NCNameID(String s) {
         super(s);
     }
-        @Override
+    @Override
     public Pattern[] getPatternArray() {
         return PATTERN_ARRAY;
     }

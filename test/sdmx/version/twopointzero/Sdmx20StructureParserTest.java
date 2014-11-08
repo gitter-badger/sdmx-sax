@@ -746,20 +746,20 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample103() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("BIS", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getAgencyId().toString());
+        assertEquals("BIS", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getConceptIdentity().getAgencyId().toString());
     }
 
     @Test
     public void testStructureSample104() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("JD_TYPE", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getId().toString());
+        assertEquals("JD_TYPE", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getConceptIdentity().getId().toString());
     }
 
     @Test
     public void testStructureSample105() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
         // 1.0 is filled in from the conceptRef field.
-        assertEquals("1.0", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getVersion().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getConceptIdentity().getVersion().toString());
     }
 
     @Test

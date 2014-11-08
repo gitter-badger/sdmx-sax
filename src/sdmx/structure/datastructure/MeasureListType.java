@@ -33,6 +33,7 @@ import sdmx.structure.base.ComponentListType;
  */
 public class MeasureListType extends ComponentListType {
     private PrimaryMeasure primary = null;
+/*
     private List<MeasureDimensionType> measures = new ArrayList<MeasureDimensionType>();
    public List<MeasureDimensionType> getMeasures() {
        return measures;
@@ -45,7 +46,7 @@ public class MeasureListType extends ComponentListType {
    public MeasureDimensionType getMeasure(int i) {
        return measures.get(i);
    }
-    
+  */  
     /**
      * @return the primary
      */
@@ -60,7 +61,7 @@ public class MeasureListType extends ComponentListType {
         this.primary = primary;
     }
     public int size() {
-        return measures.size();
+        return 1;
     }
     
 }

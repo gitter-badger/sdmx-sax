@@ -476,14 +476,14 @@ public class Sdmx21StructureParserTest {
         assertEquals("CL_SEX", dlt.getDimensions().get(2).getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
         assertEquals("1.0", dlt.getDimensions().get(2).getLocalRepresentation().getEnumeration().getVersion().toString());
 
-        assertEquals("ESTAT", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getAgencyId().toString());
-        assertEquals("DEMO_CONCEPTS", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getMaintainableParentId().toString());
-        assertEquals("1.0", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getVersion().toString());
-        assertEquals("DEMO", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getConceptIdentity().getId().toString());
-        assertEquals("ESTAT", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getLocalRepresentation().getEnumeration().getAgencyId().toString());
-        assertEquals("DEMO_MEASURES", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
-        assertEquals("1.0", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getLocalRepresentation().getEnumeration().getVersion().toString());
-        assertEquals("ConceptScheme", ds.getDataStructureComponents().getMeasureList().getMeasure(0).getLocalRepresentation().getEnumeration().getRefClass().toString());
+        assertEquals("ESTAT", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getConceptIdentity().getAgencyId().toString());
+        assertEquals("DEMO_CONCEPTS", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getConceptIdentity().getMaintainableParentId().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getConceptIdentity().getVersion().toString());
+        assertEquals("DEMO", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getConceptIdentity().getId().toString());
+        assertEquals("ESTAT", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getLocalRepresentation().getEnumeration().getAgencyId().toString());
+        assertEquals("DEMO_MEASURES", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
+        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getLocalRepresentation().getEnumeration().getVersion().toString());
+        assertEquals("ConceptScheme", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getLocalRepresentation().getEnumeration().getRefClass().toString());
         List<AttributeType> atts = ds.getDataStructureComponents().getAttributeList().getAttributes();
         assertEquals("Mandatory", atts.get(0).getAssignmentStatus().toString());
 

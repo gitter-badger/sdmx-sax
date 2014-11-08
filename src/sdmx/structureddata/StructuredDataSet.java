@@ -58,7 +58,7 @@ public class StructuredDataSet {
         //System.out.println("ds="+getStructure());
         Component c = getStructure().getDataStructureComponents().findDimension(conceptString);
         if (c == null && conceptString.equals("type")) {
-            c = getStructure().getDataStructureComponents().getMeasureList().getMeasure(0);
+            c = getStructure().getDataStructureComponents().getDimensionList().getMeasureDimension();
         }
         //System.out.println("Concept="+conceptString+": component="+c);
         // * Fixed in DataStructureComponentsType.findDimension

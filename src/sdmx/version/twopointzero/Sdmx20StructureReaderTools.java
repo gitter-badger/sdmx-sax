@@ -47,6 +47,8 @@ import sdmx.commonreferences.ItemSchemeRefBase;
 import sdmx.commonreferences.ItemSchemeReferenceBase;
 import sdmx.commonreferences.LocalItemRefBase;
 import sdmx.commonreferences.LocalItemReference;
+import sdmx.commonreferences.LocalPrimaryMeasureRef;
+import sdmx.commonreferences.LocalPrimaryMeasureReference;
 import sdmx.commonreferences.NCNameID;
 import sdmx.commonreferences.NestedNCNameID;
 import sdmx.commonreferences.RefBase;
@@ -82,6 +84,7 @@ import sdmx.structure.concept.ConceptType;
 import sdmx.structure.concept.ISOConceptReferenceType;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.AttributeListType;
+import sdmx.structure.datastructure.AttributeRelationshipType;
 import sdmx.structure.datastructure.AttributeType;
 import sdmx.structure.datastructure.DataStructureComponents;
 import sdmx.structure.datastructure.DataStructureType;
@@ -173,21 +176,22 @@ public class Sdmx20StructureReaderTools {
         xmlOptions.setLoadStripComments();
         xmlOptions.setLoadTrimTextBuffer();
         xmlOptions.setLoadStripWhitespace();
-        regDoc = org.sdmx.resources.sdmxml.schemas.v20.message.RegistryInterfaceDocument.Factory.parse(in,xmlOptions);
+        regDoc = org.sdmx.resources.sdmxml.schemas.v20.message.RegistryInterfaceDocument.Factory.parse(in, xmlOptions);
         mainAgencyId = new NestedNCNameID(regDoc.getRegistryInterface().getHeader().getSenderArray(0).getId());
         return parseRegistry(regDoc);
     }
+
     public StructureType parseRegistry(Reader in) throws XmlException, IOException, TypeValueNotFoundException {
         XmlOptions xmlOptions = new XmlOptions();
         //xmlOptions.setCharacterEncoding("utf-16");
         xmlOptions.setLoadStripComments();
         xmlOptions.setLoadTrimTextBuffer();
         xmlOptions.setLoadStripWhitespace();
-        regDoc = org.sdmx.resources.sdmxml.schemas.v20.message.RegistryInterfaceDocument.Factory.parse(in,xmlOptions);
+        regDoc = org.sdmx.resources.sdmxml.schemas.v20.message.RegistryInterfaceDocument.Factory.parse(in, xmlOptions);
         mainAgencyId = new NestedNCNameID(regDoc.getRegistryInterface().getHeader().getSenderArray(0).getId());
         return parseRegistry(regDoc);
     }
-    
+
     public StructureType parseStructure(org.sdmx.resources.sdmxml.schemas.v20.message.StructureDocument structDoc) throws TypeValueNotFoundException {
         if (!(registry instanceof DoubleRegistry)) {
             registry = new DoubleRegistry(struct, registry);
@@ -227,11 +231,12 @@ public class Sdmx20StructureReaderTools {
             return null;
         }
         CodelistType cl2 = new CodelistType();
-        cl2.setId(toIDType(cl1.getId()));
+        cl2.setId(toNCNameIDType(cl1.getId()));
         cl2.setAgencyID(toNestedNCNameIDType(cl1.getAgencyID()));
-        if( cl1.getVersion()!=null){cl2.setVersion(toVersionType(cl1.getVersion()));}
-        else {
-           cl2.setVersion(Version.ONE);
+        if (cl1.getVersion() != null) {
+            cl2.setVersion(toVersionType(cl1.getVersion()));
+        } else {
+            cl2.setVersion(Version.ONE);
         }
         cl2.setAnnotations(toAnnotations(cl1.getAnnotations()));
         cl2.setDescriptions(toDescriptions(cl1.getDescriptionArray()));
@@ -344,9 +349,9 @@ public class Sdmx20StructureReaderTools {
         List<Name> names = new ArrayList<Name>(cl1.getDescriptionArray().length);
         List<Description> descs = toDescriptions(cl1.getDescriptionArray());
         Iterator<Description> it = descs.iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             Description desc = it.next();
-            Name name = new Name(desc.getLang(),desc.getText());
+            Name name = new Name(desc.getLang(), desc.getText());
             names.add(name);
         }
         cl2.setNames(names);
@@ -411,7 +416,7 @@ public class Sdmx20StructureReaderTools {
         standalone.setId(new IDType("STANDALONE_CONCEPT_SCHEME"));
         standalone.setAgencyID(agency);
         standalone.setVersion(new Version("1.0"));
-        Name name = new Name("en","Standalone Concept Scheme");
+        Name name = new Name("en", "Standalone Concept Scheme");
         standalone.setNames(Collections.singletonList(name));
         list.add(standalone);
         return standalone;
@@ -465,7 +470,7 @@ public class Sdmx20StructureReaderTools {
         con2.setAnnotations(toAnnotations(con1.getAnnotations()));
         con2.setDescriptions(toDescriptions(con1.getDescriptionArray()));
         con2.setNames(toNames(con1.getNameArray()));
-        con2.setId(toIDType(con1.getId().toString()));
+        con2.setId(toNCNameIDType(con1.getId().toString()));
         con2.setUri(toAnyURI(con1.getUri()));
         con2.setUrn(toAnyURI(con1.getUrn()));
         con2.setAgencyID(toNestedNCNameIDType(con1.getAgencyID()));
@@ -499,8 +504,7 @@ public class Sdmx20StructureReaderTools {
         con2.setDescriptions(toDescriptions(con1.getDescriptionArray()));
         //con2.setFinal(con1.getIsFinal());
         con2.setNames(toNames(con1.getNameArray()));
-        //System.out.println("CT ID="+con1.getId());
-        con2.setId(toIDType(con1.getId()));
+        con2.setId(toNCNameIDType(con1.getId()));
         con2.setUri(toAnyURI(con1.getUri()));
         con2.setUrn(toAnyURI(con1.getUrn()));
         con2.setAgencyID(toNestedNCNameIDType(con1.getAgencyID()));
@@ -518,7 +522,7 @@ public class Sdmx20StructureReaderTools {
         }
         List<DataStructureType> dss = new ArrayList<DataStructureType>();
         DataStructuresType dst = new DataStructuresType();
-        System.out.println("Key family array size="+kf.getKeyFamilyArray().length);
+        System.out.println("Key family array size=" + kf.getKeyFamilyArray().length);
         for (int i = 0; i < kf.sizeOfKeyFamilyArray(); i++) {
             dss.add(toDataStructure(kf.getKeyFamilyArray(i)));
         }
@@ -567,7 +571,7 @@ public class Sdmx20StructureReaderTools {
         currentDataStructure.setDimensionList(toDimensionListType(c1.getDimensionArray()));
         currentDataStructure.setAttributeList(toAttributeList(c1.getAttributeArray()));
         currentDataStructure.setMeasureList(toMeasureList(c1));
-        if( currentDataStructure.getDimensionList()!=null&&c1.getTimeDimension()!=null) {
+        if (currentDataStructure.getDimensionList() != null && c1.getTimeDimension() != null) {
             currentDataStructure.getDimensionList().setTimeDimension(toTimeDimension(c1.getTimeDimension()));
         }
         return currentDataStructure;
@@ -579,6 +583,8 @@ public class Sdmx20StructureReaderTools {
         for (int i = 0; i < d1.length; i++) {
             if (!d1[i].getIsMeasureDimension()) {
                 d2.add(toDimensionType(d1[i]));
+            } else {
+                dlt.setMeasureDimension(toMeasureDimensionType(d1[i]));
             }
         }
         dlt.setDimensions(d2);
@@ -632,13 +638,22 @@ public class Sdmx20StructureReaderTools {
         //if (!id.endsWith("_MEASURES")) {
         //    id = id + "_MEASURES";
         //}
-        ConceptSchemeReference ref = ConceptSchemeReference.create(mainAgencyId,codelist.getId(),null);
+        NestedNCNameID agency = codelist.getAgencyID();
+        if (agency == null) {
+            agency = mainAgencyId;
+        }
+        Version vers = codelist.getVersion();
+        if (vers == null) {
+            vers = Version.ONE;
+        }
+        ConceptSchemeReference ref = ConceptSchemeReference.create(agency, codelist.getId(), vers);
         ConceptSchemeType scheme = registry.find(ref);
         if (scheme == null) {
             scheme = new ConceptSchemeType();
-            scheme.setAgencyID(mainAgencyId);
+            scheme.setAgencyID(agency);
             scheme.setId(codelist.getId());
-            scheme.setVersion(Version.ONE);
+            scheme.setVersion(vers);
+            scheme.setNames(codelist.getNames());
             struct.getConcepts().getConceptSchemes().add(scheme);
             for (int i = 0; i < codelist.size(); i++) {
                 ConceptType concept2 = new ConceptType();
@@ -646,7 +661,7 @@ public class Sdmx20StructureReaderTools {
                 concept2.setNames(code.getNames());
                 concept2.setDescriptions(code.getDescriptions());
                 concept2.setAnnotations(code.getAnnotations());
-                concept2.setId(code.getId());
+                concept2.setId(new NCNameID(code.getId().toString()));
                 ConceptRepresentation coreRep = new ConceptRepresentation();
                 TextFormatType text = new TextFormatType();
                 text.setTextType(DataType.DOUBLE);
@@ -676,13 +691,13 @@ public class Sdmx20StructureReaderTools {
         // Sdmx2.0 concepts dont have maintainable parent Id's
         //System.out.println("Vers1:"+cs.getVersion());
         if (csch != null) {
-            ConceptRef ref2 = new ConceptRef(csch.getAgencyID(),csch.getId(), csch.getVersion(), cs.getId());
+            ConceptRef ref2 = new ConceptRef(csch.getAgencyID(), csch.getId(), csch.getVersion(), cs.getId());
             ref2.setAgencyId(csch.getAgencyID());
             //System.out.println("Cref=:"+ref2.getAgencyId()+":"+ref2.getMaintainableParentId().toString()+":"+ref2.getId()+":-"+registry.findConceptScheme(ref2.getAgencyId(), ref2.getMaintainableParentId()));
             //System.out.println("cs.getId()=="+cs.getId());
             return ref2;
         } else {
-            ConceptRef ref2 = new ConceptRef(cs.getAgencyID(),cs.getId(), cs.getVersion(), cs.getId());
+            ConceptRef ref2 = new ConceptRef(cs.getAgencyID(), cs.getId(), cs.getVersion(), cs.getId());
             //System.out.println("Vers2:"+ref2.getVersion());
             return ref2;
         }
@@ -696,37 +711,37 @@ public class Sdmx20StructureReaderTools {
         //System.out.println("Concept="+cscheme);
         ConceptType concept = getConcept(cscheme, d1);
         /*
-        if (cscheme.getId().equals("STANDALONE_CONCEPT_SCHEME")) {
-            MeasureDimensionType measure = currentDataStructure.getMeasureList().getMeasures().get(0);
-            ConceptSchemeType cs = registry.findConceptScheme(measure.getLocalRepresentation().getEnumeration().getAgencyId(), measure.getLocalRepresentation().getEnumeration().getMaintainableParentId());
-            concept.setCode(d1.getCode());
-            cscheme.removeItem(concept);
-            cs.addConcept(concept);
-        }*/
+         if (cscheme.getId().equals("STANDALONE_CONCEPT_SCHEME")) {
+         MeasureDimensionType measure = currentDataStructure.getMeasureList().getMeasures().get(0);
+         ConceptSchemeType cs = registry.findConceptScheme(measure.getLocalRepresentation().getEnumeration().getAgencyId(), measure.getLocalRepresentation().getEnumeration().getMaintainableParentId());
+         concept.setCode(d1.getCode());
+         cscheme.removeItem(concept);
+         cs.addConcept(concept);
+         }*/
         return;
     }
 
     public ConceptSchemeType getConceptScheme(org.sdmx.resources.sdmxml.schemas.v20.structure.CrossSectionalMeasureType dim) {
-        Logger.getLogger("sdmx").log(Level.FINE,"Sdmx20StructureReaderTools:getConceptScheme CrossSectionalMeasure "+dim.getConceptAgency()+":"+dim.getConceptSchemeRef()+":"+dim.getConceptVersion());
+        Logger.getLogger("sdmx").log(Level.FINE, "Sdmx20StructureReaderTools:getConceptScheme CrossSectionalMeasure " + dim.getConceptAgency() + ":" + dim.getConceptSchemeRef() + ":" + dim.getConceptVersion());
         if ((dim.getConceptSchemeAgency() != null || dim.getConceptAgency() != null) && dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
             NestedNCNameID csa = new NestedNCNameID(dim.getConceptSchemeAgency() == null ? dim.getConceptAgency() : dim.getConceptSchemeAgency());
             IDType csi = new IDType(dim.getConceptSchemeRef());
-            Version version = dim.getConceptVersion()==null?null:new Version(dim.getConceptVersion());
+            Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             return registry.find(ref);
         } else if (dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
             NestedNCNameID csa = currentKeyFamilyAgency;
             IDType csi = new IDType(dim.getConceptSchemeRef());
-            Version version = dim.getConceptVersion()==null?null:new Version(dim.getConceptVersion());
+            Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             return registry.find(ref);
         } else if (dim.getConceptRef() != null) {
             NestedNCNameID csa = currentKeyFamilyAgency;
             IDType csi = new IDType("STANDALONE_CONCEPT_SCHEME");
-            Version version = dim.getConceptVersion()==null?null:new Version(dim.getConceptVersion());
+            Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             ConceptSchemeType cst = registry.find(ref);
-            System.out.println("CST="+cst);
+            System.out.println("CST=" + cst);
             ConceptType ct = cst != null ? cst.findConcept(new IDType(dim.getConceptRef())) : null;
             if (ct == null) {
                 ct = findConcept(dim.getConceptRef());
@@ -764,6 +779,7 @@ public class Sdmx20StructureReaderTools {
         lr2.setEnumeration(toConceptSchemeReference(cscheme));
         return lr2;
     }
+
     public RepresentationType toLocalRepresentation(TextFormatType tf) throws TypeValueNotFoundException, URISyntaxException {
         SimpleDataStructureRepresentationType lr2 = new SimpleDataStructureRepresentationType();
         lr2.setTextFormat(tf);
@@ -776,7 +792,7 @@ public class Sdmx20StructureReaderTools {
     }
 
     public ConceptSchemeRef toConceptSchemeRefType(ConceptSchemeType cscheme) {
-        ConceptSchemeRef ref = new ConceptSchemeRef(cscheme.getAgencyID(),cscheme.getId(),cscheme.getVersion());
+        ConceptSchemeRef ref = new ConceptSchemeRef(cscheme.getAgencyID(), cscheme.getId(), cscheme.getVersion());
         return ref;
     }
 
@@ -824,18 +840,23 @@ public class Sdmx20StructureReaderTools {
         if (concept != null) {
             a2.setConceptIdentity(toConceptReference(cscheme, concept));
             //a2.setId(concept.getId());
-            if( a1.getAssignmentStatus()!=null) {
-               a2.setAssignmentStatus(UsageStatusType.fromString(a1.getAssignmentStatus().toString()));
-            }else{
+            if (a1.getAssignmentStatus() != null) {
+                a2.setAssignmentStatus(UsageStatusType.fromString(a1.getAssignmentStatus().toString()));
+            } else {
                 // There is not default assignment status set in schema, 
                 // this is a required attribute!! but it should ben safe to put this in;
-               a2.setAssignmentStatus(UsageStatusType.CONDITIONAL);
+                a2.setAssignmentStatus(UsageStatusType.CONDITIONAL);
             }
         }
         if (code != null) {
             a2.setLocalRepresentation(toLocalRepresentation(code, toTextFormatType(a1.getTextFormat())));
             a2.getLocalRepresentation().setEnumeration(toItemSchemeReference(code));
         }
+        AttributeRelationshipType rel = new AttributeRelationshipType();
+        LocalPrimaryMeasureRef ref = new LocalPrimaryMeasureRef(new IDType("OBS_VALUE"));
+        LocalPrimaryMeasureReference reference = new LocalPrimaryMeasureReference(ref);
+        rel.setPrimaryMeasure(reference);
+        a2.setRelationshipType(rel);
         return a2;
     }
 
@@ -862,7 +883,7 @@ public class Sdmx20StructureReaderTools {
         if (tft1.getTimeInterval() != null) {
             tft2.setTimeInterval(toDuration(tft1.getTimeInterval()));
         }
-        if( tft1.getTextType()!=null) {
+        if (tft1.getTextType() != null) {
             tft2.setTextType(DataType.fromString(tft1.getTextType().toString()));
         }
         return tft2;
@@ -936,7 +957,9 @@ public class Sdmx20StructureReaderTools {
 
     public List<IDType> toDataSetIDTypeList(String idtype) {
         List<IDType> list = new ArrayList<IDType>();
-        if( idtype==null ) return list;
+        if (idtype == null) {
+            return list;
+        }
         list.add(toIDType(idtype));
         return list;
     }
@@ -1033,21 +1056,11 @@ public class Sdmx20StructureReaderTools {
             return null;
         }
         MeasureListType measurelist = new MeasureListType();
-        List<MeasureDimensionType> measures = new ArrayList<MeasureDimensionType>();
-        for (int i = 0; i < c1.getDimensionArray().length; i++) {
-            if (c1.getDimensionArray(i).getIsMeasureDimension()) {
-                measures.add(toMeasureDimensionType(c1.getDimensionArray(i)));
-            }
-        }
-        measurelist.setMeasures(measures);        
-        currentDataStructure.setMeasureList(measurelist);
-        for (int i = 0; i < c1.getCrossSectionalMeasureArray().length; i++) {
-            toCrossSectionalMeasure(c1.getCrossSectionalMeasureArray(i));
-        }
+
         //System.out.println("Measures="+measurelist.getMeasures().size());
         measurelist.setPrimaryMeasure(toPrimaryMeasure(c1.getPrimaryMeasure()));
         //System.out.println("Measures="+measurelist.getMeasures().size());
-        
+
         return measurelist;
     }
 
@@ -1060,8 +1073,8 @@ public class Sdmx20StructureReaderTools {
             pm2.setConceptIdentity(toConceptReference(cscheme, concept));
             pm2.setId(concept.getId());
         }
-        System.out.println("PM Concept="+concept);
-        System.out.println("PM ID="+pm2.getId());
+        System.out.println("PM Concept=" + concept);
+        System.out.println("PM ID=" + pm2.getId());
         pm2.setLocalRepresentation(toLocalRepresentation(code, toTextFormatType(pm1.getTextFormat())));
         return pm2;
     }
@@ -1077,40 +1090,45 @@ public class Sdmx20StructureReaderTools {
         if (concept != null) {
             td2.setConceptIdentity(toConceptReference(cscheme, concept));
             //td2.setId(concept.getId());
-        }else {
+        } else {
             System.out.println("Time Dimension Concept Is Null");
         }
-        
+
         if (code != null) {
             td2.setLocalRepresentation(toLocalRepresentation(code, toTextFormatType(td1.getTextFormat())));
             td2.getLocalRepresentation().setEnumeration(toItemSchemeReference(code));
-        }else {
+        }
+        if (td1.getTextFormat() == null) {
+            TextFormatType tf = new TextFormatType();
+            tf.setTextType(DataType.OBSERVATIONAL_TIMEPERIOD);
+            td2.setLocalRepresentation(toLocalRepresentation(tf));
+        } else {
             td2.setLocalRepresentation(toLocalRepresentation(toTextFormatType(td1.getTextFormat())));
         }
         return td2;
     }
 
     public ConceptSchemeType getConceptScheme(org.sdmx.resources.sdmxml.schemas.v20.structure.DimensionType dim) {
-        Logger.getLogger("sdmx").log(Level.FINE,"Sdmx20StructureReaderTools:getConceptScheme DimensionType "+dim.getConceptRef()+":"+dim.getConceptAgency()+":"+dim.getConceptSchemeRef()+":"+dim.getConceptVersion());
+        Logger.getLogger("sdmx").log(Level.FINE, "Sdmx20StructureReaderTools:getConceptScheme DimensionType " + dim.getConceptRef() + ":" + dim.getConceptAgency() + ":" + dim.getConceptSchemeRef() + ":" + dim.getConceptVersion());
         if ((dim.getConceptSchemeAgency() != null || dim.getConceptAgency() != null) && dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
             NestedNCNameID csa = new NestedNCNameID(dim.getConceptSchemeAgency() == null ? dim.getConceptAgency() : dim.getConceptSchemeAgency());
             IDType csi = new IDType(dim.getConceptSchemeRef());
-            Version version = dim.getConceptVersion()==null?null:new Version(dim.getConceptVersion());
+            Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             return registry.find(ref);
         } else if (dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
             NestedNCNameID csa = currentKeyFamilyAgency;
             IDType csi = new IDType(dim.getConceptSchemeRef());
-            Version version = dim.getConceptVersion()==null?null:new Version(dim.getConceptVersion());
+            Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             return registry.find(ref);
         } else if (dim.getConceptRef() != null) {
             NestedNCNameID csa = currentKeyFamilyAgency;
             IDType csi = new IDType("STANDALONE_CONCEPT_SCHEME");
-            Version version = dim.getConceptVersion()==null?null:new Version(dim.getConceptVersion());
+            Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             ConceptSchemeType cst = registry.find(ref);
-            System.out.println("CST1="+cst);
+            System.out.println("CST1=" + cst);
             ConceptType ct = cst != null ? cst.findConcept(new IDType(dim.getConceptRef())) : null;
             if (ct == null) {
                 ct = findConcept(dim.getConceptRef());
@@ -1120,7 +1138,7 @@ public class Sdmx20StructureReaderTools {
                 ConceptSchemeReference ref2 = ConceptSchemeReference.create(mainAgencyId, new IDType("STANDALONE_CONCEPT_SCHEME"), version);
                 cst = registry.find(ref2);
             }
-            System.out.println("CST2 (returning)="+cst);
+            System.out.println("CST2 (returning)=" + cst);
             return cst;
         } else {
             return null;
@@ -1128,7 +1146,7 @@ public class Sdmx20StructureReaderTools {
     }
 
     public ConceptType getConcept(ConceptSchemeType scheme, org.sdmx.resources.sdmxml.schemas.v20.structure.DimensionType dim) {
-        Logger.getLogger("sdmx").log(Level.INFO,"Sdmx20StructureReaderTools:getConcept "+dim.getConceptRef());
+        Logger.getLogger("sdmx").log(Level.INFO, "Sdmx20StructureReaderTools:getConcept " + dim.getConceptRef());
         if (scheme != null) {
             return scheme.findConcept(dim.getConceptRef());
         } else {
@@ -1138,26 +1156,26 @@ public class Sdmx20StructureReaderTools {
     }
 
     public ConceptSchemeType getConceptScheme(org.sdmx.resources.sdmxml.schemas.v20.structure.TimeDimensionType dim) {
-        Logger.getLogger("sdmx").log(Level.FINE,"Sdmx20StructureReaderTools:getConceptScheme TimeDimension"+dim.getConceptSchemeAgency()+":"+dim.getConceptSchemeRef()+":"+dim.getConceptVersion());
+        Logger.getLogger("sdmx").log(Level.FINE, "Sdmx20StructureReaderTools:getConceptScheme TimeDimension" + dim.getConceptSchemeAgency() + ":" + dim.getConceptSchemeRef() + ":" + dim.getConceptVersion());
         if ((dim.getConceptSchemeAgency() != null || dim.getConceptAgency() != null) && dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
             NestedNCNameID csa = new NestedNCNameID(dim.getConceptSchemeAgency() == null ? dim.getConceptAgency() : dim.getConceptSchemeAgency());
             IDType csi = new IDType(dim.getConceptSchemeRef());
-            Version version = dim.getConceptVersion()==null?null:new Version(dim.getConceptVersion());
+            Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             return registry.find(ref);
         } else if (dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
             NestedNCNameID csa = currentKeyFamilyAgency;
             IDType csi = new IDType(dim.getConceptSchemeRef());
-            Version version = dim.getConceptVersion()==null?null:new Version(dim.getConceptVersion());
+            Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             return registry.find(ref);
         } else if (dim.getConceptRef() != null) {
             NestedNCNameID csa = currentKeyFamilyAgency;
             IDType csi = new IDType("STANDALONE_CONCEPT_SCHEME");
-            Version version = dim.getConceptVersion()==null?null:new Version(dim.getConceptVersion());
+            Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             ConceptSchemeType cst = registry.find(ref);
-            System.out.println("CST="+cst);
+            System.out.println("CST=" + cst);
             ConceptType ct = cst != null ? cst.findConcept(new IDType(dim.getConceptRef())) : null;
             if (ct == null) {
                 ct = findConcept(dim.getConceptRef());
@@ -1182,26 +1200,26 @@ public class Sdmx20StructureReaderTools {
     }
 
     public ConceptSchemeType getConceptScheme(org.sdmx.resources.sdmxml.schemas.v20.structure.PrimaryMeasureType dim) {
-        Logger.getLogger("sdmx").log(Level.FINE,"Sdmx20StructureReaderTools:getConceptScheme PrimaryMeasure"+dim.getConceptSchemeAgency()+":"+dim.getConceptSchemeRef()+":"+dim.getConceptVersion());
+        Logger.getLogger("sdmx").log(Level.FINE, "Sdmx20StructureReaderTools:getConceptScheme PrimaryMeasure" + dim.getConceptSchemeAgency() + ":" + dim.getConceptSchemeRef() + ":" + dim.getConceptVersion());
         if ((dim.getConceptSchemeAgency() != null || dim.getConceptAgency() != null) && dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
             NestedNCNameID csa = new NestedNCNameID(dim.getConceptSchemeAgency() == null ? dim.getConceptAgency() : dim.getConceptSchemeAgency());
             IDType csi = new IDType(dim.getConceptSchemeRef());
-            Version version = dim.getConceptVersion()==null?null:new Version(dim.getConceptVersion());
+            Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             return registry.find(ref);
         } else if (dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
             NestedNCNameID csa = currentKeyFamilyAgency;
             IDType csi = new IDType(dim.getConceptSchemeRef());
-            Version version = dim.getConceptVersion()==null?null:new Version(dim.getConceptVersion());
+            Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             return registry.find(ref);
         } else if (dim.getConceptRef() != null) {
             NestedNCNameID csa = currentKeyFamilyAgency;
             IDType csi = new IDType("STANDALONE_CONCEPT_SCHEME");
-            Version version = dim.getConceptVersion()==null?null:new Version(dim.getConceptVersion());
+            Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             ConceptSchemeType cst = registry.find(ref);
-            System.out.println("CST="+cst);
+            System.out.println("CST=" + cst);
             ConceptType ct = cst != null ? cst.findConcept(new IDType(dim.getConceptRef())) : null;
             if (ct == null) {
                 ct = findConcept(dim.getConceptRef());
@@ -1226,26 +1244,26 @@ public class Sdmx20StructureReaderTools {
     }
 
     public ConceptSchemeType getConceptScheme(org.sdmx.resources.sdmxml.schemas.v20.structure.AttributeType dim) {
-        Logger.getLogger("sdmx").log(Level.FINE,"Sdmx20StructureReaderTools:getConceptScheme "+dim.getConceptSchemeAgency()+":"+dim.getConceptSchemeRef()+":"+dim.getConceptVersion());
+        Logger.getLogger("sdmx").log(Level.FINE, "Sdmx20StructureReaderTools:getConceptScheme " + dim.getConceptSchemeAgency() + ":" + dim.getConceptSchemeRef() + ":" + dim.getConceptVersion());
         if ((dim.getConceptSchemeAgency() != null || dim.getConceptAgency() != null) && dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
             NestedNCNameID csa = new NestedNCNameID(dim.getConceptSchemeAgency() == null ? dim.getConceptAgency() : dim.getConceptSchemeAgency());
             IDType csi = new IDType(dim.getConceptSchemeRef());
-            Version version = dim.getConceptVersion()==null?null:new Version(dim.getConceptVersion());
+            Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             return registry.find(ref);
         } else if (dim.getConceptSchemeRef() != null && dim.getConceptRef() != null) {
             NestedNCNameID csa = currentKeyFamilyAgency;
             IDType csi = new IDType(dim.getConceptSchemeRef());
-            Version version = dim.getConceptVersion()==null?null:new Version(dim.getConceptVersion());
+            Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             return registry.find(ref);
         } else if (dim.getConceptRef() != null) {
             NestedNCNameID csa = currentKeyFamilyAgency;
             IDType csi = new IDType("STANDALONE_CONCEPT_SCHEME");
-            Version version = dim.getConceptVersion()==null?null:new Version(dim.getConceptVersion());
+            Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             ConceptSchemeType cst = registry.find(ref);
-            System.out.println("CST="+cst);
+            System.out.println("CST=" + cst);
             ConceptType ct = cst != null ? cst.findConcept(new IDType(dim.getConceptRef())) : null;
             if (ct == null) {
                 ct = findConcept(dim.getConceptRef());
@@ -1292,14 +1310,14 @@ public class Sdmx20StructureReaderTools {
         CodelistType code = null;
         if (dim.getCodelistAgency() == null && dim.getCodelistVersion() == null) {
             // All we have is a codelist name
-            CodelistReference ref = CodelistReference.create(mainAgencyId, new IDType(dim.getCodelist()),null);
+            CodelistReference ref = CodelistReference.create(mainAgencyId, new IDType(dim.getCodelist()), null);
             code = registry.find(ref);
         } else if (dim.getCodelistAgency() != null && dim.getCodelistVersion() != null) {
-            CodelistReference ref = CodelistReference.create(new NestedNCNameID(dim.getCodelistAgency()), new IDType(dim.getCodelist()),new Version(dim.getCodelistVersion()));
+            CodelistReference ref = CodelistReference.create(new NestedNCNameID(dim.getCodelistAgency()), new IDType(dim.getCodelist()), new Version(dim.getCodelistVersion()));
             code = registry.find(ref);
         } else if (dim.getCodelistAgency() != null && dim.getCodelistVersion() == null) {
             // Only codelist and codelistAgency
-            CodelistReference ref = CodelistReference.create(new NestedNCNameID(dim.getCodelistAgency()), new IDType(dim.getCodelist()),null);
+            CodelistReference ref = CodelistReference.create(new NestedNCNameID(dim.getCodelistAgency()), new IDType(dim.getCodelist()), null);
             code = registry.find(ref);
         }
         return code;
@@ -1312,14 +1330,14 @@ public class Sdmx20StructureReaderTools {
         CodelistType code = null;
         if (dim.getCodelistAgency() == null && dim.getCodelistVersion() == null) {
             // All we have is a codelist name
-            CodelistReference ref = CodelistReference.create(mainAgencyId, new IDType(dim.getCodelist()),null);
+            CodelistReference ref = CodelistReference.create(mainAgencyId, new IDType(dim.getCodelist()), null);
             code = registry.find(ref);
         } else if (dim.getCodelistAgency() != null && dim.getCodelistVersion() != null) {
-            CodelistReference ref = CodelistReference.create(new NestedNCNameID(dim.getCodelistAgency()), new IDType(dim.getCodelist()),new Version(dim.getCodelistVersion()));
+            CodelistReference ref = CodelistReference.create(new NestedNCNameID(dim.getCodelistAgency()), new IDType(dim.getCodelist()), new Version(dim.getCodelistVersion()));
             code = registry.find(ref);
         } else if (dim.getCodelistAgency() != null && dim.getCodelistVersion() == null) {
             // Only codelist and codelistAgency
-            CodelistReference ref = CodelistReference.create(new NestedNCNameID(dim.getCodelistAgency()), new IDType(dim.getCodelist()),null);
+            CodelistReference ref = CodelistReference.create(new NestedNCNameID(dim.getCodelistAgency()), new IDType(dim.getCodelist()), null);
             code = registry.find(ref);
         }
         return code;
@@ -1332,14 +1350,14 @@ public class Sdmx20StructureReaderTools {
         CodelistType code = null;
         if (dim.getCodelistAgency() == null && dim.getCodelistVersion() == null) {
             // All we have is a codelist name
-            CodelistReference ref = CodelistReference.create(mainAgencyId, new IDType(dim.getCodelist()),null);
+            CodelistReference ref = CodelistReference.create(mainAgencyId, new IDType(dim.getCodelist()), null);
             code = registry.find(ref);
         } else if (dim.getCodelistAgency() != null && dim.getCodelistVersion() != null) {
-            CodelistReference ref = CodelistReference.create(new NestedNCNameID(dim.getCodelistAgency()), new IDType(dim.getCodelist()),new Version(dim.getCodelistVersion()));
+            CodelistReference ref = CodelistReference.create(new NestedNCNameID(dim.getCodelistAgency()), new IDType(dim.getCodelist()), new Version(dim.getCodelistVersion()));
             code = registry.find(ref);
         } else if (dim.getCodelistAgency() != null && dim.getCodelistVersion() == null) {
             // Only codelist and codelistAgency
-            CodelistReference ref = CodelistReference.create(new NestedNCNameID(dim.getCodelistAgency()), new IDType(dim.getCodelist()),null);
+            CodelistReference ref = CodelistReference.create(new NestedNCNameID(dim.getCodelistAgency()), new IDType(dim.getCodelist()), null);
             code = registry.find(ref);
         }
         return code;
@@ -1352,14 +1370,14 @@ public class Sdmx20StructureReaderTools {
         CodelistType code = null;
         if (dim.getCodelistAgency() == null && dim.getCodelistVersion() == null) {
             // All we have is a codelist name
-            CodelistReference ref = CodelistReference.create(mainAgencyId, new IDType(dim.getCodelist()),null);
+            CodelistReference ref = CodelistReference.create(mainAgencyId, new IDType(dim.getCodelist()), null);
             code = registry.find(ref);
         } else if (dim.getCodelistAgency() != null && dim.getCodelistVersion() != null) {
-            CodelistReference ref = CodelistReference.create(new NestedNCNameID(dim.getCodelistAgency()), new IDType(dim.getCodelist()),new Version(dim.getCodelistVersion()));
+            CodelistReference ref = CodelistReference.create(new NestedNCNameID(dim.getCodelistAgency()), new IDType(dim.getCodelist()), new Version(dim.getCodelistVersion()));
             code = registry.find(ref);
         } else if (dim.getCodelistAgency() != null && dim.getCodelistVersion() == null) {
             // Only codelist and codelistAgency
-            CodelistReference ref = CodelistReference.create(new NestedNCNameID(dim.getCodelistAgency()), new IDType(dim.getCodelist()),null);
+            CodelistReference ref = CodelistReference.create(new NestedNCNameID(dim.getCodelistAgency()), new IDType(dim.getCodelist()), null);
             code = registry.find(ref);
         }
         return code;
@@ -1392,11 +1410,13 @@ public class Sdmx20StructureReaderTools {
     }
 
     public DataflowsType toDataflows(org.sdmx.resources.sdmxml.schemas.v20.structure.DataflowsType dataflows) throws URISyntaxException {
-        if( dataflows == null ) return null;
-        DataflowsType flows = new DataflowsType(); 
+        if (dataflows == null) {
+            return null;
+        }
+        DataflowsType flows = new DataflowsType();
         List<DataflowType> flowsList = new ArrayList<DataflowType>();
-        for(int i=0;i<dataflows.sizeOfDataflowArray();i++) {
-          flowsList.add(toDataflow(dataflows.getDataflowArray(i)));     
+        for (int i = 0; i < dataflows.sizeOfDataflowArray(); i++) {
+            flowsList.add(toDataflow(dataflows.getDataflowArray(i)));
         }
         flows.setDataflows(flowsList);
         return flows;
@@ -1418,13 +1438,13 @@ public class Sdmx20StructureReaderTools {
         //dataflow.setValidFrom(toDateTime(df.getValidFrom()));
         //dataflow.setValidTo(toDateTime(df.getValidTo()));
         return dataflow;
-        
+
     }
 
     public StructureReferenceBase toDataStructureRefeference(KeyFamilyRefType keyFamilyRef) throws URISyntaxException {
-        DataStructureRef ref = new DataStructureRef(toNestedNCNameIDType(keyFamilyRef.getKeyFamilyAgencyID()),toIDType(keyFamilyRef.getKeyFamilyID()),toVersionType(keyFamilyRef.getVersion()));
-        DataStructureReference reference = new DataStructureReference(ref,toAnyURI(keyFamilyRef.getURN()));
+        DataStructureRef ref = new DataStructureRef(toNestedNCNameIDType(keyFamilyRef.getKeyFamilyAgencyID()), toIDType(keyFamilyRef.getKeyFamilyID()), toVersionType(keyFamilyRef.getVersion()));
+        DataStructureReference reference = new DataStructureReference(ref, toAnyURI(keyFamilyRef.getURN()));
         return reference;
-        
+
     }
 }

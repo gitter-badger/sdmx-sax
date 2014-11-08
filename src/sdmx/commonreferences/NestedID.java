@@ -49,7 +49,7 @@ public class NestedID extends RegexXMLString {
     public NestedID(String s) {
         super(s);
     }
-
+    @Override
     public Pattern[] getPatternArray() {
         return PATTERN_ARRAY;
     }

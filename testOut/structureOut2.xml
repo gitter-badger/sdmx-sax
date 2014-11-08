@@ -1374,72 +1374,72 @@
                     <str:DimensionList>
                         <str:Dimension id="TYP">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="TYP" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="TYP" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
                                 <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ABS:STANDALONE_CONCEPT_SCHEME(1.0).TYP</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" version="1.0" maintainableParentID="CL_ALC_TYP" maintainableParentVersion="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_TYP" version="1.0"/>
                                     <URN>urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ABS:CL_ALC_TYP(1.0)</URN>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
                         <str:Dimension id="MEA">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="MEA" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="MEA" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
                                 <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ABS:STANDALONE_CONCEPT_SCHEME(1.0).MEA</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" version="1.0" maintainableParentID="CL_ALC_MEA" maintainableParentVersion="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_MEA" version="1.0"/>
                                     <URN>urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ABS:CL_ALC_MEA(1.0)</URN>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
                         <str:Dimension id="BEVT">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="BEVT" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="BEVT" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
                                 <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ABS:STANDALONE_CONCEPT_SCHEME(1.0).BEVT</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" version="1.0" maintainableParentID="CL_ALC_BEVT" maintainableParentVersion="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_BEVT" version="1.0"/>
                                     <URN>urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ABS:CL_ALC_BEVT(1.0)</URN>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
                         <str:Dimension id="SUB">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="SUB" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="SUB" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
                                 <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ABS:STANDALONE_CONCEPT_SCHEME(1.0).SUB</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" version="1.0" maintainableParentID="CL_ALC_SUB" maintainableParentVersion="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_SUB" version="1.0"/>
                                     <URN>urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ABS:CL_ALC_SUB(1.0)</URN>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
                         <str:Dimension id="FREQUENCY">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="FREQUENCY" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="FREQUENCY" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
                                 <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ABS:STANDALONE_CONCEPT_SCHEME(1.0).FREQUENCY</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" version="1.0" maintainableParentID="CL_ALC_FREQUENCY" maintainableParentVersion="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_FREQUENCY" version="1.0"/>
                                     <URN>urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ABS:CL_ALC_FREQUENCY(1.0)</URN>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
                         </str:Dimension>
                         <str:TimeDimension id="TIME">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="TIME" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="TIME" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
                                 <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ABS:STANDALONE_CONCEPT_SCHEME(1.0).TIME</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" version="1.0" maintainableParentID="CL_ALC_TIME" maintainableParentVersion="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_TIME" version="1.0"/>
                                     <URN>urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ABS:CL_ALC_TIME(1.0)</URN>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
@@ -1448,63 +1448,88 @@
                     <str:AttributeList>
                         <str:Attribute id="OBS_STATUS" assignmentStatus="Conditional">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="OBS_STATUS" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="OBS_STATUS" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
                                 <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ABS:STANDALONE_CONCEPT_SCHEME(1.0).OBS_STATUS</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" version="1.0" maintainableParentID="CL_ALC_OBS_STATUS" maintainableParentVersion="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_OBS_STATUS" version="1.0"/>
                                     <URN>urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ABS:CL_ALC_OBS_STATUS(1.0)</URN>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:PrimaryMeasure>
+                                    <Ref id="OBS_VALUE"/>
+                                </str:PrimaryMeasure>
+                            </str:AttributeRelationship>
                         </str:Attribute>
                         <str:Attribute id="UNIT" assignmentStatus="Conditional">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="UNIT" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="UNIT" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
                                 <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ABS:STANDALONE_CONCEPT_SCHEME(1.0).UNIT</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" version="1.0" maintainableParentID="CL_ALC_UNIT" maintainableParentVersion="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_UNIT" version="1.0"/>
                                     <URN>urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ABS:CL_ALC_UNIT(1.0)</URN>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:PrimaryMeasure>
+                                    <Ref id="OBS_VALUE"/>
+                                </str:PrimaryMeasure>
+                            </str:AttributeRelationship>
                         </str:Attribute>
                         <str:Attribute id="POWERCODE" assignmentStatus="Conditional">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="POWERCODE" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="POWERCODE" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
                                 <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ABS:STANDALONE_CONCEPT_SCHEME(1.0).POWERCODE</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" version="1.0" maintainableParentID="CL_ALC_POWERCODE" maintainableParentVersion="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_POWERCODE" version="1.0"/>
                                     <URN>urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ABS:CL_ALC_POWERCODE(1.0)</URN>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:PrimaryMeasure>
+                                    <Ref id="OBS_VALUE"/>
+                                </str:PrimaryMeasure>
+                            </str:AttributeRelationship>
                         </str:Attribute>
                         <str:Attribute id="REFERENCEPERIOD" assignmentStatus="Conditional">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="REFERENCEPERIOD" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="REFERENCEPERIOD" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
                                 <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ABS:STANDALONE_CONCEPT_SCHEME(1.0).REFERENCEPERIOD</URN>
                             </str:ConceptIdentity>
+                            <str:AttributeRelationship>
+                                <str:PrimaryMeasure>
+                                    <Ref id="OBS_VALUE"/>
+                                </str:PrimaryMeasure>
+                            </str:AttributeRelationship>
                         </str:Attribute>
                         <str:Attribute id="TIME_FORMAT" assignmentStatus="Conditional">
                             <str:ConceptIdentity>
-                                <Ref agencyID="ABS" id="TIME_FORMAT" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="ABS" id="TIME_FORMAT" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
                                 <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=ABS:STANDALONE_CONCEPT_SCHEME(1.0).TIME_FORMAT</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>
                                 <str:Enumeration>
-                                    <Ref agencyID="ABS" version="1.0" maintainableParentID="CL_ALC_TIME_FORMAT" maintainableParentVersion="1.0"/>
+                                    <Ref agencyID="ABS" id="CL_ALC_TIME_FORMAT" version="1.0"/>
                                     <URN>urn:sdmx:org.sdmx.infomodel.codelist.Codelist=ABS:CL_ALC_TIME_FORMAT(1.0)</URN>
                                 </str:Enumeration>
                             </str:LocalRepresentation>
+                            <str:AttributeRelationship>
+                                <str:PrimaryMeasure>
+                                    <Ref id="OBS_VALUE"/>
+                                </str:PrimaryMeasure>
+                            </str:AttributeRelationship>
                         </str:Attribute>
                     </str:AttributeList>
                     <str:MeasureList>
                         <str:PrimaryMeasure id="OBS_VALUE">
                             <str:ConceptIdentity>
-                                <Ref agencyID="OECD" id="OBS_VALUE" version="1.0" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
+                                <Ref agencyID="OECD" id="OBS_VALUE" maintainableParentID="STANDALONE_CONCEPT_SCHEME" maintainableParentVersion="1.0"/>
                                 <URN>urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=OECD:STANDALONE_CONCEPT_SCHEME(1.0).OBS_VALUE</URN>
                             </str:ConceptIdentity>
                             <str:LocalRepresentation>

@@ -170,16 +170,27 @@ public class ReferenceType {
             sb.append(getAgencyId().toString());
         }
         if (getMaintainableParentId() != null) {
-            sb.append(":");
-            sb.append(getMaintainableParentId().toString());
+            if (getMaintainableParentId() != null) {
+                sb.append(":");
+                sb.append(getMaintainableParentId().toString());
+            }
+            if (getVersion() != null) {
+                sb.append("(" + getVersion().toString() + ")");
+            }
+            if (getId() != null) {
+                sb.append(".");
+                sb.append(getId().toString());
+            }
+        } else {
+            if (getId() != null) {
+                sb.append(".");
+                sb.append(getId().toString());
+            }
+            if (getVersion() != null) {
+                sb.append("(" + getVersion().toString() + ")");
+            }
         }
-        if (getVersion() != null) {
-            sb.append("(" + getVersion().toString() + ")");
-        }
-        if (getId() != null) {
-            sb.append(".");
-            sb.append(getId().toString());
-        }
+
         this.urn = new anyURI(sb.toString());
     }
 
@@ -257,7 +268,7 @@ public class ReferenceType {
             } else {
                 this.objectId = new IDType(id);
             }
-        } else {
+         } else {
             this.objectId = maintainedParentId;
             this.maintainedParentId = null;
         }

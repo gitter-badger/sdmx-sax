@@ -62,7 +62,7 @@ public class ValueTypeResolver {
         }
         Component dim = struct.getDataStructureComponents().findDimension(column);
         if (dim == null && "type".equals(column)) {
-            dim = struct.getDataStructureComponents().getMeasureList().getMeasure(0);
+            dim = struct.getDataStructureComponents().getDimensionList().getMeasureDimension();
         }
         ConceptReference conceptRef = dim.getConceptIdentity();
         RepresentationType rep = null;

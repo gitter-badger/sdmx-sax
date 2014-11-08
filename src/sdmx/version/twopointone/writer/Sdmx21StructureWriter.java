@@ -9,11 +9,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import org.apache.xmlbeans.SchemaType;
+import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
+import org.apache.xmlbeans.impl.values.XmlAnyTypeImpl;
+import org.sdmx.resources.sdmxml.schemas.v21.common.ActionType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.AnnotationType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.AnnotationsType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.ConceptReferenceType;
@@ -95,7 +100,8 @@ public class Sdmx21StructureWriter {
 
     public static org.sdmx.resources.sdmxml.schemas.v21.message.StructureType toStructureType(sdmx.message.StructureType structure1) {
         StructureType structure2 = StructureType.Factory.newInstance();
-        toHeader(structure2.addNewHeader(), structure1.getHeader());
+        BaseHeaderType header2 = structure2.addNewHeader();
+        toHeader(header2, structure1.getHeader());
         structure2.setStructures(toStructuresType(structure1.getStructures()));
         return structure2;
     }
@@ -224,18 +230,39 @@ public class Sdmx21StructureWriter {
         if (ref.getAgencyId() != null) {
             ref2.setAgencyID(ref.getAgencyId().toString());
         }
-        if (ref.getId() != null) {
+        if (ref.getMaintainableParentId() != null && ref.getId() != null) {
+            if (ref.getId() != null) {
+                ref2.setId(ref.getId().toString());
+            }
+            if (ref.getMaintainableParentId() != null) {
+                ref2.setMaintainableParentID(ref.getMaintainableParentId().toString());
+            }
+            if (ref.getVersion() != null) {
+                ref2.setMaintainableParentVersion(ref.getVersion().toString());
+            }
+        } else if (ref.getId() != null && ref.getMaintainableParentId() == null) {
             ref2.setId(ref.getId().toString());
+            if (ref.getVersion() != null) {
+                ref2.setVersion(ref.getVersion().toString());
+            }
+            if (ref.getMaintainedParentVersion() != null) {
+                ref2.setVersion(ref.getMaintainedParentVersion().toString());
+            }
+        } else {
+            if (ref.getMaintainableParentId() != null) {
+                ref2.setId(ref.getMaintainableParentId().toString());
+            }
+            if (ref.getVersion() != null) {
+                ref2.setVersion(ref.getVersion().toString());
+            }
+            if (ref.getMaintainedParentVersion() != null) {
+                ref2.setVersion(ref.getMaintainedParentVersion().toString());
+            }
         }
-        if (ref.getVersion() != null) {
-            ref2.setVersion(ref.getVersion().toString());
-        }
-        if (ref.getMaintainableParentId() != null) {
-            ref2.setMaintainableParentID(ref.getMaintainableParentId().toString());
-        }
-        if (ref.getVersion() != null) {
-            ref2.setMaintainableParentVersion(ref.getVersion().toString());
-        }
+
+        //if (ref.getVersion() != null) {
+        //    ref2.setVersion(ref.getVersion().toString());
+        //}
     }
 
     public static ConceptsType toConcepts(sdmx.structure.ConceptsType concepts) {
@@ -543,7 +570,8 @@ public class Sdmx21StructureWriter {
             if (localrep.getEnumerationFormat() != null) {
                 toCodededTextFormatType(localrep2.getEnumerationFormat(), localrep.getEnumerationFormat());
             }
-        } else if (localrep.getTextFormat() != null) {
+        }
+        if (localrep.getTextFormat() != null) {
             toTextFormat(localrep2.addNewTextFormat(), localrep.getTextFormat());
         }
     }
@@ -563,7 +591,11 @@ public class Sdmx21StructureWriter {
         }
         Iterator<sdmx.structure.datastructure.DimensionType> it = dim.getDimensions().iterator();
         while (it.hasNext()) {
-            toDimensionType(dim2.addNewDimension(), it.next());
+            sdmx.structure.datastructure.DimensionType dt = (sdmx.structure.datastructure.DimensionType) it.next();
+            toDimensionType(dim2.addNewDimension(), dt);
+        }
+        if (dim.getMeasureDimension() != null) {
+            toMeasure(dim2.addNewMeasureDimension(), dim.getMeasureDimension());
         }
     }
 
@@ -619,20 +651,11 @@ public class Sdmx21StructureWriter {
         if (mlist.getUrn() != null) {
             mlist2.setUrn(mlist.getUrn().getString());
         }
-        ComponentType[] components = new ComponentType[((mlist.getPrimaryMeasure() != null ? 1 : 0) + (mlist.getMeasures() != null ? mlist.getMeasures().size() : 0))];
-        int i = 0;
+
+        int size = mlist.getPrimaryMeasure() != null ? 1 : 0;
         if (mlist.getPrimaryMeasure() != null) {
             toPrimaryMeasure(mlist2.addNewPrimaryMeasure(), mlist.getPrimaryMeasure());
-            components[i++] = mlist2.getPrimaryMeasure();
         }
-        if (mlist.getMeasures() != null) {
-            for (int j = 0; j < mlist.getMeasures().size(); j++) {
-                org.sdmx.resources.sdmxml.schemas.v21.structure.MeasureDimensionType meas = org.sdmx.resources.sdmxml.schemas.v21.structure.MeasureDimensionType.Factory.newInstance();
-                toMeasure(meas, mlist.getMeasure(j));
-                components[i++] = meas;
-            }
-        }
-        mlist2.setComponentArray(components);
     }
 
     private static void toPrimaryMeasure(PrimaryMeasureType prim2, PrimaryMeasure prim) {
@@ -666,6 +689,7 @@ public class Sdmx21StructureWriter {
         }
         if (time.getId() != null) {
             time2.setId(time.getId().getString());
+            time2.setId("TIME_PERIOD");
         }
         if (time.getUri() != null) {
             time2.setUri(time.getUri().getString());
@@ -680,6 +704,7 @@ public class Sdmx21StructureWriter {
     }
 
     private static void toHeader(BaseHeaderType header2, sdmx.message.BaseHeaderType header) {
+        
         if (header.getId() != null) {
             header2.setID(header.getId());
         }
@@ -690,7 +715,11 @@ public class Sdmx21StructureWriter {
             toDataProvider(header2.addNewDataProvider(), header.getDataProvider());
         }
         if (header.getDataSetAction() != null) {
-            header2.setDataSetAction(org.sdmx.resources.sdmxml.schemas.v21.common.ActionType.Enum.forString(header.getDataSetAction().getString()));
+            //org.sdmx.resources.sdmxml.schemas.v21.common.ActionType.Enum.forString(header.getDataSetAction().getString()
+            // XMLBeans has hideous problems here...
+            // I have given up trying to get XMLBeans to write a DataSetAction...
+            // I think it will require recompiling XMLBeans to get this to work...
+            //header2.setDataSetAction(org.sdmx.resources.sdmxml.schemas.v21.common.ActionType.Enum.forString(header.getDataSetAction().getString());
         }
         if (header.getPrepared() != null) {
             Calendar cal = Calendar.getInstance();
@@ -809,7 +838,7 @@ public class Sdmx21StructureWriter {
         }
     }
 
-    public static void toMeasure(ComponentType meas2, MeasureDimensionType meas) {
+    public static void toMeasure(org.sdmx.resources.sdmxml.schemas.v21.structure.MeasureDimensionType meas2, MeasureDimensionType meas) {
         if (meas.getAnnotations() != null) {
             toAnnotationsType(meas2.addNewAnnotations(), meas.getAnnotations());
         }

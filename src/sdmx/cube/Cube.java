@@ -74,8 +74,8 @@ public class Cube {
         time = (TimeCubeDimension) myDim;
         String cross = null;
         IDType dimId2 = null;
-        for (int j = 0; j < struct.getDataStructureComponents().getMeasureList().size(); j++) {
-            dimId2 = struct.getDataStructureComponents().getMeasureList().getMeasure(j).getId();
+        if( struct.getDataStructureComponents().getDimensionList().getMeasureDimension()!=null){
+            dimId2 = struct.getDataStructureComponents().getDimensionList().getMeasureDimension().getId();
             cross = obs.getValue(mapper.getColumnIndex(dimId2.toString()));
         }
         IDType dimId3 = struct.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getId();

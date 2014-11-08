@@ -119,8 +119,8 @@ public class DataStructureComponentsType extends DataStructureComponentsBaseType
         for(int i=0;i<attributeList.size();i++) {
             if( attributeList.getAttribute(i).getId().equals(name))return attributeList.getAttribute(i);
         }
-        for(int i=0;i<measureList.size();i++) {
-            if( measureList.getMeasure(i).getId().equals(name))return measureList.getMeasure(i);
+        if( dimensionList.getMeasureDimension()!=null&&dimensionList.getMeasureDimension().getId().equals(name)){
+            return dimensionList.getMeasureDimension();
         }
         if( dimensionList.getTimeDimension()!=null&& dimensionList.getTimeDimension().getId().equals(name))return dimensionList.getTimeDimension();
         if( measureList.getPrimaryMeasure()!=null&&measureList.getPrimaryMeasure().getId().equals(name))return measureList.getPrimaryMeasure();

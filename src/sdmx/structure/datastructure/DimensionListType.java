@@ -31,8 +31,10 @@ import sdmx.structure.base.Component;
  */
 public class DimensionListType extends DimensionListBaseType {
 
-    private TimeDimensionType timeDimension = null;
+    
     private List<DimensionType> dimensions = new ArrayList<DimensionType>();
+    private MeasureDimensionType measureDimension = null;
+    private TimeDimensionType timeDimension = null;
 
     public List<DimensionType> getDimensions() {
         return dimensions;
@@ -60,4 +62,18 @@ public class DimensionListType extends DimensionListBaseType {
         this.timeDimension = timeDimension;
     }
     public int size() { return dimensions.size(); }
+
+    /**
+     * @return the measureDimension
+     */
+    public MeasureDimensionType getMeasureDimension() {
+        return measureDimension;
+    }
+
+    /**
+     * @param measureDimension the measureDimension to set
+     */
+    public void setMeasureDimension(MeasureDimensionType measureDimension) {
+        this.measureDimension = measureDimension;
+    }
 }

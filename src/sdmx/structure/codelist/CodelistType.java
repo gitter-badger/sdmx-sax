@@ -58,7 +58,9 @@ import sdmx.structure.base.ItemType;
  *  Copyright James Gardner 2014
  */
 public class CodelistType extends ItemSchemeType {
-    public static void main(String args[]) {}
+    
+    private NCNameID id = null;
+    
     public CodelistType() {
         
     }
@@ -97,5 +99,24 @@ public class CodelistType extends ItemSchemeType {
         for(int i=0;i<this.size();i++) {
             this.getCode(i).dump();
         }
+    }
+
+    /**
+     * @return the id
+     */
+    @Override
+    public NCNameID getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(IDType id) {
+        this.id=(NCNameID)id;
+    }
+    /**
+     * @param id the id to set
+     */
+    public void setId(NCNameID id) {
+        this.id = id;
     }
 }

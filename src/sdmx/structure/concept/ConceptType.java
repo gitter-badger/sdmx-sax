@@ -4,6 +4,7 @@
  */
 package sdmx.structure.concept;
 
+import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.NCNameID;
 import sdmx.commonreferences.NestedNCNameID;
 import sdmx.commonreferences.Version;
@@ -54,6 +55,8 @@ import sdmx.structure.base.ItemType;
  */
 public class ConceptType extends ConceptBaseType {
     
+    
+    private NCNameID id = null;
     private ConceptRepresentation coreRep = null;
     private ISOConceptReferenceType isoConceptRef = null;
     
@@ -135,5 +138,23 @@ public class ConceptType extends ConceptBaseType {
      */
     public void setCode(String code) {
         this.code = code;
+    }
+    /**
+     * @return the id
+     */
+    @Override
+    public NCNameID getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(IDType id) {
+        this.id=(NCNameID)id;
+    }
+    /**
+     * @param id the id to set
+     */
+    public void setId(NCNameID id) {
+        this.id = id;
     }
 }
