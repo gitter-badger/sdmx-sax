@@ -79,11 +79,6 @@ public class IdentifiableType extends AnnotableType {
      * @return the urn
      */
     public anyURI getUrn() {
-        if( urn!=null){
-            System.out.println("GetURn:"+urn.toString());
-        }else {
-            System.out.println("GetURn:NULL");
-        }
         return urn;
     }
 
@@ -91,11 +86,6 @@ public class IdentifiableType extends AnnotableType {
      * @param urn the urn to set
      */
     public void setUrn(anyURI urn) {
-        if( urn!=null){
-            System.out.println("SetURn:"+urn.toString());
-        }else {
-            System.out.println("SetURn:NULL");
-        }
         this.urn = urn;
     }
 

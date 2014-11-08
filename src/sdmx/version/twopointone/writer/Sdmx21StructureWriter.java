@@ -309,6 +309,12 @@ public class Sdmx21StructureWriter {
         if (next.getParent() != null) {
             concept2.setParent(toLocalItemReference(concept2.addNewParent(), next.getParent()));
         }
+        if( next.getUrn()!=null) {
+            concept2.setUrn(next.getUrn().toString());
+        }
+        if( next.getUri()!=null) {
+            concept2.setUri(next.getUri().toString());
+        }
         sdmx.structure.concept.ConceptType concept = (sdmx.structure.concept.ConceptType) next;
         if (concept.getCoreRepresentation() != null) {
             toCoreRepresentation(concept2.addNewCoreRepresentation(), concept.getCoreRepresentation());
