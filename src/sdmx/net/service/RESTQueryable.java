@@ -326,7 +326,7 @@ public class RESTQueryable implements Queryable, Registry, Repository {
         DataStructureType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/datastructure/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + ref.getVersion().toString());
+                StructureType st = retrieve(getServiceURL() + "/datastructure/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion()==null?"latest":ref.getVersion().toString()));
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {

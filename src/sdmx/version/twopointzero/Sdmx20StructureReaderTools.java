@@ -522,7 +522,6 @@ public class Sdmx20StructureReaderTools {
         }
         List<DataStructureType> dss = new ArrayList<DataStructureType>();
         DataStructuresType dst = new DataStructuresType();
-        System.out.println("Key family array size=" + kf.getKeyFamilyArray().length);
         for (int i = 0; i < kf.sizeOfKeyFamilyArray(); i++) {
             dss.add(toDataStructure(kf.getKeyFamilyArray(i)));
         }
@@ -741,7 +740,6 @@ public class Sdmx20StructureReaderTools {
             Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             ConceptSchemeType cst = registry.find(ref);
-            System.out.println("CST=" + cst);
             ConceptType ct = cst != null ? cst.findConcept(new IDType(dim.getConceptRef())) : null;
             if (ct == null) {
                 ct = findConcept(dim.getConceptRef());
@@ -1073,8 +1071,6 @@ public class Sdmx20StructureReaderTools {
             pm2.setConceptIdentity(toConceptReference(cscheme, concept));
             pm2.setId(concept.getId());
         }
-        System.out.println("PM Concept=" + concept);
-        System.out.println("PM ID=" + pm2.getId());
         pm2.setLocalRepresentation(toLocalRepresentation(code, toTextFormatType(pm1.getTextFormat())));
         return pm2;
     }
@@ -1175,7 +1171,6 @@ public class Sdmx20StructureReaderTools {
             Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             ConceptSchemeType cst = registry.find(ref);
-            System.out.println("CST=" + cst);
             ConceptType ct = cst != null ? cst.findConcept(new IDType(dim.getConceptRef())) : null;
             if (ct == null) {
                 ct = findConcept(dim.getConceptRef());
@@ -1219,7 +1214,6 @@ public class Sdmx20StructureReaderTools {
             Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             ConceptSchemeType cst = registry.find(ref);
-            System.out.println("CST=" + cst);
             ConceptType ct = cst != null ? cst.findConcept(new IDType(dim.getConceptRef())) : null;
             if (ct == null) {
                 ct = findConcept(dim.getConceptRef());
@@ -1263,7 +1257,6 @@ public class Sdmx20StructureReaderTools {
             Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             ConceptSchemeType cst = registry.find(ref);
-            System.out.println("CST=" + cst);
             ConceptType ct = cst != null ? cst.findConcept(new IDType(dim.getConceptRef())) : null;
             if (ct == null) {
                 ct = findConcept(dim.getConceptRef());

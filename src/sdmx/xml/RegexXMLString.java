@@ -47,7 +47,6 @@ public class RegexXMLString extends XMLString {
 // Override Me
 
     public Pattern[] getPatternArray() {
-        System.out.println("RegexXMLString");
         return new Pattern[]{};
     }
 }

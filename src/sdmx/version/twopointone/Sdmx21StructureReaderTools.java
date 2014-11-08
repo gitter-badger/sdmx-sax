@@ -470,7 +470,8 @@ public class Sdmx21StructureReaderTools {
         cl2.setExternalReference(cl1.getIsExternalReference());
         cl2.setFinal(cl1.getIsFinal());
         cl2.setPartial(cl1.getIsPartial());
-        
+        cl2.setUri(toAnyURI(cl1.getUri()));
+        cl2.setUrn(toAnyURI(cl1.getUrn()));
         cl2.setNames(toNames(cl1.getNameArray()));
         cl2.setCodes(toCodes(cl1.getCodeArray()));
         cl2.setVersion(toVersionType(cl1.getVersion()));
@@ -758,7 +759,7 @@ public class Sdmx21StructureReaderTools {
         return tft2;
     }
 
-    public static ConceptType toConceptType(org.sdmx.resources.sdmxml.schemas.v21.structure.ConceptType con1) throws TypeValueNotFoundException {
+    public static ConceptType toConceptType(org.sdmx.resources.sdmxml.schemas.v21.structure.ConceptType con1) throws TypeValueNotFoundException, URISyntaxException {
         if (con1 == null) {
             return null;
         }
@@ -766,6 +767,8 @@ public class Sdmx21StructureReaderTools {
         con2.setAnnotations(toAnnotations(con1.getAnnotations()));
         con2.setDescriptions(toDescriptions(con1.getDescriptionArray()));
         con2.setNames(toNames(con1.getNameArray()));
+        con2.setUri(toAnyURI(con1.getUri()));
+        con2.setUrn(toAnyURI(con1.getUrn()));
         con2.setId(toNCNameIDType(con1.getId().toString()));
         con2.setParent(toLocalItemReferenceType(con1.getParent()));
         con2.setCoreRepresentation(toConceptRepresentation(con1.getCoreRepresentation()));
@@ -833,6 +836,8 @@ public class Sdmx21StructureReaderTools {
         ds2.setId(toIDType(ds1.getId().toString()));
         ds2.setVersion(toVersionType(ds1.getVersion()));
         ds2.setDataStructureComponents(toDataStructureComponents(ds1.getDataStructureComponents()));
+        ds2.setUri(toAnyURI(ds1.getUri()));
+        ds2.setUrn(toAnyURI(ds1.getUrn()));
         return ds2;
     }
 
@@ -1384,6 +1389,7 @@ public class Sdmx21StructureReaderTools {
             pt.setId(toIDType(receiverArray[i].getId()));
             pt.setContacts(toContactList(receiverArray[i].getContactArray()));
             pt.setNames(toNames(receiverArray[i].getNameArray()));
+            list.add(pt);
         }
         return list;
     }

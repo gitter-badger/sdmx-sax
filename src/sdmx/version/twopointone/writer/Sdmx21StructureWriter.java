@@ -31,6 +31,7 @@ import org.sdmx.resources.sdmxml.schemas.v21.common.LocalItemReferenceType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.LocalPrimaryMeasureReferenceType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.RefBaseType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.SimpleDataType;
+import org.sdmx.resources.sdmxml.schemas.v21.common.StructureReferenceBaseType;
 import org.sdmx.resources.sdmxml.schemas.v21.common.TextType;
 import org.sdmx.resources.sdmxml.schemas.v21.message.BaseHeaderType;
 import org.sdmx.resources.sdmxml.schemas.v21.message.ContactType;
@@ -52,6 +53,8 @@ import org.sdmx.resources.sdmxml.schemas.v21.structure.ConceptsType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.DataStructureComponentsType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.DataStructureType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.DataStructuresType;
+import org.sdmx.resources.sdmxml.schemas.v21.structure.DataflowType;
+import org.sdmx.resources.sdmxml.schemas.v21.structure.DataflowsType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.DimensionListType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.DimensionType;
 import org.sdmx.resources.sdmxml.schemas.v21.structure.ISOConceptReferenceType;
@@ -67,6 +70,7 @@ import org.sdmx.resources.sdmxml.schemas.v21.structure.UsageStatusType;
 import sdmx.common.Annotations;
 import sdmx.common.DataType;
 import sdmx.common.Name;
+import sdmx.commonreferences.DataStructureReference;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.datastructure.DataStructureComponents;
 import sdmx.structure.datastructure.MeasureDimensionType;
@@ -116,6 +120,9 @@ public class Sdmx21StructureWriter {
         }
         if (structure1.getDataStructures() != null) {
             structures2.setDataStructures(toDataStructure(structure1.getDataStructures()));
+        }
+        if( structure1.getDataflows()!=null ) {
+            structures2.setDataflows(toDataflows(structure1.getDataflows()));
         }
         return structures2;
     }
@@ -190,6 +197,13 @@ public class Sdmx21StructureWriter {
             c.setTime(m1.getValidTo().getDate());
             m2.setValidTo(c);
         }
+        if( m1.getUrn()!=null ) {
+            m2.setUrn(m1.getUrn().toString());
+        }
+        if( m1.getUri()!=null ) {
+            m2.setUri(m1.getUri().toString());
+        }
+        
         toNameableType(m2, m1);
     }
 
@@ -211,6 +225,12 @@ public class Sdmx21StructureWriter {
     public static void toCodeType(CodeType code2, ItemType item) {
         sdmx.structure.codelist.CodeType code = (sdmx.structure.codelist.CodeType) item;
         toNameableType(code2, code);
+        if( item.getUrn()!=null) {
+            code2.setUrn(item.getUrn().toString());
+        }
+        if( item.getUri()!=null) {
+            code2.setUri(item.getUri().toString());
+        }
         if (item.getParent() != null) {
             code2.setParent(toLocalItemReference(code2.addNewParent(), item.getParent()));
         }
@@ -480,6 +500,12 @@ public class Sdmx21StructureWriter {
         }
         if (att.getLocalRepresentation() != null) {
             toLocalRepresentation(att2.addNewLocalRepresentation(), att.getLocalRepresentation());
+        }
+        if( att.getUri()!=null) {
+            att2.setUri(att.getUri().toString());
+        }
+        if( att.getUrn()!=null) {
+            att2.setUrn(att.getUrn().toString());
         }
     }
 
@@ -858,4 +884,23 @@ public class Sdmx21StructureWriter {
             toLocalRepresentation(meas2.addNewLocalRepresentation(), meas.getLocalRepresentation());
         }
     }
+
+    public static DataflowsType toDataflows(sdmx.structure.DataflowsType dataflows) {
+        DataflowsType dfts = DataflowsType.Factory.newInstance();
+        
+        for(sdmx.structure.dataflow.DataflowType df:dataflows.getDataflows()){
+            DataflowType df2 = dfts.addNewDataflow();
+            toMaintainableType(df2, df);
+            df2.setStructure(toStructureReference(df.getStructure()));
+        }
+        return dfts;
+    }
+
+    private static StructureReferenceBaseType toStructureReference(DataStructureReference structure) {
+        StructureReferenceBaseType reference = StructureReferenceBaseType.Factory.newInstance();
+        toRef(reference.addNewRef(),structure);
+        return reference;
+    }
+
+    
 }

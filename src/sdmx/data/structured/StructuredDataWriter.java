@@ -113,7 +113,6 @@ public class StructuredDataWriter implements DataSetWriter {
     public StructuredDataSet finishDataSet() {
         StructuredDataSet ds = dataSet;
         if( seriesList.size()>0){
-            System.out.println("DataSet="+ds);
             ds.setSeriesList(seriesList);
         }else {
             ds.setObservations(obsList);
