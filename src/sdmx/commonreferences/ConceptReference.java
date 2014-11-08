@@ -52,7 +52,7 @@ public class ConceptReference extends ItemReference {
     public ConceptReference(anyURI urn) {
         super(urn);
     }
-    public static ConceptReference create(NestedNCNameID agency,IDType mid,Version ver,IDType id){
+    public static ConceptReference create(NestedNCNameID agency,IDType mid,Version ver,NestedID id){
         ConceptRef ref = new ConceptRef(agency,mid,ver,id);
         return new ConceptReference(ref,null);
     }

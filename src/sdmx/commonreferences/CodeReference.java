@@ -52,5 +52,8 @@ public class CodeReference extends ItemReference {
     public CodeReference(anyURI urn){
         super(urn);
     }
-
+    public static CodeReference create(NestedNCNameID agency,IDType mid,Version ver,NestedID id){
+        CodeRef ref = new CodeRef(agency,mid,ver,id);
+        return new CodeReference(ref,null);
+    }
 }

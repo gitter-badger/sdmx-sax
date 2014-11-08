@@ -19,6 +19,8 @@ import sdmx.commonreferences.DataflowReference;
 import sdmx.commonreferences.DimensionReference;
 import sdmx.commonreferences.HierarchicalCodelistReference;
 import sdmx.commonreferences.IDType;
+import sdmx.commonreferences.ItemReference;
+import sdmx.commonreferences.ItemSchemeReference;
 import sdmx.commonreferences.ItemSchemeReferenceBase;
 import sdmx.commonreferences.NestedNCNameID;
 import sdmx.commonreferences.StructureReference;
@@ -26,6 +28,8 @@ import sdmx.commonreferences.Version;
 import sdmx.message.StructureType;
 import sdmx.structure.HierarchicalCodelist;
 import sdmx.structure.base.ComponentType;
+import sdmx.structure.base.ItemSchemeType;
+import sdmx.structure.base.ItemType;
 import sdmx.structure.base.MaintainableType;
 import sdmx.structure.category.CategorySchemeType;
 import sdmx.structure.codelist.CodeType;
@@ -50,6 +54,8 @@ public interface Registry {
     public DataflowType find(DataflowReference ref);
     public CodeType find(CodeReference ref);
     public CodelistType find(CodelistReference ref);
+    public ItemType find(ItemReference ref);
+    public ItemSchemeType find(ItemSchemeReference ref);
     public ConceptType find(ConceptReference ref);
     public ConceptSchemeType find(ConceptSchemeReference ref);
 }

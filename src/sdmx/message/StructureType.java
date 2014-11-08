@@ -13,12 +13,16 @@ import sdmx.commonreferences.ConceptSchemeReference;
 import sdmx.commonreferences.DataStructureReference;
 import sdmx.commonreferences.DataflowReference;
 import sdmx.commonreferences.IDType;
+import sdmx.commonreferences.ItemReference;
+import sdmx.commonreferences.ItemSchemeReference;
 import sdmx.commonreferences.ItemSchemeReferenceBase;
 import sdmx.commonreferences.NestedID;
 import sdmx.commonreferences.NestedNCNameID;
 import sdmx.commonreferences.StructureReference;
 import sdmx.commonreferences.Version;
 import sdmx.structure.StructuresType;
+import sdmx.structure.base.ItemSchemeType;
+import sdmx.structure.base.ItemType;
 import sdmx.structure.base.MaintainableType;
 import sdmx.structure.codelist.CodeType;
 import sdmx.structure.codelist.CodelistType;
@@ -129,6 +133,16 @@ public class StructureType extends MessageType implements Registry {
 
     public void setStructures(StructuresType struct) {
         this.structures=struct;
+    }
+
+    @Override
+    public ItemType find(ItemReference ref) {
+        return this.structures.find(ref);
+    }
+
+    @Override
+    public ItemSchemeType find(ItemSchemeReference ref) {
+        return this.structures.find(ref);
     }
 
 }

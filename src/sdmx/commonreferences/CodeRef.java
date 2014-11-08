@@ -5,8 +5,10 @@
 
 package sdmx.commonreferences;
 
+import org.sdmx.resources.sdmxml.schemas.v21.common.NestedNCNameIDType;
 import sdmx.commonreferences.types.ItemTypeCodelistType;
 import sdmx.commonreferences.types.ItemSchemePackageTypeCodelistType;
+import sdmx.commonreferences.types.PackageTypeCodelistType;
 
 /**
  *	<xs:complexType name="CodeRefType">
@@ -52,7 +54,7 @@ import sdmx.commonreferences.types.ItemSchemePackageTypeCodelistType;
  *  Copyright James Gardner 2014
  */
 public class CodeRef extends ItemRefBase {
-    public CodeRef(IDType mparent,Version vpar, NestedID id, ItemTypeCodelistType obs,ItemSchemePackageTypeCodelistType pack) {
-         super(null,mparent,vpar,id,obs,pack);
+    public CodeRef(NestedNCNameID agency,IDType mparent,Version vpar, NestedID id) {
+         super(agency,mparent,vpar,id,ItemTypeCodelistType.CODE,ItemSchemePackageTypeCodelistType.CODELIST);
     }
 }

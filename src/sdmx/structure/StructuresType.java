@@ -16,6 +16,8 @@ import sdmx.commonreferences.DataStructureRef;
 import sdmx.commonreferences.DataStructureReference;
 import sdmx.commonreferences.DataflowReference;
 import sdmx.commonreferences.IDType;
+import sdmx.commonreferences.ItemReference;
+import sdmx.commonreferences.ItemSchemeReference;
 import sdmx.commonreferences.ItemSchemeReferenceBase;
 import sdmx.commonreferences.NestedID;
 import sdmx.commonreferences.NestedNCNameID;
@@ -29,6 +31,8 @@ import sdmx.message.DataQueryMessage;
 import sdmx.message.DataStructure;
 import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.StructureType;
+import sdmx.structure.base.ItemSchemeType;
+import sdmx.structure.base.ItemType;
 import sdmx.structure.base.MaintainableType;
 import sdmx.structure.codelist.CodeType;
 import sdmx.structure.codelist.CodelistType;
@@ -342,5 +346,22 @@ public class StructuresType implements Registry {
     public List<DataflowType> listDataflows() {
         if( getDataflows()==null) return Collections.EMPTY_LIST;
         return getDataflows().getDataflows();
+    }
+
+    @Override
+    public ItemType find(ItemReference ref) {
+        ConceptType concept = find(ConceptReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion(), ref.getId()));
+        if( concept!=null) return concept;
+        CodeType code = find(CodeReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion(), ref.getId()));
+        return code;
+        
+    }
+
+    @Override
+    public ItemSchemeType find(ItemSchemeReference ref) {
+        ConceptSchemeType concept = find(ConceptSchemeReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion()));
+        if( concept!=null) return concept;
+        CodelistType code = find(CodelistReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion()));
+        return code;
     }
 }
