@@ -33,13 +33,11 @@ public class ILODataProvider extends DataProvider {
 
     private String agencyId = null;
     private URL serviceURL = null;
-    private Queryable registry = null;
 
     public ILODataProvider(int indx,String agency, String serviceURL) throws MalformedURLException {
         super(indx);
         this.agencyId = agency;
         this.serviceURL = new URL(serviceURL);
-        this.registry = new ILORESTServiceRegistry(agency, serviceURL.toString());
     }
 
     public String getAgencyId() {
@@ -47,7 +45,7 @@ public class ILODataProvider extends DataProvider {
     }
 
     public Queryable getQueryable() {
-        return registry;
+        return new ILORESTServiceRegistry(agencyId, serviceURL.toString());
     }
     public int getType() { return DataProvider.TYPE_ILO; }
     @Override

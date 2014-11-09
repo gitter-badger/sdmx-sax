@@ -190,7 +190,6 @@ public class NameableType extends IdentifiableType {
         return name.getText();
 
     }
-
     public static String toString(Object o) {
         if (o == null) {
             return "";

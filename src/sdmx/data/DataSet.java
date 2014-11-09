@@ -45,7 +45,7 @@ public interface DataSet {
     public void setValue(int row, int col,String val);
     public void setValue(int row, String col,String val);
     public void writeTo(DataSetWriter writer);
-    public Cube query(Cube cube,DataQuery query);
+    public Cube query(Cube cube,List<String> order);
     public ColumnMapper getColumnMapper();
     public void setGroups(List<Group> groups);
     public List<Group> getGroups();

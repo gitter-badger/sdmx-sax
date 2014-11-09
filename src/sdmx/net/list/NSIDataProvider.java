@@ -32,15 +32,12 @@ public class NSIDataProvider extends DataProvider {
     private String agencyId = null;
     private URL serviceURL = null;
     private String soapNamespace = null;
-    Sdmx20NSIQueryable q = null;
 
     public NSIDataProvider(int indx,String agency, String serviceURL, String soapNamespace) throws MalformedURLException {
         super(indx);
         this.agencyId = agency;
         this.serviceURL = new URL(serviceURL);
         this.soapNamespace = soapNamespace;
-        q = new Sdmx20NSIQueryable(agencyId, serviceURL);
-        q.setSoapNamespace(soapNamespace);
     }
 
     @Override

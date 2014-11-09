@@ -208,7 +208,6 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
         //temp.close();
         //in.close();
         //in = new FileInputStream("temp.xml");
-        System.out.println("Parsing!");
         StructureType st = SdmxIO.parseStructure(this, in);
         if (st == null) {
             System.out.println("St is null!");

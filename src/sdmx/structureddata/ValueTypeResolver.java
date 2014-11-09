@@ -172,6 +172,7 @@ public class ValueTypeResolver {
                 }
             }
         }
-        throw new RuntimeException("Problem occurred looking for codelist:"+column);
+        // Uncoded Dimension (probably Time)
+        return null;
     }
 }

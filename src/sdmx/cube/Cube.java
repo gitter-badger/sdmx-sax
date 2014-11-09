@@ -5,6 +5,7 @@
  */
 package sdmx.cube;
 
+import java.util.List;
 import sdmx.commonreferences.IDType;
 import sdmx.data.ColumnMapper;
 import sdmx.data.flat.FlatObs;
@@ -47,13 +48,16 @@ public class Cube {
         return root;
     }
 
-    public void putObservation(ColumnMapper mapper, FlatObs obs) {
+    public void putObservation(List<String> order,ColumnMapper mapper, FlatObs obs) {
         CubeDimension dim = getRootCubeDimension();
         TimeCubeDimension time = null;
         CubeObservation cubeobs = null;
         for (int i = 0; i < struct.getDataStructureComponents().getDimensionList().size(); i++) {
             //if( struct.getDataStructureComponents().getDimensionList().getDimension(i).)
-            IDType dimId = struct.getDataStructureComponents().getDimensionList().getDimension(i).getId();
+            // This line goes through the components in their datastructure order
+            //IDType dimId = struct.getDataStructureComponents().getDimensionList().getDimension(i).getId();
+            // This line goes through the components in their specified order
+            IDType dimId = new IDType(order.get(i));
             CubeDimension myDim = dim.getSubDimension(obs.getValue(mapper.getColumnIndex(dimId.toString())));
             if (myDim == null) {
                 //myDim = new HashMapCubeDimension(dimId.toString(), obs.getValue(mapper.getColumnIndex(dimId.toString())));

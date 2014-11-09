@@ -142,7 +142,6 @@ public class RESTQueryable implements Queryable, Registry, Repository {
         //temp.close();
         //in.close();
         //in = new FileInputStream("temp.xml");
-        System.out.println("Parsing!");
         StructureType st = SdmxIO.parseStructure(this, in);
         if (st == null) {
             System.out.println("St is null!");
@@ -184,7 +183,6 @@ public class RESTQueryable implements Queryable, Registry, Repository {
             IOUtils.copy(in, file);
             in = new FileInputStream(name);
         }
-        System.out.println("Parsing!");
         DataMessage msg = SdmxIO.parseData(in);
         if (msg == null) {
             System.out.println("Data is null!");
@@ -216,7 +214,6 @@ public class RESTQueryable implements Queryable, Registry, Repository {
      Thread.sleep(1000);
      } catch (InterruptedException ie) {
      }
-     System.out.println("Parsing!");
      StructureType st = SdmxIO.parseStructure(local, in);
      if (st == null) {
      System.out.println("St is null!");

@@ -50,10 +50,10 @@ public class SdmxIO {
     private static boolean DUMP_QUERY = false;
     private static boolean DUMP_XML = false;
     private static boolean SANITISE_NAMES = false;
-    private static boolean STRICT_REGEX = true;
-    private static boolean IGNORE_CASE = false;
+    private static boolean STRICT_REGEX = false;
+    private static boolean IGNORE_CASE = true;
     private static boolean CHECK_URN = true;
-    private static int LOG_LEVEL = 7;
+    private static int LOG_LEVEL = 1;
     private static Handler h = new ConsoleHandler();
     static{
         SdmxIO.setLogLevel(LOG_LEVEL);

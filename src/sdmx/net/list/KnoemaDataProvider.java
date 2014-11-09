@@ -33,13 +33,11 @@ public class KnoemaDataProvider extends DataProvider {
 
     private String agencyId = null;
     private URL serviceURL = null;
-    private Queryable registry = null;
 
     public KnoemaDataProvider(int indx,String agency, String serviceURL) throws MalformedURLException {
         super(indx);
         this.agencyId = agency;
         this.serviceURL = new URL(serviceURL);
-        this.registry = new KnoemaRESTServiceRegistry(agency, serviceURL);
     }
 
     public String getAgencyId() {
@@ -47,7 +45,7 @@ public class KnoemaDataProvider extends DataProvider {
     }
 
     public Queryable getQueryable() {
-        return registry;
+        return new KnoemaRESTServiceRegistry(agencyId, serviceURL.toString());
     }
     public int getType() { return DataProvider.TYPE_KNOEMA; }
     

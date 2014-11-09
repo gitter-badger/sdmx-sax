@@ -39,7 +39,6 @@ public class OpenSDMXDataProvider extends DataProvider {
         super(indx);
         this.agencyId = agency;
         this.serviceURL = new URL(serviceURL);
-        this.registry = new OpenSDMXRESTQueryable(agency, serviceURL.toString());
     }
 
     public String getAgencyId() {
@@ -47,7 +46,7 @@ public class OpenSDMXDataProvider extends DataProvider {
     }
 
     public Queryable getQueryable() {
-        return registry;
+        return new OpenSDMXRESTQueryable(agencyId, serviceURL.toString());
     }
     public int getType() { return DataProvider.TYPE_OPENSDMX; }
     public String getServiceURL() { return this.serviceURL.toString(); }

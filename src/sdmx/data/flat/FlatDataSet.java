@@ -305,10 +305,10 @@ public class FlatDataSet implements DataSet {
     }
 
     @Override
-    public Cube query(Cube cube, DataQuery query) {
+    public Cube query(Cube cube, List<String> order) {
        long time = System.currentTimeMillis();
        for(int i=0;i<size();i++) {
-           cube.putObservation(mapper, getFlatObs(i));
+           cube.putObservation(order,mapper, getFlatObs(i));
            /*
            if( i % 100 == 0 ) {
                System.out.println("100 obs="+(time-System.currentTimeMillis()));
