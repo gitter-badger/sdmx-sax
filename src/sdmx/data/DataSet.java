@@ -50,4 +50,5 @@ public interface DataSet {
     public void setGroups(List<Group> groups);
     public List<Group> getGroups();
     public int groupSize();
+    public FlatObs find(FullKey key);
     }

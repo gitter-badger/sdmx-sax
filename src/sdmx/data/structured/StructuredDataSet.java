@@ -359,4 +359,20 @@ public class StructuredDataSet implements DataSet, Attachable {
         }
         return cube;
     }
+    public FlatObs find(FullKey key) {
+        boolean found = true;
+        for (int i = 0; i < size(); i++) {
+            FlatObs obs = getFlatObs(i);
+            found=true;
+            for (int j = 0; j < columnMapper.size() && !found; j++) {
+                if (!key.getComponent(columnMapper.getColumnName(j)).equals(obs.getValue(j))) {
+                    found = false;
+                }
+            }
+            if (found) {
+                return obs;
+            }
+        }
+        return null;
+    }
 }

@@ -11,6 +11,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.sdmx.resources.sdmxml.schemas.v21.common.ActionType;
+import org.sdmx.resources.sdmxml.schemas.v21.message.BaseHeaderType;
+import org.sdmx.resources.sdmxml.schemas.v21.message.StructureHeaderType;
 import sdmx.commonreferences.DataStructureReference;
 import sdmx.commonreferences.IDType;
 import sdmx.exception.ParseException;
@@ -28,15 +31,9 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException, ParseException {
-        System.out.println("test registry interface on LocalRegistry");
-        boolean expResult = false;
-        InputStream in = Main.class.getResourceAsStream("StructureSample.xml");
-        StructureType doc = null;
-        try {
-            doc = SdmxIO.parseStructure(in);
-        } catch (Exception ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        BaseHeaderType header = StructureHeaderType.Factory.newInstance();
+        header.setDataSetAction(ActionType.APPEND);
+        
     }
 
 }

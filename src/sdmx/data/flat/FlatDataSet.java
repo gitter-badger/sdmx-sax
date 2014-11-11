@@ -130,22 +130,21 @@ import sdmx.cube.Cube;
  * @author James
  */
 /**
- *  This file is part of SdmxSax.
+ * This file is part of SdmxSax.
  *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *   SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * SdmxSax is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ * SdmxSax is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  Copyright James Gardner 2014
+ * You should have received a copy of the GNU General Public License along with
+ * SdmxSax. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright James Gardner 2014
  */
 public class FlatDataSet implements DataSet {
 
@@ -289,7 +288,9 @@ public class FlatDataSet implements DataSet {
     @Override
     public void setGroups(List<Group> groups) {
         this.groups = groups;
-        if( groups == null ) return;
+        if (groups == null) {
+            return;
+        }
         for (int i = 0; i < groups.size(); i++) {
             Group g = groups.get(i);
             g.processGroupValues(this);
@@ -306,16 +307,33 @@ public class FlatDataSet implements DataSet {
 
     @Override
     public Cube query(Cube cube, List<String> order) {
-       long time = System.currentTimeMillis();
-       for(int i=0;i<size();i++) {
-           cube.putObservation(order,mapper, getFlatObs(i));
-           /*
-           if( i % 100 == 0 ) {
-               System.out.println("100 obs="+(time-System.currentTimeMillis()));
-               time = System.currentTimeMillis();
-           }
-           */
-       }
-       return cube;
+        long time = System.currentTimeMillis();
+        for (int i = 0; i < size(); i++) {
+            cube.putObservation(order, mapper, getFlatObs(i));
+            /*
+             if( i % 100 == 0 ) {
+             System.out.println("100 obs="+(time-System.currentTimeMillis()));
+             time = System.currentTimeMillis();
+             }
+             */
+        }
+        return cube;
+    }
+
+    public FlatObs find(FullKey key) {
+        boolean found = true;
+        for (int i = 0; i < size(); i++) {
+            FlatObs obs = getFlatObs(i);
+            found=true;
+            for (int j = 0; j < mapper.size() && !found; j++) {
+                if (!key.getComponent(mapper.getColumnName(j)).equals(obs.getValue(j))) {
+                    found = false;
+                }
+            }
+            if (found) {
+                return obs;
+            }
+        }
+        return null;
     }
 }
