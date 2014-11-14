@@ -51,4 +51,8 @@ public class DataflowReference extends StructureUsageReferenceBase {
     public DataflowReference(anyURI urn){
        super(urn);
     }
+    public static DataflowReference create(NestedNCNameID agency,IDType id,Version ver){
+        DataflowRef ref = new DataflowRef(agency,id,ver);
+        return new DataflowReference(ref,null);
+    }
 }
