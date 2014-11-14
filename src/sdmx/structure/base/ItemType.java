@@ -122,5 +122,17 @@ public abstract class ItemType extends ItemBaseType {
         return null;
     }
 
+    public boolean equals(Object o) {
+        if (o instanceof ItemType) {
+            ItemType o1 = (ItemType) o;
+            if (o1.getId().equals(this.getId()) && o1.getName().equals(this.getName())) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 
 }
