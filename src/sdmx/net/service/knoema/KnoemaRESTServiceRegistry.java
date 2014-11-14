@@ -106,7 +106,7 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
         this.serviceURL = service;
         this.agency = agency;
         SdmxIO.setStrictRegex(false);
-        SdmxIO.setIgnoreCase(true);
+        //SdmxIO.setIgnoreCase(true);
     }
 
     public void load(StructureType struct) {
@@ -123,6 +123,8 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
             try {
                 StructureType st = retrieve(getServiceURL() + "/"+ref.getMaintainableParentId().toString());
                 DataStructureType ds = st.getStructures().getDataStructures().getDataStructures().get(0);
+                ds.setId(ref.getMaintainableParentId());
+                ds.setAgencyID(ref.getAgencyId());
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {
@@ -295,13 +297,11 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
         if (dataflowList != null) {
             return dataflowList;
         }
-        dataflowList = new ArrayList<DataflowType>();
         try {
             StructureType st = retrieve2(getServiceURL());
             List<DataStructureType> dss = st.getStructures().getDataStructures().getDataStructures();
             List<DataflowType> dfs = new ArrayList<DataflowType>();
             for(DataStructureType ds:dss){
-                ds.setId(new IDType(ds.getId().toString().toUpperCase()));
                 DataflowType df = ds.asDataflow();
                 dfs.add(df);
             }
