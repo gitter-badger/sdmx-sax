@@ -4,6 +4,9 @@
  */
 package sdmx.structure.base;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -194,5 +197,14 @@ public class ItemSchemeType extends MaintainableType {
             }
         }
         return result;
+    }
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.writeObject(items);
+        oos.writeBoolean(partial);
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        this.items = (List<ItemType>)ois.readObject();
+        this.partial = ois.readBoolean();
     }
 }

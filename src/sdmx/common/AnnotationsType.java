@@ -55,5 +55,7 @@ public abstract class AnnotationsType {
         return at;
     }
     public int size() { return annots.size(); }
+    public List<AnnotationType> getAnnotations() { return this.annots; }
+    public void setAnnotations(List<AnnotationType> list) {this.annots=list;}
 }
 

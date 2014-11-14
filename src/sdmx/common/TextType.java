@@ -1,5 +1,11 @@
 package sdmx.common;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.List;
+
 /**
  *	<xs:complexType name="TextType">
 		<xs:annotation>
@@ -36,7 +42,7 @@ package sdmx.common;
  *
  *  Copyright James Gardner 2014
  */
-public class TextType {
+public class TextType implements Serializable {
 
     String lang = null;
     String text = null;
@@ -56,5 +62,14 @@ public class TextType {
     }
     public String toString() {
         return text;
+    }
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.writeUTF(lang);
+        oos.writeUTF(text);
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        lang = ois.readUTF();
+        text = ois.readUTF();
     }
 }

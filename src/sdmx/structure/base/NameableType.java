@@ -4,13 +4,19 @@
  */
 package sdmx.structure.base;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import sdmx.SdmxIO;
 import sdmx.common.Description;
 import sdmx.common.Name;
+import sdmx.commonreferences.IDType;
 import sdmx.structure.concept.ConceptType;
+import sdmx.xml.anyURI;
 
 /**
  * <xs:complexType name="NameableType" abstract="true">
@@ -245,5 +251,14 @@ public class NameableType extends IdentifiableType {
          return s;
          */
 
+    }
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.writeObject(names);
+        oos.writeObject(descriptions);
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        this.names  = (List<Name>)ois.readObject();
+        this.descriptions = (List<Description>)ois.readObject();
     }
 }

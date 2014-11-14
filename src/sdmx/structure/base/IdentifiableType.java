@@ -4,7 +4,13 @@
  */
 package sdmx.structure.base;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.URISyntaxException;
+import java.util.List;
 import sdmx.common.AnnotableType;
+import sdmx.common.AnnotationType;
 import sdmx.commonreferences.IDType;
 import sdmx.commonreferences.NestedID;
 import sdmx.commonreferences.RefBase;
@@ -119,5 +125,21 @@ public class IdentifiableType extends AnnotableType {
             return this.urn.equals(uri2);
         }
         return false;
+    }
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.writeUTF(id!=null?id.toString():null);
+        oos.writeUTF(urn!=null?urn.toString():null);
+        oos.writeUTF(uri!=null?uri.toString():null);
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        String id = ois.readUTF();
+        if( id!=null ) this.id = new IDType(id);
+        String urn = ois.readUTF();
+        try{
+        if( urn!=null ) this.urn = new anyURI(urn);
+        String uri = ois.readUTF();
+        if( uri!=null ) this.uri = new anyURI(uri);
+        }catch(URISyntaxException ex){}
     }
 }

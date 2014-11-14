@@ -4,6 +4,9 @@
  */
 package sdmx.structure.base;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import sdmx.commonreferences.Version;
 import sdmx.xml.DateTime;
 
@@ -100,5 +103,15 @@ public class VersionableType extends NameableType {
     public void setValidTo(DateTime validTo) {
         this.validTo = validTo;
     }
-    
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.writeObject(version);
+        oos.writeObject(validFrom);
+        oos.writeObject(validTo);
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        this.version = (Version)ois.readObject();
+        this.validFrom = (DateTime)ois.readObject();
+        this.validTo = (DateTime)ois.readObject();
+    }
 }

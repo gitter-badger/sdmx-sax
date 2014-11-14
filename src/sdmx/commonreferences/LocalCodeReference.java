@@ -5,6 +5,11 @@
 
 package sdmx.commonreferences;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 /**
  *	<xs:complexType name="LocalCodeReferenceType">
 		<xs:annotation>
@@ -38,8 +43,13 @@ package sdmx.commonreferences;
  *
  *  Copyright James Gardner 2014
  */
-public class LocalCodeReference extends LocalItemReference {
+public class LocalCodeReference extends LocalItemReference implements Serializable {
     public LocalCodeReference(LocalCodeRef ref) {
         super(ref);
+    }
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
     }
 }

@@ -5,6 +5,10 @@
 
 package sdmx.xml;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import sdmx.common.DataType;
 
 /**
@@ -29,7 +33,7 @@ import sdmx.common.DataType;
  *
  *  Copyright James Gardner 2014
  */
-public class XMLString {
+public class XMLString implements Serializable {
     String value = null;
     public XMLString(String s) {
         this.value=s;
@@ -37,5 +41,12 @@ public class XMLString {
     public String getString() { return value; }
     public String toString() {
         return value;
+    }
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.writeUTF(value);
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        this.value = ois.readUTF();
     }
 }

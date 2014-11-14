@@ -4,6 +4,10 @@
  */
 package sdmx.commonreferences;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -77,7 +81,7 @@ import sdmx.xml.anyURI;
  *
  * Copyright James Gardner 2014
  */
-public class ReferenceType {
+public class ReferenceType implements Serializable {
 
     private RefBase ref = null;
     private anyURI urn = null;
@@ -360,5 +364,41 @@ public class ReferenceType {
         sb.append(":" + this.getClazz());
         sb.append(":" + this.getPack());
         return sb.toString();
+    }
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.writeUTF(pack.toString());
+        oos.writeUTF(clazz.toString());
+        oos.writeUTF(agency!=null?agency.toString():null);
+        oos.writeUTF(maintainedParentId!=null?maintainedParentId.toString():null);
+        oos.writeUTF(maintainedParentVersion!=null?maintainedParentVersion.toString():null);
+        oos.writeUTF(objectId!=null?objectId.toString():null);
+        oos.writeUTF(version!=null?version.toString():null);
+        oos.writeUTF(this.urn!=null?urn.toString():null);
+        oos.writeObject(this.containedIds);
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        this.pack = PackageTypeCodelistType.fromString(ois.readUTF());
+        this.clazz = ObjectTypeCodelistType.fromString(ois.readUTF());
+        String ag = ois.readUTF();
+        if( ag!=null ) {
+            this.agency = new NestedNCNameID(ag);
+        }
+        String mid = ois.readUTF();
+        if( mid!=null ) {
+            this.maintainedParentId = new IDType(mid);
+        }
+        String mv = ois.readUTF();
+        if( mv!=null ) {
+            this.maintainedParentVersion=new Version(mv);
+        }
+        String oid = ois.readUTF();
+        if( oid!=null) {
+            this.objectId = new IDType(oid);
+        }
+        String v = ois.readUTF();
+        if( v!=null ) {
+            this.version = new Version(v);
+        }
     }
 }

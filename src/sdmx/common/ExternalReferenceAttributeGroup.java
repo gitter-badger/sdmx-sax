@@ -5,6 +5,11 @@
 
 package sdmx.common;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 /**
  *	<xs:attributeGroup name="ExternalReferenceAttributeGroup">
 		<xs:attribute name="serviceURL" type="xs:anyURI" use="optional">
@@ -38,7 +43,7 @@ package sdmx.common;
  *
  *  Copyright James Gardner 2014
  */
-public class ExternalReferenceAttributeGroup {
+public class ExternalReferenceAttributeGroup implements Serializable {
     private String serviceURL = null;
     private String structureURL = null;
 
@@ -74,5 +79,14 @@ public class ExternalReferenceAttributeGroup {
      */
     public void setStructureURL(String structureURL) {
         this.structureURL = structureURL;
+    }
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.writeUTF(serviceURL);
+        oos.writeUTF(structureURL);
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        this.serviceURL = ois.readUTF();
+        this.structureURL = ois.readUTF();
     }
 }

@@ -5,6 +5,9 @@
 
 package sdmx.commonreferences;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.regex.Pattern;
 import sdmx.xml.RegexXMLString;
 
@@ -62,5 +65,11 @@ public class Version extends RegexXMLString implements Comparable {
         double a1 = Double.parseDouble(o.toString());
         double a2 = Double.parseDouble(toString());
         return a1>a2?1:a1<a2?-1:0;
+    }
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        
     }
 }

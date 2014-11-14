@@ -5,6 +5,9 @@
 
 package sdmx.common;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -154,5 +157,20 @@ public class AnnotationType {
      */
     public void setId(String id) {
         this.id = id;
+    }
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.writeUTF(annotationTitle);
+        oos.writeUTF(annotationType);
+        oos.writeUTF(annotationUrl);
+        oos.writeUTF(id);
+        oos.writeObject(this.annotationText);
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        annotationTitle = ois.readUTF();
+        annotationType = ois.readUTF();
+        annotationUrl = ois.readUTF();
+        id = ois.readUTF();
+        annotationText = (List<TextType>)ois.readObject();
     }
 }

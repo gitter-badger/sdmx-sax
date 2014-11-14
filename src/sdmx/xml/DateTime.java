@@ -4,6 +4,10 @@
  */
 package sdmx.xml;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,7 +39,7 @@ import sdmx.version.twopointzero.compact.CompactDataEventHandler;
  *
  *  Copyright James Gardner 2014
  */
-public class DateTime {
+public class DateTime implements Serializable {
 
     public static final SimpleDateFormat DF = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
     public static final SimpleDateFormat DF2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -90,5 +94,14 @@ public class DateTime {
     }
     public void setBaseString(String s) {
         this.baseString=s;
+    }
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.writeLong(date.getTime());
+        oos.writeObject(calendar);
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        this.date = new Date(ois.readLong());
+        this.calendar = (Calendar)ois.readObject();
     }
 }

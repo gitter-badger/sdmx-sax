@@ -4,6 +4,10 @@
  */
 package sdmx.common;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,12 +29,19 @@ import java.util.List;
  *
  *  Copyright James Gardner 2014
  */
-public class Annotations extends AnnotationsType {
+public class Annotations extends AnnotationsType implements Serializable {
      public Annotations(List<AnnotationType> annots) {
          super(annots);
      }
 
     public Annotations() {
         super(new ArrayList<AnnotationType>());
+    }
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.writeObject(super.getAnnotations());
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        super.setAnnotations((List<AnnotationType>)ois.readObject());
     }
 }

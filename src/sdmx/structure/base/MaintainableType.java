@@ -4,6 +4,9 @@
  */
 package sdmx.structure.base;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import sdmx.common.Annotations;
 import sdmx.common.ExternalReferenceAttributeGroup;
 import sdmx.commonreferences.IDType;
@@ -183,5 +186,25 @@ public class MaintainableType extends MaintainableBaseType {
         RefBase ref = new RefBase(agencyID,getId(),getVersion(),null,null,null,false,null,null);
         ReferenceType reference = new ReferenceType(ref,getUri());
         return reference;
+    }
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        if( agencyID==null ) {oos.writeUTF(null);}
+        else {
+            oos.writeUTF(agencyID.toString());
+        }
+        oos.writeObject(isFinal);
+        oos.writeObject(isExternalReference);
+        oos.writeObject(externalReferences);
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        String ag = ois.readUTF();
+        if( ag != null ) {
+            agencyID = new NestedNCNameID(ag);
+        }
+        isFinal = (Boolean)ois.readObject();
+        isExternalReference = (Boolean)ois.readObject();
+        externalReferences = (ExternalReferenceAttributeGroup)ois.readObject();
+        
     }
 }

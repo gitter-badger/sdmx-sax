@@ -4,6 +4,9 @@
  */
 package sdmx.structure.codelist;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import sdmx.commonreferences.LocalCodeReference;
@@ -147,5 +150,12 @@ public class CodeType extends ItemType {
 
     public void dump() {
         System.out.println("Code:"+this.getId()+":"+this.findName("en")+":"+this.findDescription("en"));
+    }
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.writeObject(parent);
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        parent = (LocalCodeReference)ois.readObject();
     }
 }
