@@ -256,6 +256,7 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
         IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataflow().get(0).getMaintainableParentId();
         NestedNCNameID agency = new NestedNCNameID(this.getAgencyId());
         DataStructureType dst = null;
+        if( this.dataflowList==null) listDataflows();
         for (int i = 0; i < dataflowList.size(); i++) {
             if (dataflowList.get(i).getId().equals(flowid)) {
                 dst = find(dataflowList.get(i).getStructure());
