@@ -108,7 +108,7 @@ public class Cube {
     public CubeObservation find(FullKey key) {
         CubeDimension dim = getRootCubeDimension();
         CubeDimension oldDim = dim;
-        for(int i=0;i<order.size();i++) {
+        for(int i=0;i<this.struct.getDataStructureComponents().getDimensionList().size();i++) {
             dim = dim.getSubDimension((String)key.getComponent(dim.getSubDimension()));
             if( dim == null ) {
                 //System.out.println("Can't find dim:"+key.getComponent(order.get(i))+":"+oldDim.getSubDimension());
