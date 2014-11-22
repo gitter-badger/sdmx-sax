@@ -127,9 +127,9 @@ public class IdentifiableType extends AnnotableType {
         return false;
     }
     private void writeObject(ObjectOutputStream oos) throws IOException {
-        oos.writeUTF(id!=null?id.toString():null);
-        oos.writeUTF(urn!=null?urn.toString():null);
-        oos.writeUTF(uri!=null?uri.toString():null);
+        oos.writeUTF(id!=null?id.toString():"");
+        oos.writeUTF(urn!=null?urn.toString():"");
+        oos.writeUTF(uri!=null?uri.toString():"");
     }
 
     private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
@@ -137,9 +137,9 @@ public class IdentifiableType extends AnnotableType {
         if( id!=null ) this.id = new IDType(id);
         String urn = ois.readUTF();
         try{
-        if( urn!=null ) this.urn = new anyURI(urn);
+        if( !"".equals(urn) ) this.urn = new anyURI(urn);
         String uri = ois.readUTF();
-        if( uri!=null ) this.uri = new anyURI(uri);
+        if( !"".equals(uri) ) this.uri = new anyURI(uri);
         }catch(URISyntaxException ex){}
     }
 }

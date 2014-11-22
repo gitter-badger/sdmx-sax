@@ -21,29 +21,31 @@ import org.jdom.Namespace;
 import org.jdom.output.XMLOutputter;
 import sdmx.common.Name;
 import sdmx.data.DataSet;
+import sdmx.data.Group;
 import sdmx.structureddata.ValueTypeResolver;
 import sdmx.data.structured.Obs;
 import sdmx.data.structured.Series;
 import sdmx.data.structured.StructuredColumnMapper;
 import sdmx.data.structured.StructuredDataSet;
 import sdmx.message.*;
+import sdmx.structure.base.NameableType;
+
 /**
- *  This file is part of SdmxSax.
+ * This file is part of SdmxSax.
  *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *   SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * SdmxSax is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ * SdmxSax is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  Copyright James Gardner 2014
+ * You should have received a copy of the GNU General Public License along with
+ * SdmxSax. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright James Gardner 2014
  */
 public class CompactDataWriter {
 
@@ -144,10 +146,10 @@ public class CompactDataWriter {
             writer.writeEndElement();
         }
         writer.writeEndElement();
-        if( namespaceprefix==null||namespace==null){
-        writer.writeStartElement("DataSet");
-        }else{
-        writer.writeStartElement(namespaceprefix, "DataSet", namespace);
+        if (namespaceprefix == null || namespace == null) {
+            writer.writeStartElement("DataSet");
+        } else {
+            writer.writeStartElement(namespaceprefix, "DataSet", namespace);
         }
 
         DataSet ds = msg.getDataSets().get(0);
@@ -164,7 +166,7 @@ public class CompactDataWriter {
         if (msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider().getAgencyId() != null) {
             writer.writeAttribute("DataProviderSchemeAgencyId", msg.getHeader().getDataProvider().getAgencyId().toString());
         }
-        if (msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider()!= null && msg.getHeader().getDataProvider().getAgencyId() != null) {
+        if (msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider().getAgencyId() != null) {
             writer.writeAttribute("DataProviderSchemeId", msg.getHeader().getDataProvider().getId().toString());
         }
         if (msg.getHeader().getDataSetID() != null && msg.getHeader().getDataSetID().size() > 0) {
@@ -189,11 +191,16 @@ public class CompactDataWriter {
         if (ds instanceof StructuredDataSet) {
             StructuredDataSet sds = (StructuredDataSet) ds;
             StructuredColumnMapper mapper = (StructuredColumnMapper) sds.getColumnMapper();
+            if (sds.getGroups() != null) {
+                for (Group gr : sds.getGroups()) {
+                    writeGroup(writer, gr, namespaceprefix,namespace);
+                }
+            }
             if (sds.getSeriesList() != null && sds.getSeriesList().size() > 0) {
                 for (int i = 0; i < sds.getSeriesList().size(); i++) {
-                    if( namespaceprefix==null||namespace==null){
+                    if (namespaceprefix == null || namespace == null) {
                         writer.writeStartElement("Series");
-                    }else {
+                    } else {
                         writer.writeStartElement(namespaceprefix, "Series", namespace);
                     }
                     Series s = sds.getSeriesList().get(i);
@@ -203,9 +210,9 @@ public class CompactDataWriter {
                         }
                     }
                     for (int k = 0; k < s.getObservations().size(); k++) {
-                        if( namespaceprefix==null||namespace==null){
+                        if (namespaceprefix == null || namespace == null) {
                             writer.writeEmptyElement("Obs");
-                        }else {
+                        } else {
                             writer.writeEmptyElement(namespaceprefix, "Obs", namespace);
                         }
                         Obs o = s.getObservations().get(k);
@@ -247,7 +254,9 @@ public class CompactDataWriter {
 
     private static void writeText(XMLStreamWriter writer, String element, String lang, String text) throws XMLStreamException {
         writer.writeStartElement(element);
-        if(lang!=null)writer.writeAttribute("xml:lang", lang);
+        if (lang != null) {
+            writer.writeAttribute("xml:lang", lang);
+        }
         writer.writeCharacters(text);
         writer.writeEndElement();
     }
@@ -257,14 +266,35 @@ public class CompactDataWriter {
     }
 
     public static void writeContact(XMLStreamWriter writer, ContactType contact) throws XMLStreamException {
-        if (contact.getNames()!=null&&contact.getNames().size() > 0) {
+        writer.writeStartElement("Contact");
+        if (contact.getNames() != null && contact.getNames().size() > 0) {
             writeText(writer, "Name", contact.getNames().get(0).getLang(), contact.getNames().get(0).getText());
         }
-        if (contact.getDepartments()!=null&&contact.getDepartments().size() > 0) {
+        if (contact.getDepartments() != null && contact.getDepartments().size() > 0) {
             writeText(writer, "Department", contact.getDepartments().get(0).getLang(), contact.getDepartments().get(0).getText());
         }
-        if (contact.getTelephones()!=null&&contact.getTelephones().size() > 0) {
+        if (contact.getTelephones() != null && contact.getTelephones().size() > 0) {
             writeText(writer, "Telephone", null, contact.getTelephones().get(0));
         }
+        writer.writeEndElement();
+    }
+
+    public static void writeGroup(XMLStreamWriter writer, Group gr, String namespaceprefix,String namespace) throws XMLStreamException {
+        if (namespaceprefix != null) {
+            writer.writeStartElement(namespaceprefix, gr.getGroupName(),namespace);
+        } else {
+            writer.writeStartElement(namespace,gr.getGroupName());
+        }
+        Iterator<String> it = gr.getGroupKey().keySet().iterator();
+        while (it.hasNext()) {
+            String s = it.next();
+            writer.writeAttribute(s, NameableType.toIDString(gr.getGroupKey().get(s)));
+        }
+        Iterator<String> it2 = gr.getGroupAttributes().keySet().iterator();
+        while (it2.hasNext()) {
+            String s = it2.next();
+            writer.writeAttribute(s, NameableType.toIDString(gr.getGroupAttributes().get(s)));
+        }
+        writer.writeEndElement();
     }
 }

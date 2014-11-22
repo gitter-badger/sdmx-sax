@@ -140,6 +140,11 @@ public class LocalRegistry implements Registry {
             df = structures.get(i).find(ref);
             if( df!=null ) return df;
         }
+        for(DataflowType df2:listDataflows()) {
+            if( df2.identifiesMe(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion())){
+                return df2;
+            }
+        }
         return null;
     }
 

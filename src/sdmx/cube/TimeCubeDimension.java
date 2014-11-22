@@ -62,8 +62,8 @@ public class TimeCubeDimension extends CubeDimension {
         Iterator<CubeObservation> it = obs.iterator();
         while(it.hasNext()){
             CubeObservation c = it.next();
-            if( c.getCrossSection()==null) return c;
-            if( c.getCrossSection().equals(id))return c;
+            if( c.getCrossSection()==null) {return c;}
+            if( c.getCrossSection().equals(id)){return c;}
         }
         return null;
     }

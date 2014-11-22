@@ -368,12 +368,12 @@ public class ReferenceType implements Serializable {
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeUTF(pack.toString());
         oos.writeUTF(clazz.toString());
-        oos.writeUTF(agency!=null?agency.toString():null);
-        oos.writeUTF(maintainedParentId!=null?maintainedParentId.toString():null);
-        oos.writeUTF(maintainedParentVersion!=null?maintainedParentVersion.toString():null);
-        oos.writeUTF(objectId!=null?objectId.toString():null);
-        oos.writeUTF(version!=null?version.toString():null);
-        oos.writeUTF(this.urn!=null?urn.toString():null);
+        oos.writeUTF(agency!=null?agency.toString():"");
+        oos.writeUTF(maintainedParentId!=null?maintainedParentId.toString():"");
+        oos.writeUTF(maintainedParentVersion!=null?maintainedParentVersion.toString():"");
+        oos.writeUTF(objectId!=null?objectId.toString():"");
+        oos.writeUTF(version!=null?version.toString():"");
+        oos.writeUTF(this.urn!=null?urn.toString():"");
         oos.writeObject(this.containedIds);
     }
 
@@ -381,23 +381,23 @@ public class ReferenceType implements Serializable {
         this.pack = PackageTypeCodelistType.fromString(ois.readUTF());
         this.clazz = ObjectTypeCodelistType.fromString(ois.readUTF());
         String ag = ois.readUTF();
-        if( ag!=null ) {
+        if( !"".equals(ag) ) {
             this.agency = new NestedNCNameID(ag);
         }
         String mid = ois.readUTF();
-        if( mid!=null ) {
+        if( !"".equals(mid) ) {
             this.maintainedParentId = new IDType(mid);
         }
         String mv = ois.readUTF();
-        if( mv!=null ) {
+        if( !"".equals(mv) ) {
             this.maintainedParentVersion=new Version(mv);
         }
         String oid = ois.readUTF();
-        if( oid!=null) {
+        if( !"".equals(oid)) {
             this.objectId = new IDType(oid);
         }
         String v = ois.readUTF();
-        if( v!=null ) {
+        if( !"".equals(v) ) {
             this.version = new Version(v);
         }
     }

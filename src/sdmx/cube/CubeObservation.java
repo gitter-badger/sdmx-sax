@@ -73,7 +73,7 @@ public class CubeObservation {
     /**
      * @param concept the concept to set
      */
-    public void setCross(String concept) {
+    public void setCrossSection(String concept) {
         this.cross = concept;
     }
 

@@ -319,6 +319,11 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
 
     @Override
     public DataflowType find(DataflowReference ref) {
+        for(DataflowType df2:listDataflows()) {
+            if( df2.identifiesMe(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion())){
+                return df2;
+            }
+        }
         Logger.getLogger("sdmx").log(Level.FINE,"find(DataflowReference-"+ref.getAgencyId()+":"+ref.getMaintainableParentId()+":"+ref.getVersion()+")");
         DataflowType dft = local.find(ref);
         if (dft == null) {

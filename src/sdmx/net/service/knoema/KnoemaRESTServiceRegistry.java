@@ -354,6 +354,11 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
 
     @Override
     public DataflowType find(DataflowReference ref) {
+        for(DataflowType df2:listDataflows()) {
+            if( df2.identifiesMe(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion())){
+                return df2;
+            }
+        }
         return local.find(ref);
     }
 

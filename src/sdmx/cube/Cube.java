@@ -107,9 +107,14 @@ public class Cube {
     }
     public CubeObservation find(FullKey key) {
         CubeDimension dim = getRootCubeDimension();
+        CubeDimension oldDim = dim;
         for(int i=0;i<order.size();i++) {
-            dim = dim.getSubDimension((String)key.getComponent(order.get(i)));
-            if( dim == null ) return null;
+            dim = dim.getSubDimension((String)key.getComponent(dim.getSubDimension()));
+            if( dim == null ) {
+                //System.out.println("Can't find dim:"+key.getComponent(order.get(i))+":"+oldDim.getSubDimension());
+                return null;
+            }
+            oldDim = dim;
         }
         TimeDimensionType time = this.struct.getDataStructureComponents().getDimensionList().getTimeDimension();
         if( time == null ) {
@@ -118,10 +123,14 @@ public class Cube {
             String timeValue = NameableType.toIDString((String)key.getComponent(time.getId().toString()));
             TimeCubeDimension tcd = (TimeCubeDimension)dim.getSubDimension(timeValue);
             if( tcd == null ) {
+                //System.out.println("TCD null:"+key.getComponent(time.getId().toString()+":"+timeValue));
+                //dim.dump();
                 return null;
             }
             if( struct.getDataStructureComponents().getDimensionList().getMeasureDimension()!=null){
                 String measure = NameableType.toIDString(key.getComponent(struct.getDataStructureComponents().getDimensionList().getMeasureDimension().getId().toString()));
+                //tcd.dump();
+                //System.out.println("Measure="+measure);
                 return tcd.getObservation(measure);
             }else {
                 CubeObservation co = tcd.getObservation(struct.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getId().toString());
