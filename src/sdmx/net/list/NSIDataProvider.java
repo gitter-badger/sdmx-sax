@@ -33,8 +33,8 @@ public class NSIDataProvider extends DataProvider {
     private URL serviceURL = null;
     private String soapNamespace = null;
 
-    public NSIDataProvider(int indx,String agency, String serviceURL, String soapNamespace) throws MalformedURLException {
-        super(indx);
+    public NSIDataProvider(int indx,String agency, String serviceURL, String soapNamespace,String attribution,String htmlAttribution) throws MalformedURLException {
+        super(indx,attribution,htmlAttribution);
         this.agencyId = agency;
         this.serviceURL = new URL(serviceURL);
         this.soapNamespace = soapNamespace;

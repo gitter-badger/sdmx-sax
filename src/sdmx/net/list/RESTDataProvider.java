@@ -34,8 +34,8 @@ public class RESTDataProvider extends DataProvider {
     private String agencyId = null;
     private URL serviceURL = null;
 
-    public RESTDataProvider(int indx,String agency, String serviceURL) throws MalformedURLException {
-        super(indx);
+    public RESTDataProvider(int indx,String agency, String serviceURL,String attribution,String htmlAttribution) throws MalformedURLException {
+        super(indx,attribution,htmlAttribution);
         this.agencyId = agency;
         this.serviceURL = new URL(serviceURL);
     }

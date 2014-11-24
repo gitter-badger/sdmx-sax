@@ -22,19 +22,19 @@ import sdmx.net.list.SDWDataProvider;
  */
 public class ServiceList {
     
-    public static DataProvider getDataProvider(int type, String agency,String serviceURL,String options) throws MalformedURLException {
+    public static DataProvider getDataProvider(int type, String agency,String serviceURL,String options,String attribution,String htmlAttribution) throws MalformedURLException {
         for(DataProvider dp:DataProvider.getList()){
             if( dp.getType() == type && agency.equals(dp.getAgencyId()) && dp.getServiceURL().equals(serviceURL)) {
                 return dp;
             }
         }
         switch(type) {
-            case DataProvider.TYPE_ILO:return new ILODataProvider(-1,agency, serviceURL);
-            case DataProvider.TYPE_KNOEMA:return new KnoemaDataProvider(-1,agency, serviceURL);
-            case DataProvider.TYPE_NSI:return new NSIDataProvider(-1,agency, serviceURL,options);
-            case DataProvider.TYPE_SDW:return new SDWDataProvider(-1,agency, serviceURL,options);
-            case DataProvider.TYPE_REST:return new RESTDataProvider(-1,agency, serviceURL);
-            case DataProvider.TYPE_OPENSDMX:return new OpenSDMXDataProvider(-1,agency, serviceURL);
+            case DataProvider.TYPE_ILO:return new ILODataProvider(-1,agency, serviceURL,attribution,htmlAttribution);
+            case DataProvider.TYPE_KNOEMA:return new KnoemaDataProvider(-1,agency, serviceURL,attribution,htmlAttribution);
+            case DataProvider.TYPE_NSI:return new NSIDataProvider(-1,agency, serviceURL,options,attribution,htmlAttribution);
+            case DataProvider.TYPE_SDW:return new SDWDataProvider(-1,agency, serviceURL,options,attribution,htmlAttribution);
+            case DataProvider.TYPE_REST:return new RESTDataProvider(-1,agency, serviceURL,attribution,htmlAttribution);
+            case DataProvider.TYPE_OPENSDMX:return new OpenSDMXDataProvider(-1,agency, serviceURL,attribution,htmlAttribution);
         }
         return null;
     }

@@ -35,8 +35,8 @@ public class OpenSDMXDataProvider extends DataProvider {
     private URL serviceURL = null;
     private Queryable registry = null;
 
-    public OpenSDMXDataProvider(int indx,String agency, String serviceURL) throws MalformedURLException {
-        super(indx);
+    public OpenSDMXDataProvider(int indx,String agency, String serviceURL,String attribution,String htmlAttribution) throws MalformedURLException {
+        super(indx,attribution,htmlAttribution);
         this.agencyId = agency;
         this.serviceURL = new URL(serviceURL);
     }
