@@ -48,7 +48,7 @@ public class StructuredDataSet {
         this.structure = struct;
     }
 
-    public StructuredValue getDecoratedValue(int row, int column) {
+    public StructuredValue getStructuredValue(int row, int column) {
         return new StructuredValue(getDataSet().getColumnName(column), getDataSet().getValue(row, column), registry, getStructure());
     }
 

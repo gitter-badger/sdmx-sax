@@ -85,4 +85,8 @@ public class DataflowsType {
         }
         return null;
     }
+
+    public void merge(DataflowsType dataflows) {
+        this.getDataflows().addAll(dataflows.getDataflows());
+    }
 }

@@ -100,6 +100,9 @@ public class StructuredDataWriter implements DataSetWriter {
 
     @Override
     public void finishObservation() {
+        if(obs==null){
+            System.out.println("Finish Obs:"+obs+" is null!!!");
+        }
         if( in_series ) {
             series.getObservations().add(obs);
             obs = null;

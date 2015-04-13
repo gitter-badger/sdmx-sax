@@ -191,7 +191,7 @@ public class Series implements Attachable {
         }
     }
     public boolean contains(int row) {
-        if( start <= row && end > row ) return true;
+        if( start <= row && end-1 >= row && size()>0 ) return true;
         return false;
     }
     public void dump() {
@@ -200,6 +200,7 @@ public class Series implements Attachable {
         System.out.println("Size:"+observations.size());
     }
     public Obs getObservationRow(int row) {
+        //System.out.println("Looking for row:"+row);
         for(int i=0;i<observations.size();i++) {
             //System.out.println("SRowId="+observations.get(i).getRowId());
             if( observations.get(i).getRowId()==row) return observations.get(i);

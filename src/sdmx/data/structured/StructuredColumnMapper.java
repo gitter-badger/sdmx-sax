@@ -133,10 +133,10 @@ public class StructuredColumnMapper implements ColumnMapper {
             throw new RuntimeException("Not attached to obs");
         }
         List<String> cols = getObservationColumns();
-        System.out.println("Get Observation Index:"+col);
+        //System.out.println("Get Observation Index:"+col);
         for (int i = 0; i < cols.size(); i++) {
             if (getColumnIndex(cols.get(i)) == col) {
-                System.out.println("Returning:"+i);
+                //System.out.println("Returning:"+i);
                 return i;
             }
         }

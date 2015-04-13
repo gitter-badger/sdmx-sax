@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -137,7 +138,7 @@ public class RESTQueryable implements Queryable, Registry, Repository {
             IOUtils.copy(in, file);
             in = new FileInputStream(name);
         }
-     //FileOutputStream temp = new FileOutputStream("temp.xml");
+        //FileOutputStream temp = new FileOutputStream("temp.xml");
         //org.apache.commons.io.IOUtils.copy(in, temp);
         //temp.close();
         //in.close();
@@ -227,11 +228,18 @@ public class RESTQueryable implements Queryable, Registry, Repository {
         IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataflow().get(0).getMaintainableParentId();
         NestedNCNameID agency = new NestedNCNameID(this.getAgencyId());
         DataStructureType dst = null;
-        for (int i = 0; i < dataflowList.size(); i++) {
-            if (dataflowList.get(i).getId().equals(flowid)) {
-                DataStructureReference ref = DataStructureReference.create(dataflowList.get(i).getStructure().getAgencyId(), dataflowList.get(i).getStructure().getMaintainableParentId(), dataflowList.get(i).getStructure().getMaintainedParentVersion());
-                dst = find(ref);
+        DataflowReference dfref = DataflowReference.create(agency, flowid, null);
+        DataflowType df = find(dfref);
+        if (df == null) {
+            listDataflows();
+            for (int i = 0; i < dataflowList.size(); i++) {
+                if (dataflowList.get(i).getId().equals(flowid)) {
+                    DataStructureReference ref = DataStructureReference.create(dataflowList.get(i).getStructure().getAgencyId(), dataflowList.get(i).getStructure().getMaintainableParentId(), dataflowList.get(i).getStructure().getMaintainedParentVersion());
+                    dst = find(ref);
+                }
             }
+        }else {
+            dst = find(df.getStructure());
         }
         DataStructureType structure = dst;
         StringBuilder q = new StringBuilder();
@@ -319,11 +327,11 @@ public class RESTQueryable implements Queryable, Registry, Repository {
 
     @Override
     public DataStructureType find(DataStructureReference ref) {
-        Logger.getLogger("sdmx").log(Level.FINE, "RESTQueryable find(DataStructureReference:"+ref.getAgencyId()+":"+ref.getMaintainableParentId()+":"+ref.getVersion());
+        Logger.getLogger("sdmx").log(Level.FINE, "RESTQueryable find(DataStructureReference:" + ref.getAgencyId() + ":" + ref.getMaintainableParentId() + ":" + ref.getVersion());
         DataStructureType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/datastructure/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion()==null?"latest":ref.getVersion().toString()));
+                StructureType st = retrieve(getServiceURL() + "/datastructure/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion() == null ? "latest" : ref.getVersion().toString()));
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {
@@ -339,11 +347,11 @@ public class RESTQueryable implements Queryable, Registry, Repository {
 
     @Override
     public DataflowType find(DataflowReference ref) {
-        Logger.getLogger("sdmx").log(Level.FINE, "RESTQueryable find(DataflowReference:"+ref.getAgencyId()+":"+ref.getMaintainableParentId()+":"+ref.getVersion());
+        Logger.getLogger("sdmx").log(Level.FINE, "RESTQueryable find(DataflowReference:" + ref.getAgencyId() + ":" + ref.getMaintainableParentId() + ":" + ref.getVersion());
         DataflowType dft = local.find(ref);
         if (dft == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/dataflow/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + ref.getVersion() != null ? ref.getVersion().toString() : "latest");
+                StructureType st = retrieve(getServiceURL() + "/dataflow/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion() != null ? ref.getVersion().toString() : "latest"));
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {
@@ -359,7 +367,7 @@ public class RESTQueryable implements Queryable, Registry, Repository {
 
     @Override
     public CodeType find(CodeReference ref) {
-        Logger.getLogger("sdmx").log(Level.FINE, "RESTQueryable find(CodeReference:"+ref.getAgencyId()+":"+ref.getMaintainableParentId()+":"+ref.getVersion());
+        Logger.getLogger("sdmx").log(Level.FINE, "RESTQueryable find(CodeReference:" + ref.getAgencyId() + ":" + ref.getMaintainableParentId() + ":" + ref.getVersion());
         CodeType dst = local.find(ref);
         if (dst == null) {
             try {
@@ -380,11 +388,11 @@ public class RESTQueryable implements Queryable, Registry, Repository {
 
     @Override
     public CodelistType find(CodelistReference ref) {
-        Logger.getLogger("sdmx").log(Level.FINE, "RESTQueryable find(CodelistReference:"+ref.getAgencyId()+":"+ref.getMaintainableParentId()+":"+ref.getVersion());
+        Logger.getLogger("sdmx").log(Level.FINE, "RESTQueryable find(CodelistReference:" + ref.getAgencyId() + ":" + ref.getMaintainableParentId() + ":" + ref.getVersion());
         CodelistType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/codelist/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + ref.getVersion() != null ? "/" + ref.getVersion().toString() : "/latest");
+                StructureType st = retrieve(getServiceURL() + "/codelist/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + (ref.getVersion() != null ? "/" + ref.getVersion().toString() : "/latest"));
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {
@@ -400,14 +408,14 @@ public class RESTQueryable implements Queryable, Registry, Repository {
 
     @Override
     public ConceptType find(ConceptReference ref) {
-        ConceptSchemeReference ref2 = ConceptSchemeReference.create(ref.getAgencyId(),ref.getMaintainableParentId(),ref.getVersion());
+        ConceptSchemeReference ref2 = ConceptSchemeReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion());
         ConceptSchemeType cs = find(ref2);
         return cs.findConcept(ref.getId());
     }
 
     @Override
     public ConceptSchemeType find(ConceptSchemeReference ref) {
-        Logger.getLogger("sdmx").log(Level.FINE, "RESTQueryable find(ConceptSchemeReference:"+ref.getAgencyId()+":"+ref.getMaintainableParentId()+":"+ref.getVersion());
+        Logger.getLogger("sdmx").log(Level.FINE, "RESTQueryable find(ConceptSchemeReference:" + ref.getAgencyId() + ":" + ref.getMaintainableParentId() + ":" + ref.getVersion());
         ConceptSchemeType dst = local.find(ref);
         if (dst == null) {
             try {
@@ -424,20 +432,30 @@ public class RESTQueryable implements Queryable, Registry, Repository {
         }
         return dst;
     }
+
     @Override
     public ItemType find(ItemReference ref) {
         ConceptType concept = find(ConceptReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion(), ref.getId()));
-        if( concept!=null) return concept;
-        CodeType code = find(CodeReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion(), ref.getId()));
+        if (concept != null) {
+            return concept;
+        }
+        CodeType code = find(CodeReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion(), ref.getId()));
         return code;
-        
+
     }
 
     @Override
     public ItemSchemeType find(ItemSchemeReference ref) {
         ConceptSchemeType concept = find(ConceptSchemeReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion()));
-        if( concept!=null) return concept;
-        CodelistType code = find(CodelistReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion()));
+        if (concept != null) {
+            return concept;
+        }
+        CodelistType code = find(CodelistReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion()));
         return code;
+    }
+
+    @Override
+    public void save(OutputStream out) throws IOException {
+        local.save(out);
     }
 }

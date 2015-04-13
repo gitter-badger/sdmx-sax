@@ -5,6 +5,8 @@
  */
 package sdmx;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import sdmx.commonreferences.CategorySchemeReference;
 import sdmx.commonreferences.CodeReference;
@@ -58,4 +60,5 @@ public interface Registry {
     public ItemSchemeType find(ItemSchemeReference ref);
     public ConceptType find(ConceptReference ref);
     public ConceptSchemeType find(ConceptSchemeReference ref);
+    public void save(OutputStream out)throws IOException;
 }

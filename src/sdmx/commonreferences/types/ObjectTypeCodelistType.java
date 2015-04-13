@@ -8,7 +8,6 @@ package sdmx.commonreferences.types;
 import java.util.ArrayList;
 import java.util.List;
 import sdmx.exception.TypeValueNotFoundException;
-import sun.reflect.generics.tree.BaseType;
 
 /**
  *	<xs:simpleType name="ObjectTypeCodelistType">

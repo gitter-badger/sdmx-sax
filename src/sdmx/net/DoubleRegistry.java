@@ -6,6 +6,8 @@
 
 package sdmx.net;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -169,5 +171,10 @@ public class DoubleRegistry implements Registry {
         if( concept!=null) return concept;
         CodelistType code = find(CodelistReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion()));
         return code;
+    }
+
+    @Override
+    public void save(OutputStream out) throws IOException {
+        left.save(out);
     }
 }

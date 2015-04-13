@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -457,5 +458,10 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
         if( concept!=null) return concept;
         CodelistType code = find(CodelistReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion()));
         return code;
+    }
+
+    @Override
+    public void save(OutputStream out) throws IOException {
+        local.save(out);
     }
 }

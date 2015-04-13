@@ -21,6 +21,7 @@ import sdmx.version.twopointzero.Sdmx20DataParserTest;
 import sdmx.version.twopointzero.Sdmx20DataWriteTest;
 import sdmx.version.twopointzero.Sdmx20ServiceTest;
 import sdmx.version.twopointzero.Sdmx20StructureParserTest;
+import sdmx.version.twopointzero.Sdmx20StructureWriteTest;
 import sdmx.version.twopointzero.compact.CompactDataEventHandlerTest;
 import sdmx.version.twopointzero.generic.GenericDataContentHandlerTest;
 
@@ -61,7 +62,8 @@ import sdmx.version.twopointzero.generic.GenericDataContentHandlerTest;
     CompactDataEventHandlerTest.class,
     GenericDataContentHandlerTest.class,
     CubeTest.class,
-    ReferenceTypeTest.class
+    ReferenceTypeTest.class,
+    Sdmx20StructureWriteTest.class
 })
 public class SdmxSaxTestSuite {
     @BeforeClass

@@ -721,6 +721,7 @@ public class Sdmx21StructureWriter {
         }
         if (time.getId() != null) {
             time2.setId(time.getId().getString());
+        }else{
             time2.setId("TIME_PERIOD");
         }
         if (time.getUri() != null) {
@@ -747,11 +748,7 @@ public class Sdmx21StructureWriter {
             toDataProvider(header2.addNewDataProvider(), header.getDataProvider());
         }
         if (header.getDataSetAction() != null) {
-            //org.sdmx.resources.sdmxml.schemas.v21.common.ActionType.Enum.forString(header.getDataSetAction().getString()
-            // XMLBeans has hideous problems here...
-            // I have given up trying to get XMLBeans to write a DataSetAction...
-            // I think it will require recompiling XMLBeans to get this to work...
-            //header2.setDataSetAction(org.sdmx.resources.sdmxml.schemas.v21.common.ActionType.Enum.forString(header.getDataSetAction().getString());
+            // Structure Should Not Have a DataSetAction
         }
         if (header.getPrepared() != null) {
             Calendar cal = Calendar.getInstance();

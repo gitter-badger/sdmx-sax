@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -159,7 +160,7 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
     }
 
     private DataMessage query(String urlString) throws MalformedURLException, IOException, ParseException {
-        
+        Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Retrieve Data:" + urlString);
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(urlString);
         get.addHeader("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
@@ -233,7 +234,7 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
         String endTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getEnd().toString();
         DataMessage msg = null;
         try {
-            msg = query(getServiceURL() + "/data/" + flowid + "/" + q.toString() + "?startPeriod=" + startTime + "&endPeriod=" + endTime);
+            msg = query(getServiceURL() + "/repository/data/" + flowid + "/" + q.toString() + "/"+agency+"?startPeriod=" + startTime + "&endPeriod=" + endTime);
         } catch (IOException ex) {
             Logger.getLogger(OpenSDMXRESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
@@ -385,7 +386,7 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
 
     @Override
     public ConceptType find(ConceptReference ref) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return local.find(ref);
     }
 
     @Override
@@ -422,5 +423,10 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
         if( concept!=null) return concept;
         CodelistType code = find(CodelistReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion()));
         return code;
+    }
+
+    @Override
+    public void save(OutputStream out) throws IOException {
+        local.save(out);
     }
 }

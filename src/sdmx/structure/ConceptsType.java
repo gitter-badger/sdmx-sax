@@ -213,4 +213,8 @@ public class ConceptsType {
             return null;
         }
     }
+
+    public void merge(ConceptsType concepts) {
+        this.getConceptSchemes().addAll(concepts.getConceptSchemes());
+    }
 }

@@ -58,4 +58,7 @@ public class ItemSchemeReferenceBase extends MaintainableReferenceBase {
     public ConceptSchemeReference asConceptSchemeReference() {
         return ConceptSchemeReference.create(this.getAgencyId(), this.getMaintainableParentId(), this.getVersion());
     }
+    public ItemSchemeReference asItemSchemeReference() {
+        return ItemSchemeReference.create(this.getAgencyId(), this.getMaintainableParentId(), this.getVersion());
+    }
 }

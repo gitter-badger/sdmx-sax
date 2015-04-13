@@ -54,8 +54,8 @@ public class StructuredValue {
     }
 
     public boolean isCoded() {
-        Component comp = structure.getDataStructureComponents().findDimension(getConcept());
-        if ("type".equals(getConcept())) {
+        Component comp = structure.getDataStructureComponents().findDimension(concept);
+        if ("type".equals(concept)) {
             comp = structure.getDataStructureComponents().getDimensionList().getMeasureDimension();
         }
         if (comp == null) {
@@ -74,11 +74,11 @@ public class StructuredValue {
         //ItemType item = ValueTypeResolver.resolveCode(registry, structure, concept, value);
         //System.out.println("Item=" + item.toString());
         //System.out.println("Item=" + item.findName(loc.getLanguage()));
-        return ValueTypeResolver.resolveCode(registry, structure, getConcept(), getValue());
+        return ValueTypeResolver.resolveCode(registry, structure, concept, getValue());
     }
 
     public ItemSchemeType getCodelist() {
-        return ValueTypeResolver.getPossibleCodes(registry, structure, getConcept());
+        return ValueTypeResolver.getPossibleCodes(registry, structure, concept);
     }
 
     public String toString() {
@@ -108,8 +108,8 @@ public class StructuredValue {
     /**
      * @return the concept
      */
-    public String getConcept() {
-        return concept;
+    public ConceptType getConcept() {
+        return registry.find(structure.getDataStructureComponents().findDimension(concept).getConceptIdentity());
     }
 
     /**

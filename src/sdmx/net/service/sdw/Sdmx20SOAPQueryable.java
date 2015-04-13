@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.MalformedURLException;
@@ -66,6 +67,8 @@ import sdmx.query.base.QueryIDType;
 import sdmx.query.base.QueryNestedIDType;
 import sdmx.query.data.DataQueryType;
 import sdmx.query.datastructure.DataStructureWhereType;
+import sdmx.structure.DataflowsType;
+import sdmx.structure.StructuresType;
 import sdmx.structure.base.ItemSchemeType;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.codelist.CodeType;
@@ -409,6 +412,7 @@ public class Sdmx20SOAPQueryable implements Registry,Repository,Queryable {
 
     @Override
     public DataflowType find(DataflowReference ref) {
+        if( local.find(ref)!=null) return local.find(ref);
         for(DataflowType df2:listDataflows()) {
             if( df2.identifiesMe(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion())){
                 return df2;
@@ -456,5 +460,18 @@ public class Sdmx20SOAPQueryable implements Registry,Repository,Queryable {
         if( concept!=null) return concept;
         CodelistType code = find(CodelistReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion()));
         return code;
+    }
+
+    @Override
+    public void save(OutputStream out) throws IOException {
+        StructureType st = new StructureType();
+        st.setStructures(new StructuresType());
+        st.getStructures().setDataflows(new DataflowsType());
+        if( dataflowList==null) listDataflows();
+        for(DataflowType df:listDataflows()){
+            if(df!=null)st.getStructures().getDataflows().getDataflows().add(df);
+        }
+        local.load(st);
+        local.save(out);
     }
 }

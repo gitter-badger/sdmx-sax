@@ -4,6 +4,8 @@
  */
 package sdmx.net;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -212,5 +214,19 @@ public class LocalRegistry implements Registry {
         if( concept!=null) return concept;
         CodelistType code = find(CodelistReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion()));
         return code;
+    }
+
+    @Override
+    public void save(OutputStream out) throws IOException {
+        if( structures.size()==0)return;
+         StructureType struct = this.structures.get(0);
+         for(int i=1;i<structures.size();i++) {
+             struct.merge(structures.get(i));
+         }
+         structures.clear();
+         structures.add(struct);
+         struct.save(out);
+         out.flush();
+         out.close();
     }
 }

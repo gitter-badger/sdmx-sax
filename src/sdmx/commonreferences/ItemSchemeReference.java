@@ -52,5 +52,8 @@ public class ItemSchemeReference extends ItemSchemeReferenceBase {
     public ItemSchemeReference(anyURI urn){
         super(urn);
     }
-
+    public static ItemSchemeReference create(NestedNCNameID agency,IDType id,Version ver){
+        ItemSchemeRef ref = new ItemSchemeRef(agency,id,ver);
+        return new ItemSchemeReference(ref,null);
+    }
 }

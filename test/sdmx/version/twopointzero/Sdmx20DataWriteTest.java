@@ -26,6 +26,7 @@ import sdmx.SdmxIO;
 import sdmx.version.twopointzero.writer.CompactDataWriter;
 import sdmx.net.LocalRegistry;
 import sdmx.exception.ParseException;
+import sdmx.version.twopointzero.writer.GenericDataWriter;
 
 /**
  *
@@ -107,8 +108,42 @@ public class Sdmx20DataWriteTest {
         long t2 = System.currentTimeMillis();
         System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
         long t3 = System.currentTimeMillis();
-        OutputStream out = new FileOutputStream("testOut/DSID1230571 - GenericDataOut.xml");
+        OutputStream out = new FileOutputStream("testOut/Generic DSID1230571 - CompactOut.xml");
         CompactDataWriter.write(data, out);
+        out.close();
+        data.dump();
+    }
+    @Test
+    public void testGenericCompactSample() throws IOException, XMLStreamException, ParseException {
+        long t1= System.currentTimeMillis();
+        InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/CompactSample.xml");
+        InputStream structIn = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/StructureSample.xml");
+        LocalRegistry reg = LocalRegistry.getDefaultWorkspace();
+        StructureType struct = SdmxIO.parseStructure(reg,structIn);
+        
+        DataMessage data = SdmxIO.parseData(in,false);
+        long t2 = System.currentTimeMillis();
+        System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
+        long t3 = System.currentTimeMillis();
+        OutputStream out = new FileOutputStream("testOut/CompactSample-GenericOut.xml");
+        GenericDataWriter.write(data, out, struct.getStructures().getDataStructures().getDataStructures().get(0).asReference(), reg);
+        out.close();
+        data.dump();
+    }
+    @Test
+    public void testGenericSample2() throws IOException, XMLStreamException, ParseException {
+        long t1= System.currentTimeMillis();
+        InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/DSID1230571/DSID1230571 - CompactData.xml");
+        InputStream structIn = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/DSID1230571/DSID1230571 - DataSD.xml");
+        LocalRegistry reg = LocalRegistry.getDefaultWorkspace();
+        StructureType struct = SdmxIO.parseStructure(reg,structIn);
+        
+        DataMessage data = SdmxIO.parseData(in,false);
+        long t2 = System.currentTimeMillis();
+        System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
+        long t3 = System.currentTimeMillis();
+        OutputStream out = new FileOutputStream("testOut/DSID230571-out.xml");
+        GenericDataWriter.write(data, out, struct.getStructures().getDataStructures().getDataStructures().get(0).asReference(), reg);
         out.close();
         data.dump();
     }

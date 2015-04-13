@@ -29,6 +29,7 @@ import sdmx.data.structured.StructuredColumnMapper;
 import sdmx.data.structured.StructuredDataSet;
 import sdmx.message.*;
 import sdmx.structure.base.NameableType;
+import static sdmx.version.twopointzero.writer.GenericDataWriter.writeName;
 
 /**
  * This file is part of SdmxSax.
@@ -112,6 +113,11 @@ public class CompactDataWriter {
         if (msg.getHeader().getSender() != null && !"".equals(msg.getHeader().getSender())) {
             writer.writeStartElement("Sender");
             writer.writeAttribute("id", msg.getHeader().getSender().getId().toString());
+            if (msg.getHeader().getSender().getNames() != null) {
+                for (Name n : msg.getHeader().getSender().getNames()) {
+                    writeName(writer, n);
+                }
+            }
             if (msg.getHeader().getSender().getContacts() != null && msg.getHeader().getSender().getContacts().size() > 0) {
                 writeContact(writer, msg.getHeader().getSender().getContacts().get(0));
             }
@@ -120,6 +126,11 @@ public class CompactDataWriter {
         if (msg.getHeader().getReceivers() != null && msg.getHeader().getReceivers().size() > 0) {
             writer.writeStartElement("Receiver");
             writer.writeAttribute("id", msg.getHeader().getReceivers().get(0).getId().toString());
+            if (msg.getHeader().getReceivers().get(0).getNames() != null) {
+                for (Name n : msg.getHeader().getReceivers().get(0).getNames()) {
+                    writeName(writer, n);
+                }
+            }
             if (msg.getHeader().getReceivers().get(0).getContacts() != null && msg.getHeader().getReceivers().get(0).getContacts().size() > 0) {
                 writeContact(writer, msg.getHeader().getReceivers().get(0).getContacts().get(0));
             }
@@ -193,7 +204,7 @@ public class CompactDataWriter {
             StructuredColumnMapper mapper = (StructuredColumnMapper) sds.getColumnMapper();
             if (sds.getGroups() != null) {
                 for (Group gr : sds.getGroups()) {
-                    writeGroup(writer, gr, namespaceprefix,namespace);
+                    writeGroup(writer, gr, namespaceprefix, namespace);
                 }
             }
             if (sds.getSeriesList() != null && sds.getSeriesList().size() > 0) {
@@ -218,7 +229,10 @@ public class CompactDataWriter {
                         Obs o = s.getObservations().get(k);
                         for (int j = 0; j < mapper.size(); j++) {
                             if (mapper.isAttachedToObservation(j)) {
-                                writer.writeAttribute(mapper.getColumnName(j), o.getObservationValue(j));
+                                String val = o.getObservationValue(j);
+                                if (val != null) {
+                                    writer.writeAttribute(mapper.getColumnName(j), val != null ? val : "");
+                                }
                             }
                         }
                     }
@@ -279,11 +293,11 @@ public class CompactDataWriter {
         writer.writeEndElement();
     }
 
-    public static void writeGroup(XMLStreamWriter writer, Group gr, String namespaceprefix,String namespace) throws XMLStreamException {
+    public static void writeGroup(XMLStreamWriter writer, Group gr, String namespaceprefix, String namespace) throws XMLStreamException {
         if (namespaceprefix != null) {
-            writer.writeStartElement(namespaceprefix, gr.getGroupName(),namespace);
+            writer.writeStartElement(namespaceprefix, gr.getGroupName(), namespace);
         } else {
-            writer.writeStartElement(namespace,gr.getGroupName());
+            writer.writeStartElement(namespace, gr.getGroupName());
         }
         Iterator<String> it = gr.getGroupKey().keySet().iterator();
         while (it.hasNext()) {

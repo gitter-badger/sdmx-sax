@@ -162,4 +162,8 @@ public class CodelistsType {
         }
         return null;
     }
+
+    public void merge(CodelistsType codelists) {
+        this.getCodelists().addAll(codelists.getCodelists());
+    }
 }

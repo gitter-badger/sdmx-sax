@@ -70,4 +70,8 @@ public class CategorySchemesType {
             categorySchemes.get(i).dump();
         }
     }
+
+    public void merge(CategorySchemesType categorySchemes) {
+        this.getCategorySchemes().addAll(categorySchemes.getCategorySchemes());
+    }
 }

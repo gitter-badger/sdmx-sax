@@ -122,6 +122,7 @@ public class StructuredDataSet implements DataSet, Attachable {
                 Series series = findSeries(row);
             //System.out.println("Find Row:"+row+": Series="+series);
                 //System.out.println("Find Row:"+row+": Obs="+series.getObservationRow(row));
+                //series.dump();
                 return series.getObservationRow(row).getValue(columnMapper.getObservationIndex(s));
             } else if (attach == AttachmentLevel.GROUP) {
                 FlatObs flat = getFlatObsSansGroups(row);
@@ -186,7 +187,8 @@ public class StructuredDataSet implements DataSet, Attachable {
     }
 
     public Series findSeries(int row) {
-        return series.get(findSeriesIndex(row));
+        Series s = series.get(_findSeriesIndex(row));
+        return s;
     }
 
     public int findSeriesIndex(int row) {
@@ -194,6 +196,7 @@ public class StructuredDataSet implements DataSet, Attachable {
     }
 
     public int findSeriesIndex(int row, int from, int to) {
+        if( row == 0 ) return 0;
         //System.out.println("Find Row:"+row+": from:"+from+" to"+to);
         int half = ((to - from) / 2);
 
@@ -222,7 +225,7 @@ public class StructuredDataSet implements DataSet, Attachable {
         if (series.get(from + half).getStart() < row) {
             return findSeriesIndex(row, from + half, to);
         }
-        System.out.println("Can't Find");
+        System.out.println("Can't Find ob "+row);
         return -1;
     }
 
@@ -231,6 +234,9 @@ public class StructuredDataSet implements DataSet, Attachable {
             if (series.get(i).contains(row)) {
                 return i;
             }
+            //}else{
+                //System.out.println("Series:"+i+": doesn't contain row:"+row);
+            //}
         }
         return -1;
     }

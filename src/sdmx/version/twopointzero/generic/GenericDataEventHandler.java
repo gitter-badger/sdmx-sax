@@ -109,6 +109,7 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
     private String freq = null;
     private boolean in_group = false;
     private boolean in_series = false;
+    private boolean in_observation = false;
     DataSetWriter writer = new FlatDataSetWriter();
     
     
@@ -281,11 +282,13 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
 
     public void startObs(String uri, Attributes atts) {
         state = STATE_OBS;
+        in_observation = true;
         writer.newObservation();
     }
 
     public void endObs() throws SAXException {
         state = STATE_OBSEND;
+        in_observation=false;
         writer.finishObservation();
     }
 
@@ -422,6 +425,15 @@ public class GenericDataEventHandler extends Sdmx20EventHandler {
                 break;
             case STATE_REPORTINGEND:
                 header.setReportingEnd(new ObservationalTimePeriodType(new String(c)));
+                this.state = STATE_HEADER;
+                break;
+            case STATE_TIME:
+                if( in_observation && in_series) {
+                   writer.writeObservationComponent("TIME_PERIOD", new String(c));
+                }
+                if( in_series && !in_observation ) {
+                    writer.writeSeriesComponent("TIME_PERIOD", new String(c));
+                }
                 this.state = STATE_HEADER;
                 break;
         }

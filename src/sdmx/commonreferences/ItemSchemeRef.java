@@ -41,8 +41,8 @@ import sdmx.commonreferences.types.ItemSchemeTypeCodelistType;
  *  Copyright James Gardner 2014
  */
 public class ItemSchemeRef extends ItemSchemeRefBase {
-    public ItemSchemeRef(ItemSchemeTypeCodelistType clazz,ItemSchemePackageTypeCodelistType pack) {
-        super(null,null,null,clazz,pack);
+    public ItemSchemeRef(NestedNCNameID agency, IDType id, Version ver) {
+// We Lose Package and Item details.. what does this point to now???
+        super(agency,id,ver,null,null);
     }
-
 }

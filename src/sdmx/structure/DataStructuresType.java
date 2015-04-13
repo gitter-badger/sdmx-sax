@@ -104,4 +104,8 @@ public class DataStructuresType {
         Logger.getLogger("sdmx").finest("DataStructuresType: find(DataStructureReference:"+ref.toString()+":can't find datastructure");
         return null;
     }
+
+    public void merge(DataStructuresType dataStructures) {
+        this.getDataStructures().addAll(dataStructures.getDataStructures());
+    }
 }

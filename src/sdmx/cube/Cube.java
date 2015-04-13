@@ -61,7 +61,11 @@ public class Cube {
             // This line goes through the components in their datastructure order
             //IDType dimId = struct.getDataStructureComponents().getDimensionList().getDimension(i).getId();
             // This line goes through the components in their specified order
-            IDType dimId = new IDType(order.get(i));
+            IDType dimId = null;
+            if( order!=null){ dimId=new IDType(order.get(i));}
+            else {
+                dimId = struct.getDataStructureComponents().getDimensionList().getDimension(i).getId();
+            }
             CubeDimension myDim = dim.getSubDimension(obs.getValue(mapper.getColumnIndex(dimId.toString())));
             if (myDim == null) {
                 //myDim = new HashMapCubeDimension(dimId.toString(), obs.getValue(mapper.getColumnIndex(dimId.toString())));

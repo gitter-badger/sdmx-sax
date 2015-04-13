@@ -43,7 +43,7 @@ import sdmx.commonreferences.types.ItemSchemePackageTypeCodelistType;
 public class DataStructureEnumerationSchemeRef extends ItemSchemeRef {
 
     public DataStructureEnumerationSchemeRef(DimensionEnumerationTypeCodelistType clazz,ItemSchemePackageTypeCodelistType pack){
-        super(clazz,pack);
+        super(null,null,null);
     }
     
 }
