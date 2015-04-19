@@ -160,12 +160,28 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
             }else if ("Email".equals(localName)) {
                 eh.startEmail(atts);
             }
+            // DataSet has no namespace!!!
+            else if ("DataSet".equals(localName)) {
+                try {
+                    eh.startDataSet(uri, qName, atts);
+                } catch (URISyntaxException ex) {
+                    Logger.getLogger(CompactDataContentHandler.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
+                }
+            } else if ("Series".equals(localName)) {
+                eh.startSeries(uri, atts);
+            } else if ("Obs".equals(localName)) {
+                eh.startObs(uri, atts);
+            } else if( localName.indexOf("Group")!=-1 ) {
+                eh.startGroup(localName, atts);
+            }
         } else {
             if ("DataSet".equals(localName)) {
                 try {
                     eh.startDataSet(uri, qName, atts);
                 } catch (URISyntaxException ex) {
                     Logger.getLogger(CompactDataContentHandler.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
                 }
             } else if ("Series".equals(localName)) {
                 eh.startSeries(uri, atts);
@@ -235,6 +251,15 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
                 eh.endURI();
             }else if ("Email".equals(localName)) {
                 eh.endEmail();
+            }
+            else if ("DataSet".equals(localName)) {
+                eh.endDataSet();
+            } else if ("Series".equals(localName)) {
+                eh.endSeries();
+            } else if ("Obs".equals(localName)) {
+                eh.endObs();
+            } else if( localName.indexOf("Group")!=-1 ) {
+                eh.endGroup();
             }
         } else {
             if ("DataSet".equals(localName)) {

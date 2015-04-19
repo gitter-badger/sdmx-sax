@@ -158,7 +158,7 @@ public class CompactDataWriter {
         }
         writer.writeEndElement();
         if (namespaceprefix == null || namespace == null) {
-            writer.writeStartElement("DataSet");
+            writer.writeStartElement("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/compact","DataSet");
         } else {
             writer.writeStartElement(namespaceprefix, "DataSet", namespace);
         }
@@ -210,7 +210,7 @@ public class CompactDataWriter {
             if (sds.getSeriesList() != null && sds.getSeriesList().size() > 0) {
                 for (int i = 0; i < sds.getSeriesList().size(); i++) {
                     if (namespaceprefix == null || namespace == null) {
-                        writer.writeStartElement("Series");
+                        writer.writeStartElement("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/compact","Series");
                     } else {
                         writer.writeStartElement(namespaceprefix, "Series", namespace);
                     }
@@ -222,7 +222,7 @@ public class CompactDataWriter {
                     }
                     for (int k = 0; k < s.getObservations().size(); k++) {
                         if (namespaceprefix == null || namespace == null) {
-                            writer.writeEmptyElement("Obs");
+                            writer.writeEmptyElement("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/compact","Obs");
                         } else {
                             writer.writeEmptyElement(namespaceprefix, "Obs", namespace);
                         }
