@@ -8,6 +8,7 @@ package sdmx.common;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +65,7 @@ import java.util.List;
  *
  *  Copyright James Gardner 2014
  */
-public class AnnotationType {
+public class AnnotationType implements Serializable {
     private String annotationTitle = null;
     private String annotationType = null;
     private String annotationUrl = null;

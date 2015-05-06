@@ -420,6 +420,45 @@ public class Sdmx21StructureWriter {
             ctf2.setTextType(SimpleDataType.Enum.forString(ctf.getTextType().toString()));
         }
     }
+    public static void toTDTextFormat(TextFormatType ctf2, sdmx.structure.base.TextFormatType ctf) {
+        if (ctf.getDecimals() != null) {
+            ctf2.setDecimals(new BigInteger(Integer.toString(ctf.getDecimals().getValue())));
+        }
+        //if (ctf.getEndValue() != null) {
+        //    ctf2.setEndValue(new BigDecimal(ctf.getEndValue().toString()));
+        //3}
+        //if (ctf.getInterval() != null) {
+        //    ctf2.setInterval(new BigDecimal(ctf.getInterval().toString()));
+        //}
+        /*
+        if (ctf.isMultiLingual() != null) {
+            ctf2.setIsMultiLingual(ctf.isMultiLingual());
+        }
+        if (ctf.isSequence() != null) {
+            ctf2.setIsSequence(ctf.isSequence());
+        }
+        if (ctf.getMaxLength() != null) {
+            ctf2.setMaxLength(new BigInteger(Integer.toString(ctf.getMaxLength().getValue())));
+        }
+        if (ctf.getMaxValue() != null) {
+            ctf2.setMaxValue(new BigDecimal(ctf.getMaxValue().toString()));
+        }
+        if (ctf.getMinLength() != null) {
+            ctf2.setMinLength(new BigInteger(Integer.toString(ctf.getMinLength().getValue())));
+        }
+        if (ctf2.getMinValue() != null) {
+            ctf2.setMinValue(new BigDecimal(ctf.getMinValue()));
+        }
+        if (ctf.getPattern() != null) {
+            ctf2.setPattern(ctf.getPattern());
+        }
+        if (ctf.getStartValue() != null) {
+            ctf2.setStartValue(new BigDecimal(ctf.getStartValue().toString()));
+        }*/
+        if (ctf.getTextType() != null) {
+            ctf2.setTextType(SimpleDataType.Enum.forString(ctf.getTextType().toString()));
+        }
+    }
 
     public static void toISOConceptReference(ISOConceptReferenceType iso2, sdmx.structure.concept.ISOConceptReferenceType iso) {
         if (iso.getAgencyId() != null) {
@@ -604,7 +643,7 @@ public class Sdmx21StructureWriter {
             }
         }
         if (localrep.getTextFormat() != null) {
-            toTextFormat(localrep2.addNewTextFormat(), localrep.getTextFormat());
+            toTDTextFormat(localrep2.addNewTextFormat(), localrep.getTextFormat());
         }
     }
 

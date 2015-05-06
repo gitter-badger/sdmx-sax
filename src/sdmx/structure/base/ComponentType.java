@@ -59,6 +59,11 @@ public class ComponentType extends ComponentBaseType {
      */
     public IDType getId() {
         if( super.getId()==null ) {
+            //if( conceptIdentity==null ) {
+            //    Thread.dumpStack();
+            //    return new IDType("MISSING!");
+            //    
+            //}
             return conceptIdentity.getId().asID();
         }
         return super.getId();

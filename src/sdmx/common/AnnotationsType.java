@@ -5,8 +5,12 @@
 
 package sdmx.common;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import sdmx.commonreferences.LocalCodeReference;
 
 /**
  *	<xs:complexType name="AnnotationsType">
@@ -57,5 +61,13 @@ public abstract class AnnotationsType {
     public int size() { return annots.size(); }
     public List<AnnotationType> getAnnotations() { return this.annots; }
     public void setAnnotations(List<AnnotationType> list) {this.annots=list;}
+    
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.writeObject(annots);
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        annots = (List<AnnotationType>)ois.readObject();
+    }
 }
 
