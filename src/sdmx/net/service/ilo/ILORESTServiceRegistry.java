@@ -384,7 +384,7 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
         DataflowType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/registry/dataflow/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion() != null ? ref.getVersion().toString() : "latest"));
+                StructureType st = retrieve(getServiceURL() + "/dataflow/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion() != null ? ref.getVersion().toString() : "latest"));
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {

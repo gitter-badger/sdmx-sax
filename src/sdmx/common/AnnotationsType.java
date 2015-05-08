@@ -46,7 +46,9 @@ public abstract class AnnotationsType {
     public AnnotationsType(List<AnnotationType> annots) {
         this.annots=annots;
     }
-    
+    public AnnotationsType(){
+        this.annots = new ArrayList<AnnotationType>();
+    }
     List<AnnotationType> annots = new ArrayList<AnnotationType>();
     public AnnotationType getAnnotation(int i){
         return annots.get(i);

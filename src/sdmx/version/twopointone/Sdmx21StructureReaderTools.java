@@ -861,7 +861,6 @@ public class Sdmx21StructureReaderTools {
         AttributeListType atl = new AttributeListType();
         List<AttributeType> atts = new ArrayList<AttributeType>();
         for (int i = 0; i < ds1.getAttributeList().getAttributeArray().length; i++) {
-            System.out.println("Att="+ds1.getAttributeList().getAttributeArray(i).getId());
             atts.add(toAttribute(ds1.getAttributeList().getAttributeArray(i)));
         }
         if( ds1.getDimensionList().getTimeDimensionArray().length>0) {

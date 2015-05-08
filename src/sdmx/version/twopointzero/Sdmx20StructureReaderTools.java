@@ -201,6 +201,7 @@ public class Sdmx20StructureReaderTools {
             struct.setCodelists(toCodelists(structDoc.getStructure().getCodeLists()));
             struct.setConcepts(toConcepts(structDoc.getStructure().getConcepts()));
             struct.setDataStructures(toDataStructures(structDoc.getStructure().getKeyFamilies()));
+            struct.setDataflows(toDataflows(structDoc.getStructure().getDataflows()));
             sd.setHeader(toHeaderType(structDoc.getStructure().getHeader()));
         } catch (URISyntaxException ex) {
             //System.out.println("Exception!");

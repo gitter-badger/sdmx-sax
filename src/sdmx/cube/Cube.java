@@ -5,19 +5,25 @@
  */
 package sdmx.cube;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import sdmx.commonreferences.IDType;
 import sdmx.data.ColumnMapper;
 import sdmx.data.flat.FlatObs;
 import sdmx.data.key.FullKey;
 import sdmx.structure.base.Component;
 import sdmx.structure.base.NameableType;
+import sdmx.structure.codelist.CodeType;
 import sdmx.structure.datastructure.AttributeType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionType;
 import sdmx.structure.datastructure.MeasureDimensionType;
 import sdmx.structure.datastructure.PrimaryMeasure;
 import sdmx.structure.datastructure.TimeDimensionType;
+import sdmx.structureddata.ValueTypeResolver;
 
 /**
  * This file is part of SdmxSax.
@@ -40,6 +46,7 @@ public class Cube {
 
     private List<String> order = null;
     DataStructureType struct = null;
+    private HashMap<String, List<String>> validCodes = new HashMap<String, List<String>>();
 
     public Cube(DataStructureType struct) {
         this.struct = struct;
@@ -51,9 +58,9 @@ public class Cube {
         return root;
     }
 
-    public void putObservation(List<String> order,ColumnMapper mapper, FlatObs obs) {
+    public void putObservation(List<String> order, ColumnMapper mapper, FlatObs obs) {
         CubeDimension dim = getRootCubeDimension();
-        this.order=order;
+        this.order = order;
         TimeCubeDimension time = null;
         CubeObservation cubeobs = null;
         for (int i = 0; i < struct.getDataStructureComponents().getDimensionList().size(); i++) {
@@ -62,33 +69,53 @@ public class Cube {
             //IDType dimId = struct.getDataStructureComponents().getDimensionList().getDimension(i).getId();
             // This line goes through the components in their specified order
             IDType dimId = null;
-            if( order!=null){ dimId=new IDType(order.get(i));}
-            else {
+            if (order != null) {
+                dimId = new IDType(order.get(i));
+            } else {
                 dimId = struct.getDataStructureComponents().getDimensionList().getDimension(i).getId();
+            }
+            if (validCodes.get(dimId.toString()) == null) {
+                validCodes.put(dimId.toString(), new ArrayList<String>());
             }
             CubeDimension myDim = dim.getSubDimension(obs.getValue(mapper.getColumnIndex(dimId.toString())));
             if (myDim == null) {
                 //myDim = new HashMapCubeDimension(dimId.toString(), obs.getValue(mapper.getColumnIndex(dimId.toString())));
                 myDim = new ListCubeDimension(dimId.toString(), obs.getValue(mapper.getColumnIndex(dimId.toString())));
                 dim.putSubDimension(myDim);
+                if (!validCodes.get(dimId.toString()).contains(myDim.getValue())) {
+                    validCodes.get(dimId.toString()).add(myDim.getValue());
+                }
             }
             dim = myDim;
         }
         CubeDimension myDim = null;
         IDType dimId = struct.getDataStructureComponents().getDimensionList().getTimeDimension().getId();
+        if (validCodes.get(dimId.toString()) == null) {
+            validCodes.put(dimId.toString(), new ArrayList<String>());
+        }
         int i = mapper.getColumnIndex(dimId.toString());
         String s = obs.getValue(i);
         myDim = dim.getSubDimension(obs.getValue(mapper.getColumnIndex(dimId.toString())));
         if (myDim == null) {
             myDim = new TimeCubeDimension(dimId.toString(), obs.getValue(mapper.getColumnIndex(dimId.toString())));
             dim.putSubDimension(myDim);
+            if (!validCodes.get(dimId.toString()).contains(myDim.getValue())) {
+                validCodes.get(dimId.toString()).add(myDim.getValue());
+            }
         }
         time = (TimeCubeDimension) myDim;
         String cross = null;
         IDType dimId2 = null;
-        if( struct.getDataStructureComponents().getDimensionList().getMeasureDimension()!=null){
+        if (struct.getDataStructureComponents().getDimensionList().getMeasureDimension() != null) {
             dimId2 = struct.getDataStructureComponents().getDimensionList().getMeasureDimension().getId();
+            if (validCodes.get(dimId2.toString()) == null) {
+                validCodes.put(dimId2.toString(), new ArrayList<String>());
+            }
             cross = obs.getValue(mapper.getColumnIndex(dimId2.toString()));
+            if (!validCodes.get(dimId2.toString()).contains(cross)) {
+                validCodes.get(dimId2.toString()).add(cross);
+            }
+
         }
         IDType dimId3 = struct.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getId();
         if (dimId2
@@ -100,7 +127,7 @@ public class Cube {
 
         time.putObservation(cubeobs);
 
-        for (int k = 0;k < struct.getDataStructureComponents().getAttributeList().size(); k++) {
+        for (int k = 0; k < struct.getDataStructureComponents().getAttributeList().size(); k++) {
             String name = struct.getDataStructureComponents().getAttributeList().getAttribute(k).getId().toString();
             String value = null;
             if (mapper.getColumnIndex(name) != -1) {
@@ -109,37 +136,68 @@ public class Cube {
             }
         }
     }
+
     public CubeObservation find(FullKey key) {
+        return find(key, false);
+    }
+
+    public CubeObservation find(FullKey key, boolean latest) {
         CubeDimension dim = getRootCubeDimension();
         CubeDimension oldDim = dim;
-        for(int i=0;i<this.struct.getDataStructureComponents().getDimensionList().size();i++) {
-            dim = dim.getSubDimension((String)key.getComponent(dim.getSubDimension()));
-            if( dim == null ) {
+        for (int i = 0; i < this.struct.getDataStructureComponents().getDimensionList().size(); i++) {
+            dim = dim.getSubDimension((String) key.getComponent(dim.getSubDimension()));
+            if (dim == null) {
                 //System.out.println("Can't find dim:"+key.getComponent(order.get(i))+":"+oldDim.getSubDimension());
                 return null;
             }
             oldDim = dim;
         }
         TimeDimensionType time = this.struct.getDataStructureComponents().getDimensionList().getTimeDimension();
-        if( time == null ) {
+        if (time == null) {
             throw new RuntimeException("Time Dimension Is Null");
-        }else{
-            String timeValue = NameableType.toIDString((String)key.getComponent(time.getId().toString()));
-            TimeCubeDimension tcd = (TimeCubeDimension)dim.getSubDimension(timeValue);
-            if( tcd == null ) {
+        } else {
+            if (latest) {
+                Set times = dim.listDimensionValues();
+                List<String> timesList = new ArrayList<String>(times);
+                Collections.sort(timesList);
+                String timeValue = timesList.get(timesList.size()-1);
+                TimeCubeDimension tcd = (TimeCubeDimension) dim.getSubDimension(timeValue);
+                if (tcd == null) {
                 //System.out.println("TCD null:"+key.getComponent(time.getId().toString()+":"+timeValue));
-                //dim.dump();
-                return null;
-            }
-            if( struct.getDataStructureComponents().getDimensionList().getMeasureDimension()!=null){
-                String measure = NameableType.toIDString(key.getComponent(struct.getDataStructureComponents().getDimensionList().getMeasureDimension().getId().toString()));
+                    //dim.dump();
+                    return null;
+                }
+                if (struct.getDataStructureComponents().getDimensionList().getMeasureDimension() != null) {
+                    String measure = NameableType.toIDString(key.getComponent(struct.getDataStructureComponents().getDimensionList().getMeasureDimension().getId().toString()));
                 //tcd.dump();
-                //System.out.println("Measure="+measure);
-                return tcd.getObservation(measure);
-            }else {
-                CubeObservation co = tcd.getObservation(struct.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getId().toString());
-                return co;
+                    //System.out.println("Measure="+measure);
+                    return tcd.getObservation(measure);
+                } else {
+                    CubeObservation co = tcd.getObservation(struct.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getId().toString());
+                    return co;
+                }
+            } else {
+                String timeValue = NameableType.toIDString((String) key.getComponent(time.getId().toString()));
+                TimeCubeDimension tcd = (TimeCubeDimension) dim.getSubDimension(timeValue);
+                if (tcd == null) {
+                //System.out.println("TCD null:"+key.getComponent(time.getId().toString()+":"+timeValue));
+                    //dim.dump();
+                    return null;
+                }
+                if (struct.getDataStructureComponents().getDimensionList().getMeasureDimension() != null) {
+                    String measure = NameableType.toIDString(key.getComponent(struct.getDataStructureComponents().getDimensionList().getMeasureDimension().getId().toString()));
+                //tcd.dump();
+                    //System.out.println("Measure="+measure);
+                    return tcd.getObservation(measure);
+                } else {
+                    CubeObservation co = tcd.getObservation(struct.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getId().toString());
+                    return co;
+                }
             }
         }
+    }
+
+    public List<String> getValidCodes(String col) {
+        return validCodes.get(col);
     }
 }

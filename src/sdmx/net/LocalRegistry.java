@@ -32,6 +32,7 @@ import sdmx.message.DataStructure;
 import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.StructureType;
 import sdmx.structure.ConceptsType;
+import sdmx.structure.DataflowsType;
 import sdmx.structure.StructuresType;
 import sdmx.structure.base.IdentifiableType;
 import sdmx.structure.base.ItemSchemeType;
