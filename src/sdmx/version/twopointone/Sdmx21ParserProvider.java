@@ -20,6 +20,7 @@ import sdmx.message.DataMessage;
 import sdmx.data.DataSetWriter;
 import sdmx.data.flat.FlatDataSetWriter;
 import sdmx.data.structured.StructuredDataWriter;
+import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.version.twopointone.generic.GenericData21ContentHandler;
 import sdmx.version.twopointone.generic.GenericData21EventHandler;
 import sdmx.version.twopointone.structurespecific.StructureSpecificContentHandler;
@@ -160,16 +161,16 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     @Override
     public DataMessage parseData(String header, InputStream in) throws IOException {
         if (isStructureSpecificData(header)) {
-           return parseStructureSpecificData(in,false);
+           return parseStructureSpecificData(in,null);
         }
         if( isGenericData(header)){
-            return parseGenericData(in,false);
+            return parseGenericData(in,null);
         }
         return null;
     }
 
-    public DataMessage parseStructureSpecificData(InputStream in,boolean flat) throws IOException {
-        DataSetWriter writer = flat?new FlatDataSetWriter():new StructuredDataWriter();
+    public DataMessage parseStructureSpecificData(InputStream in, ParseDataCallbackHandler cbHandler) throws IOException {
+        DataSetWriter writer = cbHandler!=null?cbHandler.getDataSetWriter():new StructuredDataWriter();
         StructureSpecificEventHandler event = new StructureSpecificEventHandler(writer);
         StructureSpecificContentHandler handler = new StructureSpecificContentHandler(in, event);
         try {
@@ -205,38 +206,38 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     @Override
     public DataMessage parseData(String header, Reader in) throws IOException {
         if (isStructureSpecificData(header)) {
-           return parseStructureSpecificData(in,false);
+           return parseStructureSpecificData(in,null);
         }
         if( isGenericData(header)){
-            return parseGenericData(in,false);
+            return parseGenericData(in,null);
         }
         return null;
     }
 
     @Override
-    public DataMessage parseData(String header, InputStream in, boolean flat) throws IOException {
+    public DataMessage parseData(String header, InputStream in, ParseDataCallbackHandler cbHandler) throws IOException {
         if (isStructureSpecificData(header)) {
-           return parseStructureSpecificData(in,flat);
+           return parseStructureSpecificData(in,cbHandler);
         }
         if( isGenericData(header)){
-            return parseGenericData(in,flat);
+            return parseGenericData(in,cbHandler);
         }
         return null;
     }
 
     @Override
-    public DataMessage parseData(String header, Reader in, boolean flat) throws IOException {
+    public DataMessage parseData(String header, Reader in, ParseDataCallbackHandler cbHandler) throws IOException {
         if (isStructureSpecificData(header)) {
-           return parseStructureSpecificData(in,flat);
+           return parseStructureSpecificData(in,cbHandler);
         }
         if( isGenericData(header)){
-            return parseGenericData(in,flat);
+            return parseGenericData(in,cbHandler);
         }
         return null;
     }
 
-    public DataMessage parseStructureSpecificData(Reader in, boolean flat) throws IOException {
-        DataSetWriter writer = flat?new FlatDataSetWriter():new StructuredDataWriter();
+    public DataMessage parseStructureSpecificData(Reader in, ParseDataCallbackHandler cbHandler) throws IOException {
+        DataSetWriter writer = cbHandler!=null?cbHandler.getDataSetWriter():new StructuredDataWriter();
         StructureSpecificEventHandler event = new StructureSpecificEventHandler(writer);
         StructureSpecificContentHandler handler = new StructureSpecificContentHandler(in, event);
         try {
@@ -250,8 +251,8 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
         return null;
     }
 
-    public DataMessage parseGenericData(InputStream in,boolean flat) throws IOException {
-        DataSetWriter writer = flat?new FlatDataSetWriter():new StructuredDataWriter();
+    public DataMessage parseGenericData(InputStream in, ParseDataCallbackHandler cbHandler) throws IOException {
+        DataSetWriter writer = cbHandler!=null?cbHandler.getDataSetWriter():new StructuredDataWriter();
         GenericData21EventHandler event = new GenericData21EventHandler(writer);
         GenericData21ContentHandler handler = new GenericData21ContentHandler(in, event);
         try {
@@ -266,8 +267,8 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
         }
         return null;
     }
-    public DataMessage parseGenericData(Reader in,boolean flat) throws IOException {
-        DataSetWriter writer = flat?new FlatDataSetWriter():new StructuredDataWriter();
+    public DataMessage parseGenericData(Reader in, ParseDataCallbackHandler cbHandler) throws IOException {
+        DataSetWriter writer = cbHandler!=null?cbHandler.getDataSetWriter():new StructuredDataWriter();
         GenericData21EventHandler event = new GenericData21EventHandler(writer);
         GenericData21ContentHandler handler = new GenericData21ContentHandler(in, event);
         try {

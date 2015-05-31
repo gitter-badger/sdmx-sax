@@ -23,6 +23,7 @@ import sdmx.exception.ParseException;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
 import sdmx.net.LocalRegistry;
+import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.version.common.SdmxParserProvider;
 import sdmx.version.twopointone.Sdmx21ParserProvider;
 import sdmx.version.twopointzero.Sdmx20ParserProvider;
@@ -60,6 +61,30 @@ public class SdmxIO {
         h.setLevel(Level.ALL);
         Logger.getLogger("sdmx").addHandler(h);
     }
+    
+    public static final List<String> SAVE_MIME_TYPES = new ArrayList<String>();
+    
+    static{
+        SAVE_MIME_TYPES.add("application/vnd.sdmx.genericdata+xml;version=2.1");
+        SAVE_MIME_TYPES.add("application/vnd.sdmx.structurespecificdata+xml;version=2.1");
+        SAVE_MIME_TYPES.add("application/vnd.sdmx.generictimeseriesdata+xml;version=2.1");
+        SAVE_MIME_TYPES.add("application/vnd.sdmx.structurespecifictimeseriesdata+xml;version=2.1");
+        SAVE_MIME_TYPES.add("application/vnd.sdmx.genericmetadata+xml;version=2.1");
+        SAVE_MIME_TYPES.add("application/vnd.sdmx.structurespecificmetadata+xml;version=2.1");
+        SAVE_MIME_TYPES.add("application/vnd.sdmx.structure+xml;version=2.1");
+        SAVE_MIME_TYPES.add("application/vnd.sdmx.schema+xml;version=2.1");
+        SAVE_MIME_TYPES.add("application/vnd.sdmx.structurespecificdata+xml;version=2.1");
+        SAVE_MIME_TYPES.add("application/vnd.sdmx.data+json;version=1.0.0-wd");
+        SAVE_MIME_TYPES.add("application/vnd.sdmx.genericdata+xml;version=2.0");
+        SAVE_MIME_TYPES.add("application/vnd.sdmx.structurespecificdata+xml;version=2.0");
+        SAVE_MIME_TYPES.add("application/vnd.sdmx.generictimeseriesdata+xml;version=2.0");
+        SAVE_MIME_TYPES.add("application/vnd.sdmx.structurespecifictimeseriesdata+xml;version=2.0");
+        SAVE_MIME_TYPES.add("application/vnd.sdmx.structure+xml;version=2.0");
+    }
+    
+    
+    
+    
     private static List<SdmxParserProvider> list = new ArrayList<SdmxParserProvider>(0);
     public static void register(SdmxParserProvider pp) {
         list.add(pp);
@@ -178,7 +203,7 @@ public class SdmxIO {
         }
         return prov.parseData(header,push);
     }
-    public static DataMessage parseData(InputStream in,boolean flat) throws IOException,ParseException {
+    public static DataMessage parseData(InputStream in,ParseDataCallbackHandler cbHandler) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackInputStream push = new PushbackInputStream(in,8192);
         String header = getHeader(push);
@@ -186,9 +211,9 @@ public class SdmxIO {
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider");
         }
-        return prov.parseData(header,push,flat);
+        return prov.parseData(header,push,cbHandler);
     }
-    public static DataMessage parseData(Reader in,boolean flat) throws IOException,ParseException {
+    public static DataMessage parseData(Reader in,ParseDataCallbackHandler cbHandler) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackReader push = new PushbackReader(in,8192);
         String header = getHeader(push);
@@ -196,7 +221,7 @@ public class SdmxIO {
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider");
         }
-        return prov.parseData(header,push,flat);
+        return prov.parseData(header,push,cbHandler);
     }
     public static SdmxParserProvider findProvider(String header) throws IOException {
         for(int i=0;i<list.size();i++) {

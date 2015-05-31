@@ -45,7 +45,7 @@ public class Sdmx21StructureSpecificDataTest {
     @Before
     public void setUp() throws FileNotFoundException, IOException, ParseException {
         FileInputStream fis = new FileInputStream("test/resources/sdmx21-samples/demography/demography_xs.xml");
-        msg = SdmxIO.parseData(fis, false);
+        msg = SdmxIO.parseData(fis, null);
     }
     
     @After

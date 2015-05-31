@@ -156,9 +156,8 @@ public class GenericDataWriter {
             writer.writeCharacters(msg.getHeader().getReportingEnd().toString());
             writer.writeEndElement();
         }
-        writer.writeEndElement();
-        writer.writeStartElement(namespaceprefix, "DataSet", namespace);
-
+        writer.writeEndElement(); // Header
+        writer.writeStartElement("generic", "DataSet", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic");
         DataSet ds = msg.getDataSets().get(0);
 
         if (msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider() != null && msg.getHeader().getDataProvider().getAgencyId() != null) {

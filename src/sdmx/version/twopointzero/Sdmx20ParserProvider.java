@@ -31,6 +31,7 @@ import sdmx.version.twopointzero.generic.GenericDataContentHandler;
 import sdmx.version.twopointzero.generic.GenericDataEventHandler;
 import sdmx.version.twopointzero.writer.CompactDataWriter;
 import sdmx.net.LocalRegistry;
+import sdmx.version.common.ParseDataCallbackHandler;
 
 /**
  *
@@ -270,9 +271,10 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         return null;
     }
 
-    public DataMessage parseCompactData(InputStream in, boolean flat) throws IOException {
-        DataSetWriter writer = flat ? new FlatDataSetWriter() : new StructuredDataWriter();
+    public DataMessage parseCompactData(InputStream in,ParseDataCallbackHandler cbHandler) throws IOException {
+        DataSetWriter writer = cbHandler!=null?cbHandler.getDataSetWriter():new StructuredDataWriter();
         CompactDataEventHandler event = new CompactDataEventHandler(writer);
+        event.setCbHandler(cbHandler);
         CompactDataContentHandler handler = new CompactDataContentHandler(in, event);
         try {
             return handler.parse();
@@ -285,8 +287,8 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         return null;
     }
 
-    public DataMessage parseGenericData(InputStream in, boolean flat) throws IOException {
-        DataSetWriter writer = flat ? new FlatDataSetWriter() : new StructuredDataWriter();
+    public DataMessage parseGenericData(InputStream in, ParseDataCallbackHandler cbHandler) throws IOException {
+        DataSetWriter writer = cbHandler!=null?cbHandler.getDataSetWriter():new StructuredDataWriter();
         GenericDataEventHandler event = new GenericDataEventHandler(writer);
         GenericDataContentHandler handler = new GenericDataContentHandler(event, in);
         try {
@@ -327,10 +329,10 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         return null;
     }
 
-    public DataMessage parseCompactData(Reader in, boolean flat) throws IOException {
-        DataSetWriter writer = flat ? new FlatDataSetWriter() : new StructuredDataWriter();
+    public DataMessage parseCompactData(Reader in, ParseDataCallbackHandler cbHandler) throws IOException {
+        DataSetWriter writer = cbHandler!=null?cbHandler.getDataSetWriter():new StructuredDataWriter();
         CompactDataEventHandler event = new CompactDataEventHandler(writer);
-
+        event.setCbHandler(cbHandler);
         CompactDataContentHandler handler = new CompactDataContentHandler(in, event);
         try {
             return handler.parse();
@@ -343,8 +345,8 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         return null;
     }
 
-    public DataMessage parseGenericData(Reader in, boolean flat) throws IOException {
-        DataSetWriter writer = flat ? new FlatDataSetWriter() : new StructuredDataWriter();
+    public DataMessage parseGenericData(Reader in, ParseDataCallbackHandler cbHandler) throws IOException {
+        DataSetWriter writer = cbHandler!=null?cbHandler.getDataSetWriter():new StructuredDataWriter();
         GenericDataEventHandler event = new GenericDataEventHandler(writer);
         GenericDataContentHandler handler = new GenericDataContentHandler(event, in);
         try {
@@ -370,23 +372,23 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public DataMessage parseData(String header, InputStream in, boolean flat) throws IOException {
+    public DataMessage parseData(String header, InputStream in, ParseDataCallbackHandler cbHandler) throws IOException {
         if (isCompactData(header)) {
-            return parseCompactData(in, flat);
+            return parseCompactData(in, cbHandler);
         }
         if (isGenericData(header)) {
-            return parseGenericData(in, flat);
+            return parseGenericData(in, cbHandler);
         }
         return null;
     }
 
     @Override
-    public DataMessage parseData(String header, Reader in, boolean flat) throws IOException {
+    public DataMessage parseData(String header, Reader in, ParseDataCallbackHandler cbHandler) throws IOException {
         if (isCompactData(header)) {
-            return parseCompactData(in, flat);
+            return parseCompactData(in, cbHandler);
         }
         if (isGenericData(header)) {
-            return parseGenericData(in, flat);
+            return parseGenericData(in, cbHandler);
         }
         return null;
     }

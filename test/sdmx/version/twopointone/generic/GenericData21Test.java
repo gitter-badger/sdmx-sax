@@ -41,7 +41,7 @@ public class GenericData21Test {
     @Before
     public void setUp() throws FileNotFoundException, IOException, ParseException {
         FileInputStream fis = new FileInputStream("test/resources/sdmx21-samples/exr/ecb_exr_ng/generic/ecb_exr_ng_flat.xml");
-        msg = SdmxIO.parseData(fis, false);
+        msg = SdmxIO.parseData(fis, null);
     }
     
     @After

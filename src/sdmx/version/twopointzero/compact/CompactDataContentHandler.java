@@ -21,7 +21,9 @@ import java.util.logging.Logger;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
 import sdmx.Registry;
+import sdmx.data.DataSetWriter;
 import sdmx.data.flat.FlatDataSet;
+import sdmx.message.BaseHeaderType;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
 import sdmx.version.twopointzero.Sdmx20ContentHandler;
@@ -301,5 +303,4 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
     public void fatalError(SAXParseException exception) throws SAXException {
         System.out.println("Fatal:" + exception);
     }
-
 }

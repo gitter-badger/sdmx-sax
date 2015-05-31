@@ -64,6 +64,7 @@ import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionListType;
 import sdmx.structure.datastructure.DimensionType;
 import sdmx.structure.datastructure.MeasureListType;
+import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.version.twopointzero.Sdmx20EventHandler;
 import sdmx.xml.DateTime;
 import sdmx.xml.DateType;
@@ -166,7 +167,9 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
     List<ContactType> contacts = null;
     boolean in_contact = false;
     ContactType contact = null;
+    private ParseDataCallbackHandler cbHandler = null;
     
+    List<DataSet> dataSets = new ArrayList<DataSet>();
     public CompactDataEventHandler() {
     }
     
@@ -181,8 +184,6 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
         }
         DataMessage doc = new DataMessage();
         doc.setHeader(header);
-        ArrayList<DataSet> dataSets = new ArrayList<DataSet>();
-        dataSets.add(writer.finishDataSet());
         doc.setDataSets(dataSets);
         doc.setNamespace(namespace);
         doc.setNamespacePrefix(namespaceprefix);
@@ -261,6 +262,11 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
     
     public void endHeader() {
         state = STATE_HEADEREND;
+        System.out.println("Header End");
+        if( cbHandler!=null ) {
+            System.out.println("CB="+cbHandler);
+            cbHandler.headerParsed(header);
+        }
         // Insert witty assertions here
     }
     
@@ -360,10 +366,12 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
         //    throw new RuntimeException("DataSet does not Series End!");
         //}
         state = STATE_DATASETEND;
+        dataSets.add(writer.finishDataSet());
     }
     
     public void endRootElement() {
         state = STATE_FINISH;
+        if( cbHandler!=null ) {cbHandler.documentFinished();}
     }
     
     public void startName(String uri, Attributes atts) {
@@ -645,5 +653,19 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
     
     void endEmail() {
         in_email = false;
+    }
+
+    /**
+     * @return the cbHandler
+     */
+    public ParseDataCallbackHandler getCbHandler() {
+        return cbHandler;
+    }
+
+    /**
+     * @param cbHandler the cbHandler to set
+     */
+    public void setCbHandler(ParseDataCallbackHandler cbHandler) {
+        this.cbHandler = cbHandler;
     }
 }

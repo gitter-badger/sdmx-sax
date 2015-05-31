@@ -50,7 +50,7 @@ public interface SdmxParserProvider {
     
     public DataMessage parseData(String header,InputStream in)throws IOException ;
     public DataMessage parseData(String header,Reader in)throws IOException ;
-    public DataMessage parseData(String header,InputStream in,boolean flat)throws IOException ;
-    public DataMessage parseData(String header,Reader in,boolean flat)throws IOException ;
+    public DataMessage parseData(String header,InputStream in,ParseDataCallbackHandler cbHandler)throws IOException ;
+    public DataMessage parseData(String header,Reader in,ParseDataCallbackHandler cbHandler)throws IOException ;
    
 }
