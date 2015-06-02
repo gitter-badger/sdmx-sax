@@ -80,7 +80,7 @@ public class Sdmx20DataWriteTest {
     public void testCompactSample() throws IOException, XMLStreamException, ParseException {
         long t1= System.currentTimeMillis();
         InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/CompactSample.xml");
-        DataMessage data = SdmxIO.parseData(in,null);
+        DataMessage data = SdmxIO.parseData(in);
         long t2 = System.currentTimeMillis();
         System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
         long t3 = System.currentTimeMillis();
@@ -93,7 +93,7 @@ public class Sdmx20DataWriteTest {
     public void testCompactSample2() throws IOException, XMLStreamException, ParseException {
         long t1= System.currentTimeMillis();
         InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/DSID1230571/DSID1230571 - CompactData.xml");
-        DataMessage data = SdmxIO.parseData(in,null);
+        DataMessage data = SdmxIO.parseData(in);
         long t2 = System.currentTimeMillis();
         System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
         long t3 = System.currentTimeMillis();
@@ -106,7 +106,7 @@ public class Sdmx20DataWriteTest {
     public void testCompactSample3() throws IOException, XMLStreamException, ParseException {
         long t1= System.currentTimeMillis();
         InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/DSID1230571/DSID1230571 - GenericData.xml");
-        DataMessage data = SdmxIO.parseData(in,null);
+        DataMessage data = SdmxIO.parseData(in);
         long t2 = System.currentTimeMillis();
         System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
         long t3 = System.currentTimeMillis();
@@ -123,7 +123,7 @@ public class Sdmx20DataWriteTest {
         LocalRegistry reg = LocalRegistry.getDefaultWorkspace();
         StructureType struct = SdmxIO.parseStructure(reg,structIn);
         
-        DataMessage data = SdmxIO.parseData(in,null);
+        DataMessage data = SdmxIO.parseData(in);
         long t2 = System.currentTimeMillis();
         System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
         long t3 = System.currentTimeMillis();
@@ -140,7 +140,7 @@ public class Sdmx20DataWriteTest {
         LocalRegistry reg = LocalRegistry.getDefaultWorkspace();
         StructureType struct = SdmxIO.parseStructure(reg,structIn);
         
-        DataMessage data = SdmxIO.parseData(in,null);
+        DataMessage data = SdmxIO.parseData(in);
         long t2 = System.currentTimeMillis();
         System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
         long t3 = System.currentTimeMillis();
@@ -160,12 +160,9 @@ public class Sdmx20DataWriteTest {
         long t2 = System.currentTimeMillis();
         OutputStream out = new FileOutputStream("testOut/DSID230571-out-scdw.xml");
         StreamingCompactDataWriter w2 = StreamingCompactDataWriter.openWriter(out);
-        DataMessage data = SdmxIO.parseData(in,w2);
+        SdmxIO.parseData(in,w2);
         long t3 = System.currentTimeMillis();
-        System.out.println("Data="+data);
-        try{
-            Thread.sleep(2000);
-        }catch(InterruptedException ie) {}
+        System.out.println("Time to Stream Compact 2.0 DSID1230571 - "+(t3-t2));
     }
     @Test
     public void testGenericSample4() throws IOException, XMLStreamException, ParseException {
@@ -174,18 +171,12 @@ public class Sdmx20DataWriteTest {
         InputStream structIn = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/DSID1230571/DSID1230571 - DataSD.xml");
         LocalRegistry reg = LocalRegistry.getDefaultWorkspace();
         StructureType struct = SdmxIO.parseStructure(reg,structIn);
-        
-        
         long t2 = System.currentTimeMillis();
-        
         OutputStream out = new FileOutputStream("testOut/DSID230571-out-sgdw.xml");
         StreamingGenericDataWriter w2 = StreamingGenericDataWriter.openWriter(out,registry,struct.getStructures().getDataStructures().getDataStructures().get(0).asReference());
-        DataMessage data = SdmxIO.parseData(in,w2);
+        SdmxIO.parseData(in,w2);
         long t3 = System.currentTimeMillis();
-        System.out.println("Data="+data);
-        try{
-            Thread.sleep(2000);
-        }catch(InterruptedException ie) {}
+        System.out.println("Time to Stream Generic 2.0 DSID1230571 - "+(t3-t2));
     }    
 
 }

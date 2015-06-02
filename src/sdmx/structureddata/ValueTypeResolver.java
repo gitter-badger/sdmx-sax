@@ -94,6 +94,9 @@ public class ValueTypeResolver {
                     } catch (ExceptionInInitializerError ie) {
                         // Ignore
                     }
+                    if( codelist==null ) {
+                        throw new RuntimeException("Codelist is null Representation="+rep.getEnumeration().asCodelistReference().toString());
+                    }
                     CodeType ct = null;
                     if (id != null) {
                         ct = codelist.findCode(id);

@@ -68,7 +68,7 @@ public class StructuredDataTest {
         System.out.println("Primary Measure="+struct.getStructures().getDataStructures().getDataStructures().get(0).getDataStructureComponents().getMeasureList().getPrimaryMeasure().getLocalRepresentation().getTextFormat().getTextType().toString());
         long t1= System.currentTimeMillis();
         InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/CompactSample.xml");
-        DataMessage data = SdmxIO.parseData(in,null);
+        DataMessage data = SdmxIO.parseData(in);
         long t2 = System.currentTimeMillis();
         System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
         data.dump();        
@@ -86,7 +86,7 @@ public class StructuredDataTest {
         }
         long t1= System.currentTimeMillis();
         InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/CompactSample.xml");
-        DataMessage data = SdmxIO.parseData(in,null);
+        DataMessage data = SdmxIO.parseData(in);
         long t2 = System.currentTimeMillis();
         System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
         data.dump();

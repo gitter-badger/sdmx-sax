@@ -95,6 +95,7 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
     }
 
     public void endDocument() throws SAXException {
+        eh.endDocument();
     }
 
     public void startPrefixMapping(String prefix, String uri) throws SAXException {
@@ -108,10 +109,10 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
             /*
          * This is really useful!!!
          */
-        //System.out.println("localName=" + localName);
-        //for (int i = 0; i < atts.getLength(); i++) {
-//            System.out.println("Att=" + atts.getLocalName(i) + " val=" + atts.getValue(i));
-//        }
+        System.out.println("localName=" + localName);
+        for (int i = 0; i < atts.getLength(); i++) {
+            System.out.println("Att=" + atts.getLocalName(i) + " val=" + atts.getValue(i));
+        }
         if ("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message".equals(uri)) {
             if ("StructureSpecificTimeSeriesData".equals(localName)) {
                 eh.startRootElement(atts);
@@ -166,6 +167,23 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
                 } catch (URISyntaxException ex) {
                     Logger.getLogger(StructureSpecificContentHandler.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            }else if ("Series".equalsIgnoreCase(localName)) {
+                eh.startSeries(uri, atts);
+            } else if ("Obs".equalsIgnoreCase(localName)) {
+                eh.startObs(uri, atts);
+            } else if (localName.indexOf("Group") != -1) {
+                eh.startGroup(localName, atts);
+            } else if ("Ref".equalsIgnoreCase(localName)) {
+                eh.startRef(atts);
+            } else if ("URN".equalsIgnoreCase(localName)) {
+                eh.startURN(atts);
+            } else if ("DataSet".equalsIgnoreCase(localName)) {
+                System.out.println("StartDataSet");
+                try {
+                    eh.startDataSet(uri, qName, atts);
+                } catch (URISyntaxException ex) {
+                    Logger.getLogger(StructureSpecificContentHandler.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         } else if ("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common".equals(uri)) {
             if ("Structure".equals(localName)) {
@@ -183,7 +201,7 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
             } else if ("URN".equalsIgnoreCase(localName)) {
                 eh.startURN(atts);
             } else if ("DataSet".equalsIgnoreCase(localName)) {
-                //System.out.println("StartDataSet");
+                System.out.println("StartDataSet");
                 try {
                     eh.startDataSet(uri, qName, atts);
                 } catch (URISyntaxException ex) {
@@ -213,6 +231,7 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
             } else if ("StructureSpecificData".equals(localName)) {
                 eh.endRootElement();
             } else if ("Header".equals(localName)) {
+                System.out.println("End Header!!!");
                 eh.endHeader();
             } else if ("ID".equals(localName)) {
                 eh.endHeaderID();
@@ -256,12 +275,23 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
                 eh.endMessageStructure();
             } else if ("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common".equals(uri)) {
                 if ("Structure".equals(localName)) {
-                    //eh.endCommonStructure();;
                 }
             } else if ("DataSet".equals(localName)) {
-                //System.out.println("EndDataSet");
+                System.out.println("EndDataSet");
                 eh.endDataSet();
-            }
+            } else if ("Series".equals(localName)) {
+                System.out.println("EndSeries");
+                eh.endSeries();
+            } else if ("Obs".equals(localName)) {
+                System.out.println("EndObs");
+                eh.endObs();
+            } else if (localName.indexOf("Group") != -1) {
+                eh.endGroup();
+            } else if ("Ref".equals(localName)) {
+                eh.endRef();
+            } else if ("URN".equals(localName)) {
+                eh.endURN();
+            } 
         } else if ("Series".equals(localName)) {
             //System.out.println("EndSeries");
             eh.endSeries();

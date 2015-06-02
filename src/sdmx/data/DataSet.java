@@ -6,7 +6,9 @@ package sdmx.data;
 
 import sdmx.cube.Cube;
 import java.util.List;
+import sdmx.Registry;
 import sdmx.common.ActionType;
+import sdmx.commonreferences.DataStructureReference;
 import sdmx.data.flat.FlatObs;
 import sdmx.data.key.FullKey;
 import sdmx.data.key.PartialKey;
@@ -51,4 +53,5 @@ public interface DataSet {
     public List<Group> getGroups();
     public int groupSize();
     public FlatObs find(FullKey key);
+    public String getDimensionAtObservation(Registry reg,DataStructureReference ref);
     }

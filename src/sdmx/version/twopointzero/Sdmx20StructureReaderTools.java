@@ -866,19 +866,22 @@ public class Sdmx20StructureReaderTools {
         if (tft1.getDecimals() != null) {
             tft2.setDecimals(toPositiveInteger(tft1.getDecimals().intValue()));
         }
-        tft2.setEndValue(tft1.getEndValue());
-        tft2.setInterval(tft1.getInterval());
+        if( tft1.isSetEndValue()){tft2.setEndValue(tft1.getEndValue());}
+        if( tft1.isSetIsSequence()){
+            tft2.setSequence(tft1.getIsSequence());
+            if( tft1.isSetInterval()){tft2.setInterval(tft1.getInterval());}
+        }
         if (tft1.getMaxLength() != null) {
             tft2.setMaxLength(toPositiveInteger(tft1.getMaxLength().intValue()));
         }
         if (tft1.getPattern() != null) {
             tft2.setPattern(tft1.getPattern());
         }
-        tft2.setStartValue(tft1.getStartValue());
+        if( tft1.isSetStartValue()){tft2.setStartValue(tft1.getStartValue());}
         if (tft1.getTextType() != null) {
             tft2.setTextType(DataType.fromStringWithException(tft1.getTextType().toString()));
         }
-        if (tft1.getTimeInterval() != null) {
+        if (tft1.isSetTimeInterval() ) {
             tft2.setTimeInterval(toDuration(tft1.getTimeInterval()));
         }
         if (tft1.getTextType() != null) {

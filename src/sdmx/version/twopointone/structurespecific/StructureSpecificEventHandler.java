@@ -70,6 +70,7 @@ import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionListType;
 import sdmx.structure.datastructure.DimensionType;
 import sdmx.structure.datastructure.MeasureListType;
+import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.version.twopointone.structurespecific.StructureSpecificContentHandler;
 import sdmx.xml.DateTime;
 import sdmx.xml.DateType;
@@ -132,15 +133,16 @@ public class StructureSpecificEventHandler {
     public static final int STATE_HEADER_RECEIVER = 30;
     public static final int STATE_URN = 31;
 
-    String namespace = null;
-    String namespaceprefix = null;
+    //String namespace = null;
+    //String namespaceprefix = null;
     private BaseHeaderType header = new BaseHeaderType();
     private List<PayloadStructureType> payloads = new ArrayList<PayloadStructureType>();
     public int state = -1;
     private String freq = null;
     private boolean in_group = false;
     private boolean in_series = false;
-    DataSetWriter writer = new FlatDataSetWriter();
+    ParseDataCallbackHandler cbHandler = null;
+    private DataSetWriter writer = null;
 
     String xmlLang = null;
     Name name = null; // Temp Name
@@ -173,12 +175,18 @@ public class StructureSpecificEventHandler {
     List<ContactType> contacts = null;
     boolean in_contact = false;
     ContactType contact = null;
+    
+    List<DataSet> dataSets = new ArrayList<DataSet>();
 
     public StructureSpecificEventHandler() {
     }
-
     public StructureSpecificEventHandler(DataSetWriter writer) {
-        this.writer = writer;
+        this.writer=writer;
+    }
+
+    public StructureSpecificEventHandler(ParseDataCallbackHandler cbHandler) {
+        this.cbHandler=cbHandler;
+        writer = cbHandler.getDataSetWriter();
     }
 
     public DataMessage getDataMessage() {
@@ -189,11 +197,9 @@ public class StructureSpecificEventHandler {
         DataMessage doc = new DataMessage();
         header.setStructures(payloads);
         doc.setHeader(header);
-        ArrayList<DataSet> dataSets = new ArrayList<DataSet>();
-        dataSets.add(writer.finishDataSet());
         doc.setDataSets(dataSets);
-        doc.setNamespace(namespace);
-        doc.setNamespacePrefix(namespaceprefix);
+        //doc.setNamespace(namespace);
+        //doc.setNamespacePrefix(namespaceprefix);
         return doc;
     }
 
@@ -270,6 +276,10 @@ public class StructureSpecificEventHandler {
     public void endHeader() {
         state = STATE_HEADEREND;
         // Insert witty assertions here
+        System.out.println("cbHandler="+cbHandler);
+        if( cbHandler!=null ) {
+            cbHandler.headerParsed(header);
+        }
     }
 
     public void startDataSet(String uri, String qName, Attributes atts) throws URISyntaxException {
@@ -328,9 +338,9 @@ public class StructureSpecificEventHandler {
     }
 
     public void endObs() {
-        if (state != STATE_OBS) {
-            throw new RuntimeException("ObsEnd does not follow Obs");
-        }
+        //if (state != STATE_OBS) {
+        //    throw new RuntimeException("ObsEnd does not follow Obs state="+state);
+        //}
         state = STATE_OBSEND;
         writer.finishObservation();
         //System.out.println("Obs=" + Arrays.toString(obsValues.toArray()));
@@ -355,6 +365,7 @@ public class StructureSpecificEventHandler {
         //    throw new RuntimeException("DataSet does not Series End!");
         //}
         state = STATE_DATASETEND;
+        dataSets.add(writer.finishDataSet());
     }
 
     public void endRootElement() {
@@ -680,17 +691,28 @@ public class StructureSpecificEventHandler {
     }
 
     void endMessageStructure() {
+        System.out.println("End Message:Structure");
         payloads.add(payload);
+        payload = null;
+        header.setStructures(payloads);
+        System.out.println("Struct="+payloads.get(0).getStructure());
     }
 
     void startRef(Attributes atts) {
+        System.out.println("Start Ref!!!");
         StructureRef ref = new StructureRef(new NestedNCNameID(atts.getValue("agencyID")),
                 new IDType(atts.getValue("id")),new Version(atts.getValue("version")),ObjectTypeCodelistType.DATASTRUCTURE, PackageTypeCodelistType.DATASTRUCTURE);
         StructureReference reference = new StructureReference(ref, null);
         payload.setStructure(reference);
+        System.out.println("Structure="+payload.getStructure());
     }
 
     void endRef() {
 
+    }
+    public void endDocument(){
+        if( cbHandler!=null) {
+            cbHandler.documentFinished();
+        }
     }
 }

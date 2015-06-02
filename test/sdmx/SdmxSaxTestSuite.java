@@ -17,6 +17,7 @@ import sdmx.message.StructureTypeTest;
 import sdmx.registry.LocalRegistryTest;
 import sdmx.version.common.SOAPStripperInputStreamTest;
 import sdmx.version.twopointone.Sdmx21StructureParserTest;
+import sdmx.version.twopointone.writer.Sdmx21StreamingDataWriterTest;
 import sdmx.version.twopointzero.Sdmx20DataParserTest;
 import sdmx.version.twopointzero.Sdmx20DataWriteTest;
 import sdmx.version.twopointzero.Sdmx20ServiceTest;
@@ -63,7 +64,8 @@ import sdmx.version.twopointzero.generic.GenericDataContentHandlerTest;
     GenericDataContentHandlerTest.class,
     CubeTest.class,
     ReferenceTypeTest.class,
-    Sdmx20StructureWriteTest.class
+    Sdmx20StructureWriteTest.class,
+    Sdmx21StreamingDataWriterTest.class
 })
 public class SdmxSaxTestSuite {
     @BeforeClass

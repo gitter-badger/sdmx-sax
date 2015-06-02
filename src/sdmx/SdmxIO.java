@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.PushbackInputStream;
 import java.io.PushbackReader;
 import java.io.Reader;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
@@ -23,6 +24,8 @@ import sdmx.exception.ParseException;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
 import sdmx.net.LocalRegistry;
+import sdmx.net.ServiceList;
+import sdmx.net.list.DataProvider;
 import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.version.common.SdmxParserProvider;
 import sdmx.version.twopointone.Sdmx21ParserProvider;
@@ -203,7 +206,7 @@ public class SdmxIO {
         }
         return prov.parseData(header,push);
     }
-    public static DataMessage parseData(InputStream in,ParseDataCallbackHandler cbHandler) throws IOException,ParseException {
+    public static void parseData(InputStream in,ParseDataCallbackHandler cbHandler) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackInputStream push = new PushbackInputStream(in,8192);
         String header = getHeader(push);
@@ -211,9 +214,9 @@ public class SdmxIO {
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider");
         }
-        return prov.parseData(header,push,cbHandler);
+        prov.parseData(header,push,cbHandler);
     }
-    public static DataMessage parseData(Reader in,ParseDataCallbackHandler cbHandler) throws IOException,ParseException {
+    public static void parseData(Reader in,ParseDataCallbackHandler cbHandler) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackReader push = new PushbackReader(in,8192);
         String header = getHeader(push);
@@ -221,7 +224,7 @@ public class SdmxIO {
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider");
         }
-        return prov.parseData(header,push,cbHandler);
+        prov.parseData(header,push,cbHandler);
     }
     public static SdmxParserProvider findProvider(String header) throws IOException {
         for(int i=0;i<list.size();i++) {
@@ -259,5 +262,8 @@ public class SdmxIO {
         }
         Logger.getLogger("sdmx").setLevel(level);
         Logger.getLogger("sdmx").setUseParentHandlers(false);
+    }
+    public Queryable connect(int type, String agency,String serviceURL,String options,String attribution,String htmlAttribution) throws MalformedURLException {
+        return ServiceList.getDataProvider(type, agency, serviceURL, options, attribution, htmlAttribution).getQueryable();
     }
 }

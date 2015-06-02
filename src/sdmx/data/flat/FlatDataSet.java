@@ -7,6 +7,8 @@ package sdmx.data.flat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import sdmx.Registry;
+import sdmx.commonreferences.DataStructureReference;
 import sdmx.data.AttachmentLevel;
 import sdmx.data.ColumnMapper;
 import sdmx.data.DataSet;
@@ -20,6 +22,7 @@ import sdmx.query.data.DataQuery;
 import sdmx.structure.codelist.CodeType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.cube.Cube;
+import sdmx.structure.datastructure.DimensionType;
 
 /**
  * <xs:attributeGroup name="SetAttributeGroup">
@@ -335,5 +338,8 @@ public class FlatDataSet implements DataSet {
             }
         }
         return null;
+    }
+    public String getDimensionAtObservation(Registry reg,DataStructureReference ref){
+        return "AllDimensions";
     }
 }

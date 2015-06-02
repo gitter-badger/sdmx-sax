@@ -6,6 +6,8 @@ package sdmx.data.structured;
 
 import java.util.ArrayList;
 import java.util.List;
+import sdmx.Registry;
+import sdmx.commonreferences.DataStructureReference;
 import sdmx.cube.Cube;
 import sdmx.data.Attachable;
 import sdmx.data.AttachmentLevel;
@@ -19,6 +21,8 @@ import sdmx.data.key.FullKey;
 import sdmx.data.key.PartialKey;
 import sdmx.query.data.DataQuery;
 import sdmx.structure.codelist.CodeType;
+import sdmx.structure.datastructure.DataStructureType;
+import sdmx.structure.datastructure.DimensionType;
 
 /**
  *
@@ -380,5 +384,19 @@ public class StructuredDataSet implements DataSet, Attachable {
             }
         }
         return null;
+    }
+    public String getDimensionAtObservation(Registry reg,DataStructureReference ref){
+        DataStructureType struct = reg.find(ref);
+        if( this.observations.size()>0 ) {
+            return "AllDimensions";
+        }
+        if( columnMapper.isAttachedToObservation("TIME_PERIOD")){return "TIME_PERIOD";}
+        if( columnMapper.isAttachedToObservation("TIME")){return "TIME";}
+        for(DimensionType d:struct.getDataStructureComponents().getDimensionList().getDimensions()){
+            if( columnMapper.isAttachedToObservation(d.getId().toString())){
+                return d.getId().toString();
+            }
+        }
+        return struct.getDataStructureComponents().getDimensionList().getTimeDimension().getId().toString();
     }
 }

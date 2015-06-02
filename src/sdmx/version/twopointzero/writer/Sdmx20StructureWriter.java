@@ -39,6 +39,7 @@ import org.sdmx.resources.sdmxml.schemas.v20.structure.ConceptsType;
 import org.sdmx.resources.sdmxml.schemas.v20.structure.DimensionType;
 import org.sdmx.resources.sdmxml.schemas.v20.structure.KeyFamiliesType;
 import org.sdmx.resources.sdmxml.schemas.v20.structure.KeyFamilyType;
+import org.sdmx.resources.sdmxml.schemas.v20.structure.PrimaryMeasureType;
 import org.sdmx.resources.sdmxml.schemas.v20.structure.TextFormatType;
 import org.sdmx.resources.sdmxml.schemas.v20.structure.TextTypeType;
 import org.sdmx.resources.sdmxml.schemas.v20.structure.TimeDimensionType;
@@ -52,7 +53,6 @@ import sdmx.structure.base.ItemType;
 import sdmx.structure.datastructure.DataStructureComponents;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.MeasureDimensionType;
-import sdmx.structure.datastructure.PrimaryMeasure;
 import sdmx.structure.datastructure.SimpleDataStructureRepresentationType;
 import sdmx.version.twopointone.Sdmx21StructureReaderTools;
 
@@ -380,6 +380,7 @@ public class Sdmx20StructureWriter {
     private static ComponentsType toComponentsType(ComponentsType comps, DataStructureType kf) {
         comps.setDimensionArray(toDimensionArray(kf));
         comps.setTimeDimension(toTimeDimension(kf.getDataStructureComponents().getDimensionList().getTimeDimension()));
+        comps.setPrimaryMeasure(toPrimaryMeasure(kf.getDataStructureComponents().getMeasureList().getPrimaryMeasure()));
         return comps;
     }
 
@@ -475,4 +476,35 @@ public class Sdmx20StructureWriter {
 
     }
 
+    public static org.sdmx.resources.sdmxml.schemas.v20.structure.PrimaryMeasureType toPrimaryMeasure(sdmx.structure.datastructure.PrimaryMeasure pm) {
+        PrimaryMeasureType pm2 = PrimaryMeasureType.Factory.newInstance();
+        pm2.setTextFormat(toTextFormatType(pm.getLocalRepresentation().getTextFormat()));
+        if( pm.getLocalRepresentation().getEnumeration()!=null) {
+           pm2.setCodelist(pm.getLocalRepresentation().getEnumeration().getId().toString());
+           pm2.setCodelistAgency(pm.getLocalRepresentation().getEnumeration().getAgencyId().toString());
+           pm2.setCodelistVersion(pm.getLocalRepresentation().getEnumeration().getVersion().toString());
+        }
+        pm2.setConceptRef(pm.getId().toString());
+        pm2.setConceptSchemeAgency(pm.getConceptIdentity().getAgencyId().toString());
+        pm2.setConceptSchemeRef(pm.getConceptIdentity().getMaintainableParentId().toString());
+        pm2.setConceptVersion(pm.getConceptIdentity().getVersion().toString());
+        return pm2;
+    }
+
+    private static TextFormatType toTextFormatType(sdmx.structure.base.TextFormatType textFormat) {
+        TextFormatType tt = TextFormatType.Factory.newInstance();
+        if( textFormat.getDecimals()!=null) { tt.setDecimals(BigInteger.valueOf(textFormat.getDecimals().getValue()));}
+        if( textFormat.getEndValue()!=null) { tt.setEndValue(textFormat.getEndValue());}
+        if( textFormat.isSequence()!=null) {
+            tt.setIsSequence(textFormat.isSequence());
+            if( textFormat.getInterval()!=null) { tt.setInterval(textFormat.getInterval());}
+        }
+        if( textFormat.getMaxLength()!=null) { tt.setMaxLength(BigInteger.valueOf(textFormat.getMaxLength().getValue()));}
+        if( textFormat.getMinLength()!=null) { tt.setMinLength(BigInteger.valueOf(textFormat.getMinLength().getValue()));}
+        if( textFormat.getPattern()!=null) {tt.setPattern(textFormat.getPattern());}
+        if( textFormat.getStartValue()!=null) {tt.setStartValue(textFormat.getStartValue()); }
+        if( textFormat.getTextType()!=null ) { tt.setTextType(TextTypeType.Enum.forString(textFormat.getTextType().toString() ) ) ;}
+        return tt;
+    }
+    
 }

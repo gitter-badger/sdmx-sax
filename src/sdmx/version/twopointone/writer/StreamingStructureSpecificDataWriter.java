@@ -2,12 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sdmx.version.twopointzero.writer;
+package sdmx.version.twopointone.writer;
 
 /**
  *
  * @author James
  */
+import sdmx.version.twopointzero.writer.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -23,9 +24,8 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.output.XMLOutputter;
-import sdmx.Registry;
 import sdmx.common.Name;
-import sdmx.commonreferences.DataStructureReference;
+import sdmx.common.PayloadStructureType;
 import sdmx.data.ColumnMapper;
 import sdmx.data.DataSet;
 import sdmx.data.DataSetWriter;
@@ -38,13 +38,7 @@ import sdmx.data.structured.StructuredDataSet;
 import sdmx.footer.FooterType;
 import sdmx.message.*;
 import sdmx.structure.base.NameableType;
-import sdmx.structure.datastructure.AttributeType;
-import sdmx.structure.datastructure.DataStructureType;
-import sdmx.structure.datastructure.DimensionType;
-import sdmx.structure.datastructure.PrimaryMeasure;
-import sdmx.structure.datastructure.TimeDimensionType;
 import sdmx.version.common.ParseDataCallbackHandler;
-import static sdmx.version.twopointzero.writer.GenericDataWriter.writeContact;
 import static sdmx.version.twopointzero.writer.GenericDataWriter.writeName;
 
 /**
@@ -64,11 +58,11 @@ import static sdmx.version.twopointzero.writer.GenericDataWriter.writeName;
  *
  * Copyright James Gardner 2014
  */
-public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallbackHandler {
+public class StreamingStructureSpecificDataWriter implements DataSetWriter, ParseDataCallbackHandler {
 
-    public static StreamingGenericDataWriter openWriter(OutputStream out, Registry reg, DataStructureReference ref) throws XMLStreamException {
+    public static StreamingStructureSpecificDataWriter openWriter(OutputStream out) throws XMLStreamException {
         //setup this like outputDocument
-        return new StreamingGenericDataWriter(out, reg, ref);
+        return new StreamingStructureSpecificDataWriter(out);
     }
     OutputStream out = null;
     XMLStreamWriter writer = null;
@@ -76,23 +70,21 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
     private String namespaceprefix;
     BaseHeaderType header = null;
 
-    private Registry registry = null;
-    private DataStructureReference dataStructureReference = null;
-    private DataStructureType struct = null;
-
-    private boolean in_series_key = false;
-    private boolean in_series_attributes = false;
-
-    public StreamingGenericDataWriter(OutputStream out, Registry reg, DataStructureReference ref) {
+    public StreamingStructureSpecificDataWriter(OutputStream out) {
+        this.out = out;
+        XMLOutputFactory factory = XMLOutputFactory.newInstance();
         try {
-            this.registry = reg;
-            this.dataStructureReference = ref;
-            this.struct = reg.find(ref);
-            this.out = out;
-            XMLOutputFactory factory = XMLOutputFactory.newInstance();
-            this.writer = factory.createXMLStreamWriter(out);
+            writer = factory.createXMLStreamWriter(out);
+            writer.writeStartDocument("1.0");
+            writer.writeStartElement("message","StructureSpecificTimeSeriesData","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+            writer.writeDefaultNamespace("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+            writer.writeNamespace("data", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific");
+            writer.writeNamespace("message", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+            writer.writeNamespace("common","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common");
+            writer.writeNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            writer.writeNamespace("schemaLocation", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
         } catch (XMLStreamException ex) {
-            Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -100,38 +92,30 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
      *
      */
     public void writeHeader() throws XMLStreamException {
-        writer.writeStartDocument("1.0");
-        writer.writeStartElement("GenericData");
-        writer.writeDefaultNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message");
-        writer.writeNamespace("message", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message");
-        writer.writeNamespace("common", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/common");
-        writer.writeNamespace("generic", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic");
-        writer.writeNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        writer.writeNamespace("schemaLocation", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message http://www.sdmx.org/docs/2_0/SDMXMessage.xsd");
-        if (namespaceprefix != null && !namespaceprefix.startsWith("xmlns")) {
-            //writer.writeNamespace(namespaceprefix, namespace);
-        }
-        writer.writeStartElement("Header");
+        writer.writeStartElement("message","Header","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
         if (header.getId() != null && !"".equals(header.getId())) {
-            writer.writeStartElement("ID");
+            writer.writeStartElement("message","ID","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
             writer.writeCharacters(header.getId());
             writer.writeEndElement();
         }
         if (header.getTest() != null) {
-            writer.writeStartElement("Test");
+            writer.writeStartElement("message","Test","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
             writer.writeCharacters(header.getTest().toString());
             writer.writeEndElement();
         }
         if (header.getNames() != null && header.getNames().size() > 0) {
             for (int i = 0; i < header.getNames().size(); i++) {
-                writer.writeStartElement("Name");
-                writer.writeAttribute("xml:lang", header.getNames().get(i).getLang());
+                
+                writer.writeStartElement("common","Name");
+                if (header.getNames().get(i).getLang() != null) {
+                    writer.writeAttribute("xml:lang", header.getNames().get(i).getLang());
+                }
                 writer.writeCharacters(header.getNames().get(i).getText());
                 writer.writeEndElement();
             }
         }
         if (header.getPrepared() != null && !"".equals(header.getPrepared())) {
-            writer.writeStartElement("Prepared");
+            writer.writeStartElement("message","Prepared","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
             writer.writeCharacters(header.getPrepared().getDate().toString());
             writer.writeEndElement();
         }
@@ -143,7 +127,7 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
         //}
 
         if (header.getSender() != null && !"".equals(header.getSender())) {
-            writer.writeStartElement("Sender");
+            writer.writeStartElement("message","Sender","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
             writer.writeAttribute("id", header.getSender().getId().toString());
             if (header.getSender().getNames() != null) {
                 for (Name n : header.getSender().getNames()) {
@@ -156,18 +140,22 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
             writer.writeEndElement();
         }
         if (header.getReceivers() != null && header.getReceivers().size() > 0) {
-            writer.writeStartElement("Receiver");
-            writer.writeAttribute("id", header.getReceivers().get(0).getId().toString());
-            if (header.getReceivers().get(0).getNames() != null) {
-                for (Name n : header.getReceivers().get(0).getNames()) {
+            for(PartyType r:header.getReceivers()){
+            writer.writeStartElement("message","Receiver","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+            writer.writeAttribute("id", r.getId().toString());
+            if (r.getNames() != null) {
+                for (Name n : r.getNames()) {
                     writeName(writer, n);
                 }
             }
-            if (header.getReceivers().get(0).getContacts() != null && header.getReceivers().get(0).getContacts().size() > 0) {
-                writeContact(writer, header.getReceivers().get(0).getContacts().get(0));
+            if (r.getContacts() != null && r.getContacts().size() > 0) {
+                for(ContactType c:r.getContacts()) {
+                    writeContact(writer, c);
+                }
+                
             }
-
             writer.writeEndElement();
+            }
         }
         if (header.getDataSetAction() != null && !"".equals(header.getDataSetAction())) {
             writer.writeStartElement("DataSetAction");
@@ -188,6 +176,16 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
             writer.writeStartElement("ReportingEnd");
             writer.writeCharacters(header.getReportingEnd().toString());
             writer.writeEndElement();
+        }
+
+        if( header.getStructures()!=null&&header.getStructures().size()>0) {
+            System.out.println("Writing PayLoadStructure");
+            for (Iterator<sdmx.common.PayloadStructureType> it = header.getStructures().iterator(); it.hasNext();) {
+                PayloadStructureType st = (PayloadStructureType) it.next();
+                writeStructure(st);
+            }
+        }else {
+            System.out.println("Payload="+header.getStructures());
         }
         writer.writeEndElement();
         // Ignore.. no equivalient in SDMX 2.1
@@ -266,93 +264,97 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
 
     @Override
     public void newDataSet() {
-        //System.out.println("New DataSet");
-        try {                                  //http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic
-            writer.writeStartElement("generic","DataSet", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic");
+    
+        System.out.println("New DataSet");
+        try {
+            if (namespaceprefix == null || namespace == null) {
+
+                writer.writeStartElement("message","DataSet","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+
+            } else {
+                writer.writeStartElement(namespaceprefix, "DataSet", namespace);
+            }
+
         } catch (XMLStreamException ex) {
-            Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (header.getDataProvider() != null && header.getDataProvider() != null && header.getDataProvider().getAgencyId() != null) {
             try {
                 writer.writeAttribute("DataFlowAgencyID", header.getDataProvider().getAgencyId().toString());
             } catch (XMLStreamException ex) {
-                Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (header.getDataSetID() != null && header.getDataSetID().size() > 0) {
             try {
                 writer.writeAttribute("DataFlowID", header.getDataSetID().get(0).toString());
             } catch (XMLStreamException ex) {
-                Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (header.getDataProvider() != null && header.getDataProvider() != null && header.getDataProvider().getAgencyId() != null) {
             try {
                 writer.writeAttribute("DataProviderID", header.getDataProvider().getAgencyId().toString());
             } catch (XMLStreamException ex) {
-                Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (header.getDataProvider() != null && header.getDataProvider() != null && header.getDataProvider().getAgencyId() != null) {
             try {
                 writer.writeAttribute("DataProviderSchemeAgencyId", header.getDataProvider().getAgencyId().toString());
             } catch (XMLStreamException ex) {
-                Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (header.getDataProvider() != null && header.getDataProvider() != null && header.getDataProvider().getAgencyId() != null) {
             try {
                 writer.writeAttribute("DataProviderSchemeId", header.getDataProvider().getId().toString());
             } catch (XMLStreamException ex) {
-                Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (header.getDataSetID() != null && header.getDataSetID().size() > 0) {
             try {
                 writer.writeAttribute("DataSetID", header.getDataSetID().get(0).toString());
             } catch (XMLStreamException ex) {
-                Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
     @Override
     public void newSeries() {
-        try {
-            //System.out.println("New Series");
-            writer.writeStartElement("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic", "Series");
-            writer.writeStartElement("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic", "SeriesKey");
-        } catch (XMLStreamException ex) {
-            Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
+        System.out.println("New Series");
+        if (namespaceprefix == null || namespace == null) {
+            try {
+                writer.writeStartElement("Series");
+            } catch (XMLStreamException ex) {
+                Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            try {
+                writer.writeStartElement(namespaceprefix, "Series", namespace);
+            } catch (XMLStreamException ex) {
+                Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        in_series_key=true;
     }
 
     @Override
     public void newObservation() {
-       // System.out.println("New Obs");
-        if (in_series_key) {
+        System.out.println("New Obs");
+        if (namespaceprefix == null || namespace == null) {
             try {
-                //System.out.println("Ending Series Key");
-                in_series_key = false;
-                writer.writeEndElement();// SeriesKey
+                                writer.writeStartElement("Obs");
             } catch (XMLStreamException ex) {
-                Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        if (in_series_attributes) {
+        } else {
             try {
-                //System.out.println("Ending Series Atts");
-                in_series_attributes = false;
-                writer.writeEndElement(); // Attributes
+                writer.writeStartElement(namespaceprefix, "Obs", namespace);
             } catch (XMLStreamException ex) {
-                Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        try {
-            writer.writeStartElement("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic", "Obs");
-        } catch (XMLStreamException ex) {
-            Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -361,67 +363,27 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
         try {
             writer.writeAttribute(name, val);
         } catch (XMLStreamException ex) {
-            Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
     public void writeSeriesComponent(String name, String val) {
-        if (in_series_key) {
-            if (struct.findComponent(name) instanceof AttributeType) {
-                try {
-                    in_series_key = false;
-                    in_series_attributes = true;
-                    writer.writeEndElement();// SeriesKey
-                    writer.writeStartElement("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic", "Attributes");
-                } catch (XMLStreamException ex) {
-                    Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        if (in_series_attributes && struct.findComponent(name) instanceof DimensionType) {
-            throw new RuntimeException("Series Attributes must be written last!:" + name + ":" + val);
-        }
         try {
-            writer.writeStartElement("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic", "Value");
-            writer.writeAttribute("concept", name);
-            writer.writeAttribute("value", val);
-            writer.writeEndElement();
+            writer.writeAttribute(name, val);
         } catch (XMLStreamException ex) {
-            Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
     public void writeObservationComponent(String name, String val) {
-        //System.out.println("N:" + name + "val:" + val);
-        if (struct.findComponent(name) instanceof TimeDimensionType) {
-            try {
-                writer.writeStartElement("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic", "Time");
-                writer.writeCharacters(val);
-                writer.writeEndElement();
-            } catch (XMLStreamException ex) {
-                Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else if (struct.findComponent(name) instanceof PrimaryMeasure) {
-            try {
-                writer.writeStartElement("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic", "ObsValue");
-                writer.writeAttribute("value", val);
-                writer.writeEndElement();
-            } catch (XMLStreamException ex) {
-                Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            try {
-                writer.writeStartElement("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic", "Value");
-                writer.writeAttribute("concept", name);
-                writer.writeAttribute("value", val);
-                writer.writeEndElement();
-            } catch (XMLStreamException ex) {
-                Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        System.out.println("N:"+name+"val:"+val);
+        try {
+            writer.writeAttribute(name, val);
+        } catch (XMLStreamException ex) {
+            Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     @Override
@@ -431,51 +393,43 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
 
     @Override
     public void finishObservation() {
-        //System.out.println("Fin Obs");
+        System.out.println("Fin Obs");
         try {
             writer.writeEndElement();
-
         } catch (XMLStreamException ex) {
-            Logger.getLogger(StreamingGenericDataWriter.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
     public void finishSeries() {
-        //System.out.println("Fin Series");
+        System.out.println("Fin Series");
         try {
-            if( in_series_key||in_series_attributes){
-                writer.writeEndElement(); // SeriesKey or Attributes
-            }
-            writer.writeEndElement(); // Series
+            writer.writeEndElement();
         } catch (XMLStreamException ex) {
-            Logger.getLogger(StreamingGenericDataWriter.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
     public DataSet finishDataSet() {
-        //System.out.println("Fin DataSet");
+        System.out.println("Fin DataSet");
         try {
             writer.writeEndElement();
-
         } catch (XMLStreamException ex) {
-            Logger.getLogger(StreamingGenericDataWriter.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
     @Override
     public void headerParsed(BaseHeaderType header) {
-        this.header = header;
+        System.out.println("Header Parsed");
+        this.header=header;
         try {
             writeHeader();
         } catch (XMLStreamException ex) {
-            Logger.getLogger(StreamingGenericDataWriter.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -495,10 +449,8 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
         this.namespaceprefix = namespace;
         try {
             writer.writeNamespace(prefix, namespace);
-
         } catch (XMLStreamException ex) {
-            Logger.getLogger(StreamingGenericDataWriter.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -510,14 +462,41 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
             writer.close();
             out.flush();
             out.close();
-
         } catch (XMLStreamException ex) {
-            Logger.getLogger(StreamingGenericDataWriter.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(StreamingGenericDataWriter.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
+       
+    }
+        /*
+-<message:Structurenamespace="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=ECB:ECB_EXR_NG(1.0):ObsLevelDim:TIME_PERIOD" dimensionAtObservation="TIME_PERIOD" structureID="STR1">
 
+
+-<common:Structure>
+
+<Ref id="ECB_EXR_NG" version="1.0" agencyID="ECB"/>
+
+</common:Structure>
+
+</message:Structure>
+        */
+    public void writeStructure(PayloadStructureType st) {
+        try {
+            writer.writeStartElement("message","Structure","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+            writer.writeAttribute("namespace", st.getNamespace().toString());
+            writer.writeAttribute("dimensionAtObservation", st.getDimensionAtObservation().toString());
+            writer.writeAttribute("structureID",st.getStructureID().toString());
+            writer.writeStartElement("common", "Structure", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common");
+            writer.writeStartElement("Ref");
+            writer.writeAttribute("id", st.getStructure().getMaintainableParentId().toString());
+            writer.writeAttribute("version", st.getStructure().getVersion().toString());
+            writer.writeAttribute("agencyID", st.getStructure().getAgencyId().toString());
+            writer.writeEndElement();
+            writer.writeEndElement();
+            writer.writeEndElement();
+        } catch (XMLStreamException ex) {
+            Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

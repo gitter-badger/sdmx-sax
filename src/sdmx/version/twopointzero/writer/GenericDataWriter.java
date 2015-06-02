@@ -73,11 +73,10 @@ public class GenericDataWriter {
         writer.writeDefaultNamespace("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message");
         writer.writeNamespace("message", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message");
         writer.writeNamespace("common", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/common");
-        writer.writeNamespace("compact", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/compact");
         writer.writeNamespace("generic", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic");
         writer.writeNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
         writer.writeNamespace("schemaLocation", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message http://www.sdmx.org/docs/2_0/SDMXMessage.xsd");
-        writer.writeNamespace(namespaceprefix, namespace);
+        //writer.writeNamespace(namespaceprefix, namespace);
         writer.writeStartElement("Header");
         if (msg.getHeader().getId() != null && !"".equals(msg.getHeader().getId())) {
             writer.writeStartElement("ID");

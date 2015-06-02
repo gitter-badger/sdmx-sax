@@ -274,7 +274,7 @@ public class ReferenceType implements Serializable {
             }
          } else {
             this.objectId = maintainedParentId;
-            this.maintainedParentId = null;
+            //this.maintainedParentId = null;
         }
     }
 

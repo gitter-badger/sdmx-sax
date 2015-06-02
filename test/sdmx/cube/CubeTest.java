@@ -36,7 +36,7 @@ public class CubeTest {
         long t1= System.currentTimeMillis();
         InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/CompactSample.xml");
         InputStream in2 = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/StructureSample.xml");
-        DataMessage data = SdmxIO.parseData(in,null);//Flat
+        DataMessage data = SdmxIO.parseData(in);//Flat
         StructureType struct = SdmxIO.parseStructure(in2);
         long t2 = System.currentTimeMillis();
         System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");

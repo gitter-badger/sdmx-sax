@@ -40,7 +40,7 @@ public class CompactDataEventHandlerTest {
     @Before
     public void setUp() throws FileNotFoundException, IOException, ParseException {
         FileInputStream fis = new FileInputStream("test/resources/sdmx20-samples/CompactSample.xml");
-        msg = SdmxIO.parseData(fis, null);
+        msg = SdmxIO.parseData(fis);
     }
     
     @After

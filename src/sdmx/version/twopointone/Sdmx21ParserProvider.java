@@ -86,7 +86,7 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public StructureType parseStructure(InputStream in,String header) {
+    public StructureType parseStructure(InputStream in, String header) {
         try {
             return Sdmx21StructureReaderTools.toStructureDocument(in);
         } catch (XmlException ex) {
@@ -133,8 +133,8 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public StructureType parseStructure(Registry registry, InputStream in,String header) throws IOException {
-        StructureType st = parseStructure(in,header);
+    public StructureType parseStructure(Registry registry, InputStream in, String header) throws IOException {
+        StructureType st = parseStructure(in, header);
         registry.load(st);
         return st;
     }
@@ -148,6 +148,7 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
             return false;
         }
     }
+
     public boolean isGenericData(String header) {
         if (header.indexOf("GenericData ") != -1) {
             return true;
@@ -161,17 +162,22 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     @Override
     public DataMessage parseData(String header, InputStream in) throws IOException {
         if (isStructureSpecificData(header)) {
-           return parseStructureSpecificData(in,null);
+            return parseStructureSpecificData(in, null);
         }
-        if( isGenericData(header)){
-            return parseGenericData(in,null);
+        if (isGenericData(header)) {
+            return parseGenericData(in, null);
         }
         return null;
     }
 
     public DataMessage parseStructureSpecificData(InputStream in, ParseDataCallbackHandler cbHandler) throws IOException {
-        DataSetWriter writer = cbHandler!=null?cbHandler.getDataSetWriter():new StructuredDataWriter();
+        DataSetWriter writer = cbHandler != null ? cbHandler.getDataSetWriter() : new StructuredDataWriter();
         StructureSpecificEventHandler event = new StructureSpecificEventHandler(writer);
+        if (cbHandler != null) {
+            event = new StructureSpecificEventHandler(cbHandler);
+        } else {
+            event = new StructureSpecificEventHandler(writer);
+        }
         StructureSpecificContentHandler handler = new StructureSpecificContentHandler(in, event);
         try {
             return handler.parse();
@@ -185,7 +191,7 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public StructureType parseStructure(Reader in,String header) throws IOException {
+    public StructureType parseStructure(Reader in, String header) throws IOException {
         try {
             return Sdmx21StructureReaderTools.toStructureDocument(in);
         } catch (XmlException ex) {
@@ -197,8 +203,8 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public StructureType parseStructure(Registry registry, Reader in,String header) throws IOException {
-        StructureType st = parseStructure(in,header);
+    public StructureType parseStructure(Registry registry, Reader in, String header) throws IOException {
+        StructureType st = parseStructure(in, header);
         registry.load(st);
         return st;
     }
@@ -206,10 +212,10 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     @Override
     public DataMessage parseData(String header, Reader in) throws IOException {
         if (isStructureSpecificData(header)) {
-           return parseStructureSpecificData(in,null);
+            return parseStructureSpecificData(in, null);
         }
-        if( isGenericData(header)){
-            return parseGenericData(in,null);
+        if (isGenericData(header)) {
+            return parseGenericData(in, null);
         }
         return null;
     }
@@ -217,10 +223,10 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     @Override
     public DataMessage parseData(String header, InputStream in, ParseDataCallbackHandler cbHandler) throws IOException {
         if (isStructureSpecificData(header)) {
-           return parseStructureSpecificData(in,cbHandler);
+            return parseStructureSpecificData(in, cbHandler);
         }
-        if( isGenericData(header)){
-            return parseGenericData(in,cbHandler);
+        if (isGenericData(header)) {
+            return parseGenericData(in, cbHandler);
         }
         return null;
     }
@@ -228,17 +234,24 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     @Override
     public DataMessage parseData(String header, Reader in, ParseDataCallbackHandler cbHandler) throws IOException {
         if (isStructureSpecificData(header)) {
-           return parseStructureSpecificData(in,cbHandler);
+            return parseStructureSpecificData(in, cbHandler);
         }
-        if( isGenericData(header)){
-            return parseGenericData(in,cbHandler);
+        if (isGenericData(header)) {
+            return parseGenericData(in, cbHandler);
         }
         return null;
     }
 
     public DataMessage parseStructureSpecificData(Reader in, ParseDataCallbackHandler cbHandler) throws IOException {
-        DataSetWriter writer = cbHandler!=null?cbHandler.getDataSetWriter():new StructuredDataWriter();
-        StructureSpecificEventHandler event = new StructureSpecificEventHandler(writer);
+        DataSetWriter writer = cbHandler != null ? cbHandler.getDataSetWriter() : new StructuredDataWriter();
+        StructureSpecificEventHandler event = null;
+        if (cbHandler != null) {
+            System.out.println("CBHandler2=" + cbHandler);
+            event = new StructureSpecificEventHandler(cbHandler);
+        } else {
+            event = new StructureSpecificEventHandler(writer);
+        }
+
         StructureSpecificContentHandler handler = new StructureSpecificContentHandler(in, event);
         try {
             return handler.parse();
@@ -252,8 +265,14 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     }
 
     public DataMessage parseGenericData(InputStream in, ParseDataCallbackHandler cbHandler) throws IOException {
-        DataSetWriter writer = cbHandler!=null?cbHandler.getDataSetWriter():new StructuredDataWriter();
-        GenericData21EventHandler event = new GenericData21EventHandler(writer);
+        DataSetWriter writer = cbHandler != null ? cbHandler.getDataSetWriter() : new StructuredDataWriter();
+        GenericData21EventHandler event = null;
+        if (cbHandler != null) {
+            //event = new GenericData21EventHandler(cbHandler);
+            event = new GenericData21EventHandler(cbHandler);
+        } else {
+            event = new GenericData21EventHandler(writer);
+        }
         GenericData21ContentHandler handler = new GenericData21ContentHandler(in, event);
         try {
             return handler.parse();
@@ -267,8 +286,9 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
         }
         return null;
     }
+
     public DataMessage parseGenericData(Reader in, ParseDataCallbackHandler cbHandler) throws IOException {
-        DataSetWriter writer = cbHandler!=null?cbHandler.getDataSetWriter():new StructuredDataWriter();
+        DataSetWriter writer = cbHandler != null ? cbHandler.getDataSetWriter() : new StructuredDataWriter();
         GenericData21EventHandler event = new GenericData21EventHandler(writer);
         GenericData21ContentHandler handler = new GenericData21ContentHandler(in, event);
         try {

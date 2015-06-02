@@ -77,7 +77,7 @@ public class StructuredDataSet {
             Locale loc = Locale.getDefault();
             Name name = concept == null ? null : concept.findName(loc.getLanguage());
             if (name == null) {
-                throw new RuntimeException("No Name for Concept!");
+                throw new RuntimeException("No Name for Concept"+conceptRef.toString());
             }
             return name.getText();
         } else {

@@ -46,6 +46,7 @@ import sdmx.message.DataMessage;
 import sdmx.message.HeaderTimeType;
 import sdmx.message.PartyType;
 import sdmx.message.SenderType;
+import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.version.twopointone.structurespecific.StructureSpecificEventHandler;
 import sdmx.version.twopointzero.Sdmx20EventHandler;
 import sdmx.version.twopointzero.compact.CompactDataEventHandler;
@@ -124,7 +125,8 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
     private String freq = null;
     private boolean in_group = false;
     private boolean in_series = false;
-    DataSetWriter writer = new FlatDataSetWriter();
+    private ParseDataCallbackHandler cbHandler = null;
+    DataSetWriter writer = null;
     
     
     String xmlLang = null;
@@ -162,6 +164,10 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
 
     public GenericData21EventHandler(DataSetWriter writer) {
         this.writer = writer;
+    }
+    public GenericData21EventHandler(ParseDataCallbackHandler cbHandler) {
+        this.cbHandler = cbHandler;
+        this.writer=cbHandler.getDataSetWriter();
     }
 
     public DataMessage getDataMessage() {
@@ -238,6 +244,9 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
     public void endHeader() {
         state = STATE_HEADEREND;
         // Insert witty assertions here
+        if( cbHandler!=null) {
+            cbHandler.headerParsed(header);
+        }
     }
 
     public void startDataSet(String uri, Attributes atts) {
@@ -720,5 +729,12 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
 
     public void endURN() {
         state = STATE_HEADER;
+    }
+
+    public void endDocument() {
+        if( cbHandler!=null) {
+            cbHandler.documentFinished();
+        }
+        
     }
 }

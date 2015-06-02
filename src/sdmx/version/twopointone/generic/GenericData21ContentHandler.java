@@ -100,6 +100,7 @@ public class GenericData21ContentHandler implements ContentHandler, ErrorHandler
     }
 
     public void endDocument() throws SAXException {
+        eh.endDocument();
     }
 
     public void startPrefixMapping(String prefix, String uri) throws SAXException {
