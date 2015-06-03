@@ -23,7 +23,9 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.output.XMLOutputter;
+import sdmx.Registry;
 import sdmx.common.Name;
+import sdmx.commonreferences.DataStructureReference;
 import sdmx.data.ColumnMapper;
 import sdmx.data.DataSet;
 import sdmx.data.DataSetWriter;
@@ -67,6 +69,8 @@ public class StreamingCompactDataWriter implements DataSetWriter, ParseDataCallb
     private String namespace;
     private String namespaceprefix;
     BaseHeaderType header = null;
+    Registry registry = null;
+    DataStructureReference ref = null;
 
     public StreamingCompactDataWriter(OutputStream out) {
         this.out = out;
@@ -449,5 +453,34 @@ public class StreamingCompactDataWriter implements DataSetWriter, ParseDataCallb
             Logger.getLogger(StreamingCompactDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
        
+    }
+
+    private String dimensionAtObservation = null;
+    @Override
+    public void setDimensionAtObservationHint(String s) {
+        dimensionAtObservation=s;
+    }
+    @Override
+    public String getDimensionAtObservationHint() {
+        return dimensionAtObservation;
+    }
+    @Override
+    public void setDataStructureReferenceHint(DataStructureReference ref) {
+        this.ref=ref;
+    }
+
+    @Override
+    public DataStructureReference getDataStructureReferenceHint() {
+        return ref;
+    }
+
+    @Override
+    public Registry getRegistry() {
+        return registry;
+    }
+
+    @Override
+    public void setRegistry(Registry reg) {
+        this.registry=reg;
     }
 }

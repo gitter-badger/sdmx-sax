@@ -115,9 +115,9 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
         }
         if ("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message".equals(uri)) {
             if ("StructureSpecificTimeSeriesData".equals(localName)) {
-                eh.startRootElement(atts);
+                eh.startRootElement(localName,atts);
             } else if ("StructureSpecificData".equals(localName)) {
-                eh.startRootElement(atts);
+                eh.startRootElement(localName,atts);
             } else if ("Header".equals(localName)) {
                 eh.startHeader();
             } else if ("ID".equals(localName)) {

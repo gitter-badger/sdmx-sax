@@ -191,7 +191,7 @@ public class StructureSpecificEventHandler {
 
     public DataMessage getDataMessage() {
         if (state != STATE_FINISH) {
-            System.out.println("state=" + state);
+            //System.out.println("state=" + state);
             throw new RuntimeException("You can't get the document before i've finished parsing!");
         }
         DataMessage doc = new DataMessage();
@@ -203,7 +203,7 @@ public class StructureSpecificEventHandler {
         return doc;
     }
 
-    public void startRootElement(Attributes atts) {
+    public void startRootElement(String localName,Attributes atts) {
         state = STATE_START;
         if (atts.getValue("xsi:schemaLocation") != null || atts.getValue("schemaLocation") != null) {
             // ABS Data has this, UIS Does Not

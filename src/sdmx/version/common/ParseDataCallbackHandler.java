@@ -5,6 +5,8 @@
  */
 package sdmx.version.common;
 
+import sdmx.Registry;
+import sdmx.commonreferences.DataStructureReference;
 import sdmx.data.DataSetWriter;
 import sdmx.footer.FooterType;
 import sdmx.message.BaseHeaderType;
@@ -19,4 +21,11 @@ public interface ParseDataCallbackHandler {
     public void footerParsed(FooterType footer);
     public DataSetWriter getDataSetWriter();
     public void documentFinished();
+    public String getDimensionAtObservationHint();
+    public void setDimensionAtObservationHint(String s);
+    public void setDataStructureReferenceHint(DataStructureReference ref);
+    public DataStructureReference getDataStructureReferenceHint();
+    public Registry getRegistry();
+    public void setRegistry(Registry reg);
+    
 }

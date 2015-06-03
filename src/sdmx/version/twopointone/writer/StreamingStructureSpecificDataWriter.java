@@ -24,8 +24,10 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.output.XMLOutputter;
+import sdmx.Registry;
 import sdmx.common.Name;
 import sdmx.common.PayloadStructureType;
+import sdmx.commonreferences.DataStructureReference;
 import sdmx.data.ColumnMapper;
 import sdmx.data.DataSet;
 import sdmx.data.DataSetWriter;
@@ -69,6 +71,8 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
     private String namespace;
     private String namespaceprefix;
     BaseHeaderType header = null;
+    private Registry registry = null;
+    private DataStructureReference ref = null;
 
     public StreamingStructureSpecificDataWriter(OutputStream out) {
         this.out = out;
@@ -76,7 +80,7 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
         try {
             writer = factory.createXMLStreamWriter(out);
             writer.writeStartDocument("1.0");
-            writer.writeStartElement("message","StructureSpecificTimeSeriesData","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+            writer.writeStartElement("message","StructureSpecificData","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
             writer.writeDefaultNamespace("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
             writer.writeNamespace("data", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific");
             writer.writeNamespace("message", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
@@ -184,8 +188,10 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
                 PayloadStructureType st = (PayloadStructureType) it.next();
                 writeStructure(st);
             }
-        }else {
-            System.out.println("Payload="+header.getStructures());
+        }else if( ref!=null ) {
+            PayloadStructureType payload = new PayloadStructureType();
+            payload.setStructure(ref.asDataStructureReference());
+            writeStructure(payload);
         }
         writer.writeEndElement();
         // Ignore.. no equivalient in SDMX 2.1
@@ -484,9 +490,13 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
     public void writeStructure(PayloadStructureType st) {
         try {
             writer.writeStartElement("message","Structure","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
-            writer.writeAttribute("namespace", st.getNamespace().toString());
-            writer.writeAttribute("dimensionAtObservation", st.getDimensionAtObservation().toString());
-            writer.writeAttribute("structureID",st.getStructureID().toString());
+            if( st.getNamespace()!=null) {writer.writeAttribute("namespace", st.getNamespace().toString());}
+            if( st.getDimensionAtObservation()!=null) {
+                writer.writeAttribute("dimensionAtObservation", st.getDimensionAtObservation().toString());
+            }else{
+                writer.writeAttribute("dimensionAtObservation", dimensionAtObservation);
+            }
+            if( st.getStructureID()!=null){writer.writeAttribute("structureID",st.getStructureID().toString());}
             writer.writeStartElement("common", "Structure", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common");
             writer.writeStartElement("Ref");
             writer.writeAttribute("id", st.getStructure().getMaintainableParentId().toString());
@@ -498,5 +508,35 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
         } catch (XMLStreamException ex) {
             Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private String dimensionAtObservation = null;
+    @Override
+    public void setDimensionAtObservationHint(String s) {
+        dimensionAtObservation=s;
+    }
+    @Override
+    public String getDimensionAtObservationHint() {
+        return dimensionAtObservation;
+    }
+
+    @Override
+    public void setDataStructureReferenceHint(DataStructureReference ref) {
+        this.ref=ref;
+    }
+
+    @Override
+    public DataStructureReference getDataStructureReferenceHint() {
+        return ref;
+    }
+
+    @Override
+    public Registry getRegistry() {
+        return registry;
+    }
+
+    @Override
+    public void setRegistry(Registry reg) {
+        this.registry=reg;
     }
 }

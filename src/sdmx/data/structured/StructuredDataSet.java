@@ -385,18 +385,4 @@ public class StructuredDataSet implements DataSet, Attachable {
         }
         return null;
     }
-    public String getDimensionAtObservation(Registry reg,DataStructureReference ref){
-        DataStructureType struct = reg.find(ref);
-        if( this.observations.size()>0 ) {
-            return "AllDimensions";
-        }
-        if( columnMapper.isAttachedToObservation("TIME_PERIOD")){return "TIME_PERIOD";}
-        if( columnMapper.isAttachedToObservation("TIME")){return "TIME";}
-        for(DimensionType d:struct.getDataStructureComponents().getDimensionList().getDimensions()){
-            if( columnMapper.isAttachedToObservation(d.getId().toString())){
-                return d.getId().toString();
-            }
-        }
-        return struct.getDataStructureComponents().getDimensionList().getTimeDimension().getId().toString();
-    }
 }

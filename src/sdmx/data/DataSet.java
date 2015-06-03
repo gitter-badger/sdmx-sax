@@ -53,5 +53,4 @@ public interface DataSet {
     public List<Group> getGroups();
     public int groupSize();
     public FlatObs find(FullKey key);
-    public String getDimensionAtObservation(Registry reg,DataStructureReference ref);
     }

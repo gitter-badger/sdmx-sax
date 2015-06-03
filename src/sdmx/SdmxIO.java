@@ -7,6 +7,7 @@ package sdmx;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PushbackInputStream;
 import java.io.PushbackReader;
 import java.io.Reader;
@@ -19,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
 import org.xml.sax.SAXException;
+import sdmx.commonreferences.DataStructureReference;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.exception.ParseException;
 import sdmx.message.DataMessage;
@@ -28,6 +30,8 @@ import sdmx.net.ServiceList;
 import sdmx.net.list.DataProvider;
 import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.version.common.SdmxParserProvider;
+import sdmx.version.common.SdmxStreamWriterProvider;
+import sdmx.version.common.SdmxWriterProvider;
 import sdmx.version.twopointone.Sdmx21ParserProvider;
 import sdmx.version.twopointzero.Sdmx20ParserProvider;
 
@@ -67,34 +71,25 @@ public class SdmxIO {
     
     public static final List<String> SAVE_MIME_TYPES = new ArrayList<String>();
     
-    static{
-        SAVE_MIME_TYPES.add("application/vnd.sdmx.genericdata+xml;version=2.1");
-        SAVE_MIME_TYPES.add("application/vnd.sdmx.structurespecificdata+xml;version=2.1");
-        SAVE_MIME_TYPES.add("application/vnd.sdmx.generictimeseriesdata+xml;version=2.1");
-        SAVE_MIME_TYPES.add("application/vnd.sdmx.structurespecifictimeseriesdata+xml;version=2.1");
-        SAVE_MIME_TYPES.add("application/vnd.sdmx.genericmetadata+xml;version=2.1");
-        SAVE_MIME_TYPES.add("application/vnd.sdmx.structurespecificmetadata+xml;version=2.1");
-        SAVE_MIME_TYPES.add("application/vnd.sdmx.structure+xml;version=2.1");
-        SAVE_MIME_TYPES.add("application/vnd.sdmx.schema+xml;version=2.1");
-        SAVE_MIME_TYPES.add("application/vnd.sdmx.structurespecificdata+xml;version=2.1");
-        SAVE_MIME_TYPES.add("application/vnd.sdmx.data+json;version=1.0.0-wd");
-        SAVE_MIME_TYPES.add("application/vnd.sdmx.genericdata+xml;version=2.0");
-        SAVE_MIME_TYPES.add("application/vnd.sdmx.structurespecificdata+xml;version=2.0");
-        SAVE_MIME_TYPES.add("application/vnd.sdmx.generictimeseriesdata+xml;version=2.0");
-        SAVE_MIME_TYPES.add("application/vnd.sdmx.structurespecifictimeseriesdata+xml;version=2.0");
-        SAVE_MIME_TYPES.add("application/vnd.sdmx.structure+xml;version=2.0");
-    }
+    private static List<SdmxParserProvider> parsers = new ArrayList<SdmxParserProvider>(0);
+    private static List<SdmxWriterProvider> writers = new ArrayList<SdmxWriterProvider>(0);    
+    private static List<SdmxStreamWriterProvider> streamWriters = new ArrayList<SdmxStreamWriterProvider>(0);
     
-    
-    
-    
-    private static List<SdmxParserProvider> list = new ArrayList<SdmxParserProvider>(0);
     public static void register(SdmxParserProvider pp) {
-        list.add(pp);
+        parsers.add(pp);
     }
+    public static void register(SdmxWriterProvider pp) {
+        writers.add(pp);
+    }
+    public static void register(SdmxStreamWriterProvider pp) {
+        streamWriters.add(pp);
+    }
+    
     static{
         try {
             Class.forName("sdmx.version.twopointone.Sdmx21ParserProvider");
+            Class.forName("sdmx.version.twopointone.Sdmx21MessageWriterProvider");
+            Class.forName("sdmx.version.twopointone.Sdmx21StreamWriterProvider");
             Class.forName("sdmx.version.twopointzero.Sdmx20ParserProvider");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SdmxIO.class.getName()).log(Level.SEVERE, null, ex);
@@ -142,15 +137,15 @@ public class SdmxIO {
         return header;
     }    
     public static int checkVersion(String header) {
-        for(int i=0;i<list.size();i++) {
-            if( list.get(i).canParse(header))return list.get(i).getVersionIdentifier();
+        for(int i=0;i<parsers.size();i++) {
+            if( parsers.get(i).canParse(header))return parsers.get(i).getVersionIdentifier();
         }
         return UNKNOWN;
     }
     public static int checkVersion(PushbackInputStream push) throws IOException {
         String header = getHeader(push);
-        for(int i=0;i<list.size();i++) {
-            if( list.get(i).canParse(header))return list.get(i).getVersionIdentifier();
+        for(int i=0;i<parsers.size();i++) {
+            if( parsers.get(i).canParse(header))return parsers.get(i).getVersionIdentifier();
         }
         return UNKNOWN;
     }
@@ -166,7 +161,7 @@ public class SdmxIO {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackInputStream push = new PushbackInputStream(in,8192);
         String header = getHeader(push);
-        SdmxParserProvider prov = findProvider(header);
+        SdmxParserProvider prov = findParserProvider(header);
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider header="+header);
         }
@@ -178,7 +173,7 @@ public class SdmxIO {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackReader push = new PushbackReader(in,8192);
         String header = getHeader(push);
-        SdmxParserProvider prov = findProvider(header);
+        SdmxParserProvider prov = findParserProvider(header);
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider");
         }
@@ -190,7 +185,7 @@ public class SdmxIO {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackInputStream push = new PushbackInputStream(in,8192);
         String header = getHeader(push);
-        SdmxParserProvider prov = findProvider(header);
+        SdmxParserProvider prov = findParserProvider(header);
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider"+header);
         }
@@ -200,7 +195,7 @@ public class SdmxIO {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackReader push = new PushbackReader(in,8192);
         String header = getHeader(push);
-        SdmxParserProvider prov = findProvider(header);
+        SdmxParserProvider prov = findParserProvider(header);
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider");
         }
@@ -210,7 +205,7 @@ public class SdmxIO {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackInputStream push = new PushbackInputStream(in,8192);
         String header = getHeader(push);
-        SdmxParserProvider prov = findProvider(header);
+        SdmxParserProvider prov = findParserProvider(header);
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider");
         }
@@ -220,15 +215,27 @@ public class SdmxIO {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackReader push = new PushbackReader(in,8192);
         String header = getHeader(push);
-        SdmxParserProvider prov = findProvider(header);
+        SdmxParserProvider prov = findParserProvider(header);
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider");
         }
         prov.parseData(header,push,cbHandler);
     }
-    public static SdmxParserProvider findProvider(String header) throws IOException {
-        for(int i=0;i<list.size();i++) {
-            if( list.get(i).canParse(header))return list.get(i);
+    public static SdmxParserProvider findParserProvider(String header) throws IOException {
+        for(int i=0;i<parsers.size();i++) {
+            if( parsers.get(i).canParse(header))return parsers.get(i);
+        }
+        return null;
+    }
+    public static SdmxWriterProvider findWriterProvider(String mime) throws IOException {
+        for(int i=0;i<writers.size();i++) {
+            if( writers.get(i).getSupportedMIMETypes().contains(mime)) return writers.get(i);
+        }
+        return null;
+    }
+    public static SdmxStreamWriterProvider findStreamWriterProvider(String mime) throws IOException {
+        for(int i=0;i<streamWriters.size();i++) {
+            if( streamWriters.get(i).getSupportedMIMETypes().contains(mime)) return streamWriters.get(i);
         }
         return null;
     }
@@ -263,7 +270,42 @@ public class SdmxIO {
         Logger.getLogger("sdmx").setLevel(level);
         Logger.getLogger("sdmx").setUseParentHandlers(false);
     }
-    public Queryable connect(int type, String agency,String serviceURL,String options,String attribution,String htmlAttribution) throws MalformedURLException {
+    public static Queryable connect(int type, String agency,String serviceURL,String options,String attribution,String htmlAttribution) throws MalformedURLException {
         return ServiceList.getDataProvider(type, agency, serviceURL, options, attribution, htmlAttribution).getQueryable();
+    }
+    public static ParseDataCallbackHandler openForStreamWriting(String mime,OutputStream out,Registry reg,DataStructureReference ref) throws IOException {
+        SdmxStreamWriterProvider provider = findStreamWriterProvider(mime);
+        if( provider == null ) {
+            throw new RuntimeException("Not Writer found for MIME type:"+mime);
+        }
+        return provider.openForWriting(mime, out, reg, ref);
+    }
+    public static void write(String mime,DataMessage message,OutputStream out) throws IOException {
+        SdmxWriterProvider writer = findWriterProvider(mime);
+        if( writer==null) {
+            throw new RuntimeException("Not Writer found for MIME type:"+mime);
+        }
+        writer.save(mime, out, message);
+    }
+    public static void write(String mime,StructureType message,OutputStream out) throws IOException {
+        SdmxWriterProvider writer = findWriterProvider(mime);
+        if( writer==null) {
+            throw new RuntimeException("Not Writer found for MIME type:"+mime);
+        }
+        writer.save(mime, out, message);
+    }
+    public List<String> listSupportedWriteMIMETypes() {
+        List<String> result = new ArrayList<String>();
+        for(SdmxWriterProvider p:writers) {
+            result.addAll(p.getSupportedMIMETypes());
+        }
+        return result;
+    }
+    public List<String> listSupportedStreamWriteMIMETypes() {
+        List<String> result = new ArrayList<String>();
+        for(SdmxStreamWriterProvider p:streamWriters) {
+            result.addAll(p.getSupportedMIMETypes());
+        }
+        return result;
     }
 }

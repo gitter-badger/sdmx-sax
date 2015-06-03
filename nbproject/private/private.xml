@@ -3,15 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/James/Dropbox/Programming/sdmx-sax/test/sdmx/version/twopointzero/Sdmx20StructureWriteTest.java</file>
-            <file>file:/C:/Users/James/Dropbox/Programming/sdmx-sax/test/sdmx/version/twopointone/writer/Sdmx21StreamingDataWriterTest.java</file>
+            <file>file:/C:/Users/James/Dropbox/Programming/sdmx-sax/src/sdmx/version/twopointone/writer/StreamingStructureSpecificTimeSeriesWriter.java</file>
             <file>file:/C:/Users/James/Dropbox/Programming/sdmx-sax/src/sdmx/version/twopointone/writer/StreamingStructureSpecificDataWriter.java</file>
-            <file>file:/C:/Users/James/Dropbox/Programming/sdmx-sax/test/resources/sdmx21-samples/exr/ecb_exr_ng/structured/ecb_exr_ng_ts.xml</file>
-            <file>file:/C:/Users/James/Dropbox/Programming/sdmx-sax/testOut/ecb_exr_ng_ts-streaming_compact_out.xml</file>
-            <file>file:/C:/Users/James/Dropbox/Programming/sdmx-sax/src/sdmx/version/twopointone/structurespecific/StructureSpecificContentHandler.java</file>
-            <file>file:/C:/Users/James/Dropbox/Programming/sdmx-sax/src/sdmx/version/twopointone/structurespecific/StructureSpecificEventHandler.java</file>
-            <file>file:/C:/Users/James/Dropbox/Programming/sdmx-sax/src/sdmx/data/structured/StructuredDataWriter.java</file>
-            <file>file:/C:/Users/James/Dropbox/Programming/sdmx-sax/src/sdmx/commonreferences/ReferenceType.java</file>
         </group>
     </open-files>
 </project-private>

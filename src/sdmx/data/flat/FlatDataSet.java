@@ -154,6 +154,7 @@ public class FlatDataSet implements DataSet {
     List<Group> groups = null;
     FlatColumnMapper mapper = new FlatColumnMapper();
     List<FlatObs> observations = new ArrayList<FlatObs>();
+    private String dimensionAtObservation = "AllDimensions";
 
     public FlatDataSet() {
     }
@@ -341,5 +342,11 @@ public class FlatDataSet implements DataSet {
     }
     public String getDimensionAtObservation(Registry reg,DataStructureReference ref){
         return "AllDimensions";
+    }
+
+    public void setDimensionAtObservation(String s) {
+    }
+    public String getDimensionAtObservation() {
+        return dimensionAtObservation;
     }
 }

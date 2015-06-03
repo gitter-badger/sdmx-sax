@@ -143,6 +143,5 @@ public class StructuredDataWriter implements DataSetWriter {
         //    System.out.println("Value="+s+":"+groupValues.get(s));
         //}
     }
-
   
 }
