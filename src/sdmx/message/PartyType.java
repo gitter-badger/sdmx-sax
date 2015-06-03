@@ -7,6 +7,7 @@ package sdmx.message;
 import java.util.List;
 import sdmx.common.Name;
 import sdmx.commonreferences.IDType;
+import sdmx.structure.base.NameableType;
 
 /**
  *	<xs:complexType name="PartyType">
@@ -52,11 +53,14 @@ import sdmx.commonreferences.IDType;
  *
  *  Copyright James Gardner 2014
  */
-public class PartyType {
+public class PartyType extends NameableType {
     private List<Name> names;
     private List<ContactType> contacts;
     private IDType id;
-    public PartyType(){}
+    public PartyType(){
+        super();
+    
+    }
 
     /**
      * @return the name

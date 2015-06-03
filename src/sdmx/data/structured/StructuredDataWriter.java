@@ -126,7 +126,7 @@ public class StructuredDataWriter implements DataSetWriter {
         return ds;
     }    
 
-    @Override
+   //@Override
     public ColumnMapper getColumnMapper() {
         return mapper;
     }

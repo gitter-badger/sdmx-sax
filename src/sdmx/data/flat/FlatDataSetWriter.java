@@ -146,7 +146,7 @@ public class FlatDataSetWriter implements DataSetWriter {
         obsValues.set(i, val);
     }
 
-    @Override
+    //@Override
     public ColumnMapper getColumnMapper() {
         return mapper;
     }

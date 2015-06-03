@@ -264,11 +264,6 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
     }
 
     @Override
-    public ColumnMapper getColumnMapper() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void newDataSet() {
     
         System.out.println("New DataSet");

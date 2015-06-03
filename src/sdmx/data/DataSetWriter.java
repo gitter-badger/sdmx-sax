@@ -30,7 +30,7 @@ import sdmx.data.flat.FlatDataSet;
  *  Copyright James Gardner 2014
  */
 public interface DataSetWriter {
-    public ColumnMapper getColumnMapper();
+    //public ColumnMapper getColumnMapper();
     public void newDataSet();
     public void newSeries();
     public void newObservation();

@@ -262,11 +262,6 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
     }
 
     @Override
-    public ColumnMapper getColumnMapper() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void newDataSet() {
         //System.out.println("New DataSet");
         try {                                  //http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic

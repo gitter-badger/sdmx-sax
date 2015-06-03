@@ -91,6 +91,7 @@ public class SdmxIO {
             Class.forName("sdmx.version.twopointone.Sdmx21MessageWriterProvider");
             Class.forName("sdmx.version.twopointone.Sdmx21StreamWriterProvider");
             Class.forName("sdmx.version.twopointzero.Sdmx20ParserProvider");
+            Class.forName("sdmx.version.json.JSONStreamWriterProvider");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SdmxIO.class.getName()).log(Level.SEVERE, null, ex);
         }

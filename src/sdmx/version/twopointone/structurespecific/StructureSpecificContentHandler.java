@@ -109,10 +109,10 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
             /*
          * This is really useful!!!
          */
-        System.out.println("localName=" + localName);
-        for (int i = 0; i < atts.getLength(); i++) {
-            System.out.println("Att=" + atts.getLocalName(i) + " val=" + atts.getValue(i));
-        }
+//        System.out.println("localName=" + localName);
+ //       for (int i = 0; i < atts.getLength(); i++) {
+  //          System.out.println("Att=" + atts.getLocalName(i) + " val=" + atts.getValue(i));
+    //    }
         if ("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message".equals(uri)) {
             if ("StructureSpecificTimeSeriesData".equals(localName)) {
                 eh.startRootElement(localName,atts);
