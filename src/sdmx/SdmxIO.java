@@ -32,6 +32,7 @@ import sdmx.net.ServiceList;
 import sdmx.net.list.DataProvider;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.version.common.ParseDataCallbackHandler;
+import sdmx.version.common.ParseParams;
 import sdmx.version.common.SdmxParserProvider;
 import sdmx.version.common.SdmxStreamWriterProvider;
 import sdmx.version.common.SdmxWriterProvider;
@@ -155,34 +156,41 @@ public class SdmxIO {
     }
     public static StructureType parseStructure(InputStream in) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
-        return parseStructure(new LocalRegistry(),in);
+        ParseParams params = new ParseParams();
+        params.setRegistry(new LocalRegistry());
+        return parseStructure(params,in);
+        
     }
     public static StructureType parseStructure(Reader in) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
-        return parseStructure(new LocalRegistry(),in);
+        ParseParams params = new ParseParams();
+        params.setRegistry(new LocalRegistry());
+        return parseStructure(params,in);
     }
-    public static StructureType parseStructure(Registry registry,InputStream in) throws IOException,ParseException {
+    public static StructureType parseStructure(ParseParams params,InputStream in) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackInputStream push = new PushbackInputStream(in,8192);
         String header = getHeader(push);
+        params.setHeader(header);
         SdmxParserProvider prov = findParserProvider(header);
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider header="+header);
         }
-        StructureType struct =  prov.parseStructure(registry,push,header);
-        registry.load(struct);
+        StructureType struct =  prov.parseStructure(params,push);
+        params.getRegistry().load(struct);
         return struct;
     }
-    public static StructureType parseStructure(Registry registry,Reader in) throws IOException,ParseException {
+    public static StructureType parseStructure(ParseParams params,Reader in) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackReader push = new PushbackReader(in,8192);
         String header = getHeader(push);
+        params.setHeader(header);
         SdmxParserProvider prov = findParserProvider(header);
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider");
         }
-        StructureType struct =  prov.parseStructure(push,header);
-        registry.load(struct);
+        StructureType struct =  prov.parseStructure(params,push);
+        params.getRegistry().load(struct);
         return struct;
     }
     public static DataMessage parseData(InputStream in1) throws IOException,ParseException {
@@ -199,7 +207,9 @@ public class SdmxIO {
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider"+header);
         }
-        return prov.parseData(header,push);
+        ParseParams params = new ParseParams();
+        params.setHeader(header);
+        return prov.parseData(params,push);
     }
     public static DataMessage parseData(Reader in) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
@@ -209,7 +219,9 @@ public class SdmxIO {
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider");
         }
-        return prov.parseData(header,push);
+        ParseParams params = new ParseParams();
+        params.setHeader(header);
+        return prov.parseData(params,push);
     }
     public static void parseData(InputStream in,ParseDataCallbackHandler cbHandler) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
@@ -219,8 +231,24 @@ public class SdmxIO {
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider");
         }
-        prov.parseData(header,push,cbHandler);
+        ParseParams params = new ParseParams();
+        params.setHeader(header);
+        params.setCallbackHandler(cbHandler);
+        prov.parseData(params,push);
     }
+    public static void parseData(ParseParams params,InputStream in,ParseDataCallbackHandler cbHandler) throws IOException,ParseException {
+        if( in == null ) throw new IllegalArgumentException("Null Stream");
+        PushbackInputStream push = new PushbackInputStream(in,8192);
+        String header = getHeader(push);
+        SdmxParserProvider prov = findParserProvider(header);
+        if( prov==null ) {
+            throw new ParseException("Unable to find Parser provider");
+        }
+        params.setHeader(header);
+        params.setCallbackHandler(cbHandler);
+        prov.parseData(params,push);
+    }
+    
     public static void parseData(Reader in,ParseDataCallbackHandler cbHandler) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackReader push = new PushbackReader(in,8192);
@@ -229,8 +257,25 @@ public class SdmxIO {
         if( prov==null ) {
             throw new ParseException("Unable to find Parser provider");
         }
-        prov.parseData(header,push,cbHandler);
+        ParseParams params = new ParseParams();
+        params.setHeader(header);
+        params.setCallbackHandler(cbHandler);
+        prov.parseData(params,push);
     }
+    
+    public static void parseData(ParseParams params,Reader in,ParseDataCallbackHandler cbHandler) throws IOException,ParseException {
+        if( in == null ) throw new IllegalArgumentException("Null Stream");
+        PushbackReader push = new PushbackReader(in,8192);
+        String header = getHeader(push);
+        SdmxParserProvider prov = findParserProvider(header);
+        if( prov==null ) {
+            throw new ParseException("Unable to find Parser provider");
+        }
+        params.setHeader(header);
+        params.setCallbackHandler(cbHandler);
+        prov.parseData(params,push);
+    }
+    
     public static SdmxParserProvider findParserProvider(String header) throws IOException {
         for(int i=0;i<parsers.size();i++) {
             if( parsers.get(i).canParse(header))return parsers.get(i);
@@ -283,13 +328,13 @@ public class SdmxIO {
     public static Queryable connect(int type, String agency,String serviceURL,String options,String attribution,String htmlAttribution) throws MalformedURLException {
         return ServiceList.getDataProvider(type, agency, serviceURL, options, attribution, htmlAttribution).getQueryable();
     }
-    public static ParseDataCallbackHandler openForStreamWriting(String mime,OutputStream out1,Registry reg,DataflowType flow) throws IOException {
+    public static ParseDataCallbackHandler openForStreamWriting(String mime,OutputStream out1,ParseParams params) throws IOException {
         SdmxStreamWriterProvider provider = findStreamWriterProvider(mime);
         if( provider == null ) {
             throw new RuntimeException("Not Writer found for MIME type:"+mime);
         }
         BufferedOutputStream out = new BufferedOutputStream(out1);
-        return provider.openForWriting(mime, out, reg, flow);
+        return provider.openForWriting(mime, out, params);
     }
     public static void write(String mime,DataMessage message,OutputStream out) throws IOException {
         SdmxWriterProvider writer = findWriterProvider(mime);

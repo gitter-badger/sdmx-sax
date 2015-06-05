@@ -69,6 +69,7 @@ import sdmx.structure.concept.ConceptType;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionType;
+import sdmx.version.common.ParseParams;
 import sdmx.version.common.SOAPStrippingInputStream;
 import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
 
@@ -209,7 +210,9 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
         //temp.close();
         //in.close();
         //in = new FileInputStream("temp.xml");
-        StructureType st = SdmxIO.parseStructure(this, in);
+        ParseParams params = new ParseParams();
+        params.setRegistry(this);
+        StructureType st = SdmxIO.parseStructure(params, in);
         if (st == null) {
             System.out.println("St is null!");
         } else {
@@ -283,7 +286,9 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
         } catch (InterruptedException ie) {
         }
         System.out.println("Parsing!");
-        StructureType st = SdmxIO.parseStructure(local, in);
+        ParseParams params = new ParseParams();
+        params.setRegistry(this);
+        StructureType st = SdmxIO.parseStructure(params, in);
         if (st == null) {
             System.out.println("St is null!");
         }

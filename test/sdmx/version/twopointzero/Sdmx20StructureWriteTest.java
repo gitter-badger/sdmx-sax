@@ -16,6 +16,7 @@ import sdmx.exception.ParseException;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
 import sdmx.net.LocalRegistry;
+import sdmx.version.common.ParseParams;
 import sdmx.version.twopointzero.writer.GenericDataWriter;
 import sdmx.version.twopointzero.writer.Sdmx20StructureWriter;
 
@@ -29,7 +30,10 @@ public class Sdmx20StructureWriteTest {
         long t1= System.currentTimeMillis();
         InputStream structIn = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/DSID1230571/DSID1230571 - DataSD.xml");
         LocalRegistry reg = LocalRegistry.getDefaultWorkspace();
-        StructureType struct = SdmxIO.parseStructure(reg,structIn);
+        ParseParams params = new ParseParams();
+        params.setRegistry(reg);
+        StructureType struct = SdmxIO.parseStructure(params,structIn);
+
         OutputStream out = new FileOutputStream("testOut/DSID1230571 - DataSD-2.0.xml");
         Sdmx20StructureWriter.write(struct, out);
         out.close();
@@ -39,9 +43,12 @@ public class Sdmx20StructureWriteTest {
         long t1= System.currentTimeMillis();
         InputStream structIn = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/abs_census2011_t33.xml");
         LocalRegistry reg = LocalRegistry.getDefaultWorkspace();
-        StructureType struct = SdmxIO.parseStructure(reg,structIn);
+        ParseParams params = new ParseParams();
+        params.setRegistry(reg);
+        StructureType struct = SdmxIO.parseStructure(params,structIn);
         OutputStream out = new FileOutputStream("testOut/abs_census2011_t33-out.xml");
         Sdmx20StructureWriter.write(struct, out);
         out.close();
     }
 }
+

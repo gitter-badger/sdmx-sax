@@ -32,6 +32,7 @@ import sdmx.version.twopointzero.generic.GenericDataEventHandler;
 import sdmx.version.twopointzero.writer.CompactDataWriter;
 import sdmx.net.LocalRegistry;
 import sdmx.version.common.ParseDataCallbackHandler;
+import sdmx.version.common.ParseParams;
 
 /**
  *
@@ -97,14 +98,13 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         return false;
     }
 
-    @Override
-    public StructureType parseStructure(InputStream in, String header) throws IOException {
+    public StructureType parseStructure(ParseParams params, InputStream in) throws IOException {
         try {
             StructureType doc;
-            if (!isRegistryInterface(header)) {
-                doc = new Sdmx20StructureReaderTools(LocalRegistry.getDefaultWorkspace()).parseStructure(in);
+            if (!isRegistryInterface(params.getHeader())) {
+                doc = new Sdmx20StructureReaderTools(params).parseStructure(in);
             } else {
-                doc = new Sdmx20StructureReaderTools(LocalRegistry.getDefaultWorkspace()).parseRegistry(in);
+                doc = new Sdmx20StructureReaderTools(params).parseRegistry(in);
             }
             return doc;
         } catch (XmlException | IOException ex) {
@@ -118,13 +118,13 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public StructureType parseStructure(Reader in, String header) {
+    public StructureType parseStructure(ParseParams params, Reader in) {
         try {
             StructureType doc;
-            if (!isRegistryInterface(header)) {
-                doc = new Sdmx20StructureReaderTools(LocalRegistry.getDefaultWorkspace()).parseStructure(in);
+            if (!isRegistryInterface(params.getHeader())) {
+                doc = new Sdmx20StructureReaderTools(params).parseStructure(in);
             } else {
-                doc = new Sdmx20StructureReaderTools(LocalRegistry.getDefaultWorkspace()).parseRegistry(in);
+                doc = new Sdmx20StructureReaderTools(params).parseRegistry(in);
             }
             return doc;
         } catch (XmlException | IOException ex) {
@@ -198,48 +198,21 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
     }
 
     @Override
-    public DataMessage parseData(String header, InputStream in) throws IOException {
-        if (isCompactData(header)) {
-            return parseCompactData(in);
-        }
-        if (isGenericData(header)) {
-            return parseGenericData(in);
-        }
-        return null;
-    }
-
-    @Override
-    public StructureType parseStructure(Registry registry, InputStream in, String header) throws IOException {
-        try {
-            StructureType doc;
-            if (!isRegistryInterface(header)) {
-                doc = new Sdmx20StructureReaderTools(registry).parseStructure(in);
-            } else {
-                doc = new Sdmx20StructureReaderTools(registry).parseRegistry(in);
+    public DataMessage parseData(ParseParams params, InputStream in) throws IOException {
+        if (params.getCallbackHandler() == null) {
+            if (isCompactData(params.getHeader())) {
+                return parseCompactData(in);
             }
-            return doc;
-        } catch (XmlException | IOException ex) {
-            Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TypeValueNotFoundException ex) {
-            Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
-    @Override
-    public StructureType parseStructure(Registry registry, Reader in, String header) throws IOException {
-        try {
-            StructureType doc;
-            if (!isRegistryInterface(header)) {
-                doc = new Sdmx20StructureReaderTools(registry).parseStructure(in);
-            } else {
-                doc = new Sdmx20StructureReaderTools(registry).parseRegistry(in);
+            if (isGenericData(params.getHeader())) {
+                return parseGenericData(in);
             }
-            return doc;
-        } catch (XmlException | IOException ex) {
-            Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TypeValueNotFoundException ex) {
-            Logger.getLogger(Sdmx20ParserProvider.class.getName()).log(Level.SEVERE, null, ex);
+        }else{
+            if (isCompactData(params.getHeader())) {
+                return parseCompactData(in,params.getCallbackHandler());
+            }
+            if (isGenericData(params.getHeader())) {
+                return parseGenericData(in,params.getCallbackHandler());
+            }
         }
         return null;
     }
@@ -271,8 +244,8 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         return null;
     }
 
-    public DataMessage parseCompactData(InputStream in,ParseDataCallbackHandler cbHandler) throws IOException {
-        DataSetWriter writer = cbHandler!=null?cbHandler.getDataSetWriter():new StructuredDataWriter();
+    public DataMessage parseCompactData(InputStream in, ParseDataCallbackHandler cbHandler) throws IOException {
+        DataSetWriter writer = cbHandler != null ? cbHandler.getDataSetWriter() : new StructuredDataWriter();
         CompactDataEventHandler event = new CompactDataEventHandler(writer);
         event.setCbHandler(cbHandler);
         CompactDataContentHandler handler = new CompactDataContentHandler(in, event);
@@ -288,7 +261,7 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
     }
 
     public DataMessage parseGenericData(InputStream in, ParseDataCallbackHandler cbHandler) throws IOException {
-        DataSetWriter writer = cbHandler!=null?cbHandler.getDataSetWriter():new StructuredDataWriter();
+        DataSetWriter writer = cbHandler != null ? cbHandler.getDataSetWriter() : new StructuredDataWriter();
         GenericDataEventHandler event = new GenericDataEventHandler(writer);
         GenericDataContentHandler handler = new GenericDataContentHandler(event, in);
         try {
@@ -330,7 +303,7 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
     }
 
     public DataMessage parseCompactData(Reader in, ParseDataCallbackHandler cbHandler) throws IOException {
-        DataSetWriter writer = cbHandler!=null?cbHandler.getDataSetWriter():new StructuredDataWriter();
+        DataSetWriter writer = cbHandler != null ? cbHandler.getDataSetWriter() : new StructuredDataWriter();
         CompactDataEventHandler event = new CompactDataEventHandler(writer);
         event.setCbHandler(cbHandler);
         CompactDataContentHandler handler = new CompactDataContentHandler(in, event);
@@ -346,7 +319,7 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
     }
 
     public DataMessage parseGenericData(Reader in, ParseDataCallbackHandler cbHandler) throws IOException {
-        DataSetWriter writer = cbHandler!=null?cbHandler.getDataSetWriter():new StructuredDataWriter();
+        DataSetWriter writer = cbHandler != null ? cbHandler.getDataSetWriter() : new StructuredDataWriter();
         GenericDataEventHandler event = new GenericDataEventHandler(writer);
         GenericDataContentHandler handler = new GenericDataContentHandler(event, in);
         try {
@@ -360,29 +333,25 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         return null;
     }
 
-    @Override
-    public DataMessage parseData(String header, Reader in) throws IOException {
-        if (isCompactData(header)) {
-            return parseCompactData(in);
-        }
-        if (isGenericData(header)) {
-            return parseGenericData(in);
-        }
-        return null;
-    }
-
-    @Override
-    public DataMessage parseData(String header, InputStream in, ParseDataCallbackHandler cbHandler) throws IOException {
-        if (isCompactData(header)) {
-            return parseCompactData(in, cbHandler);
-        }
-        if (isGenericData(header)) {
-            return parseGenericData(in, cbHandler);
+    public DataMessage parseData(ParseParams params, Reader in) throws IOException {
+        if (params.getCallbackHandler() == null) {
+            if (isCompactData(params.getHeader())) {
+                return parseCompactData(in);
+            }
+            if (isGenericData(params.getHeader())) {
+                return parseGenericData(in);
+            }
+        } else {
+            if (isCompactData(params.getHeader())) {
+                return parseCompactData(in, params.getCallbackHandler());
+            }
+            if (isGenericData(params.getHeader())) {
+                return parseGenericData(in, params.getCallbackHandler());
+            }
         }
         return null;
     }
 
-    @Override
     public DataMessage parseData(String header, Reader in, ParseDataCallbackHandler cbHandler) throws IOException {
         if (isCompactData(header)) {
             return parseCompactData(in, cbHandler);
@@ -393,7 +362,4 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         return null;
     }
 
-    public void writeDataMessage(DataMessage msg, OutputStream out) throws XMLStreamException {
-        CompactDataWriter.write(msg, out);
-    }
 }

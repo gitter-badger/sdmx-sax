@@ -64,6 +64,7 @@ import sdmx.structure.concept.ConceptType;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionType;
+import sdmx.version.common.ParseParams;
 import sdmx.version.common.SOAPStrippingInputStream;
 import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
 
@@ -146,7 +147,9 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
         //in.close();
         //in = new FileInputStream("temp.xml");
         System.out.println("Parsing!");
-        StructureType st = SdmxIO.parseStructure(this, in);
+        ParseParams params = new ParseParams();
+        params.setRegistry(this);
+        StructureType st = SdmxIO.parseStructure(params, in);
         if (st == null) {
             System.out.println("St is null!");
         } else {

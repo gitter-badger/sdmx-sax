@@ -26,6 +26,7 @@ import sdmx.SdmxIO;
 import sdmx.version.twopointzero.writer.CompactDataWriter;
 import sdmx.net.LocalRegistry;
 import sdmx.exception.ParseException;
+import sdmx.version.common.ParseParams;
 import sdmx.version.twopointzero.writer.StreamingCompactDataWriter;
 import sdmx.version.twopointzero.writer.GenericDataWriter;
 import sdmx.version.twopointzero.writer.StreamingGenericDataWriter;
@@ -121,14 +122,15 @@ public class Sdmx20DataWriteTest {
         InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/CompactSample.xml");
         InputStream structIn = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/sdmx20-samples/StructureSample.xml");
         LocalRegistry reg = LocalRegistry.getDefaultWorkspace();
-        StructureType struct = SdmxIO.parseStructure(reg,structIn);
-        
+        ParseParams params = new ParseParams();
+        params.setRegistry(reg);
+        StructureType struct = SdmxIO.parseStructure(params,structIn);
         DataMessage data = SdmxIO.parseData(in);
         long t2 = System.currentTimeMillis();
         System.out.println("Read:"+data.getDataSets().get(0).size()+" Observations "+(t2-t1)+" ms");
         long t3 = System.currentTimeMillis();
         OutputStream out = new FileOutputStream("testOut/CompactSample-GenericOut.xml");
-        GenericDataWriter.write(data, out, struct.getStructures().getDataStructures().getDataStructures().get(0).asReference(), reg);
+        GenericDataWriter.write(data, out, struct.getStructures().getDataStructures().getDataStructures().get(0).asReference(), params.getRegistry());
         out.close();
         data.dump();
     }
@@ -138,7 +140,9 @@ public class Sdmx20DataWriteTest {
         InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/DSID1230571/DSID1230571 - CompactData.xml");
         InputStream structIn = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/DSID1230571/DSID1230571 - DataSD.xml");
         LocalRegistry reg = LocalRegistry.getDefaultWorkspace();
-        StructureType struct = SdmxIO.parseStructure(reg,structIn);
+        ParseParams params = new ParseParams();
+        params.setRegistry(reg);
+        StructureType struct = SdmxIO.parseStructure(params,structIn);
         
         DataMessage data = SdmxIO.parseData(in);
         long t2 = System.currentTimeMillis();
@@ -156,7 +160,9 @@ public class Sdmx20DataWriteTest {
         InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/DSID1230571/DSID1230571 - CompactData.xml");
         InputStream structIn = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/DSID1230571/DSID1230571 - DataSD.xml");
         LocalRegistry reg = LocalRegistry.getDefaultWorkspace();
-        StructureType struct = SdmxIO.parseStructure(reg,structIn);
+        ParseParams params = new ParseParams();
+        params.setRegistry(reg);
+        StructureType struct = SdmxIO.parseStructure(params,structIn);
         long t2 = System.currentTimeMillis();
         OutputStream out = new FileOutputStream("testOut/DSID230571-out-scdw.xml");
         StreamingCompactDataWriter w2 = StreamingCompactDataWriter.openWriter(out);
@@ -170,7 +176,9 @@ public class Sdmx20DataWriteTest {
         InputStream in = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/DSID1230571/DSID1230571 - CompactData.xml");
         InputStream structIn = Sdmx20StructureParserTest.class.getResourceAsStream("/resources/abs-20/DSID1230571/DSID1230571 - DataSD.xml");
         LocalRegistry reg = LocalRegistry.getDefaultWorkspace();
-        StructureType struct = SdmxIO.parseStructure(reg,structIn);
+        ParseParams params = new ParseParams();
+        params.setRegistry(reg);
+        StructureType struct = SdmxIO.parseStructure(params,structIn);
         long t2 = System.currentTimeMillis();
         OutputStream out = new FileOutputStream("testOut/DSID230571-out-sgdw.xml");
         StreamingGenericDataWriter w2 = StreamingGenericDataWriter.openWriter(out,registry,struct.getStructures().getDataStructures().getDataStructures().get(0).asDataflow());

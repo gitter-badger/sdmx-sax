@@ -15,6 +15,7 @@ import static sdmx.SdmxIO.SAVE_MIME_TYPES;
 import sdmx.commonreferences.DataStructureReference;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.version.common.ParseDataCallbackHandler;
+import sdmx.version.common.ParseParams;
 import sdmx.version.common.SdmxStreamWriterProvider;
 import sdmx.version.twopointone.writer.StreamingGeneric21DataWriter;
 import sdmx.version.twopointone.writer.StreamingStructureSpecificDataWriter;
@@ -47,23 +48,23 @@ public class Sdmx21StreamWriterProvider implements SdmxStreamWriterProvider {
     }
 
     @Override
-    public ParseDataCallbackHandler openForWriting(String mime, OutputStream out,Registry reg,DataflowType flow) {
+    public ParseDataCallbackHandler openForWriting(String mime, OutputStream out,ParseParams params) {
         if("application/vnd.sdmx.genericdata+xml;version=2.1".equals(mime)){
-            return new StreamingGeneric21DataWriter(out, reg, flow);
+            return new StreamingGeneric21DataWriter(out, params.getRegistry(), params.getDataflow());
         }
         if("application/vnd.sdmx.generictimeseriesdata+xml;version=2.1".equals(mime)){
-            return new StreamingGeneric21DataWriter(out, reg, flow);
+            return new StreamingGeneric21DataWriter(out, params.getRegistry(), params.getDataflow());
         }
         if("application/vnd.sdmx.structurespecificdata+xml;version=2.1".equals(mime)){
             StreamingStructureSpecificDataWriter sssdw = new StreamingStructureSpecificDataWriter(out);
-            sssdw.setRegistry(reg);
-            sssdw.setDataflow(flow);
+            sssdw.setRegistry(params.getRegistry());
+            sssdw.setDataflow(params.getDataflow());
             return sssdw;
         }
         if("application/vnd.sdmx.structurespecifictimeseriesdata+xml;version=2.1".equals(mime)){
             StreamingStructureSpecificTimeSeriesWriter sssdw = new StreamingStructureSpecificTimeSeriesWriter(out);
-            sssdw.setRegistry(reg);
-            sssdw.setDataflow(flow);
+            sssdw.setRegistry(params.getRegistry());
+            sssdw.setDataflow(params.getDataflow());
             return sssdw;
         }
         throw new RuntimeException("MIME type:"+mime+" not supported by "+getClass().getName());
