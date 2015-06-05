@@ -59,11 +59,11 @@ public class ComponentType extends ComponentBaseType {
      */
     public IDType getId() {
         if( super.getId()==null ) {
-            //if( conceptIdentity==null ) {
-            //    Thread.dumpStack();
-            //    return new IDType("MISSING!");
-            //    
-            //}
+            if( conceptIdentity==null ) {
+                //Thread.dumpStack();
+                return new IDType("MISS");
+                
+            }
             return conceptIdentity.getId().asID();
         }
         return super.getId();
@@ -83,6 +83,10 @@ public class ComponentType extends ComponentBaseType {
     }
 
     /**
+     * Don't use this function.. use the 
+     * ComponentUtil.getRepresentation(registry,component);
+     * unless you really need the local rep..
+     * then use ComponentUtil.getLocalRepresentation(Component);
      * @return the localRepresentation
      */
     public RepresentationType getLocalRepresentation() {

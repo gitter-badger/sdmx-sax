@@ -4,10 +4,12 @@
  */
 package sdmx.structure.datastructure;
 
+import javax.swing.UIManager;
 import sdmx.commonreferences.DataStructureRef;
 import sdmx.commonreferences.DataStructureReference;
 import sdmx.commonreferences.IDType;
 import sdmx.structure.base.Component;
+import sdmx.structure.base.ComponentUtil;
 import sdmx.structure.base.StructureType;
 import sdmx.structure.dataflow.DataflowType;
 
@@ -75,32 +77,32 @@ public class DataStructureType extends StructureType {
         System.out.println("Dimensions");
         for (DimensionType dim : components.getDimensionList().getDimensions()) {
             System.out.print(dim.getConceptIdentity().getId());
-            if (dim.getLocalRepresentation().getEnumeration() != null) {
-                System.out.print(" Codelist:" + dim.getLocalRepresentation().getEnumeration().getAgencyId() + ":" + dim.getLocalRepresentation().getEnumeration().getMaintainableParentId() + ":" + dim.getLocalRepresentation().getEnumeration().getMaintainedParentVersion());
+            if (ComponentUtil.getLocalRepresentation(dim).getEnumeration() != null) {
+                System.out.print(" Codelist:" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getAgencyId() + ":" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getMaintainableParentId() + ":" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getMaintainedParentVersion());
             }
             if (dim.getConceptIdentity() != null) {
                 System.out.print(" Concept Identity:" + dim.getConceptIdentity().getAgencyId() + ":" + dim.getConceptIdentity().getMaintainableParentId() + ":" + dim.getConceptIdentity().getMaintainedParentVersion());
             } else {
                 System.out.println("***** NULL CONCEPT IDENTITY ******");
             }
-            if (dim.getLocalRepresentation() != null && dim.getLocalRepresentation().getTextFormat() != null) {
-                System.out.print(" Text Format:" + dim.getLocalRepresentation().getTextFormat().getTextType());
+            if (ComponentUtil.getLocalRepresentation(dim) != null && ComponentUtil.getLocalRepresentation(dim).getTextFormat() != null) {
+                System.out.print(" Text Format:" + ComponentUtil.getLocalRepresentation(dim).getTextFormat().getTextType());
             }
             System.out.println();
         }
         System.out.println("Attributes");
         for (AttributeType dim : components.getAttributeList().getAttributes()) {
             System.out.print(dim.getConceptIdentity().getId());
-            if (dim.getLocalRepresentation() != null && dim.getLocalRepresentation().getEnumeration() != null) {
-                System.out.print(" Codelist:" + dim.getLocalRepresentation().getEnumeration().getAgencyId() + ":" + dim.getLocalRepresentation().getEnumeration().getMaintainableParentId() + ":" + dim.getLocalRepresentation().getEnumeration().getMaintainedParentVersion());
+            if (ComponentUtil.getLocalRepresentation(dim) != null && ComponentUtil.getLocalRepresentation(dim).getEnumeration() != null) {
+                System.out.print(" Codelist:" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getAgencyId() + ":" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getMaintainableParentId() + ":" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getMaintainedParentVersion());
             }
             if (dim.getConceptIdentity() != null) {
                 System.out.print(" Concept Identity:" + dim.getConceptIdentity().getAgencyId() + ":" + dim.getConceptIdentity().getMaintainableParentId() + ":" + dim.getConceptIdentity().getMaintainedParentVersion());
             } else {
                 System.out.println("***** NULL CONCEPT IDENTITY ******");
             }
-            if (dim.getLocalRepresentation() != null && dim.getLocalRepresentation().getTextFormat() != null) {
-                System.out.print(" Text Format:" + dim.getLocalRepresentation().getTextFormat().getTextType());
+            if (ComponentUtil.getLocalRepresentation(dim) != null && ComponentUtil.getLocalRepresentation(dim).getTextFormat() != null) {
+                System.out.print(" Text Format:" + ComponentUtil.getLocalRepresentation(dim).getTextFormat().getTextType());
             }
             System.out.println();
         }
@@ -109,16 +111,16 @@ public class DataStructureType extends StructureType {
         {
             MeasureDimensionType dim = components.getDimensionList().getMeasureDimension();
             System.out.print(dim.getConceptIdentity().getId());
-            if (dim.getLocalRepresentation() != null && dim.getLocalRepresentation().getEnumeration() != null) {
-                System.out.print(" Codelist:" + dim.getLocalRepresentation().getEnumeration().getAgencyId() + ":" + dim.getLocalRepresentation().getEnumeration().getMaintainableParentId() + ":" + dim.getLocalRepresentation().getEnumeration().getMaintainedParentVersion());
+            if (ComponentUtil.getLocalRepresentation(dim) != null && ComponentUtil.getLocalRepresentation(dim).getEnumeration() != null) {
+                System.out.print(" Codelist:" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getAgencyId() + ":" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getMaintainableParentId() + ":" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getMaintainedParentVersion());
             }
             if (dim.getConceptIdentity() != null) {
                 System.out.print(" Concept Identity:" + dim.getConceptIdentity().getAgencyId() + ":" + dim.getConceptIdentity().getMaintainableParentId() + ":" + dim.getConceptIdentity().getMaintainedParentVersion());
             } else {
                 System.out.println("***** NULL CONCEPT IDENTITY ******");
             }
-            if (dim.getLocalRepresentation() != null && dim.getLocalRepresentation().getTextFormat() != null) {
-                System.out.print(" Text Format:" + dim.getLocalRepresentation().getTextFormat().getTextType());
+            if (ComponentUtil.getLocalRepresentation(dim) != null && ComponentUtil.getLocalRepresentation(dim).getTextFormat() != null) {
+                System.out.print(" Text Format:" + ComponentUtil.getLocalRepresentation(dim).getTextFormat().getTextType());
             }
             System.out.println();
         }
@@ -126,32 +128,32 @@ public class DataStructureType extends StructureType {
         TimeDimensionType dim = components.getDimensionList().getTimeDimension();
         if (dim != null) {
             System.out.print(dim.getConceptIdentity().getId());
-            if (dim.getLocalRepresentation() != null && dim.getLocalRepresentation().getEnumeration() != null) {
-                System.out.print(" Codelist:" + dim.getLocalRepresentation().getEnumeration().getAgencyId() + ":" + dim.getLocalRepresentation().getEnumeration().getMaintainableParentId() + ":" + dim.getLocalRepresentation().getEnumeration().getMaintainedParentVersion());
+            if (ComponentUtil.getLocalRepresentation(dim) != null && ComponentUtil.getLocalRepresentation(dim).getEnumeration() != null) {
+                System.out.print(" Codelist:" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getAgencyId() + ":" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getMaintainableParentId() + ":" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getMaintainedParentVersion());
             }
             if (dim.getConceptIdentity() != null) {
                 System.out.print(" Concept Identity:" + dim.getConceptIdentity().getAgencyId() + ":" + dim.getConceptIdentity().getMaintainableParentId() + ":" + dim.getConceptIdentity().getMaintainedParentVersion());
             } else {
                 System.out.println("***** NULL CONCEPT IDENTITY ******");
             }
-            if (dim.getLocalRepresentation() != null && dim.getLocalRepresentation().getTextFormat() != null) {
-                System.out.print(" Text Format:" + dim.getLocalRepresentation().getTextFormat().getTextType());
+            if (ComponentUtil.getLocalRepresentation(dim) != null && ComponentUtil.getLocalRepresentation(dim).getTextFormat() != null) {
+                System.out.print(" Text Format:" + ComponentUtil.getLocalRepresentation(dim).getTextFormat().getTextType());
             }
             System.out.println();
         }
         PrimaryMeasure dim2 = components.getMeasureList().getPrimaryMeasure();
         if (dim2 != null) {
             System.out.print(dim2.getConceptIdentity().getId());
-            if (dim2.getLocalRepresentation() != null && dim2.getLocalRepresentation().getEnumeration() != null) {
-                System.out.print(" Codelist:" + dim2.getLocalRepresentation().getEnumeration().getAgencyId() + ":" + dim2.getLocalRepresentation().getEnumeration().getMaintainableParentId() + ":" + dim2.getLocalRepresentation().getEnumeration().getMaintainedParentVersion());
+            if (ComponentUtil.getLocalRepresentation(dim2) != null && ComponentUtil.getLocalRepresentation(dim).getEnumeration() != null) {
+                System.out.print(" Codelist:" + ComponentUtil.getLocalRepresentation(dim2).getEnumeration().getAgencyId() + ":" + ComponentUtil.getLocalRepresentation(dim2).getEnumeration().getMaintainableParentId() + ":" + ComponentUtil.getLocalRepresentation(dim2).getEnumeration().getMaintainedParentVersion());
             }
             if (dim2.getConceptIdentity() != null) {
                 System.out.print(" Concept Identity:" + dim2.getConceptIdentity().getAgencyId() + ":" + dim2.getConceptIdentity().getMaintainableParentId() + ":" + dim2.getConceptIdentity().getMaintainedParentVersion());
             } else {
                 System.out.println("***** NULL CONCEPT IDENTITY ******");
             }
-            if (dim2.getLocalRepresentation() != null && dim2.getLocalRepresentation().getTextFormat() != null) {
-                System.out.print(" Text Format:" + dim2.getLocalRepresentation().getTextFormat().getTextType());
+            if (ComponentUtil.getLocalRepresentation(dim2) != null && ComponentUtil.getLocalRepresentation(dim2).getTextFormat() != null) {
+                System.out.print(" Text Format:" + ComponentUtil.getLocalRepresentation(dim2).getTextFormat().getTextType());
             }
             System.out.println();
         }
@@ -203,5 +205,48 @@ public class DataStructureType extends StructureType {
         dataFlow.setId(getId());
         dataFlow.setVersion(getVersion());
         return dataFlow;
+    }
+    public boolean isDimension(String s) {
+        for(DimensionType d:this.getDataStructureComponents().getDimensionList().getDimensions()) {
+            if( s.equals(d.getId().toString())){
+                return true;
+            }
+        }
+        if( s.equals(this.getDataStructureComponents().getDimensionList().getTimeDimension().getId().toString())){
+            return true;
+        }
+        return false;
+    }
+    public boolean isTimeDimension(String s) {
+        if( s.equals(this.getDataStructureComponents().getDimensionList().getTimeDimension().getId().toString())){
+            return true;
+        }
+        return false;
+    }
+    public boolean isAttribute(String s) {
+        for(AttributeType d:this.getDataStructureComponents().getAttributeList().getAttributes()) {
+            if( s.equals(d.getId().toString())){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean isPrimaryMeasure(String s) {
+        if( "OBS_VALUE".equals(s))return true;
+        else if( this.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getId().toString().equals(s)){return true;}
+        return false;
+    }
+    public int getKeyPosition(String s) {
+        int i = 0;
+        for(DimensionType d:this.getDataStructureComponents().getDimensionList().getDimensions()) {
+            if( s.equals(d.getId().toString())){
+                return i;
+            }
+            i++;
+        }
+        if( s.equals(this.getDataStructureComponents().getDimensionList().getTimeDimension().getId().toString())){
+            return i;
+        }
+        throw new RuntimeException("Dimension:"+s+" not found in structure");
     }
 }

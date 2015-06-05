@@ -38,6 +38,7 @@ import sdmx.structure.datastructure.DimensionListType;
 import sdmx.structure.datastructure.DimensionType;
 import sdmx.SdmxIO;
 import sdmx.exception.ParseException;
+import sdmx.structure.base.ComponentUtil;
 import sdmx.version.twopointzero.Sdmx20StructureParserTest;
 
 /**
@@ -463,27 +464,27 @@ public class Sdmx21StructureParserTest {
         assertEquals("DEMO_CONCEPTS", dlt.getDimensions().get(1).getConceptIdentity().getMaintainableParentId().toString());
         assertEquals("1.0", dlt.getDimensions().get(1).getConceptIdentity().getVersion().toString());
         assertEquals("COUNTRY", dlt.getDimensions().get(1).getConceptIdentity().getId().toString());
-        assertEquals("ESTAT", dlt.getDimensions().get(1).getLocalRepresentation().getEnumeration().getAgencyId().toString());
+        assertEquals("ESTAT", ComponentUtil.getLocalRepresentation(dlt.getDimensions().get(1)).getEnumeration().getAgencyId().toString());
 
-        assertEquals("CL_COUNTRY", dlt.getDimensions().get(1).getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
-        assertEquals("1.0", dlt.getDimensions().get(1).getLocalRepresentation().getEnumeration().getVersion().toString());
+        assertEquals("CL_COUNTRY", ComponentUtil.getLocalRepresentation(dlt.getDimensions().get(1)).getEnumeration().getMaintainableParentId().toString());
+        assertEquals("1.0", ComponentUtil.getLocalRepresentation(dlt.getDimensions().get(1)).getEnumeration().getVersion().toString());
 
         assertEquals("ESTAT", dlt.getDimensions().get(2).getConceptIdentity().getAgencyId().toString());
         assertEquals("DEMO_CONCEPTS", dlt.getDimensions().get(2).getConceptIdentity().getMaintainableParentId().toString());
         assertEquals("1.0", dlt.getDimensions().get(2).getConceptIdentity().getVersion().toString());
         assertEquals("SEX", dlt.getDimensions().get(2).getConceptIdentity().getId().toString());
-        assertEquals("ESTAT", dlt.getDimensions().get(2).getLocalRepresentation().getEnumeration().getAgencyId().toString());
-        assertEquals("CL_SEX", dlt.getDimensions().get(2).getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
-        assertEquals("1.0", dlt.getDimensions().get(2).getLocalRepresentation().getEnumeration().getVersion().toString());
+        assertEquals("ESTAT", ComponentUtil.getLocalRepresentation(dlt.getDimensions().get(2)).getEnumeration().getAgencyId().toString());
+        assertEquals("CL_SEX", ComponentUtil.getLocalRepresentation(dlt.getDimensions().get(2)).getEnumeration().getMaintainableParentId().toString());
+        assertEquals("1.0", ComponentUtil.getLocalRepresentation(dlt.getDimensions().get(2)).getEnumeration().getVersion().toString());
 
         assertEquals("ESTAT", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getConceptIdentity().getAgencyId().toString());
         assertEquals("DEMO_CONCEPTS", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getConceptIdentity().getMaintainableParentId().toString());
         assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getConceptIdentity().getVersion().toString());
         assertEquals("DEMO", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getConceptIdentity().getId().toString());
-        assertEquals("ESTAT", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getLocalRepresentation().getEnumeration().getAgencyId().toString());
-        assertEquals("DEMO_MEASURES", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
-        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getLocalRepresentation().getEnumeration().getVersion().toString());
-        assertEquals("ConceptScheme", ds.getDataStructureComponents().getDimensionList().getMeasureDimension().getLocalRepresentation().getEnumeration().getRefClass().toString());
+        assertEquals("ESTAT", ComponentUtil.getLocalRepresentation(ds.getDataStructureComponents().getDimensionList().getMeasureDimension()).getEnumeration().getAgencyId().toString());
+        assertEquals("DEMO_MEASURES", ComponentUtil.getLocalRepresentation(ds.getDataStructureComponents().getDimensionList().getMeasureDimension()).getEnumeration().getMaintainableParentId().toString());
+        assertEquals("1.0", ComponentUtil.getLocalRepresentation(ds.getDataStructureComponents().getDimensionList().getMeasureDimension()).getEnumeration().getVersion().toString());
+        assertEquals("ConceptScheme", ComponentUtil.getLocalRepresentation(ds.getDataStructureComponents().getDimensionList().getMeasureDimension()).getEnumeration().getRefClass().toString());
         List<AttributeType> atts = ds.getDataStructureComponents().getAttributeList().getAttributes();
         assertEquals("Mandatory", atts.get(0).getAssignmentStatus().toString());
 
@@ -527,7 +528,7 @@ public class Sdmx21StructureParserTest {
         assertEquals("SDMX", ds.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getConceptIdentity().getAgencyId().toString());
         assertEquals("CROSS_DOMAIN_CONCEPTS", ds.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getConceptIdentity().getMaintainableParentId().toString());
         assertEquals("1.0", ds.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getConceptIdentity().getVersion().toString());
-        assertEquals("Decimal", ds.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getLocalRepresentation().getTextFormat().getTextType().toString());
+        assertEquals("Decimal", ComponentUtil.getLocalRepresentation(ds.getDataStructureComponents().getMeasureList().getPrimaryMeasure()).getTextFormat().getTextType().toString());
     }
 
     @Test

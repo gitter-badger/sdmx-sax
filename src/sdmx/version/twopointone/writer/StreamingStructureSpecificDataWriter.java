@@ -40,6 +40,7 @@ import sdmx.data.structured.StructuredDataSet;
 import sdmx.footer.FooterType;
 import sdmx.message.*;
 import sdmx.structure.base.NameableType;
+import sdmx.structure.dataflow.DataflowType;
 import sdmx.version.common.ParseDataCallbackHandler;
 import static sdmx.version.twopointzero.writer.GenericDataWriter.writeName;
 
@@ -72,6 +73,7 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
     private String namespaceprefix;
     BaseHeaderType header = null;
     private Registry registry = null;
+    private DataflowType flow = null;
     private DataStructureReference ref = null;
 
     public StreamingStructureSpecificDataWriter(OutputStream out) {
@@ -516,16 +518,6 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
     }
 
     @Override
-    public void setDataStructureReferenceHint(DataStructureReference ref) {
-        this.ref=ref;
-    }
-
-    @Override
-    public DataStructureReference getDataStructureReferenceHint() {
-        return ref;
-    }
-
-    @Override
     public Registry getRegistry() {
         return registry;
     }
@@ -533,5 +525,16 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
     @Override
     public void setRegistry(Registry reg) {
         this.registry=reg;
+    }
+
+    @Override
+    public void setDataflow(DataflowType flow) {
+        this.flow=flow;
+        this.ref = flow.getStructure();
+    }
+
+    @Override
+    public DataflowType getDataflow() {
+        return flow;
     }
 }

@@ -13,6 +13,7 @@ import sdmx.Registry;
 import sdmx.SdmxIO;
 import static sdmx.SdmxIO.SAVE_MIME_TYPES;
 import sdmx.commonreferences.DataStructureReference;
+import sdmx.structure.dataflow.DataflowType;
 import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.version.common.SdmxStreamWriterProvider;
 import sdmx.version.twopointone.writer.StreamingGeneric21DataWriter;
@@ -46,23 +47,23 @@ public class Sdmx21StreamWriterProvider implements SdmxStreamWriterProvider {
     }
 
     @Override
-    public ParseDataCallbackHandler openForWriting(String mime, OutputStream out,Registry reg,DataStructureReference ref) {
+    public ParseDataCallbackHandler openForWriting(String mime, OutputStream out,Registry reg,DataflowType flow) {
         if("application/vnd.sdmx.genericdata+xml;version=2.1".equals(mime)){
-            return new StreamingGeneric21DataWriter(out, reg, ref);
+            return new StreamingGeneric21DataWriter(out, reg, flow);
         }
         if("application/vnd.sdmx.generictimeseriesdata+xml;version=2.1".equals(mime)){
-            return new StreamingGeneric21DataWriter(out, reg, ref);
+            return new StreamingGeneric21DataWriter(out, reg, flow);
         }
         if("application/vnd.sdmx.structurespecificdata+xml;version=2.1".equals(mime)){
             StreamingStructureSpecificDataWriter sssdw = new StreamingStructureSpecificDataWriter(out);
-            sssdw.setDataStructureReferenceHint(ref);
             sssdw.setRegistry(reg);
+            sssdw.setDataflow(flow);
             return sssdw;
         }
         if("application/vnd.sdmx.structurespecifictimeseriesdata+xml;version=2.1".equals(mime)){
             StreamingStructureSpecificTimeSeriesWriter sssdw = new StreamingStructureSpecificTimeSeriesWriter(out);
-            sssdw.setDataStructureReferenceHint(ref);
             sssdw.setRegistry(reg);
+            sssdw.setDataflow(flow);
             return sssdw;
         }
         throw new RuntimeException("MIME type:"+mime+" not supported by "+getClass().getName());

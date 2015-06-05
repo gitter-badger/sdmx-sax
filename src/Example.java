@@ -19,6 +19,7 @@ import sdmx.query.data.DataParametersType;
 import sdmx.query.data.DataQuery;
 import sdmx.query.data.DimensionValueType;
 import sdmx.query.data.TimeDimensionValueType;
+import sdmx.structure.base.ComponentUtil;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
@@ -69,7 +70,7 @@ public class Example {
         for (int i = 0; i < struct.getDataStructureComponents().getDimensionList().size(); i++) {
             DataParametersOrType or = new DataParametersOrType();
             List<DimensionValueType> dims = new ArrayList<DimensionValueType>();
-            CodelistType codes1 = reg.find(struct.getDataStructureComponents().getDimensionList().getDimension(i).getLocalRepresentation().getEnumeration().asCodelistReference());
+            CodelistType codes1 = reg.find(ComponentUtil.getRepresentation(reg,struct.getDataStructureComponents().getDimensionList().getDimension(i)).getEnumeration().asCodelistReference());
             dims.add(new DimensionValueType(struct.getDataStructureComponents().getDimensionList().getDimension(i).getId().toString(), codes1.getItem(0).getId().toString()));
             // If there is more than 1 code in the codelist, include the second code too!
             if (codes1.size() > 1) {

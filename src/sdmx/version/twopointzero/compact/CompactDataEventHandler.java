@@ -262,9 +262,9 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
     
     public void endHeader() {
         state = STATE_HEADEREND;
-        System.out.println("Header End");
+        //System.out.println("Header End");
         if( cbHandler!=null ) {
-            System.out.println("CB="+cbHandler);
+            //System.out.println("CB="+cbHandler);
             cbHandler.headerParsed(header);
         }
         // Insert witty assertions here

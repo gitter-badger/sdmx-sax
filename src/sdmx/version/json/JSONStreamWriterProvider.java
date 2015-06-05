@@ -12,6 +12,7 @@ import java.util.List;
 import sdmx.Registry;
 import sdmx.SdmxIO;
 import sdmx.commonreferences.DataStructureReference;
+import sdmx.structure.dataflow.DataflowType;
 import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.version.common.SdmxStreamWriterProvider;
 import sdmx.version.twopointone.Sdmx21StreamWriterProvider;
@@ -39,9 +40,9 @@ public class JSONStreamWriterProvider implements SdmxStreamWriterProvider {
     }
 
     @Override
-    public ParseDataCallbackHandler openForWriting(String mime, OutputStream out,Registry reg,DataStructureReference ref) {
+    public ParseDataCallbackHandler openForWriting(String mime, OutputStream out,Registry reg,DataflowType flow) {
         if("application/vnd.sdmx.draft-sdmx-json+json;version=2.1".equals(mime)){
-            StreamingJSONWriter writer = new StreamingJSONWriter(out, reg, ref);
+            StreamingSdmxJSONWriter writer = new StreamingSdmxJSONWriter(out, reg, flow);
             return writer;
         }
         throw new RuntimeException("MIME type:"+mime+" not supported by "+getClass().getName());

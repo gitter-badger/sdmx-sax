@@ -173,7 +173,7 @@ public class Sdmx20DataWriteTest {
         StructureType struct = SdmxIO.parseStructure(reg,structIn);
         long t2 = System.currentTimeMillis();
         OutputStream out = new FileOutputStream("testOut/DSID230571-out-sgdw.xml");
-        StreamingGenericDataWriter w2 = StreamingGenericDataWriter.openWriter(out,registry,struct.getStructures().getDataStructures().getDataStructures().get(0).asReference());
+        StreamingGenericDataWriter w2 = StreamingGenericDataWriter.openWriter(out,registry,struct.getStructures().getDataStructures().getDataStructures().get(0).asDataflow());
         SdmxIO.parseData(in,w2);
         long t3 = System.currentTimeMillis();
         System.out.println("Time to Stream Generic 2.0 DSID1230571 - "+(t3-t2));

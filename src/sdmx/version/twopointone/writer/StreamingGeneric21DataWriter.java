@@ -40,6 +40,7 @@ import sdmx.data.structured.StructuredDataSet;
 import sdmx.footer.FooterType;
 import sdmx.message.*;
 import sdmx.structure.base.NameableType;
+import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.AttributeType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionType;
@@ -68,9 +69,9 @@ import static sdmx.version.twopointzero.writer.GenericDataWriter.writeName;
  */
 public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCallbackHandler {
 
-    public static StreamingGeneric21DataWriter openWriter(OutputStream out, Registry reg, DataStructureReference ref) throws XMLStreamException {
+    public static StreamingGeneric21DataWriter openWriter(OutputStream out, Registry reg, DataflowType flow) throws XMLStreamException {
         //setup this like outputDocument
-        return new StreamingGeneric21DataWriter(out, reg, ref);
+        return new StreamingGeneric21DataWriter(out, reg, flow);
     }
     OutputStream out = null;
     XMLStreamWriter writer = null;
@@ -81,17 +82,18 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
     private Registry registry = null;
     private DataStructureReference dataStructureReference = null;
     private DataStructureType struct = null;
+    private DataflowType flow = null;
 
     private boolean in_series_key = false;
     private boolean in_series_attributes = false;
     private boolean in_obs_attributes;
     
     
-    public StreamingGeneric21DataWriter(OutputStream out, Registry reg, DataStructureReference ref) {
+    public StreamingGeneric21DataWriter(OutputStream out, Registry reg, DataflowType flow) {
         try {
             this.registry = reg;
-            this.dataStructureReference = ref;
-            this.struct = reg.find(ref);
+            this.flow=flow;
+            this.struct = reg.find(flow.getStructure());
             this.out = out;
             XMLOutputFactory factory = XMLOutputFactory.newInstance();
             this.writer = factory.createXMLStreamWriter(out);
@@ -556,16 +558,6 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
         return dimensionAtObservation;
     }
     @Override
-    public void setDataStructureReferenceHint(DataStructureReference ref) {
-        this.dataStructureReference=ref;
-    }
-
-    @Override
-    public DataStructureReference getDataStructureReferenceHint() {
-        return dataStructureReference;
-    }
-
-    @Override
     public Registry getRegistry() {
         return registry;
     }
@@ -595,5 +587,16 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
         } catch (XMLStreamException ex) {
             Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public void setDataflow(DataflowType flow) {
+        this.flow=flow;
+        this.struct = registry.find(flow.getStructure());
+    }
+
+    @Override
+    public DataflowType getDataflow() {
+        return flow;
     }
 }

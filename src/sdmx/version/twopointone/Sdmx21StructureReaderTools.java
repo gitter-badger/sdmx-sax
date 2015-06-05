@@ -784,12 +784,13 @@ public class Sdmx21StructureReaderTools {
         return lrt2;
     }
 
-    public static ConceptRepresentation toConceptRepresentation(org.sdmx.resources.sdmxml.schemas.v21.structure.ConceptRepresentation cor1) throws TypeValueNotFoundException {
+    public static ConceptRepresentation toConceptRepresentation(org.sdmx.resources.sdmxml.schemas.v21.structure.ConceptRepresentation cor1) throws TypeValueNotFoundException, URISyntaxException {
         if (cor1 == null) {
             return null;
         }
         ConceptRepresentation cor2 = new ConceptRepresentation();
         cor2.setTextFormat(toTextFormatType(cor1.getTextFormat()));
+        cor2.setEnumeration(toItemSchemeReference(cor1.getEnumeration()));
         return cor2;
     }
 
@@ -908,6 +909,9 @@ public class Sdmx21StructureReaderTools {
 
     public static RepresentationType toLocalRepresentation(org.sdmx.resources.sdmxml.schemas.v21.structure.RepresentationType lr1) throws TypeValueNotFoundException, URISyntaxException {
         if (lr1 == null) {
+            return null;
+        }
+        if( lr1.getTextFormat()==null&&lr1.getEnumeration()==null) {
             return null;
         }
         RepresentationType lr2 = new RepresentationType();

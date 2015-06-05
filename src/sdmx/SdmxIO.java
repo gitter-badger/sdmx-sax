@@ -28,6 +28,7 @@ import sdmx.message.StructureType;
 import sdmx.net.LocalRegistry;
 import sdmx.net.ServiceList;
 import sdmx.net.list.DataProvider;
+import sdmx.structure.dataflow.DataflowType;
 import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.version.common.SdmxParserProvider;
 import sdmx.version.common.SdmxStreamWriterProvider;
@@ -274,12 +275,12 @@ public class SdmxIO {
     public static Queryable connect(int type, String agency,String serviceURL,String options,String attribution,String htmlAttribution) throws MalformedURLException {
         return ServiceList.getDataProvider(type, agency, serviceURL, options, attribution, htmlAttribution).getQueryable();
     }
-    public static ParseDataCallbackHandler openForStreamWriting(String mime,OutputStream out,Registry reg,DataStructureReference ref) throws IOException {
+    public static ParseDataCallbackHandler openForStreamWriting(String mime,OutputStream out,Registry reg,DataflowType flow) throws IOException {
         SdmxStreamWriterProvider provider = findStreamWriterProvider(mime);
         if( provider == null ) {
             throw new RuntimeException("Not Writer found for MIME type:"+mime);
         }
-        return provider.openForWriting(mime, out, reg, ref);
+        return provider.openForWriting(mime, out, reg, flow);
     }
     public static void write(String mime,DataMessage message,OutputStream out) throws IOException {
         SdmxWriterProvider writer = findWriterProvider(mime);
@@ -295,18 +296,36 @@ public class SdmxIO {
         }
         writer.save(mime, out, message);
     }
-    public List<String> listSupportedWriteMIMETypes() {
+    public static List<String> listSupportedWriteMIMETypes() {
         List<String> result = new ArrayList<String>();
         for(SdmxWriterProvider p:writers) {
             result.addAll(p.getSupportedMIMETypes());
         }
         return result;
     }
-    public List<String> listSupportedStreamWriteMIMETypes() {
+    public static List<String> listSupportedStreamWriteMIMETypes() {
         List<String> result = new ArrayList<String>();
         for(SdmxStreamWriterProvider p:streamWriters) {
             result.addAll(p.getSupportedMIMETypes());
         }
         return result;
+    }
+    public static List<String> listStructureMIMETypes() {
+        return STRUCT_MIMES;
+    }
+    private static List<String> DATA_MIMES = new ArrayList<String>();
+    static{
+        DATA_MIMES.add("application/vnd.sdmx.genericdata+xml;version=2.1");
+        DATA_MIMES.add("application/vnd.sdmx.generictimeseriesdata+xml;version=2.1");
+        DATA_MIMES.add("application/vnd.sdmx.structurespecificdata+xml;version=2.1");
+        DATA_MIMES.add("application/vnd.sdmx.structurespecifictimeseriesdata+xml;version=2.1");
+        DATA_MIMES.add("application/vnd.sdmx.draft-sdmx-json+json;version=2.1");
+    }
+    private static List<String> STRUCT_MIMES = new ArrayList<String>();
+    static{
+        STRUCT_MIMES.add("application/vnd.sdmx.structure+xml;version=2.1");
+    }
+    public static List<String> listDataMIMETypes() {
+        return DATA_MIMES;
     }
 }

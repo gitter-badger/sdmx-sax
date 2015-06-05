@@ -49,6 +49,7 @@ import sdmx.common.Name;
 import sdmx.commonreferences.DataStructureReference;
 import sdmx.message.BaseHeaderType;
 import sdmx.message.SenderType;
+import sdmx.structure.base.ComponentUtil;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.datastructure.DataStructureComponents;
 import sdmx.structure.datastructure.DataStructureType;
@@ -402,16 +403,16 @@ public class Sdmx20StructureWriter {
     private static DimensionType toDimension(sdmx.structure.datastructure.DimensionType dim) {
         DimensionType dim2 = DimensionType.Factory.newInstance();
         if( dim.getAnnotations()!=null)dim2.setAnnotations(toAnnotations(dim.getAnnotations()));
-        if( dim.getLocalRepresentation().getEnumeration()!=null) {
-            dim2.setCodelist(dim.getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
-            dim2.setCodelistAgency(dim.getLocalRepresentation().getEnumeration().getAgencyId().toString());
-            dim2.setCodelistVersion(dim.getLocalRepresentation().getEnumeration().getVersion().toString());
+        if( ComponentUtil.getLocalRepresentation(dim).getEnumeration()!=null) {
+            dim2.setCodelist(ComponentUtil.getLocalRepresentation(dim).getEnumeration().getMaintainableParentId().toString());
+            dim2.setCodelistAgency(ComponentUtil.getLocalRepresentation(dim).getEnumeration().getAgencyId().toString());
+            dim2.setCodelistVersion(ComponentUtil.getLocalRepresentation(dim).getEnumeration().getVersion().toString());
         }
-        if( dim.getLocalRepresentation().getTextFormat()!=null ) {
+        if( ComponentUtil.getLocalRepresentation(dim).getTextFormat()!=null ) {
             TextFormatType tft = TextFormatType.Factory.newInstance();
-            tft.setDecimals(new BigInteger(Integer.toString(dim.getLocalRepresentation().getTextFormat().getDecimals().getValue())));
-            tft.setEndValue(dim.getLocalRepresentation().getTextFormat().getEndValue());
-            tft.setTextType(TextTypeType.Enum.forString(dim.getLocalRepresentation().getTextFormat().getTextType().toString()));
+            tft.setDecimals(new BigInteger(Integer.toString(ComponentUtil.getLocalRepresentation(dim).getTextFormat().getDecimals().getValue())));
+            tft.setEndValue(ComponentUtil.getLocalRepresentation(dim).getTextFormat().getEndValue());
+            tft.setTextType(TextTypeType.Enum.forString(ComponentUtil.getLocalRepresentation(dim).getTextFormat().getTextType().toString()));
             dim2.setTextFormat(tft);
         }
         dim2.setConceptAgency(dim.getConceptIdentity().getAgencyId().toString());
@@ -427,16 +428,16 @@ public class Sdmx20StructureWriter {
     private static DimensionType toMeasureDimension(MeasureDimensionType dim) {
         DimensionType dim2 = DimensionType.Factory.newInstance();
         if( dim.getAnnotations()!=null){dim2.setAnnotations(toAnnotations(dim.getAnnotations()));}
-        if( dim.getLocalRepresentation().getEnumeration()!=null) {
-            dim2.setCodelist(dim.getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
-            dim2.setCodelistAgency(dim.getLocalRepresentation().getEnumeration().getAgencyId().toString());
-            dim2.setCodelistVersion(dim.getLocalRepresentation().getEnumeration().getVersion().toString());
+        if( ComponentUtil.getLocalRepresentation(dim).getEnumeration()!=null) {
+            dim2.setCodelist(ComponentUtil.getLocalRepresentation(dim).getEnumeration().getMaintainableParentId().toString());
+            dim2.setCodelistAgency(ComponentUtil.getLocalRepresentation(dim).getEnumeration().getAgencyId().toString());
+            dim2.setCodelistVersion(ComponentUtil.getLocalRepresentation(dim).getEnumeration().getVersion().toString());
         }
-        if( dim.getLocalRepresentation().getTextFormat()!=null ) {
+        if( ComponentUtil.getLocalRepresentation(dim).getTextFormat()!=null ) {
             TextFormatType tft = TextFormatType.Factory.newInstance();
-            tft.setDecimals(new BigInteger(Integer.toString(dim.getLocalRepresentation().getTextFormat().getDecimals().getValue())));
-            tft.setEndValue(dim.getLocalRepresentation().getTextFormat().getEndValue());
-            tft.setTextType(TextTypeType.Enum.forString(dim.getLocalRepresentation().getTextFormat().getTextType().toString()));
+            tft.setDecimals(new BigInteger(Integer.toString(ComponentUtil.getLocalRepresentation(dim).getTextFormat().getDecimals().getValue())));
+            tft.setEndValue(ComponentUtil.getLocalRepresentation(dim).getTextFormat().getEndValue());
+            tft.setTextType(TextTypeType.Enum.forString(ComponentUtil.getLocalRepresentation(dim).getTextFormat().getTextType().toString()));
             dim2.setTextFormat(tft);
         }
         dim2.setConceptAgency(dim.getConceptIdentity().getAgencyId().toString());
@@ -453,16 +454,16 @@ public class Sdmx20StructureWriter {
     private static TimeDimensionType toTimeDimension(sdmx.structure.datastructure.TimeDimensionType dim) {
         TimeDimensionType dim2 = TimeDimensionType.Factory.newInstance();
         if( dim.getAnnotations()!=null)dim2.setAnnotations(toAnnotations(dim.getAnnotations()));
-        if( dim.getLocalRepresentation().getEnumeration()!=null) {
-            dim2.setCodelist(dim.getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
-            dim2.setCodelistAgency(dim.getLocalRepresentation().getEnumeration().getAgencyId().toString());
-            dim2.setCodelistVersion(dim.getLocalRepresentation().getEnumeration().getVersion().toString());
+        if( ComponentUtil.getLocalRepresentation(dim).getEnumeration()!=null) {
+            dim2.setCodelist(ComponentUtil.getLocalRepresentation(dim).getEnumeration().getMaintainableParentId().toString());
+            dim2.setCodelistAgency(ComponentUtil.getLocalRepresentation(dim).getEnumeration().getAgencyId().toString());
+            dim2.setCodelistVersion(ComponentUtil.getLocalRepresentation(dim).getEnumeration().getVersion().toString());
         }
-        if( dim.getLocalRepresentation().getTextFormat()!=null ) {
+        if( ComponentUtil.getLocalRepresentation(dim).getTextFormat()!=null ) {
             TextFormatType tft = TextFormatType.Factory.newInstance();
-            if( dim.getLocalRepresentation().getTextFormat().getDecimals()!=null){tft.setDecimals(new BigInteger(Integer.toString(dim.getLocalRepresentation().getTextFormat().getDecimals().getValue())));}
-            if( dim.getLocalRepresentation().getTextFormat().getEndValue()!=null){tft.setEndValue(dim.getLocalRepresentation().getTextFormat().getEndValue());}
-            tft.setTextType(TextTypeType.Enum.forString(dim.getLocalRepresentation().getTextFormat().getTextType().toString()));
+            if( ComponentUtil.getLocalRepresentation(dim).getTextFormat().getDecimals()!=null){tft.setDecimals(new BigInteger(Integer.toString(ComponentUtil.getLocalRepresentation(dim).getTextFormat().getDecimals().getValue())));}
+            if( ComponentUtil.getLocalRepresentation(dim).getTextFormat().getEndValue()!=null){tft.setEndValue(ComponentUtil.getLocalRepresentation(dim).getTextFormat().getEndValue());}
+            tft.setTextType(TextTypeType.Enum.forString(ComponentUtil.getLocalRepresentation(dim).getTextFormat().getTextType().toString()));
             dim2.setTextFormat(tft);
         }
         dim2.setConceptAgency(dim.getConceptIdentity().getAgencyId().toString());
@@ -478,11 +479,11 @@ public class Sdmx20StructureWriter {
 
     public static org.sdmx.resources.sdmxml.schemas.v20.structure.PrimaryMeasureType toPrimaryMeasure(sdmx.structure.datastructure.PrimaryMeasure pm) {
         PrimaryMeasureType pm2 = PrimaryMeasureType.Factory.newInstance();
-        pm2.setTextFormat(toTextFormatType(pm.getLocalRepresentation().getTextFormat()));
-        if( pm.getLocalRepresentation().getEnumeration()!=null) {
-           pm2.setCodelist(pm.getLocalRepresentation().getEnumeration().getId().toString());
-           pm2.setCodelistAgency(pm.getLocalRepresentation().getEnumeration().getAgencyId().toString());
-           pm2.setCodelistVersion(pm.getLocalRepresentation().getEnumeration().getVersion().toString());
+        pm2.setTextFormat(toTextFormatType(ComponentUtil.getLocalRepresentation(pm).getTextFormat()));
+        if( ComponentUtil.getLocalRepresentation(pm).getEnumeration()!=null) {
+           pm2.setCodelist(ComponentUtil.getLocalRepresentation(pm).getEnumeration().getId().toString());
+           pm2.setCodelistAgency(ComponentUtil.getLocalRepresentation(pm).getEnumeration().getAgencyId().toString());
+           pm2.setCodelistVersion(ComponentUtil.getLocalRepresentation(pm).getEnumeration().getVersion().toString());
         }
         pm2.setConceptRef(pm.getId().toString());
         pm2.setConceptSchemeAgency(pm.getConceptIdentity().getAgencyId().toString());

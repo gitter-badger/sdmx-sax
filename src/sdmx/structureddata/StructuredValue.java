@@ -10,6 +10,7 @@ import sdmx.Registry;
 import sdmx.common.Description;
 import sdmx.common.Name;
 import sdmx.structure.base.Component;
+import sdmx.structure.base.ComponentUtil;
 import sdmx.structure.base.ItemSchemeType;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.base.RepresentationType;
@@ -59,12 +60,10 @@ public class StructuredValue {
             comp = structure.getDataStructureComponents().getDimensionList().getMeasureDimension();
         }
         if (comp == null) {
+            System.out.println("Comp is NUll!");
             return false;
         }
-        RepresentationType localRep = comp.getLocalRepresentation();
-        if (localRep == null || localRep.getEnumeration() == null) {
-            return false;
-        }
+        RepresentationType localRep = ComponentUtil.getRepresentation(registry,comp);
         return true;
     }
 

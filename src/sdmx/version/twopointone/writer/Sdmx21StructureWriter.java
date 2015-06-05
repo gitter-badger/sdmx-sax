@@ -71,6 +71,7 @@ import sdmx.common.Annotations;
 import sdmx.common.DataType;
 import sdmx.common.Name;
 import sdmx.commonreferences.DataStructureReference;
+import sdmx.structure.base.ComponentUtil;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.datastructure.DataStructureComponents;
 import sdmx.structure.datastructure.MeasureDimensionType;
@@ -686,8 +687,8 @@ public class Sdmx21StructureWriter {
         if (dim.getConceptIdentity() != null) {
             toConceptReferenceType(dim2.addNewConceptIdentity(), dim.getConceptIdentity());
         }
-        if (dim.getLocalRepresentation() != null) {
-            toLocalRepresentation(dim2.addNewLocalRepresentation(), dim.getLocalRepresentation());
+        if (ComponentUtil.getLocalRepresentation(dim) != null) {
+            toLocalRepresentation(dim2.addNewLocalRepresentation(), ComponentUtil.getLocalRepresentation(dim));
         }
         if (dim.getPosition() != null) {
             dim2.setPosition(dim.getPosition());
@@ -745,14 +746,14 @@ public class Sdmx21StructureWriter {
         if (prim.getConceptIdentity() != null) {
             toConceptReferenceType(prim2.addNewConceptIdentity(), prim.getConceptIdentity());
         }
-        if (prim.getLocalRepresentation() != null) {
-            toLocalRepresentation(prim2.addNewLocalRepresentation(), prim.getLocalRepresentation());
+        if (ComponentUtil.getLocalRepresentation(prim) != null) {
+            toLocalRepresentation(prim2.addNewLocalRepresentation(), ComponentUtil.getLocalRepresentation(prim));
         }
     }
 
     private static void toTimeDimension(TimeDimensionType time2, sdmx.structure.datastructure.TimeDimensionType time) {
-        if (time.getLocalRepresentation() != null) {
-            toTDLocalRepresentation(time2.addNewLocalRepresentation(), time.getLocalRepresentation());
+        if (ComponentUtil.getLocalRepresentation(time) != null) {
+            toTDLocalRepresentation(time2.addNewLocalRepresentation(), ComponentUtil.getLocalRepresentation(time));
             //toLocalRepresentation(time2.addNewLocalRepresentation(), time.getLocalRepresentation());
         }
         if (time.getAnnotations() != null) {
@@ -922,8 +923,8 @@ public class Sdmx21StructureWriter {
         if (meas.getConceptIdentity() != null) {
             toConceptReferenceType(meas2.addNewConceptIdentity(), meas.getConceptIdentity());
         }
-        if (meas.getLocalRepresentation() != null) {
-            toLocalRepresentation(meas2.addNewLocalRepresentation(), meas.getLocalRepresentation());
+        if (ComponentUtil.getLocalRepresentation(meas) != null) {
+            toLocalRepresentation(meas2.addNewLocalRepresentation(), ComponentUtil.getLocalRepresentation(meas));
         }
     }
 

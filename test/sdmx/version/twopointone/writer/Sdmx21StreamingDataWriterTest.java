@@ -23,6 +23,7 @@ import sdmx.commonreferences.DataStructureReference;
 import sdmx.exception.ParseException;
 import sdmx.message.StructureType;
 import sdmx.net.LocalRegistry;
+import sdmx.structure.dataflow.DataflowType;
 import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.version.twopointone.Sdmx21StructureParserTest;
 
@@ -51,7 +52,7 @@ public class Sdmx21StreamingDataWriterTest {
             Registry reg = LocalRegistry.getDefaultWorkspace();
             StructureType struct = SdmxIO.parseStructure(new FileInputStream("test/resources/sdmx21-samples/exr/ecb_exr_ng/ecb_exr_ng_full-edited.xml"));
             reg.load(struct);
-            DataStructureReference ref = struct.getStructures().getDataStructures().getDataStructures().get(0).asReference();
+            DataflowType ref = struct.getStructures().getDataStructures().getDataStructures().get(0).asDataflow();
             FileOutputStream fos = new FileOutputStream("testOut/ecb_exr_ng_ts-streaming_ss21_out.xml");
             ParseDataCallbackHandler cbHandler = SdmxIO.openForStreamWriting("application/vnd.sdmx.structurespecificdata+xml;version=2.1", fos, reg, ref);
             FileInputStream fin = new FileInputStream("test/resources/sdmx21-samples/exr/ecb_exr_ng/structured/ecb_exr_ng_ts.xml");
@@ -71,7 +72,7 @@ public class Sdmx21StreamingDataWriterTest {
             Registry reg = LocalRegistry.getDefaultWorkspace();
             StructureType struct = SdmxIO.parseStructure(new FileInputStream("test/resources/sdmx21-samples/exr/ecb_exr_ng/ecb_exr_ng_full-edited.xml"));
             reg.load(struct);
-            DataStructureReference ref = struct.getStructures().getDataStructures().getDataStructures().get(0).asReference();
+            DataflowType ref = struct.getStructures().getDataStructures().getDataStructures().get(0).asDataflow();
             FileOutputStream fos = new FileOutputStream("testOut/ecb_exr_ng_ts-streaming_generic_out.xml");
             ParseDataCallbackHandler cbHandler = SdmxIO.openForStreamWriting("application/vnd.sdmx.genericdata+xml;version=2.1", fos, reg, ref);
             FileInputStream fin = new FileInputStream("test/resources/sdmx21-samples/exr/ecb_exr_ng/generic/ecb_exr_ng_ts.xml");

@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.util.List;
 import sdmx.Registry;
 import sdmx.commonreferences.DataStructureReference;
+import sdmx.structure.dataflow.DataflowType;
 
 /**
  *
@@ -17,5 +18,5 @@ import sdmx.commonreferences.DataStructureReference;
  */
 public interface SdmxStreamWriterProvider {
     public List<String> getSupportedMIMETypes();
-    public ParseDataCallbackHandler openForWriting(String mime,OutputStream out,Registry reg,DataStructureReference ref) throws IOException;
+    public ParseDataCallbackHandler openForWriting(String mime,OutputStream out,Registry reg,DataflowType flow) throws IOException;
 }

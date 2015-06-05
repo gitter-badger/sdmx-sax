@@ -40,6 +40,7 @@ import sdmx.data.structured.StructuredDataSet;
 import sdmx.footer.FooterType;
 import sdmx.message.*;
 import sdmx.structure.base.NameableType;
+import sdmx.structure.dataflow.DataflowType;
 import sdmx.version.common.ParseDataCallbackHandler;
 import static sdmx.version.twopointzero.writer.GenericDataWriter.writeName;
 
@@ -72,6 +73,7 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
     private String namespaceprefix;
     BaseHeaderType header = null;
     Registry registry= null;
+    private DataflowType flow = null;
     DataStructureReference ref = null;
 
     public StreamingStructureSpecificTimeSeriesWriter(OutputStream out) {
@@ -110,7 +112,7 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
         if (header.getNames() != null && header.getNames().size() > 0) {
             for (int i = 0; i < header.getNames().size(); i++) {
                 
-                writer.writeStartElement("common","Name");
+                writer.writeStartElement("common","Name","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common");
                 if (header.getNames().get(i).getLang() != null) {
                     writer.writeAttribute("xml:lang", header.getNames().get(i).getLang());
                 }
@@ -485,7 +487,7 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
     public void writeStructure(PayloadStructureType st) {
         try {
             writer.writeStartElement("message","Structure","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
-            writer.writeAttribute("namespace", st.getNamespace().toString());
+            if( st.getNamespace()!=null){writer.writeAttribute("namespace", st.getNamespace().toString());}
             if( st.getDimensionAtObservation()!=null) {
                 writer.writeAttribute("dimensionAtObservation", st.getDimensionAtObservation().toString());
             }else{
@@ -515,16 +517,6 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
         return dimensionAtObservation;
     }
     @Override
-    public void setDataStructureReferenceHint(DataStructureReference ref) {
-        this.ref=ref;
-    }
-
-    @Override
-    public DataStructureReference getDataStructureReferenceHint() {
-        return ref;
-    }
-
-    @Override
     public Registry getRegistry() {
         return registry;
     }
@@ -532,5 +524,16 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
     @Override
     public void setRegistry(Registry reg) {
         this.registry=reg;
+    }
+
+    @Override
+    public void setDataflow(DataflowType flow) {
+        this.flow=flow;
+        this.ref = flow.getStructure();
+    }
+
+    @Override
+    public DataflowType getDataflow() {
+        return flow;
     }
 }

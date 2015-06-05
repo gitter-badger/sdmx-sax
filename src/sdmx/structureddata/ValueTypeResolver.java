@@ -22,6 +22,7 @@ import sdmx.commonreferences.types.ItemSchemeTypeCodelistType;
 import sdmx.commonreferences.types.ObjectTypeCodelistType;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.structure.base.Component;
+import sdmx.structure.base.ComponentUtil;
 import sdmx.structure.base.ItemBaseType;
 import sdmx.structure.base.ItemSchemeType;
 import sdmx.structure.base.ItemType;
@@ -78,11 +79,7 @@ public class ValueTypeResolver {
                 ct.setNames(Collections.singletonList(name));
                 return ct;
             }
-            rep = concept.getCoreRepresentation();
-        }
-        RepresentationType localRep = dim.getLocalRepresentation();
-        if (localRep != null) {
-            rep = localRep;
+            rep = ComponentUtil.getRepresentation(registry,dim);
         }
         if (rep != null) {
             if (rep.getEnumeration() != null) {
@@ -133,11 +130,13 @@ public class ValueTypeResolver {
                 }
             }
         } else {
+            
             CodeType itm = new CodeType();
             Name name = new Name(Locale.getDefault().getLanguage(), value);
             List<Name> names = Collections.singletonList(name);
             itm.setNames(names);
-            return itm;
+            throw new RuntimeException("Rep is null!");
+            //return itm;
         }
         return null;
     }
@@ -153,7 +152,7 @@ public class ValueTypeResolver {
                 rep = concept.getCoreRepresentation();
             }
         }
-        RepresentationType localRep = dim.getLocalRepresentation();
+        RepresentationType localRep = ComponentUtil.getRepresentation(registry,dim);
         if (localRep != null) {
             rep = localRep;
         }

@@ -23,6 +23,8 @@ import sdmx.commonreferences.RefBase;
 import sdmx.commonreferences.Version;
 import sdmx.message.StructureType;
 import sdmx.structure.ConceptsType;
+import sdmx.structure.base.ComponentUtil;
+import sdmx.structure.base.RepresentationType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
@@ -765,7 +767,8 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample106() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("BIS", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getAgencyId().toString());
+        RepresentationType rep = ComponentUtil.getLocalRepresentation(ds.getDataStructureComponents().getDimensionList().getDimensions().get(1));
+        assertEquals("BIS", rep.getEnumeration().getAgencyId().toString());
     }
     /*
      @Test
@@ -804,19 +807,22 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample112() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("BIS", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getAgencyId().toString());
+        RepresentationType rep = ComponentUtil.getLocalRepresentation(ds.getDataStructureComponents().getDimensionList().getDimensions().get(1));
+        assertEquals("BIS", rep.getEnumeration().getAgencyId().toString());
     }
 
     @Test
     public void testStructureSample113() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("CL_JD_CATEGORY", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
+        RepresentationType rep = ComponentUtil.getLocalRepresentation(ds.getDataStructureComponents().getDimensionList().getDimensions().get(1));
+        assertEquals("CL_JD_CATEGORY", rep.getEnumeration().getMaintainableParentId().toString());
     }
 
     @Test
     public void testStructureSample114() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(1).getLocalRepresentation().getEnumeration().getVersion().toString());
+        RepresentationType rep = ComponentUtil.getLocalRepresentation(ds.getDataStructureComponents().getDimensionList().getDimensions().get(1));
+        assertEquals("1.0", rep.getEnumeration().getVersion().toString());
     }
 
     @Test
@@ -841,19 +847,22 @@ public class Sdmx20StructureParserTest {
     @Test
     public void testStructureSample118() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("BIS", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getLocalRepresentation().getEnumeration().getAgencyId().toString());
+        RepresentationType rep = ComponentUtil.getLocalRepresentation(ds.getDataStructureComponents().getDimensionList().getDimensions().get(2));
+        assertEquals("BIS", rep.getEnumeration().getAgencyId().toString());
     }
 
     @Test
     public void testStructureSample119() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("CL_BIS_IF_REF_AREA", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getLocalRepresentation().getEnumeration().getMaintainableParentId().toString());
+        RepresentationType rep = ComponentUtil.getLocalRepresentation(ds.getDataStructureComponents().getDimensionList().getDimensions().get(2));
+        assertEquals("CL_BIS_IF_REF_AREA", rep.getEnumeration().getMaintainableParentId().toString());
     }
 
     @Test
     public void testStructureSample120() {
         DataStructureType ds = doc.getStructures().getDataStructures().getDataStructures().get(0);
-        assertEquals("1.0", ds.getDataStructureComponents().getDimensionList().getDimensions().get(2).getLocalRepresentation().getEnumeration().getVersion().toString());
+        RepresentationType rep = ComponentUtil.getLocalRepresentation(ds.getDataStructureComponents().getDimensionList().getDimensions().get(2));
+        assertEquals("1.0", rep.getEnumeration().getVersion().toString());
     }
 
     @Test

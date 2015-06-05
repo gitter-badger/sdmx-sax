@@ -10,6 +10,7 @@ import sdmx.commonreferences.DataStructureReference;
 import sdmx.data.DataSetWriter;
 import sdmx.footer.FooterType;
 import sdmx.message.BaseHeaderType;
+import sdmx.structure.dataflow.DataflowType;
 
 /**
  *
@@ -23,8 +24,8 @@ public interface ParseDataCallbackHandler {
     public void documentFinished();
     public String getDimensionAtObservationHint();
     public void setDimensionAtObservationHint(String s);
-    public void setDataStructureReferenceHint(DataStructureReference ref);
-    public DataStructureReference getDataStructureReferenceHint();
+    public void setDataflow(DataflowType flow);
+    public DataflowType getDataflow();
     public Registry getRegistry();
     public void setRegistry(Registry reg);
     

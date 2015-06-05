@@ -276,7 +276,7 @@ public class StructureSpecificEventHandler {
     public void endHeader() {
         state = STATE_HEADEREND;
         // Insert witty assertions here
-        System.out.println("cbHandler="+cbHandler);
+        //System.out.println("cbHandler="+cbHandler);
         if( cbHandler!=null ) {
             cbHandler.headerParsed(header);
         }
@@ -691,20 +691,20 @@ public class StructureSpecificEventHandler {
     }
 
     void endMessageStructure() {
-        System.out.println("End Message:Structure");
+        //System.out.println("End Message:Structure");
         payloads.add(payload);
         payload = null;
         header.setStructures(payloads);
-        System.out.println("Struct="+payloads.get(0).getStructure());
+        //System.out.println("Struct="+payloads.get(0).getStructure());
     }
 
     void startRef(Attributes atts) {
-        System.out.println("Start Ref!!!");
+        //System.out.println("Start Ref!!!");
         StructureRef ref = new StructureRef(new NestedNCNameID(atts.getValue("agencyID")),
                 new IDType(atts.getValue("id")),new Version(atts.getValue("version")),ObjectTypeCodelistType.DATASTRUCTURE, PackageTypeCodelistType.DATASTRUCTURE);
         StructureReference reference = new StructureReference(ref, null);
         payload.setStructure(reference);
-        System.out.println("Structure="+payload.getStructure());
+        //System.out.println("Structure="+payload.getStructure());
     }
 
     void endRef() {
