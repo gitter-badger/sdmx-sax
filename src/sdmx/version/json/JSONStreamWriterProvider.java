@@ -30,7 +30,7 @@ public class JSONStreamWriterProvider implements SdmxStreamWriterProvider {
     }
     List<String> supported = new ArrayList<String>();
     {
-        supported.add("application/vnd.sdmx.draft-sdmx-json+json;version=2.1");
+        supported.add("application/vnd.sdmx.data+json;version=1.0.0-wd");
 
     }
     
@@ -41,7 +41,7 @@ public class JSONStreamWriterProvider implements SdmxStreamWriterProvider {
 
     @Override
     public ParseDataCallbackHandler openForWriting(String mime, OutputStream out,Registry reg,DataflowType flow) {
-        if("application/vnd.sdmx.draft-sdmx-json+json;version=2.1".equals(mime)){
+        if("application/vnd.sdmx.data+json;version=1.0.0-wd".equals(mime)){
             StreamingSdmxJSONWriter writer = new StreamingSdmxJSONWriter(out, reg, flow);
             return writer;
         }

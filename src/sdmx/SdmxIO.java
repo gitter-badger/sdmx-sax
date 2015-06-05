@@ -328,7 +328,7 @@ public class SdmxIO {
         DATA_MIMES.add("application/vnd.sdmx.generictimeseriesdata+xml;version=2.1");
         DATA_MIMES.add("application/vnd.sdmx.structurespecificdata+xml;version=2.1");
         DATA_MIMES.add("application/vnd.sdmx.structurespecifictimeseriesdata+xml;version=2.1");
-        DATA_MIMES.add("application/vnd.sdmx.draft-sdmx-json+json;version=2.1");
+        DATA_MIMES.add("application/vnd.sdmx.data+json;version=1.0.0-wd");
     }
     private static List<String> STRUCT_MIMES = new ArrayList<String>();
     static{

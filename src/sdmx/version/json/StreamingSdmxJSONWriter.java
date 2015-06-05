@@ -28,6 +28,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jfree.data.time.RegularTimePeriod;
 import sdmx.footer.FooterType;
 import sdmx.message.BaseHeaderType;
 import sdmx.message.ContactType;
@@ -39,6 +40,7 @@ import sdmx.structure.base.NameableType;
 import sdmx.structure.concept.ConceptType;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structureddata.ValueTypeResolver;
+import sdmx.util.time.TimeUtil;
 import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.xml.anyURI;
 
@@ -435,11 +437,12 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
                 for (String s : vals) {
                     if (ComponentUtil.getRepresentation(registry, struct.findComponent(dataSetDims[i])).getEnumeration() == null) {
                         if (struct.isTimeDimension(dataSetDims[i])) {
+                            RegularTimePeriod time = TimeUtil.parseTime(null, s);
                             writer.beginObject();
                             writer.name("id").value(s);
                             writer.name("name").value(s);
-                            writer.name("start").value(s);
-                            writer.name("end").value(s);
+                            writer.name("start").value(DF.format(time.getStart()));
+                            writer.name("end").value(DF.format(time.getEnd()));
                             writer.endObject();
                         } else {
                             writer.beginObject();
@@ -480,11 +483,12 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
                     for (String s : vals) {
                         if (ComponentUtil.getRepresentation(registry, struct.findComponent(seriesDims[i])).getEnumeration() == null) {
                             if (struct.isTimeDimension(seriesDims[i])) {
+                                RegularTimePeriod time = TimeUtil.parseTime(null, s);
                                 writer.beginObject();
                                 writer.name("id").value(s);
                                 writer.name("name").value(s);
-                                writer.name("start").value(s);
-                                writer.name("end").value(s);
+                                writer.name("start").value(DF.format(time.getStart()));
+                                writer.name("end").value(DF.format(time.getEnd()));
                                 writer.endObject();
                             } else {
                                 writer.beginObject();
@@ -528,11 +532,12 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
                     }
                     if (ComponentUtil.getRepresentation(registry, struct.findComponent(obsDims[i])).getEnumeration() == null) {
                         if (struct.isTimeDimension(obsDims[i])) {
+                            RegularTimePeriod time = TimeUtil.parseTime(null, s);
                             writer.beginObject();
                             writer.name("id").value(s);
                             writer.name("name").value(s);
-                            writer.name("start").value(s);
-                            writer.name("end").value(s);
+                            writer.name("start").value(DF.format(time.getStart()));
+                            writer.name("end").value(DF.format(time.getEnd()));
                             writer.endObject();
                         } else {
                             writer.beginObject();
@@ -575,10 +580,11 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
                     if (ComponentUtil.getRepresentation(registry, struct.findComponent(dataSetAttsArray[i])).getEnumeration() == null) {
                         if (struct.isTimeDimension(dataSetAttsArray[i])) {
                             writer.beginObject();
+                            RegularTimePeriod time = TimeUtil.parseTime(null, s);
                             writer.name("id").value(s);
                             writer.name("name").value(s);
-                            writer.name("start").value(s);
-                            writer.name("end").value(s);
+                            writer.name("start").value(DF.format(time.getStart()));
+                            writer.name("end").value(DF.format(time.getEnd()));
                             writer.endObject();
                         } else {
                             writer.beginObject();
@@ -619,11 +625,12 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
                     for (String s : vals) {
                         if (ComponentUtil.getRepresentation(registry, struct.findComponent(seriesAttsArray[i])).getEnumeration() == null) {
                         if (struct.isTimeDimension(seriesAttsArray[i])) {
+                            RegularTimePeriod time = TimeUtil.parseTime(null, s);
                             writer.beginObject();
                             writer.name("id").value(s);
                             writer.name("name").value(s);
-                            writer.name("start").value(s);
-                            writer.name("end").value(s);
+                            writer.name("start").value(DF.format(time.getStart()));
+                            writer.name("end").value(DF.format(time.getEnd()));
                             writer.endObject();
                         } else {
                             writer.beginObject();
@@ -839,11 +846,13 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
 
     @Override
     public void setDataflow(DataflowType flow) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.flow=flow;
+        this.dsref=flow.getStructure();
+        this.struct=this.registry.find(dsref);
     }
 
     @Override
     public DataflowType getDataflow() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return flow;
     }
 }
