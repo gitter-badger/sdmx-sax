@@ -4,6 +4,8 @@
  */
 package sdmx;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -183,8 +185,14 @@ public class SdmxIO {
         registry.load(struct);
         return struct;
     }
-    public static DataMessage parseData(InputStream in) throws IOException,ParseException {
-        if( in == null ) throw new IllegalArgumentException("Null Stream");
+    public static DataMessage parseData(InputStream in1) throws IOException,ParseException {
+        if( in1 == null ) throw new IllegalArgumentException("Null Stream");
+        BufferedInputStream in = null;
+        if( !(in1 instanceof BufferedInputStream) ) {
+            in = new BufferedInputStream(in1);
+        }else{
+            in = (BufferedInputStream)in1;
+        }
         PushbackInputStream push = new PushbackInputStream(in,8192);
         String header = getHeader(push);
         SdmxParserProvider prov = findParserProvider(header);
@@ -275,11 +283,12 @@ public class SdmxIO {
     public static Queryable connect(int type, String agency,String serviceURL,String options,String attribution,String htmlAttribution) throws MalformedURLException {
         return ServiceList.getDataProvider(type, agency, serviceURL, options, attribution, htmlAttribution).getQueryable();
     }
-    public static ParseDataCallbackHandler openForStreamWriting(String mime,OutputStream out,Registry reg,DataflowType flow) throws IOException {
+    public static ParseDataCallbackHandler openForStreamWriting(String mime,OutputStream out1,Registry reg,DataflowType flow) throws IOException {
         SdmxStreamWriterProvider provider = findStreamWriterProvider(mime);
         if( provider == null ) {
             throw new RuntimeException("Not Writer found for MIME type:"+mime);
         }
+        BufferedOutputStream out = new BufferedOutputStream(out1);
         return provider.openForWriting(mime, out, reg, flow);
     }
     public static void write(String mime,DataMessage message,OutputStream out) throws IOException {

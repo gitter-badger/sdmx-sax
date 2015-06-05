@@ -25,6 +25,7 @@ import sdmx.message.StructureType;
 import sdmx.net.LocalRegistry;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.version.common.ParseDataCallbackHandler;
+import sdmx.version.json.JSONStreamingTest;
 import sdmx.version.twopointone.Sdmx21StructureParserTest;
 
 /**
@@ -84,5 +85,55 @@ public class Sdmx21StreamingDataWriterTest {
         } catch (ParseException ex) {
             Logger.getLogger(Sdmx21StreamingDataWriterTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    @Test
+    public void testUIS() throws IOException {
+        StructureType uisStruct = null;
+        try {
+            InputStream in = JSONStreamingTest.class.getResourceAsStream("/resources/uis-20/structure.xml");
+            uisStruct = SdmxIO.parseStructure(LocalRegistry.getDefaultWorkspace(),in);
+        } catch (IOException ex) {
+            Logger.getLogger(JSONStreamingTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(JSONStreamingTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        InputStream dataIn = JSONStreamingTest.class.getResourceAsStream("/resources/uis-20/28b18979-129f-43bc-94ae-42f31add907a.xml");
+        FileOutputStream fos = new FileOutputStream("testOut/uis-data-generic-2.1.xml");
+        ParseDataCallbackHandler cbHandler = SdmxIO.openForStreamWriting("application/vnd.sdmx.genericdata+xml;version=2.1", fos, LocalRegistry.getDefaultWorkspace(), uisStruct.getStructures().getDataStructures().getDataStructures().get(0).asDataflow());
+        long t1 = System.currentTimeMillis();
+        try {
+            SdmxIO.parseData(dataIn, cbHandler);
+            
+            //data6.dump();
+        } catch (ParseException ex) {
+            Logger.getLogger(JSONStreamingTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        long t2 = System.currentTimeMillis();
+        System.out.println("Time taken to convert uis sdmx to genericdata 2.1 = "+(t2-t1));
+    }
+    @Test
+    public void testUIS2() throws IOException {
+        StructureType uisStruct = null;
+        try {
+            InputStream in = JSONStreamingTest.class.getResourceAsStream("/resources/uis-20/structure.xml");
+            uisStruct = SdmxIO.parseStructure(LocalRegistry.getDefaultWorkspace(),in);
+        } catch (IOException ex) {
+            Logger.getLogger(JSONStreamingTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(JSONStreamingTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        InputStream dataIn = JSONStreamingTest.class.getResourceAsStream("/resources/uis-20/28b18979-129f-43bc-94ae-42f31add907a.xml");
+        FileOutputStream fos = new FileOutputStream("testOut/uis-data-structurespecific-2.1.xml");
+        ParseDataCallbackHandler cbHandler = SdmxIO.openForStreamWriting("application/vnd.sdmx.structurespecificdata+xml;version=2.1", fos, LocalRegistry.getDefaultWorkspace(), uisStruct.getStructures().getDataStructures().getDataStructures().get(0).asDataflow());
+        long t1 = System.currentTimeMillis();
+        try {
+            SdmxIO.parseData(dataIn, cbHandler);
+            
+            //data6.dump();
+        } catch (ParseException ex) {
+            Logger.getLogger(JSONStreamingTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        long t2 = System.currentTimeMillis();
+        System.out.println("Time taken to convert uis sdmx to structurespecific data 2.1 = "+(t2-t1));
     }
 }

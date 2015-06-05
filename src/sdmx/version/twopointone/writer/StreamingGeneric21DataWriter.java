@@ -87,12 +87,12 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
     private boolean in_series_key = false;
     private boolean in_series_attributes = false;
     private boolean in_obs_attributes;
-    
-    
+
     public StreamingGeneric21DataWriter(OutputStream out, Registry reg, DataflowType flow) {
         try {
             this.registry = reg;
-            this.flow=flow;
+            this.flow = flow;
+            this.dataStructureReference = flow.getStructure();
             this.struct = reg.find(flow.getStructure());
             this.out = out;
             XMLOutputFactory factory = XMLOutputFactory.newInstance();
@@ -131,7 +131,9 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
         if (header.getNames() != null && header.getNames().size() > 0) {
             for (int i = 0; i < header.getNames().size(); i++) {
                 writer.writeStartElement("Name");
-                writer.writeAttribute("xml:lang", header.getNames().get(i).getLang());
+                if (header.getNames().get(i).getLang() != null) {
+                    writer.writeAttribute("xml:lang", header.getNames().get(i).getLang());
+                }
                 writer.writeCharacters(header.getNames().get(i).getText());
                 writer.writeEndElement();
             }
@@ -195,12 +197,12 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
             writer.writeCharacters(header.getReportingEnd().toString());
             writer.writeEndElement();
         }
-        if( header.getStructures()!=null&&header.getStructures().size()>0) {
+        if (header.getStructures() != null && header.getStructures().size() > 0) {
             for (Iterator<sdmx.common.PayloadStructureType> it = header.getStructures().iterator(); it.hasNext();) {
                 PayloadStructureType st = (PayloadStructureType) it.next();
                 writeStructure(st);
             }
-        }else {
+        } else {
             PayloadStructureType payload = new PayloadStructureType();
             payload.setStructure(dataStructureReference);
             writeStructure(payload);
@@ -279,7 +281,7 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
     public void newDataSet() {
         //System.out.println("New DataSet");
         try {                                  //http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic
-            writer.writeStartElement("generic","DataSet", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic");
+            writer.writeStartElement("generic", "DataSet", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic");
         } catch (XMLStreamException ex) {
             Logger.getLogger(StreamingGeneric21DataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -336,12 +338,12 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
         } catch (XMLStreamException ex) {
             Logger.getLogger(StreamingGeneric21DataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        in_series_key=true;
+        in_series_key = true;
     }
 
     @Override
     public void newObservation() {
-       // System.out.println("New Obs");
+        // System.out.println("New Obs");
         if (in_series_key) {
             try {
                 //System.out.println("Ending Series Key");
@@ -365,7 +367,7 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
         } catch (XMLStreamException ex) {
             Logger.getLogger(StreamingGeneric21DataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        in_obs_attributes=false;
+        in_obs_attributes = false;
     }
 
     @Override
@@ -424,8 +426,8 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
                 Logger.getLogger(StreamingGeneric21DataWriter.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            if( !in_obs_attributes) {
-                in_obs_attributes=true;
+            if (!in_obs_attributes) {
+                in_obs_attributes = true;
                 try {
                     writer.writeStartElement("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic", "Attributes");
                 } catch (XMLStreamException ex) {
@@ -451,13 +453,13 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
 
     @Override
     public void finishObservation() {
-         if( in_obs_attributes) {
-             try {
-                 writer.writeEndElement();
-             } catch (XMLStreamException ex) {
-                 Logger.getLogger(StreamingGeneric21DataWriter.class.getName()).log(Level.SEVERE, null, ex);
-             }
+        if (in_obs_attributes) {
+            try {
+                writer.writeEndElement();
+            } catch (XMLStreamException ex) {
+                Logger.getLogger(StreamingGeneric21DataWriter.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
         //System.out.println("Fin Obs");
         try {
             writer.writeEndElement();
@@ -472,7 +474,7 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
     public void finishSeries() {
         //System.out.println("Fin Series");
         try {
-            if( in_series_key||in_series_attributes){
+            if (in_series_key || in_series_attributes) {
                 writer.writeEndElement(); // SeriesKey or Attributes
             }
             writer.writeEndElement(); // Series
@@ -549,14 +551,17 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
     }
 
     private String dimensionAtObservation = null;
+
     @Override
     public void setDimensionAtObservationHint(String s) {
-        dimensionAtObservation=s;
+        dimensionAtObservation = s;
     }
+
     @Override
     public String getDimensionAtObservationHint() {
         return dimensionAtObservation;
     }
+
     @Override
     public Registry getRegistry() {
         return registry;
@@ -564,18 +569,23 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
 
     @Override
     public void setRegistry(Registry reg) {
-        this.registry=reg;
+        this.registry = reg;
     }
+
     public void writeStructure(PayloadStructureType st) {
         try {
-            writer.writeStartElement("message","Structure","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
-            if( st.getNamespace()!=null) {writer.writeAttribute("namespace", st.getNamespace().toString());}
-            if( st.getDimensionAtObservation()!=null) {
+            writer.writeStartElement("message", "Structure", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+            if (st.getNamespace() != null) {
+                writer.writeAttribute("namespace", st.getNamespace().toString());
+            }
+            if (st.getDimensionAtObservation() != null) {
                 writer.writeAttribute("dimensionAtObservation", st.getDimensionAtObservation().toString());
-            }else if( dimensionAtObservation!=null ) {
+            } else if (dimensionAtObservation != null) {
                 writer.writeAttribute("dimensionAtObservation", dimensionAtObservation);
             }
-            if( st.getStructureID()!=null){writer.writeAttribute("structureID",st.getStructureID().toString());}
+            if (st.getStructureID() != null) {
+                writer.writeAttribute("structureID", st.getStructureID().toString());
+            }
             writer.writeStartElement("common", "Structure", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common");
             writer.writeStartElement("Ref");
             writer.writeAttribute("id", st.getStructure().getMaintainableParentId().toString());
@@ -591,8 +601,9 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
 
     @Override
     public void setDataflow(DataflowType flow) {
-        this.flow=flow;
+        this.flow = flow;
         this.struct = registry.find(flow.getStructure());
+        this.dataStructureReference = flow.getStructure();
     }
 
     @Override

@@ -112,7 +112,7 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
         if (header.getNames() != null && header.getNames().size() > 0) {
             for (int i = 0; i < header.getNames().size(); i++) {
                 
-                writer.writeStartElement("common","Name");
+                writer.writeStartElement("common","Name","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common");
                 if (header.getNames().get(i).getLang() != null) {
                     writer.writeAttribute("xml:lang", header.getNames().get(i).getLang());
                 }
@@ -185,7 +185,7 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
         }
 
         if( header.getStructures()!=null&&header.getStructures().size()>0) {
-            System.out.println("Writing PayLoadStructure");
+            //System.out.println("Writing PayLoadStructure");
             for (Iterator<sdmx.common.PayloadStructureType> it = header.getStructures().iterator(); it.hasNext();) {
                 PayloadStructureType st = (PayloadStructureType) it.next();
                 writeStructure(st);
@@ -268,7 +268,7 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
     @Override
     public void newDataSet() {
     
-        System.out.println("New DataSet");
+        //System.out.println("New DataSet");
         try {
             if (namespaceprefix == null || namespace == null) {
 
@@ -327,7 +327,7 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
 
     @Override
     public void newSeries() {
-        System.out.println("New Series");
+        //System.out.println("New Series");
         if (namespaceprefix == null || namespace == null) {
             try {
                 writer.writeStartElement("Series");
@@ -345,7 +345,7 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
 
     @Override
     public void newObservation() {
-        System.out.println("New Obs");
+        //System.out.println("New Obs");
         if (namespaceprefix == null || namespace == null) {
             try {
                                 writer.writeStartElement("Obs");
@@ -381,7 +381,7 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
 
     @Override
     public void writeObservationComponent(String name, String val) {
-        System.out.println("N:"+name+"val:"+val);
+        //System.out.println("N:"+name+"val:"+val);
         try {
             writer.writeAttribute(name, val);
         } catch (XMLStreamException ex) {
@@ -396,7 +396,7 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
 
     @Override
     public void finishObservation() {
-        System.out.println("Fin Obs");
+        //System.out.println("Fin Obs");
         try {
             writer.writeEndElement();
         } catch (XMLStreamException ex) {
@@ -406,7 +406,7 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
 
     @Override
     public void finishSeries() {
-        System.out.println("Fin Series");
+        //System.out.println("Fin Series");
         try {
             writer.writeEndElement();
         } catch (XMLStreamException ex) {
@@ -416,7 +416,7 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
 
     @Override
     public DataSet finishDataSet() {
-        System.out.println("Fin DataSet");
+        //System.out.println("Fin DataSet");
         try {
             writer.writeEndElement();
         } catch (XMLStreamException ex) {
@@ -427,7 +427,7 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
 
     @Override
     public void headerParsed(BaseHeaderType header) {
-        System.out.println("Header Parsed");
+        //System.out.println("Header Parsed");
         this.header=header;
         try {
             writeHeader();
@@ -490,7 +490,7 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
             if( st.getNamespace()!=null) {writer.writeAttribute("namespace", st.getNamespace().toString());}
             if( st.getDimensionAtObservation()!=null) {
                 writer.writeAttribute("dimensionAtObservation", st.getDimensionAtObservation().toString());
-            }else{
+            }else if(dimensionAtObservation!=null){
                 writer.writeAttribute("dimensionAtObservation", dimensionAtObservation);
             }
             if( st.getStructureID()!=null){writer.writeAttribute("structureID",st.getStructureID().toString());}

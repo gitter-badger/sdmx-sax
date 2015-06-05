@@ -248,7 +248,7 @@ public class StreamingCompactDataWriter implements DataSetWriter, ParseDataCallb
     @Override
     public void newDataSet() {
     
-        System.out.println("New DataSet");
+        //System.out.println("New DataSet");
         try {
             if (namespaceprefix == null || namespace == null) {
 
@@ -307,7 +307,7 @@ public class StreamingCompactDataWriter implements DataSetWriter, ParseDataCallb
 
     @Override
     public void newSeries() {
-        System.out.println("New Series");
+        //System.out.println("New Series");
         if (namespaceprefix == null || namespace == null) {
             try {
                 writer.writeStartElement("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/compact", "Series");
@@ -325,7 +325,7 @@ public class StreamingCompactDataWriter implements DataSetWriter, ParseDataCallb
 
     @Override
     public void newObservation() {
-        System.out.println("New Obs");
+       // System.out.println("New Obs");
         if (namespaceprefix == null || namespace == null) {
             try {
                 writer.writeStartElement("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/compact", "Obs");
@@ -361,7 +361,7 @@ public class StreamingCompactDataWriter implements DataSetWriter, ParseDataCallb
 
     @Override
     public void writeObservationComponent(String name, String val) {
-        System.out.println("N:"+name+"val:"+val);
+        //System.out.println("N:"+name+"val:"+val);
         try {
             writer.writeAttribute(name, val);
         } catch (XMLStreamException ex) {
@@ -376,7 +376,7 @@ public class StreamingCompactDataWriter implements DataSetWriter, ParseDataCallb
 
     @Override
     public void finishObservation() {
-        System.out.println("Fin Obs");
+        //System.out.println("Fin Obs");
         try {
             writer.writeEndElement();
         } catch (XMLStreamException ex) {
@@ -386,7 +386,7 @@ public class StreamingCompactDataWriter implements DataSetWriter, ParseDataCallb
 
     @Override
     public void finishSeries() {
-        System.out.println("Fin Series");
+        //System.out.println("Fin Series");
         try {
             writer.writeEndElement();
         } catch (XMLStreamException ex) {
@@ -396,7 +396,7 @@ public class StreamingCompactDataWriter implements DataSetWriter, ParseDataCallb
 
     @Override
     public DataSet finishDataSet() {
-        System.out.println("Fin DataSet");
+        //System.out.println("Fin DataSet");
         try {
             writer.writeEndElement();
         } catch (XMLStreamException ex) {

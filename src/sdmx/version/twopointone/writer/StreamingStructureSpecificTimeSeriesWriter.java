@@ -72,7 +72,7 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
     private String namespace;
     private String namespaceprefix;
     BaseHeaderType header = null;
-    Registry registry= null;
+    Registry registry = null;
     private DataflowType flow = null;
     DataStructureReference ref = null;
 
@@ -82,11 +82,11 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
         try {
             writer = factory.createXMLStreamWriter(out);
             writer.writeStartDocument("1.0");
-            writer.writeStartElement("message","StructureSpecificTimeSeriesData","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+            writer.writeStartElement("message", "StructureSpecificTimeSeriesData", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
             writer.writeDefaultNamespace("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
             writer.writeNamespace("data", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific");
             writer.writeNamespace("message", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
-            writer.writeNamespace("common","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common");
+            writer.writeNamespace("common", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common");
             writer.writeNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
             writer.writeNamespace("schemaLocation", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
         } catch (XMLStreamException ex) {
@@ -98,21 +98,21 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
      *
      */
     public void writeHeader() throws XMLStreamException {
-        writer.writeStartElement("message","Header","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+        writer.writeStartElement("message", "Header", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
         if (header.getId() != null && !"".equals(header.getId())) {
-            writer.writeStartElement("message","ID","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+            writer.writeStartElement("message", "ID", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
             writer.writeCharacters(header.getId());
             writer.writeEndElement();
         }
         if (header.getTest() != null) {
-            writer.writeStartElement("message","Test","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+            writer.writeStartElement("message", "Test", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
             writer.writeCharacters(header.getTest().toString());
             writer.writeEndElement();
         }
         if (header.getNames() != null && header.getNames().size() > 0) {
             for (int i = 0; i < header.getNames().size(); i++) {
-                
-                writer.writeStartElement("common","Name","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common");
+
+                writer.writeStartElement("common", "Name", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common");
                 if (header.getNames().get(i).getLang() != null) {
                     writer.writeAttribute("xml:lang", header.getNames().get(i).getLang());
                 }
@@ -121,7 +121,7 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
             }
         }
         if (header.getPrepared() != null && !"".equals(header.getPrepared())) {
-            writer.writeStartElement("message","Prepared","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+            writer.writeStartElement("message", "Prepared", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
             writer.writeCharacters(header.getPrepared().getDate().toString());
             writer.writeEndElement();
         }
@@ -133,7 +133,7 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
         //}
 
         if (header.getSender() != null && !"".equals(header.getSender())) {
-            writer.writeStartElement("message","Sender","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+            writer.writeStartElement("message", "Sender", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
             writer.writeAttribute("id", header.getSender().getId().toString());
             if (header.getSender().getNames() != null) {
                 for (Name n : header.getSender().getNames()) {
@@ -146,21 +146,21 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
             writer.writeEndElement();
         }
         if (header.getReceivers() != null && header.getReceivers().size() > 0) {
-            for(PartyType r:header.getReceivers()){
-            writer.writeStartElement("message","Receiver","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
-            writer.writeAttribute("id", r.getId().toString());
-            if (r.getNames() != null) {
-                for (Name n : r.getNames()) {
-                    writeName(writer, n);
+            for (PartyType r : header.getReceivers()) {
+                writer.writeStartElement("message", "Receiver", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+                writer.writeAttribute("id", r.getId().toString());
+                if (r.getNames() != null) {
+                    for (Name n : r.getNames()) {
+                        writeName(writer, n);
+                    }
                 }
-            }
-            if (r.getContacts() != null && r.getContacts().size() > 0) {
-                for(ContactType c:r.getContacts()) {
-                    writeContact(writer, c);
+                if (r.getContacts() != null && r.getContacts().size() > 0) {
+                    for (ContactType c : r.getContacts()) {
+                        writeContact(writer, c);
+                    }
+
                 }
-                
-            }
-            writer.writeEndElement();
+                writer.writeEndElement();
             }
         }
         if (header.getDataSetAction() != null && !"".equals(header.getDataSetAction())) {
@@ -184,13 +184,13 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
             writer.writeEndElement();
         }
 
-        if( header.getStructures()!=null&&header.getStructures().size()>0) {
-            System.out.println("Writing PayLoadStructure");
+        if (header.getStructures() != null && header.getStructures().size() > 0) {
+            //System.out.println("Writing PayLoadStructure");
             for (Iterator<sdmx.common.PayloadStructureType> it = header.getStructures().iterator(); it.hasNext();) {
                 PayloadStructureType st = (PayloadStructureType) it.next();
                 writeStructure(st);
             }
-        }else {
+        } else {
             PayloadStructureType payload = new PayloadStructureType();
             payload.setStructure(ref.asDataStructureReference());
             writeStructure(payload);
@@ -267,12 +267,12 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
 
     @Override
     public void newDataSet() {
-    
-        System.out.println("New DataSet");
+
+        //System.out.println("New DataSet");
         try {
             if (namespaceprefix == null || namespace == null) {
 
-                writer.writeStartElement("message","DataSet","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+                writer.writeStartElement("message", "DataSet", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
 
             } else {
                 writer.writeStartElement(namespaceprefix, "DataSet", namespace);
@@ -327,7 +327,7 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
 
     @Override
     public void newSeries() {
-        System.out.println("New Series");
+        //System.out.println("New Series");
         if (namespaceprefix == null || namespace == null) {
             try {
                 writer.writeStartElement("Series");
@@ -345,10 +345,10 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
 
     @Override
     public void newObservation() {
-        System.out.println("New Obs");
+        //System.out.println("New Obs");
         if (namespaceprefix == null || namespace == null) {
             try {
-                                writer.writeStartElement("Obs");
+                writer.writeStartElement("Obs");
             } catch (XMLStreamException ex) {
                 Logger.getLogger(StreamingStructureSpecificTimeSeriesWriter.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -381,7 +381,7 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
 
     @Override
     public void writeObservationComponent(String name, String val) {
-        System.out.println("N:"+name+"val:"+val);
+        //System.out.println("N:" + name + "val:" + val);
         try {
             writer.writeAttribute(name, val);
         } catch (XMLStreamException ex) {
@@ -396,7 +396,7 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
 
     @Override
     public void finishObservation() {
-        System.out.println("Fin Obs");
+        //System.out.println("Fin Obs");
         try {
             writer.writeEndElement();
         } catch (XMLStreamException ex) {
@@ -406,7 +406,7 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
 
     @Override
     public void finishSeries() {
-        System.out.println("Fin Series");
+        //System.out.println("Fin Series");
         try {
             writer.writeEndElement();
         } catch (XMLStreamException ex) {
@@ -416,7 +416,7 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
 
     @Override
     public DataSet finishDataSet() {
-        System.out.println("Fin DataSet");
+       // System.out.println("Fin DataSet");
         try {
             writer.writeEndElement();
         } catch (XMLStreamException ex) {
@@ -427,8 +427,8 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
 
     @Override
     public void headerParsed(BaseHeaderType header) {
-        System.out.println("Header Parsed");
-        this.header=header;
+        //System.out.println("Header Parsed");
+        this.header = header;
         try {
             writeHeader();
         } catch (XMLStreamException ex) {
@@ -470,30 +470,35 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
         } catch (IOException ex) {
             Logger.getLogger(StreamingStructureSpecificTimeSeriesWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
+
     }
-        /*
--<message:Structurenamespace="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=ECB:ECB_EXR_NG(1.0):ObsLevelDim:TIME_PERIOD" dimensionAtObservation="TIME_PERIOD" structureID="STR1">
+    /*
+     -<message:Structurenamespace="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=ECB:ECB_EXR_NG(1.0):ObsLevelDim:TIME_PERIOD" dimensionAtObservation="TIME_PERIOD" structureID="STR1">
 
 
--<common:Structure>
+     -<common:Structure>
 
-<Ref id="ECB_EXR_NG" version="1.0" agencyID="ECB"/>
+     <Ref id="ECB_EXR_NG" version="1.0" agencyID="ECB"/>
 
-</common:Structure>
+     </common:Structure>
 
-</message:Structure>
-        */
+     </message:Structure>
+     */
+
     public void writeStructure(PayloadStructureType st) {
         try {
-            writer.writeStartElement("message","Structure","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
-            if( st.getNamespace()!=null){writer.writeAttribute("namespace", st.getNamespace().toString());}
-            if( st.getDimensionAtObservation()!=null) {
+            writer.writeStartElement("message", "Structure", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+            if (st.getNamespace() != null) {
+                writer.writeAttribute("namespace", st.getNamespace().toString());
+            }
+            if (st.getDimensionAtObservation() != null) {
                 writer.writeAttribute("dimensionAtObservation", st.getDimensionAtObservation().toString());
-            }else{
+            } else if (this.dimensionAtObservation != null) {
                 writer.writeAttribute("dimensionAtObservation", dimensionAtObservation);
             }
-            writer.writeAttribute("structureID",st.getStructureID().toString());
+            if (st.getStructureID() != null) {
+                writer.writeAttribute("structureID", st.getStructureID().toString());
+            }
             writer.writeStartElement("common", "Structure", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common");
             writer.writeStartElement("Ref");
             writer.writeAttribute("id", st.getStructure().getMaintainableParentId().toString());
@@ -508,14 +513,17 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
     }
 
     private String dimensionAtObservation = null;
+
     @Override
     public void setDimensionAtObservationHint(String s) {
-        dimensionAtObservation=s;
+        dimensionAtObservation = s;
     }
+
     @Override
     public String getDimensionAtObservationHint() {
         return dimensionAtObservation;
     }
+
     @Override
     public Registry getRegistry() {
         return registry;
@@ -523,12 +531,12 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
 
     @Override
     public void setRegistry(Registry reg) {
-        this.registry=reg;
+        this.registry = reg;
     }
 
     @Override
     public void setDataflow(DataflowType flow) {
-        this.flow=flow;
+        this.flow = flow;
         this.ref = flow.getStructure();
     }
 

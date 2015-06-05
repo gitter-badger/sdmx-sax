@@ -175,17 +175,18 @@ public class StructureSpecificEventHandler {
     List<ContactType> contacts = null;
     boolean in_contact = false;
     ContactType contact = null;
-    
+
     List<DataSet> dataSets = new ArrayList<DataSet>();
 
     public StructureSpecificEventHandler() {
     }
+
     public StructureSpecificEventHandler(DataSetWriter writer) {
-        this.writer=writer;
+        this.writer = writer;
     }
 
     public StructureSpecificEventHandler(ParseDataCallbackHandler cbHandler) {
-        this.cbHandler=cbHandler;
+        this.cbHandler = cbHandler;
         writer = cbHandler.getDataSetWriter();
     }
 
@@ -203,7 +204,7 @@ public class StructureSpecificEventHandler {
         return doc;
     }
 
-    public void startRootElement(String localName,Attributes atts) {
+    public void startRootElement(String localName, Attributes atts) {
         state = STATE_START;
         if (atts.getValue("xsi:schemaLocation") != null || atts.getValue("schemaLocation") != null) {
             // ABS Data has this, UIS Does Not
@@ -277,7 +278,7 @@ public class StructureSpecificEventHandler {
         state = STATE_HEADEREND;
         // Insert witty assertions here
         //System.out.println("cbHandler="+cbHandler);
-        if( cbHandler!=null ) {
+        if (cbHandler != null) {
             cbHandler.headerParsed(header);
         }
     }
@@ -668,13 +669,19 @@ public class StructureSpecificEventHandler {
     void startMessageStructure(Attributes atts) {
         payload = new PayloadStructureType();
         payload.setStructureID(new ID(atts.getValue("structureID")));
-        payload.setDimensionAtObservation(new ObservationDimensionType(atts.getValue("dimensionAtObservation")));
-        try {
-            payload.setNamespace(new anyURI(atts.getValue("namespace")));
-        } catch (URISyntaxException uri) {
-
+        if (atts.getValue("dimensionAtObservation") != null) {
+            payload.setDimensionAtObservation(new ObservationDimensionType(atts.getValue("dimensionAtObservation")));
         }
-        payload.setExplicitMeasures(Boolean.valueOf(atts.getValue("explicitMeasures")));
+        if (atts.getValue("namespace") != null) {
+            try {
+                payload.setNamespace(new anyURI(atts.getValue("namespace")));
+            } catch (URISyntaxException uri) {
+
+            }
+        }
+        if (atts.getValue("explicitMeasures") != null) {
+            payload.setExplicitMeasures(Boolean.valueOf(atts.getValue("explicitMeasures")));
+        }
 
     }
 
@@ -701,7 +708,7 @@ public class StructureSpecificEventHandler {
     void startRef(Attributes atts) {
         //System.out.println("Start Ref!!!");
         StructureRef ref = new StructureRef(new NestedNCNameID(atts.getValue("agencyID")),
-                new IDType(atts.getValue("id")),new Version(atts.getValue("version")),ObjectTypeCodelistType.DATASTRUCTURE, PackageTypeCodelistType.DATASTRUCTURE);
+                new IDType(atts.getValue("id")), new Version(atts.getValue("version")), ObjectTypeCodelistType.DATASTRUCTURE, PackageTypeCodelistType.DATASTRUCTURE);
         StructureReference reference = new StructureReference(ref, null);
         payload.setStructure(reference);
         //System.out.println("Structure="+payload.getStructure());
@@ -710,8 +717,9 @@ public class StructureSpecificEventHandler {
     void endRef() {
 
     }
-    public void endDocument(){
-        if( cbHandler!=null) {
+
+    public void endDocument() {
+        if (cbHandler != null) {
             cbHandler.documentFinished();
         }
     }
