@@ -26,6 +26,7 @@ import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structureddata.StructuredDataMessage;
 import sdmx.structureddata.StructuredDataSet;
 import sdmx.structureddata.StructuredValue;
+import sdmx.version.common.ParseParams;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -87,7 +88,10 @@ public class Example {
         q.setDataWhere(dpt);
         query.setQuery(q);
         long t3 = System.currentTimeMillis();
-        DataMessage dm = rep.query(query);
+        ParseParams params = new ParseParams();
+        params.setDataflow(flow);
+        params.setRegistry(reg);
+        DataMessage dm = rep.query(params,query);
         long t4 = System.currentTimeMillis();
         System.out.println("Got CompactData " + dm.getDataSets().get(0).size() + " observations " + (t4 - t3) + " ms");
 // Dump the dataset to System.out

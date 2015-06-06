@@ -166,7 +166,8 @@ public class Sdmx20DataWriteTest {
         long t2 = System.currentTimeMillis();
         OutputStream out = new FileOutputStream("testOut/DSID230571-out-scdw.xml");
         StreamingCompactDataWriter w2 = StreamingCompactDataWriter.openWriter(out);
-        SdmxIO.parseData(in,w2);
+        params.setCallbackHandler(w2);
+        SdmxIO.parseData(params,in);
         long t3 = System.currentTimeMillis();
         System.out.println("Time to Stream Compact 2.0 DSID1230571 - "+(t3-t2));
     }
@@ -182,7 +183,8 @@ public class Sdmx20DataWriteTest {
         long t2 = System.currentTimeMillis();
         OutputStream out = new FileOutputStream("testOut/DSID230571-out-sgdw.xml");
         StreamingGenericDataWriter w2 = StreamingGenericDataWriter.openWriter(out,registry,struct.getStructures().getDataStructures().getDataStructures().get(0).asDataflow());
-        SdmxIO.parseData(in,w2);
+        params.setCallbackHandler(w2);
+        SdmxIO.parseData(params,in);
         long t3 = System.currentTimeMillis();
         System.out.println("Time to Stream Generic 2.0 DSID1230571 - "+(t3-t2));
     }    

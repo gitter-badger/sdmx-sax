@@ -60,8 +60,9 @@ public class Sdmx21StreamingDataWriterTest {
             params.setRegistry(reg);
             params.setDataflow(ref);
             ParseDataCallbackHandler cbHandler = SdmxIO.openForStreamWriting("application/vnd.sdmx.structurespecificdata+xml;version=2.1", fos, params);
+            params.setCallbackHandler(cbHandler);
             FileInputStream fin = new FileInputStream("test/resources/sdmx21-samples/exr/ecb_exr_ng/structured/ecb_exr_ng_ts.xml");
-            SdmxIO.parseData(fin, cbHandler);
+            SdmxIO.parseData(params,fin);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Sdmx21StreamingDataWriterTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -84,7 +85,8 @@ public class Sdmx21StreamingDataWriterTest {
             params.setDataflow(ref);
             ParseDataCallbackHandler cbHandler = SdmxIO.openForStreamWriting("application/vnd.sdmx.genericdata+xml;version=2.1", fos,params);
             FileInputStream fin = new FileInputStream("test/resources/sdmx21-samples/exr/ecb_exr_ng/generic/ecb_exr_ng_ts.xml");
-            SdmxIO.parseData(fin, cbHandler);
+            params.setCallbackHandler(cbHandler);
+            SdmxIO.parseData(params,fin);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Sdmx21StreamingDataWriterTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -109,10 +111,12 @@ public class Sdmx21StreamingDataWriterTest {
         InputStream dataIn = JSONStreamingTest.class.getResourceAsStream("/resources/uis-20/28b18979-129f-43bc-94ae-42f31add907a.xml");
         FileOutputStream fos = new FileOutputStream("testOut/uis-data-generic-2.1.xml");
         params.setDataflow(uisStruct.getStructures().getDataStructures().getDataStructures().get(0).asDataflow());
+        
         ParseDataCallbackHandler cbHandler = SdmxIO.openForStreamWriting("application/vnd.sdmx.genericdata+xml;version=2.1", fos, params);
+        params.setCallbackHandler(cbHandler);
         long t1 = System.currentTimeMillis();
         try {
-            SdmxIO.parseData(dataIn, cbHandler);
+            SdmxIO.parseData(params,dataIn);
             
             //data6.dump();
         } catch (ParseException ex) {
@@ -138,9 +142,10 @@ public class Sdmx21StreamingDataWriterTest {
         FileOutputStream fos = new FileOutputStream("testOut/uis-data-structurespecific-2.1.xml");
         params.setDataflow(uisStruct.getStructures().getDataStructures().getDataStructures().get(0).asDataflow());
         ParseDataCallbackHandler cbHandler = SdmxIO.openForStreamWriting("application/vnd.sdmx.structurespecificdata+xml;version=2.1", fos, params);
+        params.setCallbackHandler(cbHandler);
         long t1 = System.currentTimeMillis();
         try {
-            SdmxIO.parseData(dataIn, cbHandler);
+            SdmxIO.parseData(params,dataIn);
             
             //data6.dump();
         } catch (ParseException ex) {

@@ -159,7 +159,7 @@ public class RESTQueryable implements Queryable, Registry, Repository {
         return st;
     }
 
-    private DataMessage query(String urlString) throws MalformedURLException, IOException, ParseException {
+    private DataMessage query(ParseParams pparams,String urlString) throws MalformedURLException, IOException, ParseException {
         Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Query:" + urlString);
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(urlString);
@@ -187,7 +187,7 @@ public class RESTQueryable implements Queryable, Registry, Repository {
             IOUtils.copy(in, file);
             in = new FileInputStream(name);
         }
-        DataMessage msg = SdmxIO.parseData(in);
+        DataMessage msg = SdmxIO.parseData(pparams,in);
         if (msg == null) {
             System.out.println("Data is null!");
         }
@@ -226,7 +226,7 @@ public class RESTQueryable implements Queryable, Registry, Repository {
      }*/
 
     @Override
-    public DataMessage query(DataQueryMessage message) {
+    public DataMessage query(ParseParams pparams,DataQueryMessage message) {
         Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Query: DataQueryMessage" + message);
         IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataflow().get(0).getMaintainableParentId();
         NestedNCNameID agency = new NestedNCNameID(this.getAgencyId());
@@ -266,7 +266,7 @@ public class RESTQueryable implements Queryable, Registry, Repository {
         String endTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getEnd().toString();
         DataMessage msg = null;
         try {
-            msg = query(getServiceURL() + "/data/" + flowid + "/" + q.toString() + "?startPeriod=" + startTime + "&endPeriod=" + endTime);
+            msg = query(pparams,getServiceURL() + "/data/" + flowid + "/" + q.toString() + "?startPeriod=" + startTime + "&endPeriod=" + endTime);
         } catch (IOException ex) {
             Logger.getLogger("sdmx").log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {

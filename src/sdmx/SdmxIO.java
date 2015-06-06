@@ -95,6 +95,8 @@ public class SdmxIO {
             Class.forName("sdmx.version.twopointone.Sdmx21MessageWriterProvider");
             Class.forName("sdmx.version.twopointone.Sdmx21StreamWriterProvider");
             Class.forName("sdmx.version.twopointzero.Sdmx20ParserProvider");
+            Class.forName("sdmx.version.twopointzero.Sdmx20MessageWriterProvider");
+            Class.forName("sdmx.version.twopointzero.Sdmx20StreamWriterProvider");
             Class.forName("sdmx.version.json.JSONStreamWriterProvider");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SdmxIO.class.getName()).log(Level.SEVERE, null, ex);
@@ -223,6 +225,7 @@ public class SdmxIO {
         params.setHeader(header);
         return prov.parseData(params,push);
     }
+    /*
     public static void parseData(InputStream in,ParseDataCallbackHandler cbHandler) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackInputStream push = new PushbackInputStream(in,8192);
@@ -235,8 +238,8 @@ public class SdmxIO {
         params.setHeader(header);
         params.setCallbackHandler(cbHandler);
         prov.parseData(params,push);
-    }
-    public static void parseData(ParseParams params,InputStream in,ParseDataCallbackHandler cbHandler) throws IOException,ParseException {
+    }*/
+    public static DataMessage parseData(ParseParams params,InputStream in) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackInputStream push = new PushbackInputStream(in,8192);
         String header = getHeader(push);
@@ -245,10 +248,9 @@ public class SdmxIO {
             throw new ParseException("Unable to find Parser provider");
         }
         params.setHeader(header);
-        params.setCallbackHandler(cbHandler);
-        prov.parseData(params,push);
+        return prov.parseData(params,push);
     }
-    
+    /*
     public static void parseData(Reader in,ParseDataCallbackHandler cbHandler) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackReader push = new PushbackReader(in,8192);
@@ -262,8 +264,8 @@ public class SdmxIO {
         params.setCallbackHandler(cbHandler);
         prov.parseData(params,push);
     }
-    
-    public static void parseData(ParseParams params,Reader in,ParseDataCallbackHandler cbHandler) throws IOException,ParseException {
+    */
+    public static DataMessage parseData(ParseParams params,Reader in) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackReader push = new PushbackReader(in,8192);
         String header = getHeader(push);
@@ -272,8 +274,7 @@ public class SdmxIO {
             throw new ParseException("Unable to find Parser provider");
         }
         params.setHeader(header);
-        params.setCallbackHandler(cbHandler);
-        prov.parseData(params,push);
+        return prov.parseData(params,push);
     }
     
     public static SdmxParserProvider findParserProvider(String header) throws IOException {
@@ -336,19 +337,19 @@ public class SdmxIO {
         BufferedOutputStream out = new BufferedOutputStream(out1);
         return provider.openForWriting(mime, out, params);
     }
-    public static void write(String mime,DataMessage message,OutputStream out) throws IOException {
+    public static void write(ParseParams params,String mime,DataMessage message,OutputStream out) throws IOException {
         SdmxWriterProvider writer = findWriterProvider(mime);
         if( writer==null) {
             throw new RuntimeException("Not Writer found for MIME type:"+mime);
         }
-        writer.save(mime, out, message);
+        writer.save(params,mime, out, message);
     }
-    public static void write(String mime,StructureType message,OutputStream out) throws IOException {
+    public static void write(ParseParams params,String mime,StructureType message,OutputStream out) throws IOException {
         SdmxWriterProvider writer = findWriterProvider(mime);
         if( writer==null) {
             throw new RuntimeException("Not Writer found for MIME type:"+mime);
         }
-        writer.save(mime, out, message);
+        writer.save(params,mime, out, message);
     }
     public static List<String> listSupportedWriteMIMETypes() {
         List<String> result = new ArrayList<String>();
@@ -374,6 +375,8 @@ public class SdmxIO {
         DATA_MIMES.add("application/vnd.sdmx.structurespecificdata+xml;version=2.1");
         DATA_MIMES.add("application/vnd.sdmx.structurespecifictimeseriesdata+xml;version=2.1");
         DATA_MIMES.add("application/vnd.sdmx.data+json;version=1.0.0-wd");
+        DATA_MIMES.add("application/vnd.sdmx.compactdata+xml;version=2.0");
+        DATA_MIMES.add("application/vnd.sdmx.genericdata+xml;version=2.");
     }
     private static List<String> STRUCT_MIMES = new ArrayList<String>();
     static{

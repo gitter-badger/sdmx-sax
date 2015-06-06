@@ -16,11 +16,12 @@ import sdmx.message.DataMessage;
 import sdmx.message.DataQueryMessage;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionType;
+import sdmx.version.common.ParseParams;
 
 /**
  *
  * @author James
  */
 public interface Repository {
-    public DataMessage query(DataQueryMessage message);
+    public DataMessage query(ParseParams params,DataQueryMessage message);
 }

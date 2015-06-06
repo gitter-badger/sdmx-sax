@@ -162,7 +162,7 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
         return st;
     }
 
-    private DataMessage query(String urlString) throws MalformedURLException, IOException, ParseException {
+    private DataMessage query(ParseParams params,String urlString) throws MalformedURLException, IOException, ParseException {
         Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Retrieve Data:" + urlString);
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(urlString);
@@ -191,7 +191,7 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
             in = new FileInputStream(name);
         }
         System.out.println("Parsing!");
-        DataMessage msg = SdmxIO.parseData(in);
+        DataMessage msg = SdmxIO.parseData(params,in);
         if (msg == null) {
             System.out.println("Data is null!");
         }
@@ -205,7 +205,7 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
      */
 
     @Override
-    public DataMessage query(DataQueryMessage message) {
+    public DataMessage query(ParseParams pparams,DataQueryMessage message) {
         IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataflow().get(0).getMaintainableParentId();
         NestedNCNameID agency = new NestedNCNameID(this.getAgencyId());
         DataStructureType dst = null;
@@ -237,7 +237,7 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
         String endTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getEnd().toString();
         DataMessage msg = null;
         try {
-            msg = query(getServiceURL() + "/repository/data/" + flowid + "/" + q.toString() + "/"+agency+"?startPeriod=" + startTime + "&endPeriod=" + endTime);
+            msg = query(pparams,getServiceURL() + "/repository/data/" + flowid + "/" + q.toString() + "/"+agency+"?startPeriod=" + startTime + "&endPeriod=" + endTime);
         } catch (IOException ex) {
             Logger.getLogger(OpenSDMXRESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {

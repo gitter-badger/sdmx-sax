@@ -77,6 +77,7 @@ import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
+import sdmx.version.common.ParseParams;
 import sdmx.version.common.SOAPStrippingInputStream;
 import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
 import sdmx.version.twopointzero.Sdmx20QueryWriter;
@@ -198,7 +199,7 @@ public class Sdmx20SOAPQueryable implements Registry,Repository,Queryable {
         return null;
     }
 
-    public DataMessage query(DataQueryMessage message) {
+    public DataMessage query(ParseParams params,DataQueryMessage message) {
         message.setHeader(getBaseHeader());
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -231,7 +232,7 @@ public class Sdmx20SOAPQueryable implements Registry,Repository,Queryable {
                 }
             }
             ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-            return SdmxIO.parseData(query("GetCompactDataResult", bais, bytes.length));
+            return SdmxIO.parseData(params,query("GetCompactDataResult", bais, bytes.length));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -188,7 +188,7 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
         }
         return st;
     }
-    private DataMessage query(String urlString) throws MalformedURLException, IOException, ParseException {
+    private DataMessage query(ParseParams pparams,String urlString) throws MalformedURLException, IOException, ParseException {
         System.out.println("Query:" + urlString);
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(urlString);
@@ -217,7 +217,7 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
             in = new FileInputStream(name);
         }
         System.out.println("Parsing!");
-        DataMessage msg = SdmxIO.parseData(in);
+        DataMessage msg = SdmxIO.parseData(pparams,in);
         if (msg == null) {
             System.out.println("Data is null!");
         }
@@ -258,7 +258,7 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
         return st;
     }
 
-    public DataMessage query(DataQueryMessage message) {
+    public DataMessage query(ParseParams pparams,DataQueryMessage message) {
         IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataflow().get(0).getMaintainableParentId();
         NestedNCNameID agency = new NestedNCNameID(this.getAgencyId());
         DataStructureType dst = null;
@@ -290,7 +290,7 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
         String endTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getEnd().toString();
         DataMessage msg = null;
         try {
-            msg = query(getServiceURL() + "/getdata?dataflow=" + flowid + "&key=" + q.toString() + "&startTime=" + startTime + "&endTime=" + endTime);
+            msg = query(pparams,getServiceURL() + "/getdata?dataflow=" + flowid + "&key=" + q.toString() + "&startTime=" + startTime + "&endTime=" + endTime);
         } catch (IOException ex) {
             Logger.getLogger(KnoemaRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {

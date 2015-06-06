@@ -17,6 +17,6 @@ import sdmx.message.StructureType;
  */
 public interface SdmxWriterProvider {
     public List<String> getSupportedMIMETypes();
-    public void save(String mime,OutputStream out,DataMessage message) throws IOException;
-    public void save(String mime,OutputStream out,StructureType message) throws IOException;
+    public void save(ParseParams params,String mime,OutputStream out,DataMessage message) throws IOException;
+    public void save(ParseParams params,String mime,OutputStream out,StructureType message) throws IOException;
 }
