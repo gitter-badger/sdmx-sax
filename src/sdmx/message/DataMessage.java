@@ -121,6 +121,11 @@ public class DataMessage extends MessageType {
         }
         PayloadStructureType payload = structures.size()==0?null:structures.get(0);
         if( payload!=null ) {
+            System.out.println("Payload Ref:");
+            payload.getStructure().dump();
+            System.out.println("New Ref");
+            ref.dump();
+            
             return;
         }
         payload = new PayloadStructureType();

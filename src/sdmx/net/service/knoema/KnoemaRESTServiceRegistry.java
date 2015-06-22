@@ -188,7 +188,7 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
         }
         return st;
     }
-    private DataMessage query(ParseParams pparams,String urlString) throws MalformedURLException, IOException, ParseException {
+    public DataMessage query(ParseParams pparams,String urlString) throws MalformedURLException, IOException, ParseException {
         System.out.println("Query:" + urlString);
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(urlString);

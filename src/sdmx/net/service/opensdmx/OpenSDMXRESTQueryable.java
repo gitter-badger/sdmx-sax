@@ -162,7 +162,8 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
         return st;
     }
 
-    private DataMessage query(ParseParams params,String urlString) throws MalformedURLException, IOException, ParseException {
+    @Override
+    public DataMessage query(ParseParams params,String urlString) throws MalformedURLException, IOException, ParseException {
         Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Retrieve Data:" + urlString);
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(urlString);

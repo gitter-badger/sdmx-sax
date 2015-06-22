@@ -84,7 +84,7 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
 
     private boolean in_series_key = false;
     private boolean in_series_attributes = false;
-    
+
     private boolean in_obs_attributes = false;
 
     public StreamingGenericDataWriter(OutputStream out, Registry reg, DataflowType flow) {
@@ -129,7 +129,9 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
         if (header.getNames() != null && header.getNames().size() > 0) {
             for (int i = 0; i < header.getNames().size(); i++) {
                 writer.writeStartElement("Name");
-                writer.writeAttribute("xml:lang", header.getNames().get(i).getLang());
+                if (header.getNames().get(i).getLang() != null) {
+                    writer.writeAttribute("xml:lang", header.getNames().get(i).getLang());
+                }
                 writer.writeCharacters(header.getNames().get(i).getText());
                 writer.writeEndElement();
             }
@@ -267,7 +269,7 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
     public void newDataSet() {
         //System.out.println("New DataSet");
         try {                                  //http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic
-            writer.writeStartElement("generic","DataSet", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic");
+            writer.writeStartElement("generic", "DataSet", "http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic");
         } catch (XMLStreamException ex) {
             Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -324,12 +326,12 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
         } catch (XMLStreamException ex) {
             Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        in_series_key=true;
+        in_series_key = true;
     }
 
     @Override
     public void newObservation() {
-       // System.out.println("New Obs");
+        // System.out.println("New Obs");
         if (in_series_key) {
             try {
                 //System.out.println("Ending Series Key");
@@ -353,7 +355,7 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
         } catch (XMLStreamException ex) {
             Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        in_obs_attributes=false;
+        in_obs_attributes = false;
     }
 
     @Override
@@ -412,8 +414,8 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
                 Logger.getLogger(StreamingGenericDataWriter.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            if( !in_obs_attributes) {
-                in_obs_attributes=true;
+            if (!in_obs_attributes) {
+                in_obs_attributes = true;
                 try {
                     writer.writeStartElement("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/generic", "Attributes");
                 } catch (XMLStreamException ex) {
@@ -439,7 +441,7 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
 
     @Override
     public void finishObservation() {
-        if( in_obs_attributes ) {
+        if (in_obs_attributes) {
             try {
                 writer.writeEndElement();
             } catch (XMLStreamException ex) {
@@ -460,7 +462,7 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
     public void finishSeries() {
         //System.out.println("Fin Series");
         try {
-            if( in_series_key||in_series_attributes){
+            if (in_series_key || in_series_attributes) {
                 writer.writeEndElement(); // SeriesKey or Attributes
             }
             writer.writeEndElement(); // Series
@@ -537,14 +539,17 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
     }
 
     private String dimensionAtObservation = null;
+
     @Override
     public void setDimensionAtObservationHint(String s) {
-        dimensionAtObservation=s;
+        dimensionAtObservation = s;
     }
+
     @Override
     public String getDimensionAtObservationHint() {
         return dimensionAtObservation;
     }
+
     @Override
     public Registry getRegistry() {
         return registry;
@@ -552,7 +557,7 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
 
     @Override
     public void setRegistry(Registry reg) {
-        this.registry=reg;
+        this.registry = reg;
     }
 
     @Override

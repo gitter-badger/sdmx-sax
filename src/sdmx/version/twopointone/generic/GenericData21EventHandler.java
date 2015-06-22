@@ -127,8 +127,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
     private boolean in_series = false;
     private ParseDataCallbackHandler cbHandler = null;
     DataSetWriter writer = null;
-    
-    
+
     String xmlLang = null;
     Name name = null; // Temp Name
     List<String> telephones = null;
@@ -151,23 +150,24 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
     boolean in_header = false;
     boolean in_sender = false;
     boolean in_receiver = false;
-    
+
     SenderType sender = null;
     PartyType receiver = null;
-    
+
     List<ContactType> contacts = null;
     boolean in_contact = false;
     ContactType contact = null;
-    
+
     public GenericData21EventHandler() {
     }
 
     public GenericData21EventHandler(DataSetWriter writer) {
         this.writer = writer;
     }
+
     public GenericData21EventHandler(ParseDataCallbackHandler cbHandler) {
         this.cbHandler = cbHandler;
-        this.writer=cbHandler.getDataSetWriter();
+        this.writer = cbHandler.getDataSetWriter();
     }
 
     public DataMessage getDataMessage() {
@@ -231,7 +231,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
         contacts = new ArrayList<ContactType>();
         in_sender = true;
     }
-    
+
     public void endHeaderSender() {
         in_sender = false;
         names = null;
@@ -244,7 +244,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
     public void endHeader() {
         state = STATE_HEADEREND;
         // Insert witty assertions here
-        if( cbHandler!=null) {
+        if (cbHandler != null) {
             cbHandler.headerParsed(header);
         }
     }
@@ -292,7 +292,9 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
 
     public void endDataSet() {
         state = STATE_DATASETEND;
-        datasets.add(writer.finishDataSet());
+        DataSet ds = writer.finishDataSet();
+        System.out.println("Read DataSet: Size="+ds.size());
+        datasets.add(ds);
     }
 
     public void endRootElement() {
@@ -306,10 +308,10 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
             names = new ArrayList<Name>();
         }
     }
-    
+
     public void endName() {
         in_name = false;
-        if (state == STATE_HEADER ) {
+        if (state == STATE_HEADER) {
             header.setNames(names);
         }
         if (in_contact) {
@@ -324,7 +326,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
             receiver.setNames(names);
             return;
         }
-        
+
     }
 
     public void characters(char[] c) {
@@ -417,6 +419,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
                     uri = new anyURI(new String(c));
                 } catch (URISyntaxException ex) {
                     Logger.getLogger(StructureSpecificEventHandler.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
                 }
                 StructureReference reference = new StructureReference(uri);
                 payload.setStructure(reference);
@@ -443,6 +446,9 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
                 break;
             case STATE_DATASETATTRIBUTES:
                 writer.writeDataSetComponent(atts.getValue("id"), atts.getValue("value"));
+                break;
+            case STATE_OBS:
+                writer.writeObservationComponent(atts.getValue("id"), atts.getValue("value"));
                 break;
         }
 
@@ -522,7 +528,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
         names = null;
         in_contact = true;
     }
-    
+
     void startTelephone(Attributes atts) {
         in_telephone = true;
         telephones = contact.getTelephones();
@@ -531,7 +537,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
         }
         contact.setTelephones(telephones);
     }
-    
+
     void startDepartment(Attributes atts) {
         in_department = true;
         depts = contact.getDepartments();
@@ -540,7 +546,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
         }
         contact.setDepartments(depts);
     }
-    
+
     void startX400(Attributes atts) {
         in_x400 = true;
         x400s = contact.getX400s();
@@ -549,7 +555,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
         }
         contact.setX400s(x400s);
     }
-    
+
     void startFax(Attributes atts) {
         in_fax = true;
         faxes = contact.getFaxes();
@@ -558,7 +564,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
         }
         contact.setFaxes(faxes);
     }
-    
+
     void endContact() {
         in_contact = false;
         contact.setDepartments(depts);
@@ -570,27 +576,27 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
         contacts.add(contact);
         contact = null;
     }
-    
+
     void endTelephone() {
         in_telephone = false;
         contact.setTelephones(telephones);
     }
-    
+
     void endDepartment() {
         in_department = false;
         contact.setDepartments(depts);
     }
-    
+
     void endtX400() {
         in_x400 = false;
         contact.setX400s(x400s);
     }
-    
+
     void endFax() {
         in_fax = false;
         contact.setFaxes(faxes);
     }
-    
+
     void startReceiver(Attributes atts) {
         state = STATE_HEADER_RECEIVER;
         receiver = new PartyType();
@@ -600,7 +606,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
         contacts = new ArrayList<ContactType>();
         in_receiver = true;
     }
-    
+
     void endReceiver() {
         List<PartyType> receivers = header.getReceivers();
         if (receivers == null) {
@@ -611,7 +617,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
         header.setReceivers(receivers);
         in_receiver = false;
     }
-    
+
     void startRole(Attributes atts) {
         in_role = true;
         roles = contact.getRoles();
@@ -620,7 +626,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
         }
         contact.setRoles(roles);
     }
-    
+
     void startURI(Attributes atts) {
         in_uri = true;
         uris = contact.getUris();
@@ -629,7 +635,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
         }
         contact.setUris(uris);
     }
-    
+
     void startEmail(Attributes atts) {
         in_email = true;
         emails = contact.getEmails();
@@ -638,15 +644,15 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
         }
         contact.setEmails(emails);
     }
-    
+
     void endRole() {
         in_role = false;
     }
-    
+
     void endURI() {
         in_uri = false;
     }
-    
+
     void endEmail() {
         in_email = false;
     }
@@ -701,7 +707,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
 
     public void startRef(Attributes atts) {
         StructureRef ref = new StructureRef(new NestedNCNameID(atts.getValue("agencyID")),
-                new IDType(atts.getValue("id")),new Version(atts.getValue("version")),ObjectTypeCodelistType.DATASTRUCTURE, PackageTypeCodelistType.DATASTRUCTURE);
+                new IDType(atts.getValue("id")), new Version(atts.getValue("version")), ObjectTypeCodelistType.DATASTRUCTURE, PackageTypeCodelistType.DATASTRUCTURE);
         StructureReference reference = new StructureReference(ref, null);
         payload.setStructure(reference);
     }
@@ -723,6 +729,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
     public void endCommonStructure() {
 
     }
+
     public void startURN(Attributes atts) {
         state = STATE_URN;
     }
@@ -732,9 +739,9 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
     }
 
     public void endDocument() {
-        if( cbHandler!=null) {
+        if (cbHandler != null) {
             cbHandler.documentFinished();
         }
-        
+
     }
 }

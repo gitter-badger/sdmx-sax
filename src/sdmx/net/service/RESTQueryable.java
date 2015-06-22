@@ -159,7 +159,7 @@ public class RESTQueryable implements Queryable, Registry, Repository {
         return st;
     }
 
-    private DataMessage query(ParseParams pparams,String urlString) throws MalformedURLException, IOException, ParseException {
+    public DataMessage query(ParseParams pparams,String urlString) throws MalformedURLException, IOException, ParseException {
         Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Query:" + urlString);
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(urlString);
@@ -461,4 +461,5 @@ public class RESTQueryable implements Queryable, Registry, Repository {
     public void save(OutputStream out) throws IOException {
         local.save(out);
     }
+
 }

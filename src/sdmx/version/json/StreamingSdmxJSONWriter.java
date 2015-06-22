@@ -137,7 +137,7 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
     public void newObservation() {
         if (!has_series && !written_observations_header) {
             try {
-                writer.name("observations").beginArray();
+                writer.name("observations").beginObject();
             } catch (IOException ex) {
                 Logger.getLogger(StreamingSdmxJSONWriter.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -205,6 +205,7 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
 
     @Override
     public void writeObservationComponent(String name, String val) {
+        System.out.println("WriteObsComponent"+name+":"+val);
         if (struct.isDimension(name)) {
             List<String> list = obsValues.get(name);
             if (list == null) {
@@ -212,6 +213,7 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
                 obsValues.put(name, list);
             }
             obsKey.add(register(list, val));
+            System.out.println("obsKey:"+toKeyString(obsKey));
         } else if (struct.isAttribute(name)) {
             List<String> list = obsAtts.get(name);
             if (list == null) {
@@ -661,6 +663,9 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
                 Component c = struct.findComponent(obsAttsArray[i]);
                 ConceptType concept = registry.find(c.getConceptIdentity());
                 writer.name("name").value(NameableType.toString(concept));
+                if( concept == null ) {
+                    System.out.println("Null Concept="+obsAttsArray[i]);
+                }
                 if (concept.findDescription(locale.getLanguage()) != null) {
                     writer.name("description").value(concept.findDescription(locale.getLanguage()).getText());
                 }

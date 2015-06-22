@@ -98,6 +98,7 @@ public class SdmxIO {
             Class.forName("sdmx.version.twopointzero.Sdmx20MessageWriterProvider");
             Class.forName("sdmx.version.twopointzero.Sdmx20StreamWriterProvider");
             Class.forName("sdmx.version.json.JSONStreamWriterProvider");
+            Class.forName("sdmx.version.json.JSONMessageWriterProvider");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SdmxIO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -376,7 +377,7 @@ public class SdmxIO {
         DATA_MIMES.add("application/vnd.sdmx.structurespecifictimeseriesdata+xml;version=2.1");
         DATA_MIMES.add("application/vnd.sdmx.data+json;version=1.0.0-wd");
         DATA_MIMES.add("application/vnd.sdmx.compactdata+xml;version=2.0");
-        DATA_MIMES.add("application/vnd.sdmx.genericdata+xml;version=2.");
+        DATA_MIMES.add("application/vnd.sdmx.genericdata+xml;version=2.0");
     }
     private static List<String> STRUCT_MIMES = new ArrayList<String>();
     static{

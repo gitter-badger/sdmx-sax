@@ -105,6 +105,7 @@ public class StructuredDataSet implements DataSet, Attachable {
 
     @Override
     public int size() {
+        if( observations!=null ) return observations.size();
         int result = 0;
         for (int i = 0; i < series.size(); i++) {
             result += series.get(i).size();

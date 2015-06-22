@@ -1,12 +1,16 @@
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import sdmx.Queryable;
 import sdmx.Registry;
 import sdmx.Repository;
 import sdmx.SdmxIO;
+import sdmx.exception.ParseException;
 import sdmx.message.DataMessage;
 import sdmx.message.DataQueryMessage;
 import sdmx.net.ServiceList;
@@ -91,7 +95,14 @@ public class Example {
         ParseParams params = new ParseParams();
         params.setDataflow(flow);
         params.setRegistry(reg);
-        DataMessage dm = rep.query(params,query);
+        DataMessage dm = null;
+        try {
+            dm = rep.query(params,query);
+        } catch (ParseException ex) {
+            Logger.getLogger(Example.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Example.class.getName()).log(Level.SEVERE, null, ex);
+        }
         long t4 = System.currentTimeMillis();
         System.out.println("Got CompactData " + dm.getDataSets().get(0).size() + " observations " + (t4 - t3) + " ms");
 // Dump the dataset to System.out

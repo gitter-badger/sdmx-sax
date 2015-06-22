@@ -225,7 +225,7 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
         return st;
     }
 
-    private DataMessage query(ParseParams params,String urlString) throws MalformedURLException, IOException, ParseException {
+    public DataMessage query(ParseParams params,String urlString) throws MalformedURLException, IOException, ParseException {
         Logger.getLogger("sdmx").info("ILORestServiceRegistry: query "+urlString);
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(urlString);

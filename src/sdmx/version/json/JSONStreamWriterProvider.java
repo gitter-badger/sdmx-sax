@@ -45,6 +45,7 @@ public class JSONStreamWriterProvider implements SdmxStreamWriterProvider {
     public ParseDataCallbackHandler openForWriting(String mime, OutputStream out,ParseParams params) {
         if("application/vnd.sdmx.data+json;version=1.0.0-wd".equals(mime)){
             StreamingSdmxJSONWriter writer = new StreamingSdmxJSONWriter(out, params.getRegistry(), params.getDataflow());
+            writer.setLocale(params.getLocale());
             return writer;
         }
         throw new RuntimeException("MIME type:"+mime+" not supported by "+getClass().getName());

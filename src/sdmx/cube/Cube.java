@@ -44,6 +44,7 @@ import sdmx.structureddata.ValueTypeResolver;
  */
 public class Cube {
 
+    private int size = 0;
     private List<String> order = null;
     DataStructureType struct = null;
     private HashMap<String, List<String>> validCodes = new HashMap<String, List<String>>();
@@ -135,6 +136,7 @@ public class Cube {
                 cubeobs.putAttribute(new CubeAttribute(name, value));
             }
         }
+        size++;
     }
 
     public CubeObservation find(FullKey key) {
@@ -199,5 +201,12 @@ public class Cube {
 
     public List<String> getValidCodes(String col) {
         return validCodes.get(col);
+    }
+
+    /**
+     * @return the size
+     */
+    public int getSize() {
+        return size;
     }
 }

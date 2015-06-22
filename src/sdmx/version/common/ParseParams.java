@@ -5,6 +5,7 @@
  */
 package sdmx.version.common;
 
+import java.util.Locale;
 import sdmx.Registry;
 import sdmx.commonreferences.DataStructureReference;
 import sdmx.structure.dataflow.DataflowType;
@@ -33,6 +34,7 @@ public class ParseParams {
      private DataStructureType structure = null;
      private String header = null;
      private ParseDataCallbackHandler callbackHandler = null;
+     private Locale locale = Locale.ENGLISH;
 
      public ParseParams() {
      }
@@ -181,6 +183,20 @@ public class ParseParams {
      */
     public void setCallbackHandler(ParseDataCallbackHandler callbackHandler) {
         this.callbackHandler = callbackHandler;
+    }
+
+    /**
+     * @return the locale
+     */
+    public Locale getLocale() {
+        return locale;
+    }
+
+    /**
+     * @param locale the locale to set
+     */
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
      
 }

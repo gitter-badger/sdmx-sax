@@ -130,13 +130,12 @@ public class ValueTypeResolver {
                 }
             }
         } else {
-            
             CodeType itm = new CodeType();
-            Name name = new Name(Locale.getDefault().getLanguage(), value);
+            Name name = new Name(Locale.getDefault().getLanguage(),value);
             List<Name> names = Collections.singletonList(name);
             itm.setNames(names);
-            throw new RuntimeException("Rep is null!");
-            //return itm;
+            //throw new RuntimeException("Rep is null!");
+            return itm;
         }
         return null;
     }

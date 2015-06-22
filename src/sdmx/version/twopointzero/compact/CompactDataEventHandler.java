@@ -318,7 +318,7 @@ public class CompactDataEventHandler extends Sdmx20EventHandler {
         state = STATE_SERIES;
         in_series = true;
         writer.newSeries();
-        for (int i = atts.getLength() - 1; i >= 0; i--) {
+        for (int i = 0; i < atts.getLength(); i++) {
             String name = atts.getLocalName(i);
             String val = atts.getValue(i);
             writer.writeSeriesComponent(name, val);

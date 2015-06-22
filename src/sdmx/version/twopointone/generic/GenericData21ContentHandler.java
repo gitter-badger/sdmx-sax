@@ -114,7 +114,7 @@ public class GenericData21ContentHandler implements ContentHandler, ErrorHandler
             /*
          * This is really useful!!!
          * */
-        //System.out.println("localName=" + localName);
+        System.out.println(uri+":"+ localName);
         //for (int i = 0; i < atts.getLength(); i++) {
 //            System.out.println("Att=" + atts.getLocalName(i) + " val=" + atts.getValue(i));
 //        }
@@ -167,6 +167,8 @@ public class GenericData21ContentHandler implements ContentHandler, ErrorHandler
                 eh.startMessageStructure(atts);;
             } else if ("DataSet".equals(localName)) {
                 eh.startDataSet(uri, atts);
+            }else if ("URN".equals(localName)) {
+                eh.startURN(atts);
             }
         }
         if ("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common".equalsIgnoreCase(uri)) {
@@ -205,7 +207,9 @@ public class GenericData21ContentHandler implements ContentHandler, ErrorHandler
         if ("Ref".equals(localName)) {
             eh.startRef(atts);
         }
-
+        if ("URN".equals(localName)) {
+            eh.startURN(atts);
+        }
     }
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
@@ -294,6 +298,9 @@ public class GenericData21ContentHandler implements ContentHandler, ErrorHandler
         }
         if ("Ref".equals(localName)) {
             eh.endRef();
+        }
+        if ("URN".equals(localName)) {
+            eh.endURN();
         }
     }
 
