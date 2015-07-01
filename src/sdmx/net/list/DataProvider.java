@@ -57,8 +57,6 @@ public class DataProvider {
             LIST.add(new KnoemaDataProvider(12,"AfDB","http://opendataforafrica.org/api/1.0/sdmx",                                                      "Based on African Development Bank Group data(www.opendataforafrica.org)","Based on African Development Bank Group data(www.opendataforafrica.org)"));
             LIST.add(new SDWDataProvider(13,"NBB","http://stat.nbb.be/sdmxws/sdmx.asmx","http://stats.oecd.org/OECDStatWS/SDMX/",              "Based on National Bank of Belgium data","Based on National Bank of Belgium data"));
             LIST.add(new SDWDataProvider(14,"UKDS","https://stats.ukdataservice.ac.uk/sdmxws/sdmx.asmx","http://stats.oecd.org/OECDStatWS/SDMX/",              "Based on United Kingdom Data Service data","Based on United Kingdom Data Service data"));
-            
-            
         } catch (MalformedURLException ex) {
             Logger.getLogger(DataProvider.class.getName()).log(Level.SEVERE, null, ex);
         }

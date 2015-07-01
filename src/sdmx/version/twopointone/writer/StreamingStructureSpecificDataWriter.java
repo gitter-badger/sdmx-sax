@@ -28,6 +28,7 @@ import sdmx.Registry;
 import sdmx.common.Name;
 import sdmx.common.PayloadStructureType;
 import sdmx.commonreferences.DataStructureReference;
+import sdmx.commonreferences.Version;
 import sdmx.data.ColumnMapper;
 import sdmx.data.DataSet;
 import sdmx.data.DataSetWriter;
@@ -497,7 +498,11 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
             writer.writeStartElement("common", "Structure", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common");
             writer.writeStartElement("Ref");
             writer.writeAttribute("id", st.getStructure().getMaintainableParentId().toString());
-            writer.writeAttribute("version", st.getStructure().getVersion().toString());
+            if( st.getStructure().getVersion()!=null){
+                writer.writeAttribute("version", st.getStructure().getVersion().toString());
+            }else {
+                writer.writeAttribute("version", Version.ONE.toString());
+            }
             writer.writeAttribute("agencyID", st.getStructure().getAgencyId().toString());
             writer.writeEndElement();
             writer.writeEndElement();
