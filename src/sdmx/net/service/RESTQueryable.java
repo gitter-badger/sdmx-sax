@@ -461,5 +461,5 @@ public class RESTQueryable implements Queryable, Registry, Repository {
     public void save(OutputStream out) throws IOException {
         local.save(out);
     }
-
+    public void merge(){}
 }

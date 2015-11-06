@@ -115,9 +115,9 @@ public class ReferenceType implements Serializable {
         }
         if (this.urn == null) {
             try {
-                if (this.getAgencyId() != null) {
-                    produce();
-                }
+                //if (this.getAgencyId() != null) {
+                produce();
+                //}
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

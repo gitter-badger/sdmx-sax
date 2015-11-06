@@ -475,4 +475,5 @@ public class Sdmx20SOAPQueryable implements Registry,Repository,Queryable {
         local.load(st);
         local.save(out);
     }
+    public void merge(){}
 }

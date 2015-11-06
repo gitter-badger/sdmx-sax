@@ -493,4 +493,5 @@ public class Sdmx20NSIQueryable implements Registry,Repository,Queryable {
     public void save(OutputStream out) throws IOException {
         local.save(out);
     }
+    public void merge(){}
 }

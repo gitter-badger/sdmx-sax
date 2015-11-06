@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sdmx.net.service.knoema;
+package sdmx.net.service.wb;
 
+import sdmx.net.service.ilo.*;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,8 +18,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.IOUtils;
@@ -33,10 +34,13 @@ import sdmx.Registry;
 import sdmx.Repository;
 import sdmx.Queryable;
 import sdmx.SdmxIO;
+import sdmx.common.Description;
+import sdmx.common.Name;
 import sdmx.commonreferences.CodeReference;
 import sdmx.commonreferences.CodelistReference;
 import sdmx.commonreferences.ConceptReference;
 import sdmx.commonreferences.ConceptSchemeReference;
+import sdmx.commonreferences.DataStructureRef;
 import sdmx.commonreferences.DataStructureReference;
 import sdmx.commonreferences.DataflowReference;
 import sdmx.commonreferences.IDType;
@@ -45,8 +49,11 @@ import sdmx.commonreferences.ItemSchemeReference;
 import sdmx.commonreferences.ItemSchemeReferenceBase;
 import sdmx.commonreferences.NestedID;
 import sdmx.commonreferences.NestedNCNameID;
+import sdmx.commonreferences.StructureRef;
 import sdmx.commonreferences.StructureReference;
 import sdmx.commonreferences.Version;
+import sdmx.commonreferences.types.PackageTypeCodelistType;
+import sdmx.commonreferences.types.StructureTypeCodelistType;
 import sdmx.exception.ParseException;
 import sdmx.message.DataMessage;
 import sdmx.message.DataQueryMessage;
@@ -56,7 +63,6 @@ import sdmx.net.LocalRegistry;
 import sdmx.structure.base.ItemSchemeType;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.base.MaintainableType;
-import sdmx.structure.base.NameableType;
 import sdmx.structure.codelist.CodeType;
 import sdmx.structure.codelist.CodelistType;
 import sdmx.structure.concept.ConceptSchemeType;
@@ -89,14 +95,14 @@ import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
  *
  * Copyright James Gardner 2014
  */
-public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable {
+public class WBRESTServiceRegistry implements Registry,Repository,Queryable {
 
     public static void main(String args[]) {
-        KnoemaRESTServiceRegistry registry = new KnoemaRESTServiceRegistry("knoema", "http://knoema.com/api/1.0/sdmx");
-        List<DataflowType> dfs = registry.listDataflows();
-        for(DataflowType df:dfs) {
-            System.out.println(NameableType.toString(df, Locale.getDefault()));
-        }
+        WBRESTServiceRegistry registry = new WBRESTServiceRegistry("WB", "http://api.worldbank.org");
+        registry.listDataflows();
+        DataStructureType dst = registry.find(DataStructureReference.create(new NestedNCNameID("WB"),new IDType("WDI"), Version.ONE));
+       
+
     }
     private String agency = "";
     private String serviceURL = "";
@@ -104,39 +110,43 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
 
     private List<DataflowType> dataflowList = null;
 
-    public KnoemaRESTServiceRegistry(String agency, String service) {
+    CodelistType classifications = null;
+    HashMap<String, CodelistType> indicators = new HashMap<String, CodelistType>();
+
+    public WBRESTServiceRegistry(String agency, String service) {
         this.serviceURL = service;
         this.agency = agency;
-        SdmxIO.setStrictRegex(false);
-        //SdmxIO.setIgnoreCase(true);
     }
 
     public void load(StructureType struct) {
+        System.out.println("ILO Load:"+struct);
         local.load(struct);
     }
 
     public void unload(StructureType struct) {
         local.unload(struct);
     }
-
+   /*
+      This function ignores the version argument!!!
+      ILO stat does not use version numbers.. simply take the latest
+    */
     public DataStructureType find(DataStructureReference ref) {
         DataStructureType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/"+ref.getMaintainableParentId().toString());
-                DataStructureType ds = st.getStructures().getDataStructures().getDataStructures().get(0);
-                ds.setId(ref.getMaintainableParentId());
-                ds.setAgencyID(ref.getAgencyId());
+                ref.dump();
+                StructureType st = retrieve(getServiceURL() + "/KeyFamily?id="+ref.getMaintainableParentId().toString());
+                DataStructureType dst2 = st.find(ref);
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {
-                Logger.getLogger(KnoemaRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(WBRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
             } catch (IOException ex) {
-                Logger.getLogger(KnoemaRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(WBRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
             } catch (ParseException ex) {
-                Logger.getLogger(KnoemaRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(WBRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
             }
         }
@@ -145,19 +155,51 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
 
     public ConceptSchemeType find(ConceptSchemeReference ref) {
         ConceptSchemeType dst = local.find(ref);
+        if (dst == null) {
+            try {
+                StructureType st = retrieve(getServiceURL() + "/conceptscheme/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion()==null?"latest":ref.getVersion().toString()));
+                load(st);
+                return local.find(ref);
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(WBRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(WBRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(WBRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         return dst;
     }
 
     public CodelistType find(CodelistReference ref) {
         CodelistType dst = local.find(ref);
+        if (dst == null) {
+            try {
+                StructureType st = retrieve(getServiceURL() + "/codelist/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion()==null?"latest":ref.getVersion().toString()));
+                load(st);
+                return local.find(ref);
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(WBRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(WBRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(WBRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         return dst;
     }
 
+    public ConceptType find(ConceptReference ref) {
+        return local.find(ref);
+    }
+
     private StructureType retrieve(String urlString) throws MalformedURLException, IOException, ParseException {
-        System.out.println("Retrieve:" + urlString);
+        Logger.getLogger("sdmx").info("ILORestServiceRegistry: retrieve "+urlString);
         URL url = new URL(urlString);
         HttpURLConnection conn
                 = (HttpURLConnection) url.openConnection();
+        conn.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+        conn.addRequestProperty("Accept-Encoding","identity");
         if (conn.getResponseCode() != 200) {
             throw new IOException(conn.getResponseMessage());
         }
@@ -173,7 +215,6 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
         //temp.close();
         //in.close();
         //in = new FileInputStream("temp.xml");
-        System.out.println("Parsing!");
         ParseParams params = new ParseParams();
         params.setRegistry(this);
         StructureType st = SdmxIO.parseStructure(params, in);
@@ -188,27 +229,28 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
         }
         return st;
     }
-    public DataMessage query(ParseParams pparams,String urlString) throws MalformedURLException, IOException, ParseException {
-        System.out.println("Query:" + urlString);
+
+    public DataMessage query(ParseParams params,String urlString) throws MalformedURLException, IOException, ParseException {
+        Logger.getLogger("sdmx").info("ILORestServiceRegistry: query "+urlString);
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(urlString);
         get.addHeader("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
         get.addHeader("User-Agent", "Sdmx-Sax");
         HttpResponse response = client.execute(get);
         /*
-        URL url = new URL(urlString);
-        HttpURLConnection conn
-                = (HttpURLConnection) url.openConnection();
-        //if (conn.getResponseCode() != 200) {
-        //    return null;
-        //}
-        conn.setDoInput(true);
-        conn.setDoOutput(false);
-        conn.addRequestProperty("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
-        conn.addRequestProperty("User-Agent", "Sdmx-Sax");
-        conn.connect();
-        InputStream in = conn.getInputStream();
-        */
+         URL url = new URL(urlString);
+         HttpURLConnection conn
+         = (HttpURLConnection) url.openConnection();
+         //if (conn.getResponseCode() != 200) {
+         //    return null;
+         //}
+         conn.setDoInput(true);
+         conn.setDoOutput(false);
+         conn.addRequestProperty("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
+         conn.addRequestProperty("User-Agent", "Sdmx-Sax");
+         conn.connect();
+         InputStream in = conn.getInputStream();
+         */
         InputStream in = response.getEntity().getContent();
         if (SdmxIO.isSaveXml()) {
             String name = System.currentTimeMillis() + ".xml";
@@ -217,7 +259,7 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
             in = new FileInputStream(name);
         }
         System.out.println("Parsing!");
-        DataMessage msg = SdmxIO.parseData(pparams,in);
+        DataMessage msg = SdmxIO.parseData(params,in);
         if (msg == null) {
             System.out.println("Data is null!");
         }
@@ -231,7 +273,7 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
      */
 
     private StructureType retrieve2(String urlString) throws MalformedURLException, IOException, ParseException {
-        System.out.println("Retrieve:" + urlString);
+        Logger.getLogger("sdmx").info("ILORestServiceRegistry: retrieve "+urlString);
         URL url = new URL(urlString);
         HttpURLConnection conn
                 = (HttpURLConnection) url.openConnection();
@@ -258,11 +300,14 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
         return st;
     }
 
+    @Override
     public DataMessage query(ParseParams pparams,DataQueryMessage message) {
         IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataflow().get(0).getMaintainableParentId();
         NestedNCNameID agency = new NestedNCNameID(this.getAgencyId());
         DataStructureType dst = null;
-        if( this.dataflowList==null) listDataflows();
+        if(dataflowList == null ) {
+            listDataflows();
+        }
         for (int i = 0; i < dataflowList.size(); i++) {
             if (dataflowList.get(i).getId().equals(flowid)) {
                 dst = find(dataflowList.get(i).getStructure());
@@ -290,11 +335,11 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
         String endTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getEnd().toString();
         DataMessage msg = null;
         try {
-            msg = query(pparams,getServiceURL() + "/getdata?dataflow=" + flowid + "&key=" + q.toString() + "&startTime=" + startTime + "&endTime=" + endTime);
+            msg = query(pparams,getServiceURL() + "/data/"+this.agency+"," + flowid + "/" + q.toString() + "?startPeriod=" + startTime + "&endPeriod=" + endTime);
         } catch (IOException ex) {
-            Logger.getLogger(KnoemaRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WBRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
-            Logger.getLogger(KnoemaRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WBRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
         }
         return msg;
     }
@@ -304,25 +349,39 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
         if (dataflowList != null) {
             return dataflowList;
         }
+        StructureType st=null;
         try {
-            StructureType st = retrieve2(getServiceURL());
-            List<DataStructureType> dss = st.getStructures().getDataStructures().getDataStructures();
-            List<DataflowType> dfs = new ArrayList<DataflowType>();
-            for(DataStructureType ds:dss){
-                DataflowType df = ds.asDataflow();
-                dfs.add(df);
-            }
-            dataflowList = dfs;
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(KnoemaRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-            //dataflowList = null;
+            st = retrieve(this.serviceURL+"/KeyFamily?id=");
         } catch (IOException ex) {
-            Logger.getLogger(KnoemaRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-            //dataflowList = null;
+            Logger.getLogger(WBRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
-            Logger.getLogger(KnoemaRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WBRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return dataflowList;
+        local.load(st);
+        List<DataflowType> list = new ArrayList<DataflowType>();
+        list.add(st.getStructures().getDataStructures().getDataStructures().get(0).asDataflow());
+        dataflowList = list;
+        return list;
+    }
+
+    @Override
+    public DataflowType find(DataflowReference ref) {
+        DataflowType dst = local.find(ref);
+        if (dst == null) {
+            try {
+                StructureType st = retrieve(getServiceURL() + "/dataflow/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion() != null ? ref.getVersion().toString() : "latest"));
+                load(st);
+                return local.find(ref);
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(WBRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(WBRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(WBRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
+            }
+        }
+        return dst;
     }
 
     /**
@@ -359,23 +418,8 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
     }
 
     @Override
-    public DataflowType find(DataflowReference ref) {
-        for(DataflowType df2:listDataflows()) {
-            if( df2.identifiesMe(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion())){
-                return df2;
-            }
-        }
-        return local.find(ref);
-    }
-
-    @Override
     public CodeType find(CodeReference ref) {
-        return local.find(ref);
-    }
-
-    @Override
-    public ConceptType find(ConceptReference ref) {
-        return local.find(ref);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

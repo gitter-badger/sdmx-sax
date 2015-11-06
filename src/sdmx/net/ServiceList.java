@@ -12,6 +12,7 @@ import sdmx.net.list.DataProvider;
 import sdmx.net.list.ILODataProvider;
 import sdmx.net.list.KnoemaDataProvider;
 import sdmx.net.list.NSIDataProvider;
+import sdmx.net.list.NomisDataProvider;
 import sdmx.net.list.OpenSDMXDataProvider;
 import sdmx.net.list.RESTDataProvider;
 import sdmx.net.list.SDWDataProvider;
@@ -35,6 +36,7 @@ public class ServiceList {
             case DataProvider.TYPE_SDW:return new SDWDataProvider(-1,agency, serviceURL,options,attribution,htmlAttribution);
             case DataProvider.TYPE_REST:return new RESTDataProvider(-1,agency, serviceURL,attribution,htmlAttribution);
             case DataProvider.TYPE_OPENSDMX:return new OpenSDMXDataProvider(-1,agency, serviceURL,attribution,htmlAttribution);
+            case DataProvider.TYPE_NOMIS:return new NomisDataProvider(-1,agency, serviceURL,options,attribution,htmlAttribution);
         }
         return null;
     }

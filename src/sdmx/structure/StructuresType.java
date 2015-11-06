@@ -371,4 +371,5 @@ public class StructuresType implements Registry {
     public void save(OutputStream out) throws IOException {
         // Do Nothing
     }
+    public void merge(){}
 }

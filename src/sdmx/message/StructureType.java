@@ -206,5 +206,5 @@ public class StructureType extends MessageType implements Registry {
             }
         }
     }
-
+   public void merge(){}
 }

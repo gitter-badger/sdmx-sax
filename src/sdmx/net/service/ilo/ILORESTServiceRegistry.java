@@ -131,7 +131,6 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
         DataStructureType dst = local.find(ref);
         if (dst == null) {
             try {
-                ref.dump();
                 StructureType st = retrieve(getServiceURL() + "/datastructure/" + ref.getAgencyId() + "/" + ref.getMaintainableParentId().toString() + "/"+(ref.getVersion()==null?"latest":ref.getVersion().toString()));
                 DataStructureType dst2 = st.find(ref);
                 load(st);
@@ -472,4 +471,5 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
     public void save(OutputStream out) throws IOException {
         local.save(out);
     }
+    public void merge(){}
 }

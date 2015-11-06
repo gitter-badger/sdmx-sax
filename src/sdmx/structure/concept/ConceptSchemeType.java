@@ -86,4 +86,10 @@ public class ConceptSchemeType extends ItemSchemeType {
     public void addConcept(ConceptType cat) {
         super.addItem(cat);
     }
+
+    public void merge(ConceptSchemeType m) {
+        for(ItemType it:m.getItems()){
+            addItem(it);
+        }
+    }
 }

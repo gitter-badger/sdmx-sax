@@ -101,6 +101,7 @@ public class ConceptsType {
     }
 
     public void dump() {
+        System.out.println("Dump Concepts");
         for (int i = 0; i < conceptSchemes.size(); i++) {
             conceptSchemes.get(i).dump();
         }
@@ -215,6 +216,15 @@ public class ConceptsType {
     }
 
     public void merge(ConceptsType concepts) {
-        this.getConceptSchemes().addAll(concepts.getConceptSchemes());
+        List<ConceptSchemeType> done = new ArrayList<ConceptSchemeType>();
+        for(ConceptSchemeType cst:this.conceptSchemes) {
+            if( concepts.findConceptScheme(cst.getAgencyID(), cst.getId(), cst.getVersion())!=null) {
+                cst.merge(concepts.findConceptScheme(cst.getAgencyID(), cst.getId(),cst.getVersion()));
+                done.add(concepts.findConceptScheme(cst.getAgencyID(), cst.getId(),cst.getVersion()));
+            }
+        }
+        List<ConceptSchemeType> add = concepts.getConceptSchemes();
+        add.removeAll(done);
+        this.getConceptSchemes().addAll(add);
     }
 }

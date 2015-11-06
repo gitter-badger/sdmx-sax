@@ -177,4 +177,5 @@ public class DoubleRegistry implements Registry {
     public void save(OutputStream out) throws IOException {
         left.save(out);
     }
+    public void merge(){}
 }

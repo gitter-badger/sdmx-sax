@@ -293,7 +293,7 @@ public class GenericData21EventHandler extends Sdmx20EventHandler {
     public void endDataSet() {
         state = STATE_DATASETEND;
         DataSet ds = writer.finishDataSet();
-        System.out.println("Read DataSet: Size="+ds.size());
+        //System.out.println("Read DataSet: Size="+ds.size());
         datasets.add(ds);
     }
 
