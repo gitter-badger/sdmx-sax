@@ -78,6 +78,13 @@ public class Cube {
             if (validCodes.get(dimId.toString()) == null) {
                 validCodes.put(dimId.toString(), new ArrayList<String>());
             }
+            /*
+                If the data you are trying to make a cube from does not have a complete key
+                with values for all dimensions, mapper.getColumnIndex(dimId.toString()) returns -1
+                here (because there is no dimension of that name in the FlatObservation)
+                this filters down into FlatObservation.getValue(-1) which causes an array index
+                out of bounds exception!
+            */
             CubeDimension myDim = dim.getSubDimension(obs.getValue(mapper.getColumnIndex(dimId.toString())));
             if (myDim == null) {
                 //myDim = new HashMapCubeDimension(dimId.toString(), obs.getValue(mapper.getColumnIndex(dimId.toString())));

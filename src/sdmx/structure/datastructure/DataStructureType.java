@@ -92,7 +92,7 @@ public class DataStructureType extends StructureType {
         }
         System.out.println("Attributes");
         for (AttributeType dim : components.getAttributeList().getAttributes()) {
-            System.out.print(dim.getConceptIdentity().getId());
+            //System.out.print(dim.getConceptIdentity().getId());
             if (ComponentUtil.getLocalRepresentation(dim) != null && ComponentUtil.getLocalRepresentation(dim).getEnumeration() != null) {
                 System.out.print(" Codelist:" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getAgencyId() + ":" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getMaintainableParentId() + ":" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getMaintainedParentVersion());
             }

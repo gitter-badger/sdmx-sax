@@ -331,6 +331,15 @@ public class DataParametersAndType {
         for(int i=0;or!=null&&i<this.or.size();i++) {
             result.addAll(or.get(i).getDimensionParameters(concept));
         }
+        List<Integer> remove = new ArrayList<Integer>();
+        for(int i=0;i<result.size();i++) {
+            for(int j=i;j<result.size();j++) {
+                if( result.get(i).equals(result.get(j))){
+                    remove.add(j);
+                }
+            }
+        }
+        result.removeAll(remove);
         return result;
     }
 }

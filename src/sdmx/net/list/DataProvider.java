@@ -39,6 +39,7 @@ public class DataProvider {
     public static final int TYPE_ILO = 4;
     public static final int TYPE_KNOEMA = 5;
     public static final int TYPE_NOMIS = 6;
+    public static final int TYPE_ONS = 7;
     
     
     private static final List<DataProvider> LIST = new ArrayList<DataProvider>();
@@ -59,6 +60,7 @@ public class DataProvider {
             LIST.add(new SDWDataProvider(13,"NBB","http://stat.nbb.be/sdmxws/sdmx.asmx","http://stats.oecd.org/OECDStatWS/SDMX/",              "Based on National Bank of Belgium data","Based on National Bank of Belgium data"));
             LIST.add(new SDWDataProvider(14,"UKDS","https://stats.ukdataservice.ac.uk/sdmxws/sdmx.asmx","http://stats.oecd.org/OECDStatWS/SDMX/",              "Based on United Kingdom Data Service data","Based on United Kingdom Data Service data"));
             LIST.add(new NomisDataProvider(15,"NOMIS","http://www.nomisweb.co.uk/api","uid=0xad235cca367972d98bd642ef04ea259da5de264f","Based on NOMIS Data Service data","Based on NOMIS Data Service data"));
+            LIST.add(new ONSDataProvider(16,"ONS","http://data.ons.gov.uk/ons/api/data", "apikey=doFKbcgLtj","Based on ONS Data Service data","Based on ONS Data Service data"));
         } catch (MalformedURLException ex) {
             Logger.getLogger(DataProvider.class.getName()).log(Level.SEVERE, null, ex);
         }

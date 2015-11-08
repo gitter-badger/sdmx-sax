@@ -356,6 +356,7 @@ public class Sdmx20StructureReaderTools {
 
     public CodeType toCode(org.sdmx.resources.sdmxml.schemas.v20.structure.CodeType cl1) throws URISyntaxException {
         CodeType cl2 = new CodeType();
+        //System.out.println("Code="+cl1.toString());
         cl2.setAnnotations(toAnnotations(cl1.getAnnotations()));
         // No Name Array in sdmx 2.0
         //cl2.setNames(toNames(cl1.getNameArray()));

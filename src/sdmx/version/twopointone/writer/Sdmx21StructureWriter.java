@@ -241,9 +241,10 @@ public class Sdmx21StructureWriter {
         if (ref.getRef() != null) {
             toRef(ref2.addNewRef(), ref);
         }
-        if (ref.getUrn() != null) {
-            ref2.setURN(ref.getUrn().getString());
-        }
+        // Local Item Doesn't use URN!
+        //if (ref.getUrn() != null) {
+        //    ref2.setURN(ref.getUrn().getString());
+        //}
         return ref2;
     }
 
@@ -306,6 +307,7 @@ public class Sdmx21StructureWriter {
     }
 
     public static void toConcept(ConceptType concept2, ItemType next) {
+        if(next.getAnnotations()!=null){toAnnotationsType(concept2.addNewAnnotations(),next.getAnnotations());}
         toNameableType(concept2, next);
         if (next.getParent() != null) {
             concept2.setParent(toLocalItemReference(concept2.addNewParent(), next.getParent()));
@@ -522,6 +524,7 @@ public class Sdmx21StructureWriter {
     }
 
     private static void toAnnotationsType(AnnotationsType annots2, Annotations annots) {
+        if( annots == null ) return;
         for (int i = 0; i < annots.size(); i++) {
             AnnotationType annot = annots2.addNewAnnotation();
             toAnnotationType(annot, annots.getAnnotation(i));

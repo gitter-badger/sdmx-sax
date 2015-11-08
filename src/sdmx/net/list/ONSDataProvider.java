@@ -25,18 +25,19 @@ import sdmx.net.service.opensdmx.OpenSDMXRESTQueryable;
 import sdmx.net.service.ilo.ILORESTServiceRegistry;
 import sdmx.net.service.knoema.KnoemaRESTServiceRegistry;
 import sdmx.net.service.nomis.NOMISRESTServiceRegistry;
+import sdmx.net.service.ons.ONSRESTServiceRegistry;
 
 /**
  *
  * @author James
  */
-public class NomisDataProvider extends DataProvider {
+public class ONSDataProvider extends DataProvider {
 
     private String agencyId = null;
     private URL serviceURL = null;
     private String options = "";
 
-    public NomisDataProvider(int indx,String agency, String serviceURL,String options,String attribution,String htmlAttribution) throws MalformedURLException {
+    public ONSDataProvider(int indx,String agency, String serviceURL,String options,String attribution,String htmlAttribution) throws MalformedURLException {
         super(indx,attribution,htmlAttribution);
         this.agencyId = agency;
         this.serviceURL = new URL(serviceURL);
@@ -48,9 +49,9 @@ public class NomisDataProvider extends DataProvider {
     }
 
     public Queryable getQueryable() {
-        return new NOMISRESTServiceRegistry(agencyId, serviceURL.toString(),options);
+        return new ONSRESTServiceRegistry(agencyId, serviceURL.toString(),options);
     }
-    public int getType() { return DataProvider.TYPE_NOMIS; }
+    public int getType() { return DataProvider.TYPE_ONS; }
     @Override
     public String getServiceURL() { return this.serviceURL.toString(); }
     @Override

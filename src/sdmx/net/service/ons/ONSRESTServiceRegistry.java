@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sdmx.net.service.nomis;
+package sdmx.net.service.ons;
 
+import sdmx.net.service.nomis.*;
 import sdmx.net.service.ilo.*;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -24,6 +25,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -33,6 +38,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.jfree.data.time.RegularTimePeriod;
+import org.xml.sax.SAXException;
 import sdmx.Registry;
 import sdmx.Repository;
 import sdmx.Queryable;
@@ -101,57 +107,75 @@ import sdmx.version.twopointzero.Sdmx20QueryWriter;
  *
  * Copyright James Gardner 2014
  */
-public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
+public class ONSRESTServiceRegistry implements Registry, Repository, Queryable {
 
     public static void main(String args[]) {
-        NOMISRESTServiceRegistry registry = new NOMISRESTServiceRegistry("NOMIS", "http://www.nomisweb.co.uk/api","uid=0xad235cca367972d98bd642ef04ea259da5de264f");
+        ONSRESTServiceRegistry registry = new ONSRESTServiceRegistry("ONS", "http://data.ons.gov.uk/ons/api/data", "apikey=doFKbcgLtj");
         List<DataflowType> list = registry.listDataflows();
         Locale loc = Locale.getDefault();
-        for(DataflowType df:list){
-            System.out.println(NameableType.toString(df, loc)+","+ df.getAgencyID()+","+df.getId());
+        Locale cy = Locale.forLanguageTag("cy");
+        for (DataflowType df : list) {
+            System.out.println(NameableType.toString(df, loc) + "," + df.getAgencyID() + "," + df.getId());
         }
+        //DataStructureReference ref = DataStructureReference.create(new NestedNCNameID("ONS"), new IDType("Social_SAPEDE_2013HEALTHH"), Version.ONE);
+        //DataStructureType dst = registry.find(ref);
+        //dst.dump();
+        DataStructureType dst = registry.find(list.get(0).getStructure());
+        dst.dump();
     }
     private String agency = "";
     private String serviceURL = "";
     private String options = "";
     Registry local = new LocalRegistry();
-    
+
     private List<DataflowType> dataflowList = null;
 
-    public NOMISRESTServiceRegistry(String agency, String service,String options) {
+    public ONSRESTServiceRegistry(String agency, String service, String options) {
         this.serviceURL = service;
         this.agency = agency;
-        this.options=options;
+        this.options = options;
     }
 
     public void load(StructureType struct) {
-        System.out.println("Nomis Load:"+struct);
+        System.out.println("Nomis Load:" + struct);
         local.load(struct);
     }
 
     public void unload(StructureType struct) {
         local.unload(struct);
     }
-   /*
+    /*
       This function ignores the version argument!!!
       ILO stat does not use version numbers.. simply take the latest
-    */
+     */
+
     public DataStructureType find(DataStructureReference ref) {
         DataStructureType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() +  "/v01/dataset/"+ref.getMaintainableParentId()+".structure.sdmx.xml");
+                String id = ref.getMaintainableParentId().toString();
+                int firstUnderscore = id.indexOf("_");
+                String context = id.substring(0,firstUnderscore);
+                int lastUnderscore = id.lastIndexOf("_");
+                String sid = id.substring(firstUnderscore+1,lastUnderscore);
+                String geography = id.substring(lastUnderscore+1,id.length());
+                System.out.println("ctx="+context);
+                System.out.println("SID="+sid);
+                System.out.println("GEO="+geography);
+                StructureType st = retrieve(getServiceURL() + "/dataset/"+sid+"/dsd.xml?context="+context+"&geog="+geography);
+                // Emergency On-set Rewrite!!!!
+                st.getStructures().getDataStructures().getDataStructures().get(0).setId(ref.getMaintainableParentId());
                 DataStructureType dst2 = st.find(ref);
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {
-                Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
             } catch (IOException ex) {
-                Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
             } catch (ParseException ex) {
-                Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
             }
         }
@@ -167,15 +191,15 @@ public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
         CodelistType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() +  "/v01/codelist/"+ref.getMaintainableParentId()+".def.sdmx.xml");
+                StructureType st = retrieve(getServiceURL() + "/v01/codelist/" + ref.getMaintainableParentId() + ".def.sdmx.xml");
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {
-                Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
-                Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return dst;
@@ -204,18 +228,18 @@ public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
             }
         }
         return dst;
-        */
+         */
     }
 
     private StructureType retrieve(String urlString) throws MalformedURLException, IOException, ParseException {
-        Logger.getLogger("sdmx").info("NOMISRESTServiceRegistry: retrieve "+urlString);
+        Logger.getLogger("sdmx").info("NOMISRESTServiceRegistry: retrieve " + urlString);
         String s = options;
-        if( urlString.indexOf("?")==-1 ){
-            s="?"+s;
-        }else{
-            s="&"+s;
+        if (urlString.indexOf("?") == -1) {
+            s = "?" + s;
+        } else {
+            s = "&" + s;
         }
-        URL url = new URL(urlString+s);
+        URL url = new URL(urlString + s);
         HttpURLConnection conn
                 = (HttpURLConnection) url.openConnection();
         if (conn.getResponseCode() != 200) {
@@ -238,29 +262,27 @@ public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
         StructureType st = SdmxIO.parseStructure(params, in);
         if (st == null) {
             System.out.println("St is null!");
-        } else {
-            if (SdmxIO.isSaveXml()) {
-                String name = System.currentTimeMillis() + "-21.xml";
-                FileOutputStream file = new FileOutputStream(name);
-                Sdmx21StructureWriter.write(st, file);
-            }
+        } else if (SdmxIO.isSaveXml()) {
+            String name = System.currentTimeMillis() + "-21.xml";
+            FileOutputStream file = new FileOutputStream(name);
+            Sdmx21StructureWriter.write(st, file);
         }
         return st;
     }
     /*
         Uses SdmxIO.parseStructure(InputStream) rather
         than SdmxIO.parseStructure(Registry,InputStream)
-    */
-    private StructureType retrieve3(String urlString) throws MalformedURLException, IOException, ParseException {
-        Logger.getLogger("sdmx").info("NOMISRestServiceRegistry: retrieve3 "+urlString);
+     */
+
+    private InputStream retrieve3(String urlString) throws MalformedURLException, IOException, ParseException {
+        Logger.getLogger("sdmx").info("ONSRestServiceRegistry: retrieve3 " + urlString);
         String s = options;
-        if( urlString.indexOf("?")==-1 ){
-            s="?"+s;
-        }else{
-            s="&"+s;
+        if (urlString.indexOf("?") == -1) {
+            s = "?" + s;
+        } else {
+            s = "&" + s;
         }
-        
-        URL url = new URL(urlString+s);
+        URL url = new URL(urlString + s);
         HttpURLConnection conn
                 = (HttpURLConnection) url.openConnection();
         if (conn.getResponseCode() != 200) {
@@ -278,30 +300,19 @@ public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
         //temp.close();
         //in.close();
         //in = new FileInputStream("temp.xml");
-        ParseParams params = new ParseParams();
-        StructureType st = SdmxIO.parseStructure(in);
-        if (st == null) {
-            System.out.println("St is null!");
-        } else {
-            if (SdmxIO.isSaveXml()) {
-                String name = System.currentTimeMillis() + "-21.xml";
-                FileOutputStream file = new FileOutputStream(name);
-                Sdmx21StructureWriter.write(st, file);
-            }
-        }
-        return st;
+        return in;
     }
 
-    public DataMessage query(ParseParams params,String urlString) throws MalformedURLException, IOException, ParseException {
-        Logger.getLogger("sdmx").info("ILORestServiceRegistry: query "+urlString);
+    public DataMessage query(ParseParams params, String urlString) throws MalformedURLException, IOException, ParseException {
+        Logger.getLogger("sdmx").info("ILORestServiceRegistry: query " + urlString);
         String s = options;
-        if( urlString.indexOf("?")==-1 ){
-            s="?"+s;
-        }else{
-            s="&"+s;
+        if (urlString.indexOf("?") == -1) {
+            s = "?" + s;
+        } else {
+            s = "&" + s;
         }
         HttpClient client = new DefaultHttpClient();
-        HttpGet get = new HttpGet(urlString+s);
+        HttpGet get = new HttpGet(urlString + s);
         get.addHeader("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
         get.addHeader("User-Agent", "Sdmx-Sax");
         HttpResponse response = client.execute(get);
@@ -327,7 +338,7 @@ public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
             in = new FileInputStream(name);
         }
         System.out.println("Parsing!");
-        DataMessage msg = SdmxIO.parseData(params,in);
+        DataMessage msg = SdmxIO.parseData(params, in);
         if (msg == null) {
             System.out.println("Data is null!");
         }
@@ -341,14 +352,14 @@ public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
      */
 
     private StructureType retrieve2(String urlString) throws MalformedURLException, IOException, ParseException {
-        Logger.getLogger("sdmx").info("ILORestServiceRegistry: retrieve "+urlString+"&"+options);
+        Logger.getLogger("sdmx").info("ILORestServiceRegistry: retrieve " + urlString + "&" + options);
         String s = options;
-        if( urlString.indexOf("?")==-1 ){
-            s="?"+s;
-        }else{
-            s="&"+s;
+        if (urlString.indexOf("?") == -1) {
+            s = "?" + s;
+        } else {
+            s = "&" + s;
         }
-        URL url = new URL(urlString+s);
+        URL url = new URL(urlString + s);
         HttpURLConnection conn
                 = (HttpURLConnection) url.openConnection();
         if (conn.getResponseCode() != 200) {
@@ -375,76 +386,8 @@ public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
     }
 
     @Override
-    public DataMessage query(ParseParams pparams,DataQueryMessage message) {
-        if( SdmxIO.isDumpQuery() ) {
-            
-        }
-        IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataflow().get(0).getMaintainableParentId();
-        NestedNCNameID agency = new NestedNCNameID(this.getAgencyId());
-        DataStructureType dst = null;
-        if(dataflowList == null ) {
-            listDataflows();
-        }
-        for (int i = 0; i < dataflowList.size(); i++) {
-            if (dataflowList.get(i).getId().equals(flowid)) {
-                dst = find(dataflowList.get(i).getStructure());
-            }
-        }
-        DataStructureType structure = dst;
-        StringBuilder q = new StringBuilder();
-        for (int i = 0; i < structure.getDataStructureComponents().getDimensionList().size(); i++) {
-            DimensionType dim = structure.getDataStructureComponents().getDimensionList().getDimension(i);
-            boolean addedParam = false;
-            String concept = dim.getConceptIdentity().getId().toString();
-            List<String> params = message.getQuery().getDataWhere().getAnd().get(0).getDimensionParameters(concept);
-            System.out.println("Params="+params);
-            if (params.size() > 0) {
-                addedParam=true;
-                q.append(concept+"=");
-                for (int j = 0; j < params.size(); j++) {
-                    q.append(params.get(j));
-                    if (j < params.size() - 1) {
-                        q.append(",");
-                    }
-                }
-            }
-            if (addedParam&&i < structure.getDataStructureComponents().getDimensionList().size() - 1) {
-                q.append("&");
-            }
-            addedParam=false;
-        }
-        StringBuilder times = new StringBuilder();
-        try {
-            StructureType st = retrieve3(getServiceURL()+"/v01/dataset/"+flowid+"/time/def.sdmx.xml");
-            CodelistType timesCL = st.getStructures().getCodelists().getCodelists().get(0);
-            String startTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getStart().toString();
-            String endTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getEnd().toString();
-            RegularTimePeriod rtpStart = TimeUtil.parseTime("",startTime);
-            RegularTimePeriod rtpEnd = TimeUtil.parseTime("",endTime);
-            boolean comma = true;
-            for(int i=0;i<timesCL.size();i++) {
-                RegularTimePeriod rtp = TimeUtil.parseTime("", timesCL.getCode(i).getId().toString());
-                if( (rtp.getStart().getTime()==rtpStart.getStart().getTime()||rtp.getStart().after(rtpStart.getStart()))&&(rtp.getEnd().before(rtpEnd.getEnd())||rtp.getEnd().getTime()==rtpEnd.getEnd().getTime())){
-                    if( !comma ) {times.append(",");}
-                    times.append(timesCL.getCode(i).getId().toString());
-                    comma=false;
-                }
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        DataMessage msg = null;
-        try {
-            msg = query(pparams,getServiceURL() + "/v01/dataset/"+ flowid + ".generic.sdmx.xml?"+q+"&time="+times.toString()+"&"+options);
-        } catch (IOException ex) {
-            Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return msg;
+    public DataMessage query(ParseParams pparams, DataQueryMessage message) {
+        return null;
     }
 
     @Override
@@ -452,20 +395,53 @@ public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
         if (dataflowList != null) {
             return dataflowList;
         }
-        try {
-            StructureType st = retrieve3(this.serviceURL+"/v01/dataset/def.sdmx.xml");
-            List<DataStructureType> list = st.getStructures().getDataStructures().getDataStructures();
-            List<DataflowType> dfs = new ArrayList<DataflowType>();
-            for(DataStructureType dst:list) {
-                dfs.add(dst.asDataflow());
+        List<String> contexts = new ArrayList<String>();
+        contexts.add("Census");
+// This is supposed to work but it doesn't :(        
+//contexts.add("Socio-Economic");
+
+        contexts.add("Economic");
+        contexts.add("Social");
+        List<ONSCube> bigList = new ArrayList<ONSCube>();
+        for (String s : contexts) {
+            try {
+                InputStream in = retrieve3(serviceURL + "/collections.xml?context=" + s + "&" + options);
+                Name name = new Name("en",s);
+                List<Name> names = new ArrayList<Name>();
+                names.add(name);
+                List<ONSCube> list = parseCollections(in,s,names);
+                bigList.addAll(list);
+            } catch (IOException ex) {
+                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (XMLStreamException ex) {
+                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             }
-            this.dataflowList = dfs;
-        } catch (IOException ex) {
-            Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        } catch (ParseException ex) {
-            Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+        }
+        List<ONSCube> bigList2 = new ArrayList<ONSCube>();
+        for(ONSCube cube:bigList) {
+            try {
+                InputStream in = retrieve3(serviceURL + "/hierarchies/"+cube.getId()+".xml?context=" + cube.getContext() + "&" + options);
+                List<ONSCube> list = parseGeography(in,cube);
+                bigList2.addAll(list);
+            } catch (IOException ex) {
+                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (XMLStreamException ex) {
+                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        dataflowList = new ArrayList<DataflowType>();
+        for (ONSCube cube : bigList2) {
+            DataflowType df = new DataflowType();
+            df.setId(new IDType(cube.getMainId()));
+            df.setNames(cube.getMainNames());
+            DataStructureReference struct = DataStructureReference.create(new NestedNCNameID(agency), df.getId(), Version.ONE);
+            df.setStructure(struct);
+            df.setAgencyID(new NestedNCNameID(agency));
+            dataflowList.add(df);
         }
         return dataflowList;
     }
@@ -479,11 +455,11 @@ public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {
-                Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
-                Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
             }
         }
@@ -537,25 +513,153 @@ public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
     public Repository getRepository() {
         return this;
     }
+
     @Override
     public ItemType find(ItemReference ref) {
         ConceptType concept = find(ConceptReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion(), ref.getId()));
-        if( concept!=null) return concept;
-        CodeType code = find(CodeReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion(), ref.getId()));
+        if (concept != null) {
+            return concept;
+        }
+        CodeType code = find(CodeReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion(), ref.getId()));
         return code;
-        
+
     }
 
     @Override
     public ItemSchemeType find(ItemSchemeReference ref) {
         ConceptSchemeType concept = find(ConceptSchemeReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion()));
-        if( concept!=null) return concept;
-        CodelistType code = find(CodelistReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion()));
+        if (concept != null) {
+            return concept;
+        }
+        CodelistType code = find(CodelistReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion()));
         return code;
     }
 
     @Override
     public void save(OutputStream out) throws IOException {
         local.save(out);
+    }
+
+    public static final int STATE_NOTHING = 0;
+    public static final int STATE_ID = 1;
+    public static final int STATE_NAME = 2;
+
+    public static List<ONSCube> parseCollections(InputStream in,String context,List<Name> contextNames) throws XMLStreamException {
+        List<ONSCube> cubeList = new ArrayList<ONSCube>();
+        ONSCube currCube = null;
+        String tagContent = null;
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+
+        XMLStreamReader reader
+                = factory.createXMLStreamReader(in);
+
+        int state = 0;
+        String lastLang = null;
+        while (reader.hasNext()) {
+            int event = reader.next();
+            switch (event) {
+                case XMLStreamConstants.START_ELEMENT:
+                    if (reader.getLocalName().equals("collection")) {
+                        currCube = new ONSCube();
+                        currCube.setContext(context);
+                        currCube.setContextNames(contextNames);
+                    }
+                    if (reader.getLocalName().equals("id")) {
+                        state = STATE_ID;
+                    }
+                    if (reader.getLocalName().equals("name")) {
+                        state = STATE_NAME;
+                        lastLang = reader.getAttributeValue(0);
+                    }
+                    break;
+                case XMLStreamConstants.CHARACTERS:
+                    if (state == STATE_ID) {
+                        currCube.setId(reader.getText().trim());
+                    }
+                    if (state == STATE_NAME && currCube != null) {
+                        List<Name> names = currCube.getIdNames();
+                        if (names == null) {
+                            names = new ArrayList<Name>();
+                        }
+                        Name n = new Name(lastLang, reader.getText().trim());
+                        names.add(n);
+                        //System.out.println("Added name:"+n.getLang()+":"+n.getText());
+                        currCube.setIdNames(names);
+                        state = STATE_NOTHING;
+                    }
+                    break;
+                case XMLStreamConstants.END_ELEMENT:
+                    if (reader.getLocalName().equals("collection")) {
+                        cubeList.add(currCube);
+                        currCube = null;
+                    }
+                    if (reader.getLocalName().equals("name")) {
+                        lastLang = null;
+                        state = STATE_NOTHING;
+                    }
+                    break;
+            }
+        }
+        return cubeList;
+    }
+    public static List<ONSCube> parseGeography(InputStream in,ONSCube cube) throws XMLStreamException {
+        List<ONSCube> cubeList = new ArrayList<ONSCube>();
+        ONSCube currCube = null;
+        String tagContent = null;
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+
+        XMLStreamReader reader
+                = factory.createXMLStreamReader(in);
+
+        int state = 0;
+        String lastLang = null;
+        while (reader.hasNext()) {
+            int event = reader.next();
+            switch (event) {
+                case XMLStreamConstants.START_ELEMENT:
+                    if (reader.getLocalName().equals("geographicalHierarchy")) {
+                        currCube = new ONSCube();
+                        currCube.setContext(cube.getContext());
+                        currCube.setContextNames(cube.getContextNames());
+                        currCube.setId(cube.getId());
+                        currCube.setIdNames(cube.getIdNames());
+                    }
+                    if (reader.getLocalName().equals("id")) {
+                        state = STATE_ID;
+                    }
+                    if (reader.getLocalName().equals("name")) {
+                        state = STATE_NAME;
+                        lastLang = reader.getAttributeValue(0);
+                    }
+                    break;
+                case XMLStreamConstants.CHARACTERS:
+                    if (state == STATE_ID&&currCube!=null) {
+                        currCube.setGeography(reader.getText().trim());
+                    }
+                    if (state == STATE_NAME && currCube != null) {
+                        List<Name> names = currCube.getGeographyNames();
+                        if (names == null) {
+                            names = new ArrayList<Name>();
+                        }
+                        Name n = new Name(lastLang, reader.getText().trim());
+                        names.add(n);
+                        //System.out.println("Added name:"+n.getLang()+":"+n.getText());
+                        currCube.setGeographyNames(names);
+                        state = STATE_NOTHING;
+                    }
+                    break;
+                case XMLStreamConstants.END_ELEMENT:
+                    if (reader.getLocalName().equals("geographicalHierarchy")) {
+                        cubeList.add(currCube);
+                        currCube = null;
+                    }
+                    if (reader.getLocalName().equals("name")) {
+                        lastLang = null;
+                        state = STATE_NOTHING;
+                    }
+                    break;
+            }
+        }
+        return cubeList;
     }
 }
