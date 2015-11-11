@@ -211,9 +211,9 @@ public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
         Logger.getLogger("sdmx").info("NOMISRESTServiceRegistry: retrieve "+urlString);
         String s = options;
         if( urlString.indexOf("?")==-1 ){
-            s="?"+s;
+            s="?"+s+"&random="+System.currentTimeMillis();
         }else{
-            s="&"+s;
+            s="&"+s+"&random="+System.currentTimeMillis();
         }
         URL url = new URL(urlString+s);
         HttpURLConnection conn
@@ -255,9 +255,9 @@ public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
         Logger.getLogger("sdmx").info("NOMISRestServiceRegistry: retrieve3 "+urlString);
         String s = options;
         if( urlString.indexOf("?")==-1 ){
-            s="?"+s;
+            s="?"+s+"&random="+System.currentTimeMillis();
         }else{
-            s="&"+s;
+            s="&"+s+"&random="+System.currentTimeMillis();;
         }
         
         URL url = new URL(urlString+s);
@@ -296,9 +296,9 @@ public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
         Logger.getLogger("sdmx").info("ILORestServiceRegistry: query "+urlString);
         String s = options;
         if( urlString.indexOf("?")==-1 ){
-            s="?"+s;
+            s="?"+s+"&random="+System.currentTimeMillis();
         }else{
-            s="&"+s;
+            s="&"+s+"&random="+System.currentTimeMillis();
         }
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(urlString+s);
@@ -438,7 +438,7 @@ public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
         
         DataMessage msg = null;
         try {
-            msg = query(pparams,getServiceURL() + "/v01/dataset/"+ flowid + ".generic.sdmx.xml?"+q+"&time="+times.toString()+"&"+options);
+            msg = query(pparams,getServiceURL() + "/v01/dataset/"+ flowid + ".compact.sdmx.xml?"+q+"&time="+times.toString()+"&"+options);
         } catch (IOException ex) {
             Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {

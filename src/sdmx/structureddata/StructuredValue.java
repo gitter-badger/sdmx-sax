@@ -60,7 +60,7 @@ public class StructuredValue {
             comp = structure.getDataStructureComponents().getDimensionList().getMeasureDimension();
         }
         if (comp == null) {
-            System.out.println("Comp is NUll!");
+            System.out.println("Comp is NUll!"+concept);
             return false;
         }
         RepresentationType localRep = ComponentUtil.getRepresentation(registry,comp);

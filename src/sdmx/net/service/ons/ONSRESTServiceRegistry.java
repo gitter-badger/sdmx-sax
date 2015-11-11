@@ -4,6 +4,7 @@
  */
 package sdmx.net.service.ons;
 
+import java.io.File;
 import sdmx.net.service.nomis.*;
 import sdmx.net.service.ilo.*;
 import java.io.FileInputStream;
@@ -64,11 +65,17 @@ import sdmx.commonreferences.Version;
 import sdmx.commonreferences.types.PackageTypeCodelistType;
 import sdmx.commonreferences.types.StructureTypeCodelistType;
 import sdmx.exception.ParseException;
+import sdmx.message.BaseHeaderType;
 import sdmx.message.DataMessage;
 import sdmx.message.DataQueryMessage;
 import sdmx.message.DataStructureQueryMessage;
+import sdmx.message.HeaderTimeType;
+import sdmx.message.PartyType;
+import sdmx.message.SenderType;
 import sdmx.message.StructureType;
 import sdmx.net.LocalRegistry;
+import sdmx.structure.DataflowsType;
+import sdmx.structure.StructuresType;
 import sdmx.structure.base.ItemSchemeType;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.base.MaintainableType;
@@ -85,6 +92,7 @@ import sdmx.version.common.ParseParams;
 import sdmx.version.common.SOAPStrippingInputStream;
 import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
 import sdmx.version.twopointzero.Sdmx20QueryWriter;
+import sdmx.xml.DateTime;
 
 /**
  *
@@ -109,14 +117,9 @@ import sdmx.version.twopointzero.Sdmx20QueryWriter;
  */
 public class ONSRESTServiceRegistry implements Registry, Repository, Queryable {
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
         ONSRESTServiceRegistry registry = new ONSRESTServiceRegistry("ONS", "http://data.ons.gov.uk/ons/api/data", "apikey=doFKbcgLtj");
         List<DataflowType> list = registry.listDataflows();
-        Locale loc = Locale.getDefault();
-        Locale cy = Locale.forLanguageTag("cy");
-        for (DataflowType df : list) {
-            System.out.println(NameableType.toString(df, loc) + "," + df.getAgencyID() + "," + df.getId());
-        }
         //DataStructureReference ref = DataStructureReference.create(new NestedNCNameID("ONS"), new IDType("Social_SAPEDE_2013HEALTHH"), Version.ONE);
         //DataStructureType dst = registry.find(ref);
         //dst.dump();
@@ -155,14 +158,11 @@ public class ONSRESTServiceRegistry implements Registry, Repository, Queryable {
             try {
                 String id = ref.getMaintainableParentId().toString();
                 int firstUnderscore = id.indexOf("_");
-                String context = id.substring(0,firstUnderscore);
+                String context = id.substring(0, firstUnderscore);
                 int lastUnderscore = id.lastIndexOf("_");
-                String sid = id.substring(firstUnderscore+1,lastUnderscore);
-                String geography = id.substring(lastUnderscore+1,id.length());
-                System.out.println("ctx="+context);
-                System.out.println("SID="+sid);
-                System.out.println("GEO="+geography);
-                StructureType st = retrieve(getServiceURL() + "/dataset/"+sid+"/dsd.xml?context="+context+"&geog="+geography);
+                String sid = id.substring(firstUnderscore + 1, lastUnderscore);
+                String geography = id.substring(lastUnderscore + 1, id.length());
+                StructureType st = retrieve(getServiceURL() + "/dataset/" + sid + "/dsd.xml?context=" + context + "&geog=" + geography);
                 // Emergency On-set Rewrite!!!!
                 st.getStructures().getDataStructures().getDataStructures().get(0).setId(ref.getMaintainableParentId());
                 DataStructureType dst2 = st.find(ref);
@@ -387,7 +387,58 @@ public class ONSRESTServiceRegistry implements Registry, Repository, Queryable {
 
     @Override
     public DataMessage query(ParseParams pparams, DataQueryMessage message) {
-        return null;
+        if (SdmxIO.isDumpQuery()) {
+
+        }
+        IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataflow().get(0).getMaintainableParentId();
+        String id = flowid.toString();
+        int firstUnderscore = id.indexOf("_");
+        String context = id.substring(0, firstUnderscore);
+        int lastUnderscore = id.lastIndexOf("_");
+        String sid = id.substring(firstUnderscore + 1, lastUnderscore);
+        String geography = id.substring(lastUnderscore + 1, id.length());
+        NestedNCNameID agency = new NestedNCNameID(this.getAgencyId());
+        DataStructureType dst = null;
+        if (dataflowList == null) {
+            listDataflows();
+        }
+        for (int i = 0; i < dataflowList.size(); i++) {
+            if (dataflowList.get(i).getId().equals(flowid)) {
+                dst = find(dataflowList.get(i).getStructure());
+            }
+        }
+        DataStructureType structure = dst;
+        StringBuilder q = new StringBuilder();
+        for (int i = 0; i < structure.getDataStructureComponents().getDimensionList().size(); i++) {
+            DimensionType dim = structure.getDataStructureComponents().getDimensionList().getDimension(i);
+            boolean addedParam = false;
+            String concept = dim.getConceptIdentity().getId().toString();
+            List<String> params = message.getQuery().getDataWhere().getAnd().get(0).getDimensionParameters(concept);
+            if (params.size() > 0) {
+                addedParam = true;
+                q.append("dm/" + concept + "=");
+                for (int j = 0; j < params.size(); j++) {
+                    q.append(params.get(j));
+                    if (j < params.size() - 1) {
+                        q.append(",");
+                    }
+                }
+            }
+            if (addedParam && i < structure.getDataStructureComponents().getDimensionList().size() - 1) {
+                q.append("&");
+            }
+            addedParam = false;
+        }
+        DataMessage msg = null;
+        try {
+            // http://www.ons.gov.uk/ons/api/data/dataset/AF001EW.xml?apikey=doFKbcgLtj&context=Census&apikey=&geog=2011STATH&totals=false&dm/2011STATH=K04000001
+            msg = query(pparams, getServiceURL() + "/dataset/" + sid + ".xml?" + options + "&context=" + context + "&geog=" + geography + "&totals=false" + q.toString());
+        } catch (IOException ex) {
+            Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return msg;
     }
 
     @Override
@@ -395,59 +446,84 @@ public class ONSRESTServiceRegistry implements Registry, Repository, Queryable {
         if (dataflowList != null) {
             return dataflowList;
         }
-        List<String> contexts = new ArrayList<String>();
-        contexts.add("Census");
+        if (new File("ons.xml").exists()) {
+            try {
+                StructureType struct = SdmxIO.parseStructure(new FileInputStream("ons.xml"));
+                return struct.getStructures().getDataflows().getDataflows();
+            } catch (IOException ex) {
+                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return Collections.EMPTY_LIST;
+        } else {
+            List<String> contexts = new ArrayList<String>();
+            contexts.add("Census");
 // This is supposed to work but it doesn't :(        
 //contexts.add("Socio-Economic");
 
-        contexts.add("Economic");
-        contexts.add("Social");
-        List<ONSCube> bigList = new ArrayList<ONSCube>();
-        for (String s : contexts) {
+            contexts.add("Economic");
+            contexts.add("Social");
+            List<ONSCube> bigList = new ArrayList<ONSCube>();
+            for (String s : contexts) {
+                try {
+                    InputStream in = retrieve3(serviceURL + "/collections.xml?context=" + s + "&" + options);
+                    Name name = new Name("en", s);
+                    List<Name> names = new ArrayList<Name>();
+                    names.add(name);
+                    List<ONSCube> list = parseCollections(in, s, names);
+                    bigList.addAll(list);
+                } catch (IOException ex) {
+                    Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ParseException ex) {
+                    Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (XMLStreamException ex) {
+                    Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            List<ONSCube> bigList2 = new ArrayList<ONSCube>();
+            for (ONSCube cube : bigList) {
+                try {
+                    InputStream in = retrieve3(serviceURL + "/hierarchies/" + cube.getId() + ".xml?context=" + cube.getContext() + "&" + options);
+                    List<ONSCube> list = parseGeography(in, cube);
+                    bigList2.addAll(list);
+                } catch (IOException ex) {
+                    Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ParseException ex) {
+                    Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (XMLStreamException ex) {
+                    Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            dataflowList = new ArrayList<DataflowType>();
+            for (ONSCube cube : bigList2) {
+                DataflowType df = new DataflowType();
+                df.setId(new IDType(cube.getMainId()));
+                df.setNames(cube.getMainNames());
+                DataStructureReference struct = DataStructureReference.create(new NestedNCNameID(agency), df.getId(), Version.ONE);
+                df.setStructure(struct);
+                df.setAgencyID(new NestedNCNameID(agency));
+                dataflowList.add(df);
+            }
+            StructureType struct = new StructureType();
+            struct.setHeader(getBaseHeader());
+            StructuresType structs = new StructuresType();
+            DataflowsType dfs = new DataflowsType();
+            dfs.setDataflows(dataflowList);
+            structs.setDataflows(dfs);
+            struct.setStructures(structs);
             try {
-                InputStream in = retrieve3(serviceURL + "/collections.xml?context=" + s + "&" + options);
-                Name name = new Name("en",s);
-                List<Name> names = new ArrayList<Name>();
-                names.add(name);
-                List<ONSCube> list = parseCollections(in,s,names);
-                bigList.addAll(list);
+                Sdmx21StructureWriter.write(struct, new FileOutputStream("ons.xml"));
             } catch (IOException ex) {
                 Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ParseException ex) {
-                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (XMLStreamException ex) {
-                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             }
+            return dataflowList;
         }
-        List<ONSCube> bigList2 = new ArrayList<ONSCube>();
-        for(ONSCube cube:bigList) {
-            try {
-                InputStream in = retrieve3(serviceURL + "/hierarchies/"+cube.getId()+".xml?context=" + cube.getContext() + "&" + options);
-                List<ONSCube> list = parseGeography(in,cube);
-                bigList2.addAll(list);
-            } catch (IOException ex) {
-                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ParseException ex) {
-                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (XMLStreamException ex) {
-                Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        dataflowList = new ArrayList<DataflowType>();
-        for (ONSCube cube : bigList2) {
-            DataflowType df = new DataflowType();
-            df.setId(new IDType(cube.getMainId()));
-            df.setNames(cube.getMainNames());
-            DataStructureReference struct = DataStructureReference.create(new NestedNCNameID(agency), df.getId(), Version.ONE);
-            df.setStructure(struct);
-            df.setAgencyID(new NestedNCNameID(agency));
-            dataflowList.add(df);
-        }
-        return dataflowList;
     }
 
     @Override
-    public DataflowType find(DataflowReference ref) {
+    public DataflowType find(DataflowReference ref
+    ) {
         DataflowType dst = local.find(ref);
         if (dst == null) {
             try {
@@ -544,7 +620,7 @@ public class ONSRESTServiceRegistry implements Registry, Repository, Queryable {
     public static final int STATE_ID = 1;
     public static final int STATE_NAME = 2;
 
-    public static List<ONSCube> parseCollections(InputStream in,String context,List<Name> contextNames) throws XMLStreamException {
+    public static List<ONSCube> parseCollections(InputStream in, String context, List<Name> contextNames) throws XMLStreamException {
         List<ONSCube> cubeList = new ArrayList<ONSCube>();
         ONSCube currCube = null;
         String tagContent = null;
@@ -602,7 +678,8 @@ public class ONSRESTServiceRegistry implements Registry, Repository, Queryable {
         }
         return cubeList;
     }
-    public static List<ONSCube> parseGeography(InputStream in,ONSCube cube) throws XMLStreamException {
+
+    public static List<ONSCube> parseGeography(InputStream in, ONSCube cube) throws XMLStreamException {
         List<ONSCube> cubeList = new ArrayList<ONSCube>();
         ONSCube currCube = null;
         String tagContent = null;
@@ -633,7 +710,7 @@ public class ONSRESTServiceRegistry implements Registry, Repository, Queryable {
                     }
                     break;
                 case XMLStreamConstants.CHARACTERS:
-                    if (state == STATE_ID&&currCube!=null) {
+                    if (state == STATE_ID && currCube != null) {
                         currCube.setGeography(reader.getText().trim());
                     }
                     if (state == STATE_NAME && currCube != null) {
@@ -661,5 +738,20 @@ public class ONSRESTServiceRegistry implements Registry, Repository, Queryable {
             }
         }
         return cubeList;
+    }
+    public BaseHeaderType getBaseHeader() {
+        BaseHeaderType header = new BaseHeaderType();
+        header.setId("none");
+        header.setTest(false);
+        SenderType sender = new SenderType();
+        sender.setId(new IDType("Sdmx-Sax"));
+        header.setSender(sender);
+        PartyType receiver = new PartyType();
+        receiver.setId(new IDType(agency));
+        header.setReceivers(Collections.singletonList(receiver));
+        HeaderTimeType htt = new HeaderTimeType();
+        htt.setDate(DateTime.now());
+        header.setPrepared(htt);
+        return header;
     }
 }
