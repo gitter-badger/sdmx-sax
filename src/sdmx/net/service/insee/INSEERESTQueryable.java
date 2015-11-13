@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sdmx.net.service.opensdmx;
+package sdmx.net.service.insee;
 
 import sdmx.net.service.*;
 import sdmx.net.*;
@@ -89,15 +89,15 @@ import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
  *
  * Copyright James Gardner 2014
  */
-public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
+public class INSEERESTQueryable implements Queryable, Registry, Repository {
 
     public static void main(String args[]) {
-        OpenSDMXRESTQueryable registry = new OpenSDMXRESTQueryable("FAO", "http://data.fao.org/sdmx");
-        //SdmxIO.setSaveXml(true);
-        SdmxIO.setLogLevel(7);
-        Logger.getLogger("sdmx").setLevel(Level.ALL);
-        DataStructureReference ref = DataStructureReference.create(new NestedNCNameID("FAO"), new IDType("CAPTURE_DATASTRUCTURE"), new Version("0.1"));
-        System.out.println("DataStructure=" + registry.find(ref));
+        INSEERESTQueryable registry = new INSEERESTQueryable("FR1", "http://www.bdm.insee.fr/series/sdmx");
+        List<DataflowType> dfs = registry.listDataflows();
+        for (int i = 0; i < dfs.size(); i++) {
+            System.out.println(dfs.get(i).getName());
+        }
+        registry.find(dfs.get(0).getStructure()).dump();
     }
     private String agency = "";
     private String serviceURL = "";
@@ -105,7 +105,7 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
 
     private List<DataflowType> dataflowList = null;
 
-    public OpenSDMXRESTQueryable(String agency, String service) {
+    public INSEERESTQueryable(String agency, String service) {
         this.serviceURL = service;
         this.agency = agency;
     }
@@ -146,7 +146,6 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
         //temp.close();
         //in.close();
         //in = new FileInputStream("temp.xml");
-        System.out.println("Parsing!");
         ParseParams params = new ParseParams();
         params.setRegistry(this);
         StructureType st = SdmxIO.parseStructure(params, in);
@@ -162,8 +161,8 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
         return st;
     }
 
-    public DataMessage query(ParseParams params,String urlString) throws MalformedURLException, IOException, ParseException {
-        Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Retrieve Data:" + urlString);
+    public DataMessage query(ParseParams pparams,String urlString) throws MalformedURLException, IOException, ParseException {
+        Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Query:" + urlString);
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(urlString);
         get.addHeader("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
@@ -190,8 +189,7 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
             IOUtils.copy(in, file);
             in = new FileInputStream(name);
         }
-        System.out.println("Parsing!");
-        DataMessage msg = SdmxIO.parseData(params,in);
+        DataMessage msg = SdmxIO.parseData(pparams,in);
         if (msg == null) {
             System.out.println("Data is null!");
         }
@@ -203,17 +201,50 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
      this means that if the sdmx service sends sdmx 2.0 data structures
      the codelists dont have to be loaded.
      */
+    /*
+     private StructureType retrieve(String urlString) throws MalformedURLException, IOException, ParseException {
+     Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Retrieve:" + urlString);
+     URL url = new URL(urlString);
+     HttpURLConnection conn
+     = (HttpURLConnection) url.openConnection();
+     if (conn.getResponseCode() != 200) {
+     throw new IOException(conn.getResponseMessage());
+     }
+     InputStream in = conn.getInputStream();
+     //FileOutputStream temp = new FileOutputStream("temp.xml");
+     //org.apache.commons.io.IOUtils.copy(in, temp);
+     //temp.close();
+     //in.close();
+     //in = new FileInputStream("temp.xml");
+     try {
+     Thread.sleep(1000);
+     } catch (InterruptedException ie) {
+     }
+     StructureType st = SdmxIO.parseStructure(local, in);
+     if (st == null) {
+     System.out.println("St is null!");
+     }
+     return st;
+     }*/
 
     @Override
     public DataMessage query(ParseParams pparams,DataQueryMessage message) {
+        Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Query: DataQueryMessage" + message);
         IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataflow().get(0).getMaintainableParentId();
         NestedNCNameID agency = new NestedNCNameID(this.getAgencyId());
         DataStructureType dst = null;
-        for (int i = 0; i < dataflowList.size(); i++) {
-            if (dataflowList.get(i).getId().equals(flowid)) {
-                DataStructureReference ref = DataStructureReference.create(dataflowList.get(i).getStructure().getAgencyId(), dataflowList.get(i).getStructure().getMaintainableParentId(), dataflowList.get(i).getStructure().getMaintainedParentVersion());
-                dst = find(ref);
+        DataflowReference dfref = DataflowReference.create(agency, flowid, null);
+        DataflowType df = find(dfref);
+        if (df == null) {
+            listDataflows();
+            for (int i = 0; i < dataflowList.size(); i++) {
+                if (dataflowList.get(i).getId().equals(flowid)) {
+                    DataStructureReference ref = DataStructureReference.create(dataflowList.get(i).getStructure().getAgencyId(), dataflowList.get(i).getStructure().getMaintainableParentId(), dataflowList.get(i).getStructure().getMaintainedParentVersion());
+                    dst = find(ref);
+                }
             }
+        }else {
+            dst = find(df.getStructure());
         }
         DataStructureType structure = dst;
         StringBuilder q = new StringBuilder();
@@ -237,35 +268,33 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
         String endTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getEnd().toString();
         DataMessage msg = null;
         try {
-            msg = query(pparams,getServiceURL() + "/repository/data/" + flowid + "/" + q.toString() + "/"+agency+"?startPeriod=" + startTime + "&endPeriod=" + endTime);
+            msg = query(pparams,getServiceURL() + "/data/" + flowid + "/" + q.toString() + "?startPeriod=" + startTime + "&endPeriod=" + endTime);
         } catch (IOException ex) {
-            Logger.getLogger(OpenSDMXRESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger("sdmx").log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
-            Logger.getLogger(OpenSDMXRESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger("sdmx").log(Level.SEVERE, null, ex);
         }
         return msg;
     }
 
     @Override
     public List<DataflowType> listDataflows() {
+        Logger.getLogger("sdmx").log(Level.FINE, "Rest Queryable listDataflows():");
         if (dataflowList != null) {
             return dataflowList;
         }
         dataflowList = new ArrayList<DataflowType>();
         try {
-            StructureType st = SdmxIO.parseStructure(OpenSDMXRESTQueryable.class.getResourceAsStream("fao_dataflows.xml"));
+            StructureType st = retrieve(getServiceURL() + "/dataflow/");
             dataflowList = st.getStructures().getDataflows().getDataflows();
         } catch (MalformedURLException ex) {
-            Logger.getLogger(OpenSDMXRESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
-            //dataflowList = null;
+            Logger.getLogger("sdmx").log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(OpenSDMXRESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
-            //dataflowList = null;
+            Logger.getLogger("sdmx").log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
-            Logger.getLogger(OpenSDMXRESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger("sdmx").log(Level.SEVERE, null, ex);
         }
         return dataflowList;
-
     }
 
     /**
@@ -303,11 +332,11 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
 
     @Override
     public DataStructureType find(DataStructureReference ref) {
-        Logger.getLogger("sdmx").log(Level.FINE,"find(DataStructureReference-"+ref.getAgencyId()+":"+ref.getMaintainableParentId()+":"+ref.getVersion()+")");
+        Logger.getLogger("sdmx").log(Level.FINE, "RESTQueryable find(DataStructureReference:" + ref.getAgencyId() + ":" + ref.getMaintainableParentId() + ":" + ref.getVersion());
         DataStructureType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/registry/datastructure/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + ref.getVersion().toString());
+                StructureType st = retrieve(getServiceURL() + "/datastructure/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion() == null ? "latest" : ref.getVersion().toString()));
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {
@@ -323,16 +352,11 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
 
     @Override
     public DataflowType find(DataflowReference ref) {
-        for(DataflowType df2:listDataflows()) {
-            if( df2.identifiesMe(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion())){
-                return df2;
-            }
-        }
-        Logger.getLogger("sdmx").log(Level.FINE,"find(DataflowReference-"+ref.getAgencyId()+":"+ref.getMaintainableParentId()+":"+ref.getVersion()+")");
+        Logger.getLogger("sdmx").log(Level.FINE, "RESTQueryable find(DataflowReference:" + ref.getAgencyId() + ":" + ref.getMaintainableParentId() + ":" + ref.getVersion());
         DataflowType dft = local.find(ref);
         if (dft == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/registry/dataflow/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + ref.getVersion() != null ? ref.getVersion().toString() : "latest");
+                StructureType st = retrieve(getServiceURL() + "/dataflow/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion() != null ? ref.getVersion().toString() : "latest"));
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {
@@ -348,11 +372,11 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
 
     @Override
     public CodeType find(CodeReference ref) {
-        Logger.getLogger("sdmx").log(Level.FINE,"find(CodeReference-"+ref.getAgencyId()+":"+ref.getMaintainableParentId()+":"+ref.getVersion()+")");
+        Logger.getLogger("sdmx").log(Level.FINE, "RESTQueryable find(CodeReference:" + ref.getAgencyId() + ":" + ref.getMaintainableParentId() + ":" + ref.getVersion());
         CodeType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/registry/codelist/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + ref.getVersion() != null ? "/" + ref.getVersion().toString() : "/latest");
+                StructureType st = retrieve(getServiceURL() + "/codelist/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + ref.getVersion() != null ? "/" + ref.getVersion().toString() : "/latest");
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {
@@ -369,11 +393,11 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
 
     @Override
     public CodelistType find(CodelistReference ref) {
-        Logger.getLogger("sdmx").log(Level.FINE,"find(CodelistReference-"+ref.getAgencyId()+":"+ref.getMaintainableParentId()+":"+ref.getVersion()+")");
+        Logger.getLogger("sdmx").log(Level.FINE, "RESTQueryable find(CodelistReference:" + ref.getAgencyId() + ":" + ref.getMaintainableParentId() + ":" + ref.getVersion());
         CodelistType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/registry/codelist/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + ref.getVersion() != null ? "/" + ref.getVersion().toString() : "/latest");
+                StructureType st = retrieve(getServiceURL() + "/codelist/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + (ref.getVersion() != null ? "/" + ref.getVersion().toString() : "/latest"));
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {
@@ -389,16 +413,18 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
 
     @Override
     public ConceptType find(ConceptReference ref) {
-        return local.find(ref);
+        ConceptSchemeReference ref2 = ConceptSchemeReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion());
+        ConceptSchemeType cs = find(ref2);
+        return cs.findConcept(ref.getId());
     }
 
     @Override
     public ConceptSchemeType find(ConceptSchemeReference ref) {
-        Logger.getLogger("sdmx").log(Level.FINE,"find(ConceptSchemeReference-"+ref.getAgencyId()+":"+ref.getMaintainableParentId()+":"+ref.getVersion()+")");
+        Logger.getLogger("sdmx").log(Level.FINE, "RESTQueryable find(ConceptSchemeReference:" + ref.getAgencyId() + ":" + ref.getMaintainableParentId() + ":" + ref.getVersion());
         ConceptSchemeType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/registry/conceptscheme/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion()==null?"latest":ref.getVersion().toString()));
+                StructureType st = retrieve(getServiceURL() + "/conceptscheme/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + ref.getVersion().toString());
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {
@@ -411,20 +437,25 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
         }
         return dst;
     }
+
     @Override
     public ItemType find(ItemReference ref) {
         ConceptType concept = find(ConceptReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion(), ref.getId()));
-        if( concept!=null) return concept;
-        CodeType code = find(CodeReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion(), ref.getId()));
+        if (concept != null) {
+            return concept;
+        }
+        CodeType code = find(CodeReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion(), ref.getId()));
         return code;
-        
+
     }
 
     @Override
     public ItemSchemeType find(ItemSchemeReference ref) {
         ConceptSchemeType concept = find(ConceptSchemeReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion()));
-        if( concept!=null) return concept;
-        CodelistType code = find(CodelistReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion()));
+        if (concept != null) {
+            return concept;
+        }
+        CodelistType code = find(CodelistReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion()));
         return code;
     }
 

@@ -1185,7 +1185,7 @@ public class Sdmx20StructureReaderTools {
     }
 
     public ConceptType getConcept(ConceptSchemeType scheme, org.sdmx.resources.sdmxml.schemas.v20.structure.DimensionType dim) {
-        Logger.getLogger("sdmx").log(Level.WARNING, "Sdmx20StructureReaderTools:getConcept " + dim.getConceptRef());
+        //Logger.getLogger("sdmx").log(Level.WARNING, "Sdmx20StructureReaderTools:getConcept " + dim.getConceptRef());
         if (scheme != null) {
             return scheme.findConcept(dim.getConceptRef());
         } else {

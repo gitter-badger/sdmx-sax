@@ -16,6 +16,10 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
@@ -80,7 +84,12 @@ public class GenericDataContentHandler extends Sdmx20ContentHandler {
 
     public DataMessage parse() throws SAXException, IOException {
         parsed = true;
-        reader = XMLReaderFactory.createXMLReader();
+        XMLReader reader = XMLReaderFactory.createXMLReader();
+        try{
+        reader.setProperty(XMLConstants.FEATURE_SECURE_PROCESSING, false);
+        }catch(Exception ex) {
+           //Logger.getLogger(GenericDataContentHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
         reader.setContentHandler(this);
         reader.setErrorHandler(this);
         if (this.in != null) {

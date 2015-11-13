@@ -22,6 +22,7 @@ public class ComponentUtil {
         return c.getLocalRepresentation();
     }
     public static RepresentationType getLocalRepresentation(Component c) {
+        if( c == null ) return null;
         return c.getLocalRepresentation();
     }
 }

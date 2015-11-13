@@ -110,16 +110,16 @@ public class DataStructureType extends StructureType {
 
         {
             MeasureDimensionType dim = components.getDimensionList().getMeasureDimension();
-            System.out.print(dim.getConceptIdentity().getId());
+            //System.out.print(dim.getConceptIdentity().getId());
             if (ComponentUtil.getLocalRepresentation(dim) != null && ComponentUtil.getLocalRepresentation(dim).getEnumeration() != null) {
                 System.out.print(" Codelist:" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getAgencyId() + ":" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getMaintainableParentId() + ":" + ComponentUtil.getLocalRepresentation(dim).getEnumeration().getMaintainedParentVersion());
             }
-            if (dim.getConceptIdentity() != null) {
+            if (dim!=null&&dim.getConceptIdentity() != null) {
                 System.out.print(" Concept Identity:" + dim.getConceptIdentity().getAgencyId() + ":" + dim.getConceptIdentity().getMaintainableParentId() + ":" + dim.getConceptIdentity().getMaintainedParentVersion());
             } else {
                 System.out.println("***** NULL CONCEPT IDENTITY ******");
             }
-            if (ComponentUtil.getLocalRepresentation(dim) != null && ComponentUtil.getLocalRepresentation(dim).getTextFormat() != null) {
+            if (dim!=null&&ComponentUtil.getLocalRepresentation(dim) != null && ComponentUtil.getLocalRepresentation(dim).getTextFormat() != null) {
                 System.out.print(" Text Format:" + ComponentUtil.getLocalRepresentation(dim).getTextFormat().getTextType());
             }
             System.out.println();

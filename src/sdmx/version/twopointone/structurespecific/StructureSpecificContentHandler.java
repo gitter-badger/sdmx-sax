@@ -19,6 +19,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
 import sdmx.Registry;
@@ -26,6 +30,7 @@ import sdmx.data.flat.FlatDataSet;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
 import sdmx.version.twopointzero.Sdmx20ContentHandler;
+import sdmx.version.twopointzero.generic.GenericDataContentHandler;
 
 /**
  * This file is part of SdmxSax.
@@ -76,7 +81,12 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
 
     public DataMessage parse() throws SAXException, IOException {
         parsed = true;
-        reader = XMLReaderFactory.createXMLReader();
+        XMLReader reader = XMLReaderFactory.createXMLReader();
+        try{
+        reader.setProperty(XMLConstants.FEATURE_SECURE_PROCESSING, false);
+        }catch(Exception ex) {
+           //Logger.getLogger(GenericDataContentHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
         reader.setContentHandler(this);
         reader.setErrorHandler(this);
         if (in != null) {
@@ -110,14 +120,14 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
          * This is really useful!!!
          */
 //        System.out.println("localName=" + localName);
- //       for (int i = 0; i < atts.getLength(); i++) {
-  //          System.out.println("Att=" + atts.getLocalName(i) + " val=" + atts.getValue(i));
-    //    }
+        //       for (int i = 0; i < atts.getLength(); i++) {
+        //          System.out.println("Att=" + atts.getLocalName(i) + " val=" + atts.getValue(i));
+        //    }
         if ("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message".equals(uri)) {
             if ("StructureSpecificTimeSeriesData".equals(localName)) {
-                eh.startRootElement(localName,atts);
+                eh.startRootElement(localName, atts);
             } else if ("StructureSpecificData".equals(localName)) {
-                eh.startRootElement(localName,atts);
+                eh.startRootElement(localName, atts);
             } else if ("Header".equals(localName)) {
                 eh.startHeader();
             } else if ("ID".equals(localName)) {
@@ -167,7 +177,7 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
                 } catch (URISyntaxException ex) {
                     Logger.getLogger(StructureSpecificContentHandler.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }else if ("Series".equalsIgnoreCase(localName)) {
+            } else if ("Series".equalsIgnoreCase(localName)) {
                 eh.startSeries(uri, atts);
             } else if ("Obs".equalsIgnoreCase(localName)) {
                 eh.startObs(uri, atts);
@@ -189,24 +199,22 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
             if ("Structure".equals(localName)) {
                 eh.startCommonStructure(atts);;
             }
-        } else {
-            if ("Series".equalsIgnoreCase(localName)) {
-                eh.startSeries(uri, atts);
-            } else if ("Obs".equalsIgnoreCase(localName)) {
-                eh.startObs(uri, atts);
-            } else if (localName.indexOf("Group") != -1) {
-                eh.startGroup(localName, atts);
-            } else if ("Ref".equalsIgnoreCase(localName)) {
-                eh.startRef(atts);
-            } else if ("URN".equalsIgnoreCase(localName)) {
-                eh.startURN(atts);
-            } else if ("DataSet".equalsIgnoreCase(localName)) {
-                //System.out.println("StartDataSet");
-                try {
-                    eh.startDataSet(uri, qName, atts);
-                } catch (URISyntaxException ex) {
-                    Logger.getLogger(StructureSpecificContentHandler.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        } else if ("Series".equalsIgnoreCase(localName)) {
+            eh.startSeries(uri, atts);
+        } else if ("Obs".equalsIgnoreCase(localName)) {
+            eh.startObs(uri, atts);
+        } else if (localName.indexOf("Group") != -1) {
+            eh.startGroup(localName, atts);
+        } else if ("Ref".equalsIgnoreCase(localName)) {
+            eh.startRef(atts);
+        } else if ("URN".equalsIgnoreCase(localName)) {
+            eh.startURN(atts);
+        } else if ("DataSet".equalsIgnoreCase(localName)) {
+            //System.out.println("StartDataSet");
+            try {
+                eh.startDataSet(uri, qName, atts);
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(StructureSpecificContentHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -291,7 +299,7 @@ public class StructureSpecificContentHandler extends Sdmx20ContentHandler implem
                 eh.endRef();
             } else if ("URN".equals(localName)) {
                 eh.endURN();
-            } 
+            }
         } else if ("Series".equals(localName)) {
             //System.out.println("EndSeries");
             eh.endSeries();

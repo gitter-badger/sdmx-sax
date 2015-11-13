@@ -17,6 +17,10 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.ErrorHandler;
@@ -27,6 +31,7 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import sdmx.message.DataMessage;
+import sdmx.version.twopointzero.generic.GenericDataContentHandler;
 
 /**
  * This file is part of SdmxSax.
@@ -81,7 +86,12 @@ public class GenericData21ContentHandler implements ContentHandler, ErrorHandler
 
     public DataMessage parse() throws SAXException, IOException {
         parsed = true;
-        reader = XMLReaderFactory.createXMLReader();
+        XMLReader reader = XMLReaderFactory.createXMLReader();
+        try{
+        reader.setProperty(XMLConstants.FEATURE_SECURE_PROCESSING, false);
+        }catch(Exception ex) {
+           //Logger.getLogger(GenericDataContentHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
         reader.setContentHandler(this);
         reader.setErrorHandler(this);
         if (this.in != null) {
@@ -114,7 +124,7 @@ public class GenericData21ContentHandler implements ContentHandler, ErrorHandler
             /*
          * This is really useful!!!
          * */
-        System.out.println(uri+":"+ localName);
+        System.out.println(uri + ":" + localName);
         //for (int i = 0; i < atts.getLength(); i++) {
 //            System.out.println("Att=" + atts.getLocalName(i) + " val=" + atts.getValue(i));
 //        }
@@ -167,7 +177,7 @@ public class GenericData21ContentHandler implements ContentHandler, ErrorHandler
                 eh.startMessageStructure(atts);;
             } else if ("DataSet".equals(localName)) {
                 eh.startDataSet(uri, atts);
-            }else if ("URN".equals(localName)) {
+            } else if ("URN".equals(localName)) {
                 eh.startURN(atts);
             }
         }

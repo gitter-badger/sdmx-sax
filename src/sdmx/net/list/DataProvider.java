@@ -40,6 +40,7 @@ public class DataProvider {
     public static final int TYPE_KNOEMA = 5;
     public static final int TYPE_NOMIS = 6;
     public static final int TYPE_ONS = 7;
+    public static final int TYPE_INSEE = 8;
     
     
     private static final List<DataProvider> LIST = new ArrayList<DataProvider>();

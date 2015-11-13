@@ -18,6 +18,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
 import sdmx.Registry;
@@ -27,23 +31,24 @@ import sdmx.message.BaseHeaderType;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
 import sdmx.version.twopointzero.Sdmx20ContentHandler;
+import sdmx.version.twopointzero.generic.GenericDataContentHandler;
+
 /**
- *  This file is part of SdmxSax.
+ * This file is part of SdmxSax.
  *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *   SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * SdmxSax is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
+ * SdmxSax is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- *  Copyright James Gardner 2014
+ * You should have received a copy of the GNU General Public License along with
+ * SdmxSax. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright James Gardner 2014
  */
 public class CompactDataContentHandler extends Sdmx20ContentHandler implements ContentHandler, ErrorHandler {
 
@@ -77,7 +82,12 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
 
     public DataMessage parse() throws SAXException, IOException {
         parsed = true;
-        reader = XMLReaderFactory.createXMLReader();
+        XMLReader reader = XMLReaderFactory.createXMLReader();
+        try{
+        reader.setProperty(XMLConstants.FEATURE_SECURE_PROCESSING, false);
+        }catch(Exception ex) {
+           //Logger.getLogger(GenericDataContentHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
         reader.setContentHandler(this);
         reader.setErrorHandler(this);
         if (in != null) {
@@ -149,20 +159,19 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
                 eh.startTelephone(atts);
             } else if ("Department".equals(localName)) {
                 eh.startDepartment(atts);
-            }else if ("X400".equals(localName)) {
+            } else if ("X400".equals(localName)) {
                 eh.startX400(atts);
-            }else if ("Fax".equals(localName)) {
+            } else if ("Fax".equals(localName)) {
                 eh.startFax(atts);
-            }else if ("Receiver".equals(localName)) {
+            } else if ("Receiver".equals(localName)) {
                 eh.startReceiver(atts);
-            }else if ("Role".equals(localName)) {
+            } else if ("Role".equals(localName)) {
                 eh.startRole(atts);
-            }else if ("URI".equals(localName)) {
+            } else if ("URI".equals(localName)) {
                 eh.startURI(atts);
-            }else if ("Email".equals(localName)) {
+            } else if ("Email".equals(localName)) {
                 eh.startEmail(atts);
-            }
-            // DataSet has no namespace!!!
+            } // DataSet has no namespace!!!
             else if ("DataSet".equals(localName)) {
                 try {
                     eh.startDataSet(uri, qName, atts);
@@ -174,24 +183,22 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
                 eh.startSeries(uri, atts);
             } else if ("Obs".equals(localName)) {
                 eh.startObs(uri, atts);
-            } else if( localName.indexOf("Group")!=-1 ) {
+            } else if (localName.indexOf("Group") != -1) {
                 eh.startGroup(localName, atts);
             }
-        } else {
-            if ("DataSet".equals(localName)) {
-                try {
-                    eh.startDataSet(uri, qName, atts);
-                } catch (URISyntaxException ex) {
-                    Logger.getLogger(CompactDataContentHandler.class.getName()).log(Level.SEVERE, null, ex);
-                    ex.printStackTrace();
-                }
-            } else if ("Series".equals(localName)) {
-                eh.startSeries(uri, atts);
-            } else if ("Obs".equals(localName)) {
-                eh.startObs(uri, atts);
-            } else if( localName.indexOf("Group")!=-1 ) {
-                eh.startGroup(localName, atts);
+        } else if ("DataSet".equals(localName)) {
+            try {
+                eh.startDataSet(uri, qName, atts);
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(CompactDataContentHandler.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
             }
+        } else if ("Series".equals(localName)) {
+            eh.startSeries(uri, atts);
+        } else if ("Obs".equals(localName)) {
+            eh.startObs(uri, atts);
+        } else if (localName.indexOf("Group") != -1) {
+            eh.startGroup(localName, atts);
         }
     }
 
@@ -235,44 +242,41 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
                 eh.endReportingBegin();
             } else if ("ReportingEnd".equals(localName)) {
                 eh.endReportingEnd();
-            }else if ("Contact".equals(localName)) {
+            } else if ("Contact".equals(localName)) {
                 eh.endContact();
             } else if ("Telephone".equals(localName)) {
                 eh.endTelephone();
             } else if ("Department".equals(localName)) {
                 eh.endDepartment();
-            }else if ("X400".equals(localName)) {
+            } else if ("X400".equals(localName)) {
                 eh.endtX400();
-            }else if ("Fax".equals(localName)) {
+            } else if ("Fax".equals(localName)) {
                 eh.endFax();
-            }else if ("Receiver".equals(localName)) {
+            } else if ("Receiver".equals(localName)) {
                 eh.endReceiver();
-            }else if ("Role".equals(localName)) {
+            } else if ("Role".equals(localName)) {
                 eh.endRole();
-            }else if ("URI".equals(localName)) {
+            } else if ("URI".equals(localName)) {
                 eh.endURI();
-            }else if ("Email".equals(localName)) {
+            } else if ("Email".equals(localName)) {
                 eh.endEmail();
-            }
-            else if ("DataSet".equals(localName)) {
+            } else if ("DataSet".equals(localName)) {
                 eh.endDataSet();
             } else if ("Series".equals(localName)) {
                 eh.endSeries();
             } else if ("Obs".equals(localName)) {
                 eh.endObs();
-            } else if( localName.indexOf("Group")!=-1 ) {
+            } else if (localName.indexOf("Group") != -1) {
                 eh.endGroup();
             }
-        } else {
-            if ("DataSet".equals(localName)) {
-                eh.endDataSet();
-            } else if ("Series".equals(localName)) {
-                eh.endSeries();
-            } else if ("Obs".equals(localName)) {
-                eh.endObs();
-            } else if( localName.indexOf("Group")!=-1 ) {
-                eh.endGroup();
-            }
+        } else if ("DataSet".equals(localName)) {
+            eh.endDataSet();
+        } else if ("Series".equals(localName)) {
+            eh.endSeries();
+        } else if ("Obs".equals(localName)) {
+            eh.endObs();
+        } else if (localName.indexOf("Group") != -1) {
+            eh.endGroup();
         }
     }
 
@@ -303,4 +307,5 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
     public void fatalError(SAXParseException exception) throws SAXException {
         System.out.println("Fatal:" + exception);
     }
+
 }
