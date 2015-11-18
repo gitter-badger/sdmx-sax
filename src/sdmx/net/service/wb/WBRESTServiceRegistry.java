@@ -134,7 +134,6 @@ public class WBRESTServiceRegistry implements Registry,Repository,Queryable {
         DataStructureType dst = local.find(ref);
         if (dst == null) {
             try {
-                ref.dump();
                 StructureType st = retrieve(getServiceURL() + "/KeyFamily?id="+ref.getMaintainableParentId().toString());
                 DataStructureType dst2 = st.find(ref);
                 load(st);

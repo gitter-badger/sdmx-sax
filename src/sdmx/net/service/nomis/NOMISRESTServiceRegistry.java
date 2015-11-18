@@ -58,11 +58,17 @@ import sdmx.commonreferences.Version;
 import sdmx.commonreferences.types.PackageTypeCodelistType;
 import sdmx.commonreferences.types.StructureTypeCodelistType;
 import sdmx.exception.ParseException;
+import sdmx.message.BaseHeaderType;
 import sdmx.message.DataMessage;
 import sdmx.message.DataQueryMessage;
 import sdmx.message.DataStructureQueryMessage;
+import sdmx.message.HeaderTimeType;
+import sdmx.message.PartyType;
+import sdmx.message.SenderType;
 import sdmx.message.StructureType;
 import sdmx.net.LocalRegistry;
+import sdmx.structure.DataflowsType;
+import sdmx.structure.StructuresType;
 import sdmx.structure.base.ItemSchemeType;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.base.MaintainableType;
@@ -79,6 +85,7 @@ import sdmx.version.common.ParseParams;
 import sdmx.version.common.SOAPStrippingInputStream;
 import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
 import sdmx.version.twopointzero.Sdmx20QueryWriter;
+import sdmx.xml.DateTime;
 
 /**
  *
@@ -460,6 +467,14 @@ public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
                 dfs.add(dst.asDataflow());
             }
             this.dataflowList = dfs;
+            StructureType struct = new StructureType();
+            StructuresType strucs = new StructuresType();
+            DataflowsType dataflows = new DataflowsType();
+            dataflows.setDataflows(dataflowList);
+            strucs.setDataflows(dataflows);
+            struct.setStructures(strucs);
+            struct.setHeader(getBaseHeader());
+            local.load(struct);
         } catch (IOException ex) {
             Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -472,22 +487,18 @@ public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
 
     @Override
     public DataflowType find(DataflowReference ref) {
-        DataflowType dst = local.find(ref);
-        if (dst == null) {
-            try {
-                StructureType st = retrieve(getServiceURL() + "/dataflow/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion() != null ? ref.getVersion().toString() : "latest"));
-                load(st);
-                return local.find(ref);
-            } catch (MalformedURLException ex) {
-                Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ParseException ex) {
-                Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
-                ex.printStackTrace();
+        if( local.find(ref)!=null){
+            return local.find(ref);
+        }
+        if( dataflowList==null) {
+            listDataflows();
+        }
+        for(DataflowType df:dataflowList) {
+            if( df.identifiesMe(ref.getMaintainableParentId())){
+                return df;
             }
         }
-        return dst;
+        return null;
     }
 
     /**
@@ -557,5 +568,20 @@ public class NOMISRESTServiceRegistry implements Registry,Repository,Queryable {
     @Override
     public void save(OutputStream out) throws IOException {
         local.save(out);
+    }
+    public BaseHeaderType getBaseHeader() {
+        BaseHeaderType header = new BaseHeaderType();
+        header.setId("none");
+        header.setTest(false);
+        SenderType sender = new SenderType();
+        sender.setId(new IDType("Sdmx-Sax"));
+        header.setSender(sender);
+        PartyType receiver = new PartyType();
+        receiver.setId(new IDType(agency));
+        header.setReceivers(Collections.singletonList(receiver));
+        HeaderTimeType htt = new HeaderTimeType();
+        htt.setDate(DateTime.now());
+        header.setPrepared(htt);
+        return header;
     }
 }

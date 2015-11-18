@@ -120,18 +120,15 @@ public class LocalRegistry implements Registry {
     public DataStructureType find(DataStructureReference ref) {
         Logger.getLogger("sdmx").log(Level.FINE, "LocalRegistry.find(DataStructureReference-" + ref.getAgencyId() + ":" + ref.getMaintainableParentId() + ":" + ref.getVersion() + ")");
         DataStructureType found = null;
-        //System.out.println("findDS");
         for (int i = 0; i < structures.size(); i++) {
-            //System.out.println("Looking for DS");
             if (structures.get(i).getStructures().getDataStructures() != null) {
-                //System.out.println("Got a Structure with a DataStructure");
-                found = structures.get(i).find(ref);
+                found = structures.get(i).getStructures().getDataStructures().find(ref);
                 if (found != null) {
                     return found;
                 }
             }
         }
-        return null;
+        return found;
     }
 
     @Override

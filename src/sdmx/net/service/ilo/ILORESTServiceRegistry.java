@@ -98,12 +98,16 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
 
     public static void main(String args[]) {
         ILORESTServiceRegistry registry = new ILORESTServiceRegistry("ILO", "http://www.ilo.org/ilostat/sdmx/ws/rest");
-        registry.listDataflows();
+        //registry.listDataflows();
+        DataStructureReference ref = DataStructureReference.create(new NestedNCNameID("ILO"), new IDType("CP_ALL_UNE_DEAP_NOC_RT"), Version.ONE);
+        System.out.println(registry.find(ref));
+        System.out.println(registry.find(ref));
+        System.out.println(registry.find(ref));
 
     }
     private String agency = "";
     private String serviceURL = "";
-    Registry local = new LocalRegistry();
+    LocalRegistry local = new LocalRegistry();
 
     private List<DataflowType> dataflowList = null;
 
@@ -132,8 +136,9 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
         if (dst == null) {
             try {
                 StructureType st = retrieve(getServiceURL() + "/datastructure/" + ref.getAgencyId() + "/" + ref.getMaintainableParentId().toString() + "/"+(ref.getVersion()==null?"latest":ref.getVersion().toString()));
-                DataStructureType dst2 = st.find(ref);
                 load(st);
+                DataStructureType dst2 = local.find(ref);
+                if( dst2 == null ) throw new RuntimeException("DST null");
                 return local.find(ref);
             } catch (MalformedURLException ex) {
                 Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
@@ -344,7 +349,6 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
             return dataflowList;
         }
         CodelistReference ref = CodelistReference.create(new NestedNCNameID(agency), new IDType("CL_COLLECTION"),null);
-        ref.dump();
         this.classifications = find(ref);
         for (int i = 0; i < classifications.size(); i++) {
             CodeType code = classifications.getCode(i);

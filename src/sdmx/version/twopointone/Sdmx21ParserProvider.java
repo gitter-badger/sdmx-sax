@@ -164,6 +164,7 @@ public class Sdmx21ParserProvider implements SdmxParserProvider {
     }
 
     public DataMessage parseStructureSpecificData(InputStream in, ParseDataCallbackHandler cbHandler) throws IOException {
+        System.out.println("parseStructureSpecificData(in,cbHandler)");
         DataSetWriter writer = cbHandler != null ? cbHandler.getDataSetWriter() : new StructuredDataWriter();
         StructureSpecificEventHandler event = new StructureSpecificEventHandler(writer);
         if (cbHandler != null) {

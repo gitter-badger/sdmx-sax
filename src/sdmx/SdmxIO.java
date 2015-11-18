@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
 import org.xml.sax.SAXException;
 import sdmx.commonreferences.DataStructureReference;
+import sdmx.data.DefaultParseDataCallbackHandler;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.exception.ParseException;
 import sdmx.message.DataMessage;
@@ -212,6 +213,7 @@ public class SdmxIO {
         }
         ParseParams params = new ParseParams();
         params.setHeader(header);
+        params.setCallbackHandler(new DefaultParseDataCallbackHandler());
         return prov.parseData(params,push);
     }
     public static DataMessage parseData(Reader in) throws IOException,ParseException {
@@ -224,6 +226,7 @@ public class SdmxIO {
         }
         ParseParams params = new ParseParams();
         params.setHeader(header);
+        params.setCallbackHandler(new DefaultParseDataCallbackHandler());
         return prov.parseData(params,push);
     }
     /*

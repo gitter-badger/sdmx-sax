@@ -90,6 +90,15 @@ public class CompactDataContentHandler extends Sdmx20ContentHandler implements C
         }
         reader.setContentHandler(this);
         reader.setErrorHandler(this);
+        /*
+           Nomis API Crashes here because you are running this code with a security manager
+           which causes FEATURE_SECURE_PROCESSING to be set in the XML parser,
+           when you have a really large query, it is too long for the parser with this setting set
+           the above reader.setProperty is an attempt to stop this from happening, but it doesn't work :(
+           just run the sdmx-sax jar without a security manager, this typically happens on a web server.s
+        
+        
+        */
         if (in != null) {
             reader.parse(new InputSource(in));
         } else {

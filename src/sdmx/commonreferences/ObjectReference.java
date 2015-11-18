@@ -57,7 +57,4 @@ public class ObjectReference extends ReferenceType implements ComponentValueSetT
    public ObjectReference(anyURI urn) {
        super(urn);
     }
-   public void test() {
-       System.out.println("TEst!");
-   }
 }

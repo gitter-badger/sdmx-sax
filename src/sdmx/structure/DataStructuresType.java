@@ -89,23 +89,21 @@ public class DataStructuresType {
         if (ref.getVersion() == null) {
             for (int i = 0; i < dataStructures.size(); i++) {
                 if (dataStructures.get(i).identifiesMe(ref.getAgencyId(), ref.getMaintainableParentId())) {
-                    Logger.getLogger("sdmx").finest("DataStructuresType: find(DataStructureReference:"+ref.toString()+":found datastructure 1");
                     return dataStructures.get(i);
                 }
             }
         } else {
             for (int i = 0; i < dataStructures.size(); i++) {
                 if (dataStructures.get(i).identifiesMe(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion())) {
-                    Logger.getLogger("sdmx").finest("DataStructuresType: find(DataStructureReference:"+ref.toString()+":found datastructure 2");
                     return dataStructures.get(i);
                 }
             }
         }
-        Logger.getLogger("sdmx").finest("DataStructuresType: find(DataStructureReference:"+ref.toString()+":can't find datastructure");
         return null;
     }
 
-    public void merge(DataStructuresType dataStructures) {
-        this.getDataStructures().addAll(dataStructures.getDataStructures());
+    public void merge(DataStructuresType otherDataStructures) {
+        if( otherDataStructures==null ) return;
+        this.getDataStructures().addAll(otherDataStructures.getDataStructures());
     }
 }

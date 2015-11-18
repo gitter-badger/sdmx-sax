@@ -50,7 +50,7 @@ public class StructuredDataSet implements DataSet, Attachable {
     List<Group> groups = null;
     List<String> columnValues = new ArrayList<String>();
     private List<Series> series = new ArrayList<Series>();
-    private List<Obs> observations = new ArrayList<Obs>();
+    private List<Obs> observations = null;
     private StructuredColumnMapper columnMapper = new StructuredColumnMapper();
 
     public StructuredDataSet() {

@@ -449,7 +449,7 @@ public class Sdmx21StructureReaderTools {
         return item;
     }
 
-    public static CodelistsType toCodelistsType(org.sdmx.resources.sdmxml.schemas.v21.structure.CodelistsType cl1) throws URISyntaxException {
+    public static CodelistsType toCodelistsType(org.sdmx.resources.sdmxml.schemas.v21.structure.CodelistsType cl1) throws URISyntaxException, TypeValueNotFoundException {
         if( cl1 == null ) return null;
         List<CodelistType> codelists = new ArrayList<CodelistType>();
         for (int i = 0; i < cl1.getCodelistArray().length; i++) {
@@ -459,7 +459,7 @@ public class Sdmx21StructureReaderTools {
         return cl2;
     }
 
-    public static CodelistType toCodelist(org.sdmx.resources.sdmxml.schemas.v21.structure.CodelistType cl1) throws URISyntaxException {
+    public static CodelistType toCodelist(org.sdmx.resources.sdmxml.schemas.v21.structure.CodelistType cl1) throws URISyntaxException, TypeValueNotFoundException {
         CodelistType cl2 = new CodelistType();
         cl2.setId(toNCNameIDType(cl1.getId()));
         cl2.setAgencyID(toNestedNCNameIDType(cl1.getAgencyID()));
@@ -487,7 +487,7 @@ public class Sdmx21StructureReaderTools {
         return new ExternalReferenceAttributeGroup(service, struct);
     }
 
-    public static List<CodeType> toCodes(org.sdmx.resources.sdmxml.schemas.v21.structure.CodeType[] codes) throws URISyntaxException {
+    public static List<CodeType> toCodes(org.sdmx.resources.sdmxml.schemas.v21.structure.CodeType[] codes) throws URISyntaxException, TypeValueNotFoundException {
         List<CodeType> codelist = new ArrayList<CodeType>();
         for (int i = 0; i < codes.length; i++) {
             codelist.add(toCode(codes[i]));
@@ -495,7 +495,7 @@ public class Sdmx21StructureReaderTools {
         return codelist;
     }
 
-    public static List<CodeType> toCodes(org.sdmx.resources.sdmxml.schemas.v21.structure.ItemType[] codes) throws URISyntaxException {
+    public static List<CodeType> toCodes(org.sdmx.resources.sdmxml.schemas.v21.structure.ItemType[] codes) throws URISyntaxException, TypeValueNotFoundException {
         List<CodeType> codelist = new ArrayList<CodeType>();
         for (int i = 0; i < codes.length; i++) {
             codelist.add(toCode(codes[i]));
@@ -515,7 +515,7 @@ public class Sdmx21StructureReaderTools {
         return descs;
     }
 
-    public static CodeType toCode(org.sdmx.resources.sdmxml.schemas.v21.structure.CodeType cl1) throws URISyntaxException {
+    public static CodeType toCode(org.sdmx.resources.sdmxml.schemas.v21.structure.CodeType cl1) throws URISyntaxException, TypeValueNotFoundException {
         CodeType cl2 = new CodeType();
         cl2.setAnnotations(toAnnotations(cl1.getAnnotations()));
         cl2.setNames(toNames(cl1.getNameArray()));
@@ -524,10 +524,11 @@ public class Sdmx21StructureReaderTools {
         cl2.setUri(toAnyURI(cl1.getUri()));
         cl2.setUrn(toAnyURI(cl1.getUrn()));
         cl2.setCodes(toCodes(cl1.getItemArray()));
+        cl2.setParent(toLocalItemReferenceType(cl1.getParent()));
         return cl2;
     }
 
-    public static CodeType toCode(org.sdmx.resources.sdmxml.schemas.v21.structure.ItemType cl1) throws URISyntaxException {
+    public static CodeType toCode(org.sdmx.resources.sdmxml.schemas.v21.structure.ItemType cl1) throws URISyntaxException, TypeValueNotFoundException {
         CodeType cl2 = new CodeType();
         cl2.setAnnotations(toAnnotations(cl1.getAnnotations()));
         cl2.setNames(toNames(cl1.getNameArray()));
@@ -536,6 +537,7 @@ public class Sdmx21StructureReaderTools {
         cl2.setUri(toAnyURI(cl1.getUri()));
         cl2.setUrn(toAnyURI(cl1.getUrn()));
         cl2.setCodes(toCodes(cl1.getItemArray()));
+        cl2.setParent(toLocalItemReferenceType(cl1.getParent()));
         return cl2;
     }
 
