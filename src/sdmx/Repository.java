@@ -26,10 +26,6 @@ import sdmx.version.common.ParseParams;
  */
 public interface Repository {
     public DataMessage query(ParseParams params,DataQueryMessage message) throws ParseException,IOException ;
-    /*
     // Dataflow must be set in ParseParams
-    default DataMessage query(ParseParams params,String query) throws ParseException,IOException {
-        return query(params,QueryStringUtils.toDataQueryMessage(params, query));
-    }
-    */
+    public DataMessage query(ParseParams params,String query) throws ParseException,IOException;
 }

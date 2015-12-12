@@ -45,4 +45,8 @@ public class ItemSchemeRef extends ItemSchemeRefBase {
 // We Lose Package and Item details.. what does this point to now???
         super(agency,id,ver,null,null);
     }
+
+    public ItemSchemeRef(NestedNCNameID agency, IDType id, Version ver, ItemSchemeTypeCodelistType code, ItemSchemePackageTypeCodelistType pack) {
+        super(agency,id,ver,code,pack);
+    }
 }

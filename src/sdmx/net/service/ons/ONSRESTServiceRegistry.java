@@ -602,7 +602,7 @@ public class ONSRESTServiceRegistry implements Registry, Repository, Queryable {
     }
 
     @Override
-    public ItemSchemeType find(ItemSchemeReference ref) {
+    public ItemSchemeType find(ItemSchemeReferenceBase ref) {
         ConceptSchemeType concept = find(ConceptSchemeReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion()));
         if (concept != null) {
             return concept;
@@ -753,5 +753,44 @@ public class ONSRESTServiceRegistry implements Registry, Repository, Queryable {
         htt.setDate(DateTime.now());
         header.setPrepared(htt);
         return header;
+    }
+    @Override
+    public List<DataStructureType> search(DataStructureReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<DataflowType> search(DataflowReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<CodeType> search(CodeReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<CodelistType> search(CodelistReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<ItemType> search(ItemReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<ItemSchemeType> search(ItemSchemeReferenceBase ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<ConceptType> search(ConceptReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<ConceptSchemeType> search(ConceptSchemeReference ref) {
+        return Collections.EMPTY_LIST;
     }
 }

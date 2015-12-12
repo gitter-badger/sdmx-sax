@@ -52,6 +52,7 @@ import sdmx.commonreferences.ItemSchemeReference;
 import sdmx.commonreferences.ItemSchemeReferenceBase;
 import sdmx.commonreferences.NestedNCNameID;
 import sdmx.commonreferences.VersionQuery;
+import sdmx.exception.ParseException;
 import sdmx.exception.QueryableException;
 import sdmx.message.BaseHeaderType;
 import sdmx.message.DataMessage;
@@ -77,6 +78,7 @@ import sdmx.structure.concept.ConceptSchemeType;
 import sdmx.structure.concept.ConceptType;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
+import sdmx.util.QueryStringUtils;
 import sdmx.version.common.ParseParams;
 import sdmx.version.common.SOAPStrippingInputStream;
 import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
@@ -238,7 +240,9 @@ public class Sdmx20SOAPQueryable implements Registry,Repository,Queryable {
         }
         return null;
     }
-
+    public DataMessage query(ParseParams params,String query) throws ParseException,IOException{
+        return query(params,QueryStringUtils.toDataQueryMessage(params, query));
+    }
     public String getAgencyId() {
         return agencyId;
     }
@@ -456,7 +460,7 @@ public class Sdmx20SOAPQueryable implements Registry,Repository,Queryable {
     }
 
     @Override
-    public ItemSchemeType find(ItemSchemeReference ref) {
+    public ItemSchemeType find(ItemSchemeReferenceBase ref) {
         ConceptSchemeType concept = find(ConceptSchemeReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion()));
         if( concept!=null) return concept;
         CodelistType code = find(CodelistReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion()));
@@ -476,4 +480,43 @@ public class Sdmx20SOAPQueryable implements Registry,Repository,Queryable {
         local.save(out);
     }
     public void merge(){}
+    @Override
+    public List<DataStructureType> search(DataStructureReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<DataflowType> search(DataflowReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<CodeType> search(CodeReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<CodelistType> search(CodelistReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<ItemType> search(ItemReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<ItemSchemeType> search(ItemSchemeReferenceBase ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<ConceptType> search(ConceptReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<ConceptSchemeType> search(ConceptSchemeReference ref) {
+        return Collections.EMPTY_LIST;
+    }
 }

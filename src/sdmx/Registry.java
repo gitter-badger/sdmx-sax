@@ -57,8 +57,18 @@ public interface Registry {
     public CodeType find(CodeReference ref);
     public CodelistType find(CodelistReference ref);
     public ItemType find(ItemReference ref);
-    public ItemSchemeType find(ItemSchemeReference ref);
+    public ItemSchemeType find(ItemSchemeReferenceBase ref);
     public ConceptType find(ConceptReference ref);
     public ConceptSchemeType find(ConceptSchemeReference ref);
+    
+    public List<DataStructureType> search(DataStructureReference ref);
+    public List<DataflowType> search(DataflowReference ref);
+    public List<CodeType> search(CodeReference ref);
+    public List<CodelistType> search(CodelistReference ref);
+    public List<ItemType> search(ItemReference ref);
+    public List<ItemSchemeType> search(ItemSchemeReferenceBase ref);
+    public List<ConceptType> search(ConceptReference ref);
+    public List<ConceptSchemeType> search(ConceptSchemeReference ref);
+    
     public void save(OutputStream out)throws IOException;
 }

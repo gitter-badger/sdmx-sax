@@ -6,6 +6,7 @@ package sdmx.message;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -155,7 +156,7 @@ public class StructureType extends MessageType implements Registry {
     }
 
     @Override
-    public ItemSchemeType find(ItemSchemeReference ref) {
+    public ItemSchemeType find(ItemSchemeReferenceBase ref) {
         return this.structures.find(ref);
     }
 
@@ -207,4 +208,44 @@ public class StructureType extends MessageType implements Registry {
         }
     }
    public void merge(){}
+
+    @Override
+    public List<DataStructureType> search(DataStructureReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<DataflowType> search(DataflowReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<CodeType> search(CodeReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<CodelistType> search(CodelistReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<ItemType> search(ItemReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<ItemSchemeType> search(ItemSchemeReferenceBase ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<ConceptType> search(ConceptReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<ConceptSchemeType> search(ConceptSchemeReference ref) {
+        return Collections.EMPTY_LIST;
+    }
 }

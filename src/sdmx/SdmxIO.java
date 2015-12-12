@@ -7,6 +7,7 @@ package sdmx;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -61,7 +62,7 @@ import sdmx.version.twopointzero.Sdmx20ParserProvider;
 public class SdmxIO {
     private static boolean SAVE_XML = false;
     private static boolean DUMP_QUERY = false;
-    private static boolean DUMP_XML = false;
+    private static boolean DUMP_XML = true;
     private static boolean SANITISE_NAMES = false;
     private static boolean STRICT_REGEX = false;
     private static boolean IGNORE_CASE = true;
@@ -73,6 +74,7 @@ public class SdmxIO {
         h.setLevel(Level.ALL);
         Logger.getLogger("sdmx").addHandler(h);
     }
+    private static File CACHE_DIRECTORY = null;
     
     public static final List<String> SAVE_MIME_TYPES = new ArrayList<String>();
     
@@ -388,5 +390,11 @@ public class SdmxIO {
     }
     public static List<String> listDataMIMETypes() {
         return DATA_MIMES;
+    }
+    public static File getCacheDirectory() {
+        return CACHE_DIRECTORY;
+    }
+    public static void setCacheDirectory(File f) {
+        CACHE_DIRECTORY=f;
     }
 }

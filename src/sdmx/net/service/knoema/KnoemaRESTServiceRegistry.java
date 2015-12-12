@@ -17,6 +17,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -397,7 +398,7 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
     }
 
     @Override
-    public ItemSchemeType find(ItemSchemeReference ref) {
+    public ItemSchemeType find(ItemSchemeReferenceBase ref) {
         ConceptSchemeType concept = find(ConceptSchemeReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion()));
         if( concept!=null) return concept;
         CodelistType code = find(CodelistReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion()));
@@ -409,4 +410,43 @@ public class KnoemaRESTServiceRegistry implements Registry,Repository,Queryable 
         local.save(out);
     }
     public void merge(){}
+    @Override
+    public List<DataStructureType> search(DataStructureReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<DataflowType> search(DataflowReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<CodeType> search(CodeReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<CodelistType> search(CodelistReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<ItemType> search(ItemReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<ItemSchemeType> search(ItemSchemeReferenceBase ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<ConceptType> search(ConceptReference ref) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<ConceptSchemeType> search(ConceptSchemeReference ref) {
+        return Collections.EMPTY_LIST;
+    }
 }
