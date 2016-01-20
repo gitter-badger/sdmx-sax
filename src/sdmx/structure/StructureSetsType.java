@@ -42,23 +42,24 @@ import java.util.List;
 	</xs:complexType>
  * @author James
  */
-/**
- *  This file is part of SdmxSax.
- *
- *   SdmxSax is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- 
- *   SdmxSax is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with SdmxSax.  If not, see <http://www.gnu.org/licenses/>.
- *
- *  Copyright James Gardner 2014
+/*
+ SDMX-SAX an SDMX Parsing Library
+Copyright (C) 2015  James Gardner
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+package sdmx;
  */
 public class StructureSetsType {
     private List<StructureSetType> structureSets = new ArrayList<StructureSetType>();

@@ -80,7 +80,6 @@ import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
  * Copyright James Gardner 2014
  */
 public class StructureType extends MessageType implements Registry {
-
     private StructuresType structures = null;
 
     public StructureType() {
