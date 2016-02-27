@@ -427,6 +427,14 @@ public class Sdmx21StructureReaderTools {
         if (s == null) {
             return null;
         }
+        
+        
+/*****
+ * WORKAROUND FOR CEPAL's MALFORMED OBS_VALUE URN!!!
+ */
+        if( "urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=SDMX:CROSS_DOMAIN_CONCEPTS(1.0). OBS_VALUE".equals(s) ){
+            return new anyURI("urn:sdmx:org.sdmx.infomodel.conceptscheme.Concept=SDMX:CROSS_DOMAIN_CONCEPTS(1.0).OBS_VALUE");
+        }
         return new anyURI(s);
     }
 

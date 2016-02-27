@@ -105,7 +105,9 @@ public class StructuredDataSet implements DataSet, Attachable {
 
     @Override
     public int size() {
-        if( observations!=null ) return observations.size();
+        if (observations != null) {
+            return observations.size();
+        }
         int result = 0;
         for (int i = 0; i < series.size(); i++) {
             result += series.get(i).size();
@@ -125,7 +127,7 @@ public class StructuredDataSet implements DataSet, Attachable {
                 return series.getValue(columnMapper.getSeriesIndex(s));
             } else if (attach == AttachmentLevel.OBSERVATION) {
                 Series series = findSeries(row);
-            //System.out.println("Find Row:"+row+": Series="+series);
+                //System.out.println("Find Row:"+row+": Series="+series);
                 //System.out.println("Find Row:"+row+": Obs="+series.getObservationRow(row));
                 //series.dump();
                 return series.getObservationRow(row).getValue(columnMapper.getObservationIndex(s));
@@ -141,8 +143,10 @@ public class StructuredDataSet implements DataSet, Attachable {
             } else {
                 return null;
             }
-        }else {
-            return observations.get(row).getValue(col);
+        } else if (columnMapper.isAttachedToDataSet(col)) {
+            return this.columnValues.get(columnMapper.getDataSetIndex(columnMapper.getColumnName(col)));
+        } else {
+            return observations.get(row).getValue(columnMapper.getObservationIndex(col));
         }
     }
 
@@ -201,7 +205,9 @@ public class StructuredDataSet implements DataSet, Attachable {
     }
 
     public int findSeriesIndex(int row, int from, int to) {
-        if( row == 0 ) return 0;
+        if (row == 0) {
+            return 0;
+        }
         //System.out.println("Find Row:"+row+": from:"+from+" to"+to);
         int half = ((to - from) / 2);
 
@@ -230,7 +236,7 @@ public class StructuredDataSet implements DataSet, Attachable {
         if (series.get(from + half).getStart() < row) {
             return findSeriesIndex(row, from + half, to);
         }
-        System.out.println("Can't Find ob "+row);
+        System.out.println("Can't Find ob " + row);
         return -1;
     }
 
@@ -240,7 +246,7 @@ public class StructuredDataSet implements DataSet, Attachable {
                 return i;
             }
             //}else{
-                //System.out.println("Series:"+i+": doesn't contain row:"+row);
+            //System.out.println("Series:"+i+": doesn't contain row:"+row);
             //}
         }
         return -1;
@@ -360,7 +366,7 @@ public class StructuredDataSet implements DataSet, Attachable {
     public Cube query(Cube cube, List<String> order) {
         long time = System.currentTimeMillis();
         for (int i = 0; i < size(); i++) {
-            cube.putObservation(order,columnMapper, getFlatObs(i));
+            cube.putObservation(order, columnMapper, getFlatObs(i));
             /*
              if( i % 100 == 0 ) {
              System.out.println("100 obs="+(time-System.currentTimeMillis()));
@@ -370,11 +376,12 @@ public class StructuredDataSet implements DataSet, Attachable {
         }
         return cube;
     }
+
     public FlatObs find(FullKey key) {
         boolean found = true;
         for (int i = 0; i < size(); i++) {
             FlatObs obs = getFlatObs(i);
-            found=true;
+            found = true;
             for (int j = 0; j < columnMapper.size() && !found; j++) {
                 if (!key.getComponent(columnMapper.getColumnName(j)).equals(obs.getValue(j))) {
                     found = false;

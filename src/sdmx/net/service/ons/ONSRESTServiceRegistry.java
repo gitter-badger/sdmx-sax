@@ -242,6 +242,8 @@ public class ONSRESTServiceRegistry implements Registry, Repository, Queryable {
         URL url = new URL(urlString + s);
         HttpURLConnection conn
                 = (HttpURLConnection) url.openConnection();
+        conn.addRequestProperty("Accept", "text/html, application/xhtml+xml, image/jxr, */*");
+        conn.addRequestProperty("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.10240");
         if (conn.getResponseCode() != 200) {
             throw new IOException(conn.getResponseMessage());
         }
@@ -313,7 +315,7 @@ public class ONSRESTServiceRegistry implements Registry, Repository, Queryable {
         }
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(urlString + s);
-        get.addHeader("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
+        get.addHeader("Accept", "text/html, application/xhtml+xml, image/jxr, */*");
         get.addHeader("User-Agent", "Sdmx-Sax");
         HttpResponse response = client.execute(get);
         /*
@@ -449,6 +451,7 @@ public class ONSRESTServiceRegistry implements Registry, Repository, Queryable {
         if (new File("ons.xml").exists()) {
             try {
                 StructureType struct = SdmxIO.parseStructure(new FileInputStream("ons.xml"));
+                this.dataflowList=struct.getStructures().getDataflows().getDataflows();
                 return struct.getStructures().getDataflows().getDataflows();
             } catch (IOException ex) {
                 Logger.getLogger(ONSRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
