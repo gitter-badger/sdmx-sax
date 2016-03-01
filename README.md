@@ -14,5 +14,4 @@ named 'Example.java'
 
 for comments please email me <jsg at internode.on.net>
 
-SDMX-SAX is now LGPL software, the GPL is a carnivorous plant, containing the sweet nectar
-of stealable code, but exposes you to the legal teeth of the EFF.
+SDMX-SAX is now LGPL software
