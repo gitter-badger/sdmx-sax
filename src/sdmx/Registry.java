@@ -83,4 +83,5 @@ public interface Registry {
     public List<ConceptSchemeType> search(ConceptSchemeReference ref);
     
     public void save(OutputStream out)throws IOException;
+    public List<StructureType> getCache();
 }

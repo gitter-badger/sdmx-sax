@@ -504,4 +504,7 @@ public class INSEERESTQueryable implements Queryable, Registry, Repository {
     public List<ConceptSchemeType> search(ConceptSchemeReference ref) {
         return Collections.EMPTY_LIST;
     }
+    public List<StructureType> getCache(){
+        return this.local.getCache();
+    }
 }

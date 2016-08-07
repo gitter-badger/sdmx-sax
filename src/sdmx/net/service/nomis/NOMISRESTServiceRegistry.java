@@ -471,7 +471,14 @@ public class NOMISRESTServiceRegistry implements Registry, Repository, Queryable
 
         DataMessage msg = null;
         try {
-            msg = query(pparams, getServiceURL() + "/v01/dataset/" + id + ".compact.sdmx.xml?" + q + "&time=" + times.toString() + geography_string +"&" + options);
+            msg = query(pparams, getServiceURL() + "/v01/dataset/" + id + ".compact.sdmx.xml?" + q + "&time=" + times.toString() + 
+                    /*
+                       We don't want the geography string at all, because its name clashes with a dimension name
+                       this causes the nomis service to send each geography code in the message...
+                       we will just specify the codes we want... and not specify the geography type.
+                    */
+                    //geography_string 
+                    "&" + options);
         } catch (IOException ex) {
             Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
@@ -729,5 +736,8 @@ public class NOMISRESTServiceRegistry implements Registry, Repository, Queryable
             }
         }
         return geogList;
+    }
+    public List<StructureType> getCache(){
+        return this.local.getCache();
     }
 }

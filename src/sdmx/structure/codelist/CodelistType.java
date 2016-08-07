@@ -77,6 +77,9 @@ public class CodelistType extends ItemSchemeType {
     public void setCode(int i, CodeType c) {
         super.setItem(i, c);
     }
+    public void addCode(CodeType c) {
+        super.getItems().add(c);
+    }
 
     public void removeCode(CodeType c) {
         super.getItems().remove(c);

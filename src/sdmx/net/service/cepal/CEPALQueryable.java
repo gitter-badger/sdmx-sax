@@ -585,4 +585,7 @@ public class CEPALQueryable implements Queryable, Registry, Repository {
         }
         return itemList;
     }
+    public List<StructureType> getCache(){
+        return this.local.getCache();
+    }    
 }

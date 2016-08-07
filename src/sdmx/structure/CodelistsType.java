@@ -43,6 +43,8 @@ import sdmx.xml.anyURI;
 public class CodelistsType {
     private List<CodelistType> codelists = new ArrayList<CodelistType>();
 
+    public CodelistsType() {
+    }
     public CodelistsType(List<CodelistType> codelists) {
         this.codelists=codelists;
     }

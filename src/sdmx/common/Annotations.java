@@ -32,6 +32,7 @@ public class Annotations extends AnnotationsType implements Serializable {
     public Annotations() {
         super(new ArrayList<AnnotationType>());
     }
+
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeObject(super.getAnnotations());
     }

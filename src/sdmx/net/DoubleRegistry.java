@@ -229,4 +229,10 @@ public class DoubleRegistry implements Registry {
     public List<ConceptSchemeType> search(ConceptSchemeReference ref) {
         return Collections.EMPTY_LIST;
     }
+    public List<StructureType> getCache(){
+        List<StructureType> result = new ArrayList<StructureType>();
+        result.addAll(left.getCache());
+        result.addAll(right.getCache());
+        return result;
+    }
 }

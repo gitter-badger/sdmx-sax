@@ -537,4 +537,7 @@ public class Sdmx20NSIQueryable implements Registry,Repository,Queryable {
     public List<ConceptSchemeType> search(ConceptSchemeReference ref) {
         return Collections.EMPTY_LIST;
     }
+    public List<StructureType> getCache(){
+        return this.local.getCache();
+    }
 }

@@ -135,7 +135,7 @@ public class Sdmx20StructureReaderTools {
 
     ParseParams params = null;
     Registry registry = null;
-    
+
     private String conceptSchemeName = "STANDALONE_CONCEPT_SCHEME";
 
     public Sdmx20StructureReaderTools() {
@@ -145,12 +145,12 @@ public class Sdmx20StructureReaderTools {
         this.params = params;
         // Temporary Registry for loading structure into before loading into main registry.
         this.registry = params.getRegistry();
-        if( this.params.isUseDataflowName() ) {
+        if (this.params.isUseDataflowName()) {
             DataflowType flow = params.getDataflow();
-            if( flow == null ) {
+            if (flow == null) {
                 throw new RuntimeException("use data flow name is selected, yet data flow is not set in parse params!");
             }
-            this.conceptSchemeName = flow.getId().toString()+"_CONCEPT_SCHEME";
+            this.conceptSchemeName = flow.getId().toString() + "_CONCEPT_SCHEME";
         }
     }
     org.sdmx.resources.sdmxml.schemas.v20.message.StructureDocument structDoc = null;
@@ -274,7 +274,18 @@ public class Sdmx20StructureReaderTools {
     public List<CodeType> toCodes(org.sdmx.resources.sdmxml.schemas.v20.structure.CodeType[] codes) throws URISyntaxException {
         List<CodeType> codelist = new ArrayList<CodeType>();
         for (int i = 0; i < codes.length; i++) {
-            codelist.add(toCode(codes[i]));
+            CodeType cc = toCode(codes[i]);
+            boolean duplicate = false;
+            for (CodeType cc2 : codelist) {
+                if (cc2.getId().equals(cc.getId())) {
+                    duplicate = true;
+                }
+            }
+            if (!duplicate) {
+                codelist.add(toCode(codes[i]));
+            } else {
+                System.out.println("SDMX-SAX Warn - Ignoring Second Code with ID:" + cc.getId().toString());
+            }
         }
         return codelist;
     }
@@ -463,7 +474,18 @@ public class Sdmx20StructureReaderTools {
         //con2.setExternalReferences(toExternalReference(con1.getServiceURL(), con1.getStructureURL()));
         List<ConceptType> cons = new ArrayList<>();
         for (int i = 0; i < con1.getConceptArray().length; i++) {
-            cons.add(toConceptType(con2, con1.getConceptArray(i)));
+            ConceptType ct = toConceptType(con2, con1.getConceptArray(i));
+            boolean duplicate = false;
+            for (ConceptType ct2 : cons) {
+                if (ct.getId().equals(ct2.getId())) {
+                    duplicate = true;
+                }
+            }
+            if (!duplicate) {
+                cons.add(toConceptType(con2, con1.getConceptArray(i)));
+            } else {
+                System.out.println("SDMX-SAX Warn - Ignoring Duplicate Concept ID:ConceptScheme:" + con2.getAgencyID().toString() + ":" + con2.getId().toString() + ":" + con2.getVersion().toString() + ": concept id:" + ct.getId().toString());
+            }
         }
         con2.setConcepts(cons);
         Iterator<ConceptType> it = cons.iterator();
@@ -576,7 +598,8 @@ public class Sdmx20StructureReaderTools {
 
     public Version toVersionType(String s) {
         if (s == null) {
-            return null;
+            return Version.ONE;
+            //return null;
         }
         return new Version(s);
     }
@@ -699,7 +722,7 @@ public class Sdmx20StructureReaderTools {
         //System.out.println("ToConceptReference:"+csch.getAgencyID()+":"+csch.getId()+":"+csch.getVersion());
         //System.out.println("Concept1="+cs);
         //System.out.println("Concept2="+cs.getId());
-        
+
         if (cs == null) {
             return null;
         }
@@ -760,7 +783,7 @@ public class Sdmx20StructureReaderTools {
             Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             return registry.find(ref);
-        } else if (dim.getConceptRef() != null&& dim.getConceptAgency()==null) {
+        } else if (dim.getConceptRef() != null && dim.getConceptAgency() == null) {
             NestedNCNameID csa = currentKeyFamilyAgency;
             IDType csi = new IDType(conceptSchemeName);
             Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
@@ -769,7 +792,9 @@ public class Sdmx20StructureReaderTools {
             ConceptType ct = cst != null ? cst.findConcept(new IDType(dim.getConceptRef())) : null;
             if (ct == null) {
                 ct = findConcept(dim.getConceptRef());
-                if( ct == null ) return null;
+                if (ct == null) {
+                    return null;
+                }
                 ConceptSchemeReference ref2 = ConceptSchemeReference.create(ct.getAgencyID(), new IDType(conceptSchemeName), version);
                 cst = registry.find(ref2);
             } else {
@@ -777,7 +802,7 @@ public class Sdmx20StructureReaderTools {
                 cst = registry.find(ref2);
             }
             return cst;
-        } else if (dim.getConceptRef() != null&&dim.getConceptAgency()!=null) {
+        } else if (dim.getConceptRef() != null && dim.getConceptAgency() != null) {
             NestedNCNameID csa = new NestedNCNameID(dim.getConceptAgency());
             IDType csi = new IDType(conceptSchemeName);
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, Version.ONE);
@@ -899,10 +924,14 @@ public class Sdmx20StructureReaderTools {
         if (tft1.getDecimals() != null) {
             tft2.setDecimals(toPositiveInteger(tft1.getDecimals().intValue()));
         }
-        if( tft1.isSetEndValue()){tft2.setEndValue(tft1.getEndValue());}
-        if( tft1.isSetIsSequence()){
+        if (tft1.isSetEndValue()) {
+            tft2.setEndValue(tft1.getEndValue());
+        }
+        if (tft1.isSetIsSequence()) {
             tft2.setSequence(tft1.getIsSequence());
-            if( tft1.isSetInterval()){tft2.setInterval(tft1.getInterval());}
+            if (tft1.isSetInterval()) {
+                tft2.setInterval(tft1.getInterval());
+            }
         }
         if (tft1.getMaxLength() != null) {
             tft2.setMaxLength(toPositiveInteger(tft1.getMaxLength().intValue()));
@@ -910,11 +939,13 @@ public class Sdmx20StructureReaderTools {
         if (tft1.getPattern() != null) {
             tft2.setPattern(tft1.getPattern());
         }
-        if( tft1.isSetStartValue()){tft2.setStartValue(tft1.getStartValue());}
+        if (tft1.isSetStartValue()) {
+            tft2.setStartValue(tft1.getStartValue());
+        }
         if (tft1.getTextType() != null) {
             tft2.setTextType(DataType.fromStringWithException(tft1.getTextType().toString()));
         }
-        if (tft1.isSetTimeInterval() ) {
+        if (tft1.isSetTimeInterval()) {
             tft2.setTimeInterval(toDuration(tft1.getTimeInterval()));
         }
         if (tft1.getTextType() != null) {
@@ -1156,7 +1187,7 @@ public class Sdmx20StructureReaderTools {
             Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             return registry.find(ref);
-        } else if (dim.getConceptRef() != null&& dim.getConceptAgency()==null) {
+        } else if (dim.getConceptRef() != null && dim.getConceptAgency() == null) {
             NestedNCNameID csa = currentKeyFamilyAgency;
             IDType csi = new IDType(conceptSchemeName);
             Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
@@ -1165,7 +1196,9 @@ public class Sdmx20StructureReaderTools {
             ConceptType ct = cst != null ? cst.findConcept(new IDType(dim.getConceptRef())) : null;
             if (ct == null) {
                 ct = findConcept(dim.getConceptRef());
-                if( ct == null ) return null;
+                if (ct == null) {
+                    return null;
+                }
                 ConceptSchemeReference ref2 = ConceptSchemeReference.create(ct.getAgencyID(), new IDType(conceptSchemeName), version);
                 cst = registry.find(ref2);
             } else {
@@ -1173,7 +1206,7 @@ public class Sdmx20StructureReaderTools {
                 cst = registry.find(ref2);
             }
             return cst;
-        } else if (dim.getConceptRef() != null&&dim.getConceptAgency()!=null) {
+        } else if (dim.getConceptRef() != null && dim.getConceptAgency() != null) {
             NestedNCNameID csa = new NestedNCNameID(dim.getConceptAgency());
             IDType csi = new IDType(conceptSchemeName);
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, Version.ONE);
@@ -1208,7 +1241,7 @@ public class Sdmx20StructureReaderTools {
             Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             return registry.find(ref);
-        } else if (dim.getConceptRef() != null&& dim.getConceptAgency()==null) {
+        } else if (dim.getConceptRef() != null && dim.getConceptAgency() == null) {
             NestedNCNameID csa = currentKeyFamilyAgency;
             IDType csi = new IDType(conceptSchemeName);
             Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
@@ -1217,7 +1250,9 @@ public class Sdmx20StructureReaderTools {
             ConceptType ct = cst != null ? cst.findConcept(new IDType(dim.getConceptRef())) : null;
             if (ct == null) {
                 ct = findConcept(dim.getConceptRef());
-                if( ct == null ) return null;
+                if (ct == null) {
+                    return null;
+                }
                 ConceptSchemeReference ref2 = ConceptSchemeReference.create(ct.getAgencyID(), new IDType(conceptSchemeName), version);
                 cst = registry.find(ref2);
             } else {
@@ -1225,7 +1260,7 @@ public class Sdmx20StructureReaderTools {
                 cst = registry.find(ref2);
             }
             return cst;
-        } else if (dim.getConceptRef() != null&&dim.getConceptAgency()!=null) {
+        } else if (dim.getConceptRef() != null && dim.getConceptAgency() != null) {
             NestedNCNameID csa = new NestedNCNameID(dim.getConceptAgency());
             IDType csi = new IDType(conceptSchemeName);
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, Version.ONE);
@@ -1258,7 +1293,7 @@ public class Sdmx20StructureReaderTools {
             Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             return registry.find(ref);
-        } else if (dim.getConceptRef() != null&& dim.getConceptAgency()==null) {
+        } else if (dim.getConceptRef() != null && dim.getConceptAgency() == null) {
             NestedNCNameID csa = currentKeyFamilyAgency;
             IDType csi = new IDType(conceptSchemeName);
             Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
@@ -1267,7 +1302,9 @@ public class Sdmx20StructureReaderTools {
             ConceptType ct = cst != null ? cst.findConcept(new IDType(dim.getConceptRef())) : null;
             if (ct == null) {
                 ct = findConcept(dim.getConceptRef());
-                if( ct == null ) return null;
+                if (ct == null) {
+                    return null;
+                }
                 ConceptSchemeReference ref2 = ConceptSchemeReference.create(ct.getAgencyID(), new IDType(conceptSchemeName), version);
                 cst = registry.find(ref2);
             } else {
@@ -1275,7 +1312,7 @@ public class Sdmx20StructureReaderTools {
                 cst = registry.find(ref2);
             }
             return cst;
-        } else if (dim.getConceptRef() != null&&dim.getConceptAgency()!=null) {
+        } else if (dim.getConceptRef() != null && dim.getConceptAgency() != null) {
             NestedNCNameID csa = new NestedNCNameID(dim.getConceptAgency());
             IDType csi = new IDType(conceptSchemeName);
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, Version.ONE);
@@ -1308,7 +1345,7 @@ public class Sdmx20StructureReaderTools {
             Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, version);
             return registry.find(ref);
-        } else if (dim.getConceptRef() != null&& dim.getConceptAgency()==null) {
+        } else if (dim.getConceptRef() != null && dim.getConceptAgency() == null) {
             NestedNCNameID csa = currentKeyFamilyAgency;
             IDType csi = new IDType(conceptSchemeName);
             Version version = dim.getConceptVersion() == null ? null : new Version(dim.getConceptVersion());
@@ -1317,7 +1354,9 @@ public class Sdmx20StructureReaderTools {
             ConceptType ct = cst != null ? cst.findConcept(new IDType(dim.getConceptRef())) : null;
             if (ct == null) {
                 ct = findConcept(dim.getConceptRef());
-                if( ct == null ) return null;
+                if (ct == null) {
+                    return null;
+                }
                 ConceptSchemeReference ref2 = ConceptSchemeReference.create(ct.getAgencyID(), new IDType(conceptSchemeName), version);
                 cst = registry.find(ref2);
             } else {
@@ -1325,7 +1364,7 @@ public class Sdmx20StructureReaderTools {
                 cst = registry.find(ref2);
             }
             return cst;
-        } else if (dim.getConceptRef() != null&&dim.getConceptAgency()!=null) {
+        } else if (dim.getConceptRef() != null && dim.getConceptAgency() != null) {
             NestedNCNameID csa = new NestedNCNameID(dim.getConceptAgency());
             IDType csi = new IDType(conceptSchemeName);
             ConceptSchemeReference ref = ConceptSchemeReference.create(csa, csi, Version.ONE);

@@ -69,4 +69,7 @@ public class ConceptReference extends ItemReference {
         ConceptRef ref = new ConceptRef(agency,mid,ver,id);
         return new ConceptReference(ref,null);
     }
+    public ConceptSchemeReference toConceptSchemeReference() {
+        return ConceptSchemeReference.create(this.getAgencyId(), this.getMaintainableParentId(), this.getVersion());
+    }
 }

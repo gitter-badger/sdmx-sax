@@ -106,6 +106,14 @@ public class AnnotationType implements Serializable {
         return annotationTitle;
     }
 
+    public void addAnnotationText(TextType tt) {
+        this.annotationText.add(tt);
+    }
+    public TextType removeAnnotationText(TextType tt) {
+        this.annotationText.remove(tt);
+        return tt;
+    }
+    
     /**
      * @param annotationTitle the annotationTitle to set
      */

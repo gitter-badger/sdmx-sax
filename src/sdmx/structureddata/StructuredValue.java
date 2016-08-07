@@ -5,6 +5,7 @@
  */
 package sdmx.structureddata;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import sdmx.Registry;
 import sdmx.common.Description;
@@ -69,6 +70,16 @@ public class StructuredValue {
 
     public ItemType getCode() {
         //System.out.println("Concept:"+ concept+" Value:" + value);
+        if( "OBS_VALUE".equals(this.concept)||this.getConcept().getId().equals(structure.getDataStructureComponents().getMeasureList().getPrimaryMeasure().getId().toString())){
+            ItemType itm = new CodeType();
+            ArrayList<Name> names = new ArrayList<Name>();
+            Name name = new Name(null,this.value);
+            names.add(name);
+            itm.setNames(names);
+            return itm;
+        }
+        
+        
         //Locale loc = Locale.getDefault();
         //ItemType item = ValueTypeResolver.resolveCode(registry, structure, concept, value);
         //System.out.println("Item=" + item.toString());

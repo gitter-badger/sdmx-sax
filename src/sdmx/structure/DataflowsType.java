@@ -72,4 +72,10 @@ public class DataflowsType {
     public void merge(DataflowsType dataflows) {
         this.getDataflows().addAll(dataflows.getDataflows());
     }
+    public int size() {
+       return this.getDataflows().size();
+    }
+    public DataflowType getDataflow(int i) {
+        return this.getDataflows().get(i);
+    }
 }

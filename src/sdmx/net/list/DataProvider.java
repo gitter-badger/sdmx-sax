@@ -66,6 +66,7 @@ public class DataProvider {
             LIST.add(new CEPALDataProvider(17,"CEPAL", "http://interwp.cepal.org/sisgen/ws/cepalstat/","english", "CEPAL English", "CEPAL English"));
             LIST.add(new CEPALDataProvider(18,"CEPAL", "http://interwp.cepal.org/sisgen/ws/cepalstat/","spanish", "CEPAL Spanish", "CEPAL Spanish"));
             LIST.add(new ONSDataProvider(19,"ONS","http://data.ons.gov.uk/ons/api/data", "apikey=doFKbcgLtj","Based on ONS Data Service data","Based on ONS Data Service data"));
+            LIST.add(new SDWDataProvider(20,"ABS","http://govhack.abs.gov.au/sdmxws/sdmx.asmx","http://stats.oecd.org/OECDStatWS/SDMX/",                    "Based on Australian Bureau of Statistics data","Based on Australian Bureau of Statistics data"));
         } catch (MalformedURLException ex) {
             Logger.getLogger(DataProvider.class.getName()).log(Level.SEVERE, null, ex);
         }

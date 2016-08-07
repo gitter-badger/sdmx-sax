@@ -51,6 +51,9 @@ public class StructuredDataSet {
     public StructuredValue getStructuredValue(int row, int column) {
         return new StructuredValue(getDataSet().getColumnName(column), getDataSet().getValue(row, column), registry, getStructure());
     }
+    public int getColumnIndex(String id) {
+        return getDataSet().getColumnIndex(id);
+    }
 
     public String getColumnName(int i) {
         String conceptString = getDataSet().getColumnName(i);
