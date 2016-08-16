@@ -29,6 +29,7 @@ import java.io.PushbackReader;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
@@ -37,10 +38,15 @@ import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
 import org.xml.sax.SAXException;
 import sdmx.commonreferences.DataStructureReference;
+import sdmx.commonreferences.IDType;
 import sdmx.data.DefaultParseDataCallbackHandler;
 import sdmx.data.flat.FlatDataSet;
 import sdmx.exception.ParseException;
+import sdmx.message.BaseHeaderType;
 import sdmx.message.DataMessage;
+import sdmx.message.HeaderTimeType;
+import sdmx.message.PartyType;
+import sdmx.message.SenderType;
 import sdmx.message.StructureType;
 import sdmx.net.LocalRegistry;
 import sdmx.net.ServiceList;
@@ -53,6 +59,7 @@ import sdmx.version.common.SdmxStreamWriterProvider;
 import sdmx.version.common.SdmxWriterProvider;
 import sdmx.version.twopointone.Sdmx21ParserProvider;
 import sdmx.version.twopointzero.Sdmx20ParserProvider;
+import sdmx.xml.DateTime;
 
 /**
  *  This file is part of SdmxSax.
@@ -410,5 +417,20 @@ public class SdmxIO {
     }
     public static void setCacheDirectory(File f) {
         CACHE_DIRECTORY=f;
+    }
+    public static BaseHeaderType getBaseHeader() {
+        BaseHeaderType header = new BaseHeaderType();
+        header.setId("none");
+        header.setTest(false);
+        SenderType sender = new SenderType();
+        sender.setId(new IDType("Sdmx-Sax"));
+        header.setSender(sender);
+        PartyType receiver = new PartyType();
+        receiver.setId(new IDType("You"));
+        header.setReceivers(Collections.singletonList(receiver));
+        HeaderTimeType htt = new HeaderTimeType();
+        htt.setDate(DateTime.now());
+        header.setPrepared(htt);
+        return header;
     }
 }

@@ -83,7 +83,7 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
         try {
             writer = factory.createXMLStreamWriter(out);
             writer.writeStartDocument("1.0");
-            writer.writeStartElement("message","StructureSpecificData","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
+            writer.writeStartElement("","StructureSpecificData","http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
             writer.writeDefaultNamespace("http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
             writer.writeNamespace("data", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific");
             writer.writeNamespace("message", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
@@ -91,6 +91,7 @@ public class StreamingStructureSpecificDataWriter implements DataSetWriter, Pars
             writer.writeNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
             writer.writeNamespace("schemaLocation", "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message");
         } catch (XMLStreamException ex) {
+            ex.printStackTrace();
             Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

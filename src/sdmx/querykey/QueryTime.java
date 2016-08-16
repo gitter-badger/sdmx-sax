@@ -15,13 +15,14 @@ import sdmx.structure.datastructure.DataStructureType;
  *
  * @author James
  */
-public class QueryTime {
+public class QueryTime extends QueryDimension {
     String concept = null;
     Registry reg = null;
     DataStructureType struct = null;
     Date startTime = new Date();
     Date endTime = new Date();
     public QueryTime(String concept,DataStructureType struct,Registry reg){
+        super(concept,struct,reg);
         this.concept=concept;
         this.struct=struct;
         this.reg=reg;

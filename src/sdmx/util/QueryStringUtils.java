@@ -114,27 +114,28 @@ public class QueryStringUtils {
             if (quer.indexOf(".") == -1) {
                 break;
             }
-            
+
             String valuesString = quer.substring(0, quer.indexOf("."));
             String[] values = valuesString.split("\\+");
             //System.out.println("Values Array="+Arrays.toString(values));
             DataParametersOrType or = new DataParametersOrType();
             List<DimensionValueType> dims = new ArrayList<DimensionValueType>();
             for (int i = 0; i < values.length; i++) {
-                System.out.println("DimValue:"+values[i]);
-                dims.add(new DimensionValueType(d.getId().toString(), values[i]));
+                if (!"".equals(values[i])) {
+                    dims.add(new DimensionValueType(d.getId().toString(), values[i]));
+                }
             }
             or.setDimensionValue(dims);
             ors.add(or);
-            quer = quer.substring(quer.indexOf(".")+1,quer.length());
+            quer = quer.substring(quer.indexOf(".") + 1, quer.length());
         }
         dw.setOr(ors);
         msg.setQuery(q);
         if (query.indexOf("startPeriod=") != -1 && query.indexOf("endPeriod=") != -1) {
-            String startString = query.substring(query.indexOf("startPeriod=")+12,query.length());
-            String startPeriod = startString.indexOf("&")!=-1?startString.substring(0,startString.indexOf("&")):startString;
-            String endString = query.substring(query.indexOf("endPeriod=")+10,query.length());
-            String endPeriod = endString.indexOf("&")!=-1?endString.substring(0,endString.indexOf("&")):endString;
+            String startString = query.substring(query.indexOf("startPeriod=") + 12, query.length());
+            String startPeriod = startString.indexOf("&") != -1 ? startString.substring(0, startString.indexOf("&")) : startString;
+            String endString = query.substring(query.indexOf("endPeriod=") + 10, query.length());
+            String endPeriod = endString.indexOf("&") != -1 ? endString.substring(0, endString.indexOf("&")) : endString;
             dw.setTimeDimensionValue(Collections.singletonList(new TimeDimensionValueType(new TimeValue(startPeriod), new TimeValue(endPeriod))));
         }
         dataWhere.setAnd(Collections.singletonList(dw));

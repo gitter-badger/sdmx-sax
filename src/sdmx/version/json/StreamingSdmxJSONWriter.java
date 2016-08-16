@@ -205,7 +205,7 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
 
     @Override
     public void writeObservationComponent(String name, String val) {
-        System.out.println("WriteObsComponent"+name+":"+val);
+        //System.out.println("WriteObsComponent"+name+":"+val);
         if (struct.isDimension(name)) {
             List<String> list = obsValues.get(name);
             if (list == null) {
@@ -213,7 +213,7 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
                 obsValues.put(name, list);
             }
             obsKey.add(register(list, val));
-            System.out.println("obsKey:"+toKeyString(obsKey));
+            //System.out.println("obsKey:"+toKeyString(obsKey));
         } else if (struct.isAttribute(name)) {
             List<String> list = obsAtts.get(name);
             if (list == null) {

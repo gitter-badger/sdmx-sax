@@ -51,6 +51,7 @@ import sdmx.structure.datastructure.TimeDimensionType;
 import static sdmx.version.twopointzero.writer.GenericDataWriter.writeName;
 import net.hamnaberg.jsonstat.util.IntCartesianProduct;
 import sdmx.structure.datastructure.MeasureDimensionType;
+
 /**
  * This file is part of SdmxSax.
  *
@@ -84,7 +85,12 @@ public class JSONStatWriter {
             Logger.getLogger(StreamingSdmxJSONWriter.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         } finally {
-            writer.close();
+            try {
+                writer.close();
+            } catch (IOException io) {
+                out.flush();
+                out.close();
+            }
         }
         System.out.println("Finished Writing");
     }
@@ -99,7 +105,7 @@ public class JSONStatWriter {
         writer.name("source").value(NameableType.toString(msg.getHeader().getSender(), loc));
         writer.name("updated").value(DF.format(msg.getHeader().getPrepared().getDate().getDate()));
         writer.name("extension").beginObject();
-        if (msg.getHeader().getSender().getContacts().size() > 0) {
+        if (msg.getHeader().getSender().getContacts() != null && msg.getHeader().getSender().getContacts().size() > 0) {
             writer.name("contact").value(msg.getHeader().getSender().getContacts().get(0).getEmails().get(0));
             writer.name("metadata").beginArray();
             writer.endArray();
@@ -111,104 +117,104 @@ public class JSONStatWriter {
         for (int i = 0; i < struct.getDataStructureComponents().getDimensionList().getDimensions().size(); i++) {
             value_size *= cube.getValidCodes(struct.getDataStructureComponents().getDimensionList().getDimensions().get(i).getId().toString()).size();
         }
-        if( struct.getDataStructureComponents().getDimensionList().getTimeDimension()!=null){
-        value_size *= cube.getValidCodes(struct.getDataStructureComponents().getDimensionList().getTimeDimension().getId().toString()).size();
+        if (struct.getDataStructureComponents().getDimensionList().getTimeDimension() != null) {
+            value_size *= cube.getValidCodes(struct.getDataStructureComponents().getDimensionList().getTimeDimension().getId().toString()).size();
         }
-        if( struct.getDataStructureComponents().getDimensionList().getMeasureDimension()!=null) {
+        if (struct.getDataStructureComponents().getDimensionList().getMeasureDimension() != null) {
             value_size *= cube.getValidCodes(struct.getDataStructureComponents().getDimensionList().getMeasureDimension().getId().toString()).size();
         }
         boolean value_labels = false;
         //System.out.println("Cube Size=" + cube.getSize());
         //System.out.println("Value Size=" + value_size);
-        
-        int[] lengths = new int[struct.getDataStructureComponents().getDimensionList().size()+(struct.getDataStructureComponents().getDimensionList().getTimeDimension()!=null?1:0)+(struct.getDataStructureComponents().getDimensionList().getMeasureDimension()!=null?1:0)];
-        for(int i=0;i<struct.getDataStructureComponents().getDimensionList().size();i++) {
-            lengths[i]=cube.getValidCodes(struct.getDataStructureComponents().getDimensionList().getDimension(i).getId().toString()).size();
+
+        int[] lengths = new int[struct.getDataStructureComponents().getDimensionList().size() + (struct.getDataStructureComponents().getDimensionList().getTimeDimension() != null ? 1 : 0) + (struct.getDataStructureComponents().getDimensionList().getMeasureDimension() != null ? 1 : 0)];
+        for (int i = 0; i < struct.getDataStructureComponents().getDimensionList().size(); i++) {
+            lengths[i] = cube.getValidCodes(struct.getDataStructureComponents().getDimensionList().getDimension(i).getId().toString()).size();
         }
-        int timeDimensionIndex = lengths.length-1-(struct.getDataStructureComponents().getDimensionList().getMeasureDimension()!=null?1:0);
-        if( struct.getDataStructureComponents().getDimensionList().getTimeDimension()!=null){
-            lengths[timeDimensionIndex]=cube.getValidCodes(struct.getDataStructureComponents().getDimensionList().getTimeDimension().getId().toString()).size();
+        int timeDimensionIndex = lengths.length - 1 - (struct.getDataStructureComponents().getDimensionList().getMeasureDimension() != null ? 1 : 0);
+        if (struct.getDataStructureComponents().getDimensionList().getTimeDimension() != null) {
+            lengths[timeDimensionIndex] = cube.getValidCodes(struct.getDataStructureComponents().getDimensionList().getTimeDimension().getId().toString()).size();
         }
-        int measureDimensionIndex = lengths.length-1;
-        if( struct.getDataStructureComponents().getDimensionList().getMeasureDimension()!=null) {
-            lengths[lengths.length-1]=cube.getValidCodes(struct.getDataStructureComponents().getDimensionList().getMeasureDimension().getId().toString()).size();
+        int measureDimensionIndex = lengths.length - 1;
+        if (struct.getDataStructureComponents().getDimensionList().getMeasureDimension() != null) {
+            lengths[lengths.length - 1] = cube.getValidCodes(struct.getDataStructureComponents().getDimensionList().getMeasureDimension().getId().toString()).size();
         }
         IntCartesianProduct cartesianProduct = new IntCartesianProduct(lengths);
         int[] result = null;
-        
+
         if (cube.getSize() < (value_size / 2)) {
             value_labels = true;
         }
         if (!value_labels) {
             writer.name("value").beginArray();
             for (int i = 1; i <= value_size; i++) {
-                writeValue(i,cartesianProduct.next(), cube, flow, reg, value_labels, writer);
+                writeValue(i, cartesianProduct.next(), cube, flow, reg, value_labels, writer);
             }
             writer.endArray();
         } else {
             writer.name("value").beginObject();
             for (int i = 1; i <= value_size; i++) {
-                writeValue(i,cartesianProduct.next(), cube, flow, reg, value_labels, writer);
+                writeValue(i, cartesianProduct.next(), cube, flow, reg, value_labels, writer);
             }
             writer.endObject();
         }
         writer.name("status").beginArray().endArray();
         writer.name("dimension").beginObject();
         writer.name("id").beginArray();
-        for(int i=0;i<struct.getDataStructureComponents().getDimensionList().size();i++){
+        for (int i = 0; i < struct.getDataStructureComponents().getDimensionList().size(); i++) {
             writer.value(struct.getDataStructureComponents().getDimensionList().getDimension(i).getId().toString());
         }
-        if( struct.getDataStructureComponents().getDimensionList().getTimeDimension()!=null) {
+        if (struct.getDataStructureComponents().getDimensionList().getTimeDimension() != null) {
             writer.value(struct.getDataStructureComponents().getDimensionList().getTimeDimension().getId().toString());
         }
         writer.endArray();
         writer.name("size").beginArray();
-        for(int i=0;i<struct.getDataStructureComponents().getDimensionList().size();i++){
+        for (int i = 0; i < struct.getDataStructureComponents().getDimensionList().size(); i++) {
             writer.value(cube.getValidCodes(struct.getDataStructureComponents().getDimensionList().getDimension(i).getId().toString()).size());
         }
-        if( struct.getDataStructureComponents().getDimensionList().getTimeDimension()!=null) {
+        if (struct.getDataStructureComponents().getDimensionList().getTimeDimension() != null) {
             writer.value(cube.getValidCodes(struct.getDataStructureComponents().getDimensionList().getTimeDimension().getId().toString()).size());
         }
         writer.endArray();
         writer.name("role").beginObject();
-        if( struct.getDataStructureComponents().getDimensionList().getTimeDimension()!=null){
+        if (struct.getDataStructureComponents().getDimensionList().getTimeDimension() != null) {
             writer.name("time").beginArray().value(struct.getDataStructureComponents().getDimensionList().getTimeDimension().getId().toString()).endArray();
         }
-        if( struct.getDataStructureComponents().getDimensionList().getMeasureDimension()!=null){
+        if (struct.getDataStructureComponents().getDimensionList().getMeasureDimension() != null) {
             writer.name("concept").beginArray().value(struct.getDataStructureComponents().getDimensionList().getMeasureDimension().getId().toString()).endArray();
         }
         writer.endObject();//role
-        
-        for(int i=0;i<struct.getDataStructureComponents().getDimensionList().size();i++){
+
+        for (int i = 0; i < struct.getDataStructureComponents().getDimensionList().size(); i++) {
             DimensionType dim = struct.getDataStructureComponents().getDimensionList().getDimension(i);
             writer.name(dim.getId().toString()).beginObject();
-            writer.name("label").value(NameableType.toString(reg.find(dim.getConceptIdentity()),loc));
+            writer.name("label").value(NameableType.toString(reg.find(dim.getConceptIdentity()), loc));
             writer.name("category").beginObject();
             writer.name("index").beginArray();
-            int index =0;
-            for(String s:cube.getValidCodes(dim.getId().toString())){
+            int index = 0;
+            for (String s : cube.getValidCodes(dim.getId().toString())) {
                 writer.value(s);
             }
             writer.endArray();
             writer.name("label").beginObject();
-            for(String s:cube.getValidCodes(dim.getId().toString())){
-                writer.name(s).value(NameableType.toString(ValueTypeResolver.resolveCode(reg, struct, dim.getId().toString(), s),loc));
+            for (String s : cube.getValidCodes(dim.getId().toString())) {
+                writer.name(s).value(NameableType.toString(ValueTypeResolver.resolveCode(reg, struct, dim.getId().toString(), s), loc));
             }
             writer.endObject();
             //writer.name("unit").beginObject();
             //writer.endObject();
-                    
+
             writer.endObject();
             writer.endObject();
         }
-        if( struct.getDataStructureComponents().getDimensionList().getTimeDimension()!=null) {
+        if (struct.getDataStructureComponents().getDimensionList().getTimeDimension() != null) {
             TimeDimensionType dim = struct.getDataStructureComponents().getDimensionList().getTimeDimension();
             writer.name(dim.getId().toString()).beginObject();
-            writer.name("label").value(NameableType.toString(reg.find(dim.getConceptIdentity()),loc));
+            writer.name("label").value(NameableType.toString(reg.find(dim.getConceptIdentity()), loc));
             writer.name("category").beginObject();
             writer.name("index").beginObject();
-            int index =0;
-            for(String s:cube.getValidCodes(dim.getId().toString())){
+            int index = 0;
+            for (String s : cube.getValidCodes(dim.getId().toString())) {
                 writer.name(s).value(index++);
             }
             writer.endObject();
@@ -219,38 +225,38 @@ public class JSONStatWriter {
             //writer.endObject();
             //writer.name("unit").beginObject();
             //writer.endObject();
-                    
+
             writer.endObject();
             writer.endObject();
         }
-        if( struct.getDataStructureComponents().getDimensionList().getMeasureDimension()!=null) {
+        if (struct.getDataStructureComponents().getDimensionList().getMeasureDimension() != null) {
             MeasureDimensionType dim = struct.getDataStructureComponents().getDimensionList().getMeasureDimension();
             writer.name(dim.getId().toString()).beginObject();
-            writer.name("label").value(NameableType.toString(reg.find(dim.getConceptIdentity()),loc));
+            writer.name("label").value(NameableType.toString(reg.find(dim.getConceptIdentity()), loc));
             writer.name("category").beginObject();
             writer.name("index").beginArray();
-            int index =0;
-            for(String s:cube.getValidCodes(dim.getId().toString())){
+            int index = 0;
+            for (String s : cube.getValidCodes(dim.getId().toString())) {
                 writer.value(s);
             }
             writer.endArray();
             writer.name("label").beginObject();
-            for(String s:cube.getValidCodes(dim.getId().toString())){
-                writer.name(s).value(NameableType.toString(ValueTypeResolver.resolveCode(reg, struct, dim.getId().toString(), s),loc));
+            for (String s : cube.getValidCodes(dim.getId().toString())) {
+                writer.name(s).value(NameableType.toString(ValueTypeResolver.resolveCode(reg, struct, dim.getId().toString(), s), loc));
             }
             writer.endObject();
             //writer.name("unit").beginObject();
             //writer.endObject();
-                    
+
             writer.endObject();//Category
             writer.endObject();// Dimension
         }
-        
+
         writer.endObject(); //Dimension
         writer.endObject(); //Document
     }
 
-    public static void writeValue(int index,int[] result, Cube cube, DataflowType flow, Registry reg, boolean labels, JsonWriter writer) throws IOException {
+    public static void writeValue(int index, int[] result, Cube cube, DataflowType flow, Registry reg, boolean labels, JsonWriter writer) throws IOException {
         CubeObservation obs = null;
         try {
             obs = cube.find(toFullKey(result, flow, reg, cube));
@@ -267,27 +273,27 @@ public class JSONStatWriter {
             } else {
                 writer.value(Double.parseDouble(obs.getValue()));
             }
+        } else if (obs == null) {
+        } else if (obs.getValue() == null) {
+            //writer.name(String.valueOf(index)).value(null);
         } else {
-            if (obs == null) {
-            } else {
-                writer.name(String.valueOf(index)).value(Double.parseDouble(obs.getValue()));
-            }
+            writer.name(String.valueOf(index)).value(Double.parseDouble(obs.getValue()));
         }
     }
 
     public static FullKey toFullKey(int[] result, DataflowType flow, Registry reg, Cube cube) {
         DataStructureType struct = reg.find(flow.getStructure());
-        LinkedHashMap<String,Object> key = new LinkedHashMap<String,Object>();
-        int i=0;
-        for (;i<struct.getDataStructureComponents().getDimensionList().size(); i++) {
+        LinkedHashMap<String, Object> key = new LinkedHashMap<String, Object>();
+        int i = 0;
+        for (; i < struct.getDataStructureComponents().getDimensionList().size(); i++) {
             DimensionType dim = struct.getDataStructureComponents().getDimensionList().getDimension(i);
             key.put(dim.getId().toString(), cube.getValidCodes(dim.getId().toString()).get(result[i]));
         }
-        if( struct.getDataStructureComponents().getDimensionList().getTimeDimension()!=null) {
+        if (struct.getDataStructureComponents().getDimensionList().getTimeDimension() != null) {
             TimeDimensionType td = struct.getDataStructureComponents().getDimensionList().getTimeDimension();
             key.put(td.getId().toString(), cube.getValidCodes(td.getId().toString()).get(result[i++]));
         }
-        if( struct.getDataStructureComponents().getDimensionList().getMeasureDimension()!=null) {
+        if (struct.getDataStructureComponents().getDimensionList().getMeasureDimension() != null) {
             MeasureDimensionType md = struct.getDataStructureComponents().getDimensionList().getMeasureDimension();
             key.put(md.getId().toString(), cube.getValidCodes(md.getId().toString()).get(result[i++]));
         }

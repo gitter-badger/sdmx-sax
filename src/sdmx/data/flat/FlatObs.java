@@ -43,6 +43,7 @@ public class FlatObs {
      }
      public String getValue(int i) {
          if( i>=values.size() ) return null;
+         if( i == -1 ) return null;
          return values.get(i);
      }
      public void dump() {
