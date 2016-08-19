@@ -29,7 +29,7 @@ public class ParseParams {
      private String header = null;
      private ParseDataCallbackHandler callbackHandler = null;
      private Locale locale = Locale.ENGLISH;
-
+     //private DataflowType dataflow = null;
      public ParseParams() {
      }
      public ParseParams(Registry reg){
@@ -107,5 +107,21 @@ public class ParseParams {
     public void setLocale(Locale locale) {
         this.locale = locale;
     }
-     
+
+    /**
+     * @return the dataFlow
+     */
+    /*
+    public DataflowType getDataflow() {
+        return dataflow;
+    }
+*/
+    /**
+     * @param dataFlow the dataFlow to set
+     */
+    /*
+    public void setDataflow(DataflowType dataFlow) {
+        this.dataflow = dataFlow;
+    }
+     */
 }

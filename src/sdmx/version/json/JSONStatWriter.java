@@ -101,7 +101,7 @@ public class JSONStatWriter {
      */
     public static void writeJSONStatMessage(DataMessage msg, Registry reg, Locale loc, JsonWriter writer) throws XMLStreamException, IOException {
         DataStructureType struct = reg.find(DataUtilities.getDataStructureReference(msg));
-        writer.name(NameableType.toIDString(DataUtilities.getDataStructureReference(msg))).beginObject();
+        writer.name(DataUtilities.getDataStructureReference(msg).getMaintainableParentId().toString()).beginObject();
         writer.name("label").value(NameableType.toString(struct, loc));
         writer.name("source").value(NameableType.toString(msg.getHeader().getSender(), loc));
         writer.name("updated").value(DF.format(msg.getHeader().getPrepared().getDate().getDate()));

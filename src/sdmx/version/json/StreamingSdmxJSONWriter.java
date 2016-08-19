@@ -424,8 +424,8 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
             writer.endObject();
             writer.endArray();
             writer.name("name").value(NameableType.toString(flow, this.locale));
-            if (flow.findDescription(locale.getLanguage()) != null) {
-                writer.name("description").value(flow.findDescription(locale.getLanguage()).getText());
+            if (struct.findDescription(locale.getLanguage()) != null) {
+                writer.name("description").value(struct.findDescription(locale.getLanguage()).getText());
             }
             writer.name("dimensions").beginObject();
             writer.name("dataSet").beginArray();
