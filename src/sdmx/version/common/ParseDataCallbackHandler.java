@@ -24,8 +24,6 @@ public interface ParseDataCallbackHandler {
     public void documentFinished();
     public String getDimensionAtObservationHint();
     public void setDimensionAtObservationHint(String s);
-    public void setDataflow(DataflowType flow);
-    public DataflowType getDataflow();
     public Registry getRegistry();
     public void setRegistry(Registry reg);
     

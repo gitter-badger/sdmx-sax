@@ -26,10 +26,12 @@ import sdmx.commonreferences.NestedNCNameID;
 import sdmx.exception.ParseException;
 import sdmx.message.DataMessage;
 import sdmx.message.DataQueryMessage;
+import sdmx.querykey.Query;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionType;
 import sdmx.util.QueryStringUtils;
+import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.version.common.ParseParams;
 
 /**
@@ -37,7 +39,8 @@ import sdmx.version.common.ParseParams;
  * @author James
  */
 public interface Repository {
-    public DataMessage query(ParseParams params,DataQueryMessage message) throws ParseException,IOException ;
-    // Dataflow must be set in ParseParams
-    public DataMessage query(ParseParams params,String query) throws ParseException,IOException;
+    // Batch
+    public DataMessage query(Query query) throws ParseException,IOException ;
+    // Streaming
+    public void query(Query query,ParseDataCallbackHandler handler) throws ParseException,IOException ;
 }

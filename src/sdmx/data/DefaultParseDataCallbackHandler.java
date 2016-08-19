@@ -61,15 +61,6 @@ public class DefaultParseDataCallbackHandler implements ParseDataCallbackHandler
     }
 
     @Override
-    public void setDataflow(DataflowType flow) {
-    }
-
-    @Override
-    public DataflowType getDataflow() {
-        return null;
-    }
-
-    @Override
     public Registry getRegistry() {
         return null;
     }

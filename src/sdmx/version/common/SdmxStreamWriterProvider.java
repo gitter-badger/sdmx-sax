@@ -18,5 +18,5 @@ import sdmx.structure.dataflow.DataflowType;
  */
 public interface SdmxStreamWriterProvider {
     public List<String> getSupportedMIMETypes();
-    public ParseDataCallbackHandler openForWriting(String mime,OutputStream out,ParseParams params) throws IOException;
+    public ParseDataCallbackHandler openForWriting(ParseParams params,String mime,OutputStream out) throws IOException;
 }

@@ -68,6 +68,7 @@ import sdmx.query.base.QueryIDType;
 import sdmx.query.base.QueryNestedIDType;
 import sdmx.query.data.DataQueryType;
 import sdmx.query.datastructure.DataStructureWhereType;
+import sdmx.querykey.Query;
 import sdmx.structure.DataflowsType;
 import sdmx.structure.StructuresType;
 import sdmx.structure.base.ItemSchemeType;
@@ -79,10 +80,11 @@ import sdmx.structure.concept.ConceptType;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.util.QueryStringUtils;
+import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.version.common.ParseParams;
 import sdmx.version.common.SOAPStrippingInputStream;
 import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
-import sdmx.version.twopointzero.Sdmx20QueryWriter;
+import sdmx.version.twopointzero.QueryToSdmx20Query;
 import sdmx.xml.DateTime;
 
 /**
@@ -106,7 +108,7 @@ import sdmx.xml.DateTime;
  *
  * Copyright James Gardner 2014
  */
-public class Sdmx20SOAPQueryable implements Registry,Repository,Queryable {
+public class Sdmx20SOAPQueryable implements Registry, Repository, Queryable {
 
     private String soapNamespace = "http://ec.europa.eu/eurostat/sri/service/2.0";
     private String mediaType = "application/soap+xml;charset=UTF-8";
@@ -127,11 +129,22 @@ public class Sdmx20SOAPQueryable implements Registry,Repository,Queryable {
             return dataflowList;
         }
         dataflowList = new ArrayList<DataflowType>();
-        DataStructureQueryMessage qm = new DataStructureQueryMessage();
-        qm.setHeader(getBaseHeader());
-        DataStructureWhereType dsw = new DataStructureWhereType();
-        qm.setDataStructureWhereType(dsw);
-        StructureType st = query(qm);
+        StructureType st = null;
+        String s = QueryToSdmx20Query.toGetDataStructureListQuery(this.agencyId, soapNamespace);
+        if (SdmxIO.isDumpQuery()) {
+            System.out.println(s);
+        }
+        byte[] b = s.getBytes();
+        InputStream in = new ByteArrayInputStream(b);
+        try {
+            st = SdmxIO.parseStructure(query("GetDataStructureDefinitionResult", in, b.length));
+        } catch (IOException ex) {
+            Logger.getLogger(Sdmx20SOAPQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        } catch (ParseException ex) {
+            Logger.getLogger(Sdmx20SOAPQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
         if (st == null) {
             dataflowList = null;
             return Collections.EMPTY_LIST;
@@ -152,97 +165,6 @@ public class Sdmx20SOAPQueryable implements Registry,Repository,Queryable {
         return dataflowList;
     }
 
-    public StructureType query(DataStructureQueryMessage message) {
-        message.setHeader(getBaseHeader());
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            Document doc = Sdmx20QueryWriter.toDocument(message);
-            String soapStart = "<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:sdmx=\"" + soapNamespace + "\">\n"
-                    //+ "   <soap:Header/>\n"
-                    + "   <soap:Body>\n"
-                    + "      <sdmx:GetDataStructureDefinition>\n"
-                    + "         <sdmx:QueryMessage>";
-            baos.write(soapStart.getBytes());
-            Format format = Format.getCompactFormat();
-            format.setOmitEncoding(true);
-            format.setOmitDeclaration(true);
-            XMLOutputter output = new XMLOutputter(format);
-            output.output(doc, baos);
-            String soapEnd = "</sdmx:QueryMessage>\n"
-                    + "      </sdmx:GetDataStructureDefinition>\n"
-                    + "   </soap:Body>\n"
-                    + "</soap:Envelope>";
-            baos.write(soapEnd.getBytes());
-            // Create a response handler
-            byte[] bytes = baos.toByteArray();
-            if (SdmxIO.isDumpQuery()) {
-                try {
-                    System.out.write(bytes);
-                    String name = "query-" + System.currentTimeMillis() + ".xml";
-                    FileOutputStream fos = new FileOutputStream(name);
-                    fos.write(bytes);
-                    fos.close();
-                } catch (IOException io) {
-                }
-            }
-            ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-            StructureType st = SdmxIO.parseStructure(query("GetDataStructureDefinitionResult", bais, bytes.length));
-            if (SdmxIO.isSaveXml() && st != null) {
-                String name = System.currentTimeMillis() + "-21.xml";
-                FileOutputStream file = new FileOutputStream(name);
-                Sdmx21StructureWriter.write(st, file);
-                file.flush();
-                file.close();
-            }
-            return st;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
-
-    public DataMessage query(ParseParams params,DataQueryMessage message) {
-        message.setHeader(getBaseHeader());
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            Document doc = Sdmx20QueryWriter.toDocument(message);
-            String soapStart = "<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n"
-                    + "  <soap12:Body>\n"
-                    + "    <GetCompactData xmlns=\"" + soapNamespace + "\">\n"
-                    + "      <QueryMessage>";
-            baos.write(soapStart.getBytes());
-            Format format = Format.getCompactFormat();
-            format.setOmitEncoding(true);
-            format.setOmitDeclaration(true);
-            XMLOutputter output = new XMLOutputter(format);
-            output.output(doc, baos);
-            String soapEnd = "</QueryMessage>\n"
-                    + "    </GetCompactData>\n"
-                    + "  </soap12:Body>\n"
-                    + "</soap12:Envelope>";
-            baos.write(soapEnd.getBytes());
-            // Create a response handler
-            byte[] bytes = baos.toByteArray();
-            if (SdmxIO.isDumpQuery()) {
-                try {
-                    System.out.write(bytes);
-                    String name = "query-" + System.currentTimeMillis() + ".xml";
-                    FileOutputStream fos = new FileOutputStream(name);
-                    fos.write(bytes);
-                    fos.close();
-                } catch (IOException io) {
-                }
-            }
-            ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-            return SdmxIO.parseData(params,query("GetCompactDataResult", bais, bytes.length));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
-    public DataMessage query(ParseParams params,String query) throws ParseException,IOException{
-        return query(params,QueryStringUtils.toDataQueryMessage(params, query));
-    }
     public String getAgencyId() {
         return agencyId;
     }
@@ -396,20 +318,21 @@ public class Sdmx20SOAPQueryable implements Registry,Repository,Queryable {
     public DataStructureType find(DataStructureReference ref) {
         DataStructureType dst = local.find(ref);
         if (dst == null) {
-            DataStructureQueryMessage queryMessage = new DataStructureQueryMessage();
-            DataStructureWhereType where = new DataStructureWhereType();
-            where.setAgencyId(new QueryNestedIDType(ref.getAgencyId().toString(), TextOperatorType.EQUAL));
-            List<QueryIDType> ids = new ArrayList<QueryIDType>();
-            ids.add(new QueryIDType(ref.getMaintainableParentId().toString(), TextOperatorType.EQUAL));
-            where.setId(ids);
-            if (ref.getVersion() != null) {
-                VersionQuery vqt = new VersionQuery(ref.getVersion().toString());
-                where.setVersion(vqt);
-            } else {
-                where.setVersion(VersionQuery.ALL);
+            String s = QueryToSdmx20Query.toGetDataStructureQuery(ref.getMaintainableParentId().toString(), ref.getAgencyId().toString(), soapNamespace);
+            if (SdmxIO.isDumpQuery()) {
+                System.out.println(s);
             }
-            queryMessage.setDataStructureWhereType(where);
-            local.load(query(queryMessage));
+            byte[] b = s.getBytes();
+            InputStream in = new ByteArrayInputStream(b);
+            try {
+                local.load(SdmxIO.parseStructure(query("GetDataStructureDefinitionResult", in, b.length)));
+            } catch (IOException ex) {
+                Logger.getLogger(Sdmx20SOAPQueryable.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
+            } catch (ParseException ex) {
+                Logger.getLogger(Sdmx20SOAPQueryable.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
+            }
             return local.find(ref);
         }
         return dst;
@@ -417,9 +340,11 @@ public class Sdmx20SOAPQueryable implements Registry,Repository,Queryable {
 
     @Override
     public DataflowType find(DataflowReference ref) {
-        if( local.find(ref)!=null) return local.find(ref);
-        for(DataflowType df2:listDataflows()) {
-            if( df2.identifiesMe(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion())){
+        if (local.find(ref) != null) {
+            return local.find(ref);
+        }
+        for (DataflowType df2 : listDataflows()) {
+            if (df2.identifiesMe(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion())) {
                 return df2;
             }
         }
@@ -450,20 +375,25 @@ public class Sdmx20SOAPQueryable implements Registry,Repository,Queryable {
     public Repository getRepository() {
         return this;
     }
+
     @Override
     public ItemType find(ItemReference ref) {
         ConceptType concept = find(ConceptReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion(), ref.getId()));
-        if( concept!=null) return concept;
-        CodeType code = find(CodeReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion(), ref.getId()));
+        if (concept != null) {
+            return concept;
+        }
+        CodeType code = find(CodeReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion(), ref.getId()));
         return code;
-        
+
     }
 
     @Override
     public ItemSchemeType find(ItemSchemeReferenceBase ref) {
         ConceptSchemeType concept = find(ConceptSchemeReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion()));
-        if( concept!=null) return concept;
-        CodelistType code = find(CodelistReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion()));
+        if (concept != null) {
+            return concept;
+        }
+        CodelistType code = find(CodelistReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion()));
         return code;
     }
 
@@ -472,14 +402,21 @@ public class Sdmx20SOAPQueryable implements Registry,Repository,Queryable {
         StructureType st = new StructureType();
         st.setStructures(new StructuresType());
         st.getStructures().setDataflows(new DataflowsType());
-        if( dataflowList==null) listDataflows();
-        for(DataflowType df:listDataflows()){
-            if(df!=null)st.getStructures().getDataflows().getDataflows().add(df);
+        if (dataflowList == null) {
+            listDataflows();
+        }
+        for (DataflowType df : listDataflows()) {
+            if (df != null) {
+                st.getStructures().getDataflows().getDataflows().add(df);
+            }
         }
         local.load(st);
         local.save(out);
     }
-    public void merge(){}
+
+    public void merge() {
+    }
+
     @Override
     public List<DataStructureType> search(DataStructureReference ref) {
         return Collections.EMPTY_LIST;
@@ -519,7 +456,47 @@ public class Sdmx20SOAPQueryable implements Registry,Repository,Queryable {
     public List<ConceptSchemeType> search(ConceptSchemeReference ref) {
         return Collections.EMPTY_LIST;
     }
-    public List<StructureType> getCache(){
+
+    public List<StructureType> getCache() {
         return this.local.getCache();
+    }
+
+    @Override
+    public DataMessage query(Query query) throws ParseException, IOException {
+        String s = QueryToSdmx20Query.toGetDataQuery(query, soapNamespace);
+        if (SdmxIO.isDumpQuery()) {
+            System.out.println(s);
+        }
+        byte[] b = s.getBytes();
+        InputStream in = new ByteArrayInputStream(b);
+        try {
+            return SdmxIO.parseData(query("GetCompactDataResult", in, b.length));
+        } catch (IOException ex) {
+            Logger.getLogger(Sdmx20SOAPQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        } catch (ParseException ex) {
+            Logger.getLogger(Sdmx20SOAPQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void query(Query query, ParseDataCallbackHandler handler) throws ParseException, IOException {
+        String s = QueryToSdmx20Query.toGetDataQuery(query, soapNamespace);
+        if (SdmxIO.isDumpQuery()) {
+            System.out.println(s);
+        }
+        byte[] b = s.getBytes();
+        InputStream in = new ByteArrayInputStream(b);
+        try {
+            SdmxIO.parseDataStream(handler, query("GetCompactDataResult", in, b.length));
+        } catch (IOException ex) {
+            Logger.getLogger(Sdmx20SOAPQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        } catch (ParseException ex) {
+            Logger.getLogger(Sdmx20SOAPQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
     }
 }

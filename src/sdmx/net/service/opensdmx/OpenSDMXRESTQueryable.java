@@ -20,6 +20,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,6 +56,9 @@ import sdmx.message.DataQueryMessage;
 import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.StructureType;
 import sdmx.net.LocalRegistry;
+import static sdmx.net.service.RESTQueryable.displayFormat;
+import sdmx.querykey.Query;
+import sdmx.querykey.QueryDimension;
 import sdmx.structure.base.ItemSchemeType;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.base.MaintainableType;
@@ -65,6 +69,7 @@ import sdmx.structure.concept.ConceptType;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionType;
+import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.version.common.ParseParams;
 import sdmx.version.common.SOAPStrippingInputStream;
 import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
@@ -163,27 +168,19 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
         return st;
     }
 
-    public DataMessage query(ParseParams params,String urlString) throws MalformedURLException, IOException, ParseException {
-        Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Retrieve Data:" + urlString);
+    /*
+     This function retrieves and uses the local registry 
+     instead of this when we call SdmxIO.parse(registry,in)
+     this means that if the sdmx service sends sdmx 2.0 data structures
+     the codelists dont have to be loaded.
+     */
+    public DataMessage queryBatch(String urlString) throws MalformedURLException, IOException, ParseException {
+        Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Query:" + urlString);
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(urlString);
         get.addHeader("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
         get.addHeader("User-Agent", "Sdmx-Sax");
         HttpResponse response = client.execute(get);
-        /*
-         URL url = new URL(urlString);
-         HttpURLConnection conn
-         = (HttpURLConnection) url.openConnection();
-         //if (conn.getResponseCode() != 200) {
-         //    return null;
-         //}
-         conn.setDoInput(true);
-         conn.setDoOutput(false);
-         conn.addRequestProperty("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
-         conn.addRequestProperty("User-Agent", "Sdmx-Sax");
-         conn.connect();
-         InputStream in = conn.getInputStream();
-         */
         InputStream in = response.getEntity().getContent();
         if (SdmxIO.isSaveXml()) {
             String name = System.currentTimeMillis() + ".xml";
@@ -191,62 +188,95 @@ public class OpenSDMXRESTQueryable implements Queryable, Registry, Repository {
             IOUtils.copy(in, file);
             in = new FileInputStream(name);
         }
-        System.out.println("Parsing!");
-        DataMessage msg = SdmxIO.parseData(params,in);
+        DataMessage msg = SdmxIO.parseData(in);
         if (msg == null) {
             System.out.println("Data is null!");
         }
         return msg;
     }
-    /*
-     This function retrieves and uses the local registry 
-     instead of this when we call SdmxIO.parse(registry,in)
-     this means that if the sdmx service sends sdmx 2.0 data structures
-     the codelists dont have to be loaded.
-     */
-
-    @Override
-    public DataMessage query(ParseParams pparams,DataQueryMessage message) {
-        IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataflow().get(0).getMaintainableParentId();
-        NestedNCNameID agency = new NestedNCNameID(this.getAgencyId());
-        DataStructureType dst = null;
-        for (int i = 0; i < dataflowList.size(); i++) {
-            if (dataflowList.get(i).getId().equals(flowid)) {
-                DataStructureReference ref = DataStructureReference.create(dataflowList.get(i).getStructure().getAgencyId(), dataflowList.get(i).getStructure().getMaintainableParentId(), dataflowList.get(i).getStructure().getMaintainedParentVersion());
-                dst = find(ref);
-            }
+    public void queryStream(String urlString,ParseDataCallbackHandler handler) throws MalformedURLException, IOException, ParseException {
+        ParseParams params = new ParseParams();
+        params.setCallbackHandler(handler);
+        Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Query:" + urlString);
+        HttpClient client = new DefaultHttpClient();
+        HttpGet get = new HttpGet(urlString);
+        get.addHeader("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
+        get.addHeader("User-Agent", "Sdmx-Sax");
+        HttpResponse response = client.execute(get);
+        InputStream in = response.getEntity().getContent();
+        if (SdmxIO.isSaveXml()) {
+            String name = System.currentTimeMillis() + ".xml";
+            FileOutputStream file = new FileOutputStream(name);
+            IOUtils.copy(in, file);
+            in = new FileInputStream(name);
         }
-        DataStructureType structure = dst;
-        StringBuilder q = new StringBuilder();
-        for (int i = 0; i < structure.getDataStructureComponents().getDimensionList().size(); i++) {
-            DimensionType dim = structure.getDataStructureComponents().getDimensionList().getDimension(i);
-            String concept = dim.getConceptIdentity().getId().toString();
-            List<String> params = message.getQuery().getDataWhere().getAnd().get(0).getDimensionParameters(concept);
+        SdmxIO.parseDataStream(handler, in);
+    }
+    public void query(Query q,ParseDataCallbackHandler handler) {
+        IDType flowid = new IDType(q.getFlowRef());
+        NestedNCNameID agency = new NestedNCNameID(q.getProviderRef());
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < q.size(); i++) {
+            QueryDimension dim = q.getQueryDimension(i);
+            String concept = dim.getConcept();
+            List<String> params = dim.getValues();
             if (params.size() > 0) {
                 for (int j = 0; j < params.size(); j++) {
-                    q.append(params.get(j));
+                    sb.append(params.get(j));
                     if (j < params.size() - 1) {
-                        q.append("+");
+                        sb.append("+");
                     }
                 }
             }
-            if (i < structure.getDataStructureComponents().getDimensionList().size() - 1) {
-                q.append(".");
+            if (i < q.getQuerySize() ) {
+                sb.append(".");
             }
         }
-        String startTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getStart().toString();
-        String endTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getEnd().toString();
-        DataMessage msg = null;
+        Date startTime = q.getQueryTime().getStartTime();
+        Date endTime = q.getQueryTime().getEndTime();
         try {
-            msg = query(pparams,getServiceURL() + "/repository/data/" + flowid + "/" + q.toString() + "/"+agency+"?startPeriod=" + startTime + "&endPeriod=" + endTime);
+            this.queryStream(getServiceURL() + "/repository/data/" + flowid + "/" + q.toString() + "/"+agency+"?startPeriod=" + displayFormat.format(startTime) + "&endPeriod=" + displayFormat.format(endTime), handler);
         } catch (IOException ex) {
-            Logger.getLogger(OpenSDMXRESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            Logger.getLogger(RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
-            Logger.getLogger(OpenSDMXRESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
-        return msg;
     }
-
+    public DataMessage query(Query q) {
+        IDType flowid = new IDType(q.getFlowRef());
+        NestedNCNameID agency = new NestedNCNameID(q.getProviderRef());
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < q.size(); i++) {
+            QueryDimension dim = q.getQueryDimension(i);
+            String concept = dim.getConcept();
+            List<String> params = dim.getValues();
+            if (params.size() > 0) {
+                for (int j = 0; j < params.size(); j++) {
+                    sb.append(params.get(j));
+                    if (j < params.size() - 1) {
+                        sb.append("+");
+                    }
+                }
+            }
+            if (i < q.getQuerySize() ) {
+                sb.append(".");
+            }
+        }
+        Date startTime = q.getQueryTime().getStartTime();
+        Date endTime = q.getQueryTime().getEndTime();
+        try {
+            return this.queryBatch(getServiceURL() + "/repository/data/" + flowid + "/" + q.toString() + "/"+agency+"?startPeriod=" + displayFormat.format(startTime) + "&endPeriod=" + displayFormat.format(endTime));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            Logger.getLogger(RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+        return null;
+    }
     @Override
     public List<DataflowType> listDataflows() {
         if (dataflowList != null) {

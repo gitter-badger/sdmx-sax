@@ -219,7 +219,9 @@ public class Cube {
     }
 
     public List<String> getValidCodes(String col) {
-        return validCodes.get(col);
+        List<String> list = validCodes.get(col);
+        if( list == null ) return Collections.EMPTY_LIST;
+        return list;
     }
 
     /**

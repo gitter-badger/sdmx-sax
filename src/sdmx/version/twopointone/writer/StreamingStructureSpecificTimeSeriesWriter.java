@@ -533,15 +533,4 @@ public class StreamingStructureSpecificTimeSeriesWriter implements DataSetWriter
     public void setRegistry(Registry reg) {
         this.registry = reg;
     }
-
-    @Override
-    public void setDataflow(DataflowType flow) {
-        this.flow = flow;
-        this.ref = flow.getStructure();
-    }
-
-    @Override
-    public DataflowType getDataflow() {
-        return flow;
-    }
 }

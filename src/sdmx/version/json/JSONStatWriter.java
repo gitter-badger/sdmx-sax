@@ -51,6 +51,7 @@ import sdmx.structure.datastructure.TimeDimensionType;
 import static sdmx.version.twopointzero.writer.GenericDataWriter.writeName;
 import net.hamnaberg.jsonstat.util.IntCartesianProduct;
 import sdmx.structure.datastructure.MeasureDimensionType;
+import sdmx.util.DataUtilities;
 
 /**
  * This file is part of SdmxSax.
@@ -73,13 +74,13 @@ public class JSONStatWriter {
 
     public static final SimpleDateFormat DF = new SimpleDateFormat("yyyy-MM-dd");
 
-    public static void write(DataMessage message, DataflowType flow, Registry reg, Locale loc, OutputStream out) throws XMLStreamException, IOException {
+    public static void write(DataMessage message, Registry reg, Locale loc, OutputStream out) throws XMLStreamException, IOException {
         System.out.println("Write!");
         JsonWriter writer = null;
         writer = new JsonWriter(new OutputStreamWriter(out));
         try {
             writer.beginObject();
-            writeJSONStatMessage(message, flow, reg, loc, writer);
+            writeJSONStatMessage(message, reg, loc, writer);
             writer.endObject();
         } catch (IOException ex) {
             Logger.getLogger(StreamingSdmxJSONWriter.class.getName()).log(Level.SEVERE, null, ex);
@@ -98,10 +99,10 @@ public class JSONStatWriter {
     /**
      *
      */
-    public static void writeJSONStatMessage(DataMessage msg, DataflowType flow, Registry reg, Locale loc, JsonWriter writer) throws XMLStreamException, IOException {
-        DataStructureType struct = reg.find(flow.getStructure());
-        writer.name(NameableType.toIDString(flow)).beginObject();
-        writer.name("label").value(NameableType.toString(flow, loc));
+    public static void writeJSONStatMessage(DataMessage msg, Registry reg, Locale loc, JsonWriter writer) throws XMLStreamException, IOException {
+        DataStructureType struct = reg.find(DataUtilities.getDataStructureReference(msg));
+        writer.name(NameableType.toIDString(DataUtilities.getDataStructureReference(msg))).beginObject();
+        writer.name("label").value(NameableType.toString(struct, loc));
         writer.name("source").value(NameableType.toString(msg.getHeader().getSender(), loc));
         writer.name("updated").value(DF.format(msg.getHeader().getPrepared().getDate().getDate()));
         writer.name("extension").beginObject();
@@ -148,13 +149,13 @@ public class JSONStatWriter {
         if (!value_labels) {
             writer.name("value").beginArray();
             for (int i = 1; i <= value_size; i++) {
-                writeValue(i, cartesianProduct.next(), cube, flow, reg, value_labels, writer);
+                writeValue(i, cartesianProduct.next(), cube, struct, reg, value_labels, writer);
             }
             writer.endArray();
         } else {
             writer.name("value").beginObject();
             for (int i = 1; i <= value_size; i++) {
-                writeValue(i, cartesianProduct.next(), cube, flow, reg, value_labels, writer);
+                writeValue(i, cartesianProduct.next(), cube, struct, reg, value_labels, writer);
             }
             writer.endObject();
         }
@@ -256,10 +257,10 @@ public class JSONStatWriter {
         writer.endObject(); //Document
     }
 
-    public static void writeValue(int index, int[] result, Cube cube, DataflowType flow, Registry reg, boolean labels, JsonWriter writer) throws IOException {
+    public static void writeValue(int index, int[] result, Cube cube, DataStructureType struct,Registry reg, boolean labels, JsonWriter writer) throws IOException {
         CubeObservation obs = null;
         try {
-            obs = cube.find(toFullKey(result, flow, reg, cube));
+            obs = cube.find(toFullKey(result, struct, reg, cube));
         } catch (Exception ex) {
             ex.printStackTrace();
             throw ex;
@@ -281,8 +282,7 @@ public class JSONStatWriter {
         }
     }
 
-    public static FullKey toFullKey(int[] result, DataflowType flow, Registry reg, Cube cube) {
-        DataStructureType struct = reg.find(flow.getStructure());
+    public static FullKey toFullKey(int[] result, DataStructureType struct, Registry reg, Cube cube) {
         LinkedHashMap<String, Object> key = new LinkedHashMap<String, Object>();
         int i = 0;
         for (; i < struct.getDataStructureComponents().getDimensionList().size(); i++) {

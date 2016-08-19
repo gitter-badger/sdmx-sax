@@ -77,7 +77,7 @@ public class CSVWriter {
 
     public static final SimpleDateFormat DF = new SimpleDateFormat("yyyy-MM-dd");
 
-    public static void write(DataMessage message, DataflowType flow, Registry reg, Locale loc, OutputStream out) throws XMLStreamException, IOException {
+    public static void write(DataMessage message,Registry reg, Locale loc, OutputStream out) throws XMLStreamException, IOException {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out));
         StructuredDataMessage sdm = new StructuredDataMessage(message, reg);
         StructuredDataSet ds = sdm.getStructuredDataSet(0);

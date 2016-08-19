@@ -17,9 +17,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,6 +57,9 @@ import sdmx.message.DataQueryMessage;
 import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.StructureType;
 import sdmx.net.LocalRegistry;
+import static sdmx.net.service.RESTQueryable.displayFormat;
+import sdmx.querykey.Query;
+import sdmx.querykey.QueryDimension;
 import sdmx.structure.base.ItemSchemeType;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.base.MaintainableType;
@@ -65,6 +70,7 @@ import sdmx.structure.concept.ConceptType;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionType;
+import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.version.common.ParseParams;
 import sdmx.version.common.SOAPStrippingInputStream;
 import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
@@ -91,6 +97,7 @@ import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
  * Copyright James Gardner 2014
  */
 public class INSEERESTQueryable implements Queryable, Registry, Repository {
+    public static final SimpleDateFormat displayFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public static void main(String args[]) {
         INSEERESTQueryable registry = new INSEERESTQueryable("FR1", "http://www.bdm.insee.fr/series/sdmx");
@@ -161,7 +168,7 @@ public class INSEERESTQueryable implements Queryable, Registry, Repository {
         }
         return st;
     }
-
+/*
     public DataMessage query(ParseParams pparams,String urlString) throws MalformedURLException, IOException, ParseException {
         Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Query:" + urlString);
         HttpClient client = new DefaultHttpClient();
@@ -182,7 +189,7 @@ public class INSEERESTQueryable implements Queryable, Registry, Repository {
          conn.addRequestProperty("User-Agent", "Sdmx-Sax");
          conn.connect();
          InputStream in = conn.getInputStream();
-         */
+         *//*
         InputStream in = response.getEntity().getContent();
         if (SdmxIO.isSaveXml()) {
             String name = System.currentTimeMillis() + ".xml";
@@ -190,12 +197,13 @@ public class INSEERESTQueryable implements Queryable, Registry, Repository {
             IOUtils.copy(in, file);
             in = new FileInputStream(name);
         }
-        DataMessage msg = SdmxIO.parseData(pparams,in);
+        DataMessage msg = SdmxIO.parseDataStream(pparams,in);
         if (msg == null) {
             System.out.println("Data is null!");
         }
         return msg;
-    }
+    }*/
+    
     /*
      This function retrieves and uses the local registry 
      instead of this when we call SdmxIO.parse(registry,in)
@@ -227,7 +235,7 @@ public class INSEERESTQueryable implements Queryable, Registry, Repository {
      }
      return st;
      }*/
-
+/*
     @Override
     public DataMessage query(ParseParams pparams,DataQueryMessage message) {
         Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Query: DataQueryMessage" + message);
@@ -277,7 +285,7 @@ public class INSEERESTQueryable implements Queryable, Registry, Repository {
         }
         return msg;
     }
-
+*/
     @Override
     public List<DataflowType> listDataflows() {
         Logger.getLogger("sdmx").log(Level.FINE, "Rest Queryable listDataflows():");
@@ -506,5 +514,111 @@ public class INSEERESTQueryable implements Queryable, Registry, Repository {
     }
     public List<StructureType> getCache(){
         return this.local.getCache();
+    }
+    public DataMessage queryBatch(String urlString) throws MalformedURLException, IOException, ParseException {
+        Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Query:" + urlString);
+        HttpClient client = new DefaultHttpClient();
+        HttpGet get = new HttpGet(urlString);
+        get.addHeader("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
+        get.addHeader("User-Agent", "Sdmx-Sax");
+        HttpResponse response = client.execute(get);
+        InputStream in = response.getEntity().getContent();
+        if (SdmxIO.isSaveXml()) {
+            String name = System.currentTimeMillis() + ".xml";
+            FileOutputStream file = new FileOutputStream(name);
+            IOUtils.copy(in, file);
+            in = new FileInputStream(name);
+        }
+        DataMessage msg = SdmxIO.parseData(in);
+        if (msg == null) {
+            System.out.println("Data is null!");
+        }
+        return msg;
+    }
+
+    public void queryStream(String urlString, ParseDataCallbackHandler handler) throws MalformedURLException, IOException, ParseException {
+        ParseParams params = new ParseParams();
+        params.setCallbackHandler(handler);
+        Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Query:" + urlString);
+        HttpClient client = new DefaultHttpClient();
+        HttpGet get = new HttpGet(urlString);
+        get.addHeader("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
+        get.addHeader("User-Agent", "Sdmx-Sax");
+        HttpResponse response = client.execute(get);
+        InputStream in = response.getEntity().getContent();
+        if (SdmxIO.isSaveXml()) {
+            String name = System.currentTimeMillis() + ".xml";
+            FileOutputStream file = new FileOutputStream(name);
+            IOUtils.copy(in, file);
+            in = new FileInputStream(name);
+        }
+        SdmxIO.parseDataStream(handler, in);
+    }
+
+    public void query(Query q, ParseDataCallbackHandler handler) {
+        IDType flowid = new IDType(q.getFlowRef());
+        NestedNCNameID agency = new NestedNCNameID(q.getProviderRef());
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < q.size(); i++) {
+            QueryDimension dim = q.getQueryDimension(i);
+            String concept = dim.getConcept();
+            List<String> params = dim.getValues();
+            if (params.size() > 0) {
+                for (int j = 0; j < params.size(); j++) {
+                    sb.append(params.get(j));
+                    if (j < params.size() - 1) {
+                        sb.append("+");
+                    }
+                }
+            }
+            if (i < q.size()) {
+                sb.append(".");
+            }
+        }
+        Date startTime = q.getQueryTime().getStartTime();
+        Date endTime = q.getQueryTime().getEndTime();
+        try {
+            this.queryStream(this.getServiceURL() + "/data/" + flowid.toString() + "/" + sb.toString() + "?startPeriod=" + displayFormat.format(startTime) + "&endPeriod=" + displayFormat.format(endTime), handler);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            Logger.getLogger(RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+    }
+
+    public DataMessage query(Query q) {
+        IDType flowid = new IDType(q.getFlowRef());
+        NestedNCNameID agency = new NestedNCNameID(q.getProviderRef());
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < q.size(); i++) {
+            QueryDimension dim = q.getQueryDimension(i);
+            String concept = dim.getConcept();
+            List<String> params = dim.getValues();
+            if (params.size() > 0) {
+                for (int j = 0; j < params.size(); j++) {
+                    sb.append(params.get(j));
+                    if (j < params.size() - 1) {
+                        sb.append("+");
+                    }
+                }
+            }
+            if (i < q.size()) {
+                sb.append(".");
+            }
+        }
+        Date startTime = q.getQueryTime().getStartTime();
+        Date endTime = q.getQueryTime().getEndTime();
+        try {
+            this.queryBatch(this.getServiceURL() + "/data/" + flowid.toString() + "/" + sb.toString() + "?startPeriod=" + displayFormat.format(startTime) + "&endPeriod=" + displayFormat.format(endTime));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            Logger.getLogger(RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+        return null;
     }
 }

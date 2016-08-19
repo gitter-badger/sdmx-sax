@@ -49,7 +49,7 @@ public class CSVWriterProvider implements sdmx.version.common.SdmxWriterProvider
 
     public void save(ParseParams params, String mime, OutputStream out, DataMessage message) throws IOException {
         try {
-            CSVWriter.write(message, params.getDataflow(), params.getRegistry(), params.getLocale(),out);
+            CSVWriter.write(message,params.getRegistry(), params.getLocale(),out);
         } catch (XMLStreamException ex) {
             Logger.getLogger(CSVWriterProvider.class.getName()).log(Level.SEVERE, null, ex);
         }

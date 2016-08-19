@@ -25,6 +25,7 @@ import org.jdom.Namespace;
 import org.jdom.output.XMLOutputter;
 import sdmx.Registry;
 import sdmx.common.Name;
+import sdmx.common.PayloadStructureType;
 import sdmx.commonreferences.DataStructureReference;
 import sdmx.data.ColumnMapper;
 import sdmx.data.DataSet;
@@ -67,9 +68,9 @@ import static sdmx.version.twopointzero.writer.GenericDataWriter.writeName;
  */
 public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallbackHandler {
 
-    public static StreamingGenericDataWriter openWriter(OutputStream out, Registry reg, DataflowType flow) throws XMLStreamException {
+    public static StreamingGenericDataWriter openWriter(OutputStream out, Registry reg) throws XMLStreamException {
         //setup this like outputDocument
-        return new StreamingGenericDataWriter(out, reg, flow);
+        return new StreamingGenericDataWriter(out, reg);
     }
     OutputStream out = null;
     XMLStreamWriter writer = null;
@@ -79,7 +80,6 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
 
     private Registry registry = null;
     private DataStructureReference dataStructureReference = null;
-    private DataflowType flow = null;
     private DataStructureType struct = null;
 
     private boolean in_series_key = false;
@@ -87,11 +87,9 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
 
     private boolean in_obs_attributes = false;
 
-    public StreamingGenericDataWriter(OutputStream out, Registry reg, DataflowType flow) {
+    public StreamingGenericDataWriter(OutputStream out, Registry reg) {
         try {
             this.registry = reg;
-            this.dataStructureReference = flow.getStructure();
-            this.struct = reg.find(flow.getStructure());
             this.out = out;
             XMLOutputFactory factory = XMLOutputFactory.newInstance();
             this.writer = factory.createXMLStreamWriter(out);
@@ -196,6 +194,13 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
             writer.writeEndElement();
         }
         writer.writeEndElement();
+        if (header.getStructures() != null && header.getStructures().size() > 0) {
+            for (Iterator<sdmx.common.PayloadStructureType> it = header.getStructures().iterator(); it.hasNext();) {
+                PayloadStructureType st = (PayloadStructureType) it.next();
+                this.dataStructureReference=(DataStructureReference)st.getStructure();
+                this.struct=this.registry.find(dataStructureReference);
+            }
+        } 
         // Ignore.. no equivalient in SDMX 2.1
         //if (header.get) {
         //    dataSet.setAttribute("KeyFamilyURI", ds.getKeyFamilyURI());
@@ -558,15 +563,5 @@ public class StreamingGenericDataWriter implements DataSetWriter, ParseDataCallb
     @Override
     public void setRegistry(Registry reg) {
         this.registry = reg;
-    }
-
-    @Override
-    public void setDataflow(DataflowType flow) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public DataflowType getDataflow() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

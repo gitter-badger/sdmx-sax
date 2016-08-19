@@ -42,9 +42,9 @@ public class JSONStreamWriterProvider implements SdmxStreamWriterProvider {
     }
 
     @Override
-    public ParseDataCallbackHandler openForWriting(String mime, OutputStream out,ParseParams params) {
+    public ParseDataCallbackHandler openForWriting(ParseParams params,String mime, OutputStream out) {
         if("application/vnd.sdmx.data+json;version=1.0.0-wd".equals(mime)){
-            StreamingSdmxJSONWriter writer = new StreamingSdmxJSONWriter(out, params.getRegistry(), params.getDataflow());
+            StreamingSdmxJSONWriter writer = new StreamingSdmxJSONWriter(out, params.getRegistry());
             writer.setLocale(params.getLocale());
             return writer;
         }

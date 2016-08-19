@@ -20,6 +20,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -72,10 +73,10 @@ import sdmx.message.PartyType;
 import sdmx.message.SenderType;
 import sdmx.message.StructureType;
 import sdmx.net.LocalRegistry;
-import sdmx.net.service.ons.ONSCube;
-import static sdmx.net.service.ons.ONSRESTServiceRegistry.STATE_ID;
-import static sdmx.net.service.ons.ONSRESTServiceRegistry.STATE_NAME;
-import static sdmx.net.service.ons.ONSRESTServiceRegistry.STATE_NOTHING;
+import sdmx.net.service.RESTQueryable;
+import static sdmx.net.service.RESTQueryable.displayFormat;
+import sdmx.querykey.Query;
+import sdmx.querykey.QueryDimension;
 import sdmx.structure.DataflowsType;
 import sdmx.structure.StructuresType;
 import sdmx.structure.base.ItemSchemeType;
@@ -90,10 +91,11 @@ import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionType;
 import sdmx.util.time.TimeUtil;
+import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.version.common.ParseParams;
 import sdmx.version.common.SOAPStrippingInputStream;
 import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
-import sdmx.version.twopointzero.Sdmx20QueryWriter;
+import sdmx.version.twopointzero.QueryToSdmx20Query;
 import sdmx.xml.DateTime;
 
 /**
@@ -314,54 +316,6 @@ public class NOMISRESTServiceRegistry implements Registry, Repository, Queryable
         return st;
     }
 
-    public DataMessage query(ParseParams params, String urlString) throws MalformedURLException, IOException, ParseException {
-        Logger.getLogger("sdmx").info("ILORestServiceRegistry: query " + urlString);
-        String s = options;
-        if (urlString.indexOf("?") == -1) {
-            s = "?" + s + "&random=" + System.currentTimeMillis();
-        } else {
-            s = "&" + s + "&random=" + System.currentTimeMillis();
-        }
-        HttpClient client = new DefaultHttpClient();
-        HttpGet get = new HttpGet(urlString + s);
-        get.addHeader("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
-        get.addHeader("User-Agent", "Sdmx-Sax");
-        HttpResponse response = client.execute(get);
-        /*
-         URL url = new URL(urlString);
-         HttpURLConnection conn
-         = (HttpURLConnection) url.openConnection();
-         //if (conn.getResponseCode() != 200) {
-         //    return null;
-         //}
-         conn.setDoInput(true);
-         conn.setDoOutput(false);
-         conn.addRequestProperty("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
-         conn.addRequestProperty("User-Agent", "Sdmx-Sax");
-         conn.connect();
-         InputStream in = conn.getInputStream();
-         */
-        InputStream in = response.getEntity().getContent();
-        if (SdmxIO.isSaveXml()) {
-            String name = System.currentTimeMillis() + ".xml";
-            FileOutputStream file = new FileOutputStream(name);
-            IOUtils.copy(in, file);
-            in = new FileInputStream(name);
-        }
-        System.out.println("Parsing!");
-        DataMessage msg = SdmxIO.parseData(params, in);
-        if (msg == null) {
-            System.out.println("Data is null!");
-        }
-        return msg;
-    }
-    /*
-     This function retrieves and uses the local registry 
-     instead of this when we call SdmxIO.parse(registry,in)
-     this means that if the sdmx service sends sdmx 2.0 data structures
-     the codelists dont have to be loaded.
-     */
-
     private StructureType retrieve2(String urlString) throws MalformedURLException, IOException, ParseException {
         Logger.getLogger("sdmx").info("ILORestServiceRegistry: retrieve " + urlString + "&" + options);
         String s = options;
@@ -395,52 +349,38 @@ public class NOMISRESTServiceRegistry implements Registry, Repository, Queryable
         }
         return st;
     }
-
     @Override
-    public DataMessage query(ParseParams pparams, DataQueryMessage message) {
+    public void query(Query q,ParseDataCallbackHandler handler) {
         if (SdmxIO.isDumpQuery()) {
 
         }
-        IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataflow().get(0).getMaintainableParentId();
-        NestedNCNameID agency = new NestedNCNameID(this.getAgencyId());
-        DataStructureType dst = null;
-        if (dataflowList == null) {
-            listDataflows();
-        }
-        DataflowReference ref = null;
-        for (int i = 0; i < dataflowList.size(); i++) {
-            if (dataflowList.get(i).getId().equals(flowid)) {
-                ref = dataflowList.get(i).asReference();
-                dst = find(dataflowList.get(i).getStructure());
-            }
-        }
-        int geogIndex = ref.getMaintainableParentId().toString().lastIndexOf("_");;
-        String geog = ref.getMaintainableParentId().toString().substring(geogIndex+1,ref.getMaintainableParentId().toString().length());
+        String flowid = q.getFlowRef();
+        String agency = q.getProviderRef();
+        int geogIndex = flowid.lastIndexOf("_");;
+        String geog = flowid.substring(geogIndex+1,flowid.length());
         String geography_string = "&geography="+geog;
         if( "NOGEOG".equals(geog)){
             geography_string="";
         }
-        String id = ref.getMaintainableParentId().toString().substring(0,geogIndex);
-        DataStructureType structure = dst;
-        StringBuilder q = new StringBuilder();
-        for (int i = 0; i < structure.getDataStructureComponents().getDimensionList().size(); i++) {
-            DimensionType dim = structure.getDataStructureComponents().getDimensionList().getDimension(i);
+        String id = flowid.substring(0,geogIndex);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < q.size(); i++) {
+            QueryDimension dim = q.getQueryDimension(i);
             boolean addedParam = false;
-            String concept = dim.getConceptIdentity().getId().toString();
-            List<String> params = message.getQuery().getDataWhere().getAnd().get(0).getDimensionParameters(concept);
-            System.out.println("Params=" + params);
+            String concept = dim.getConcept();
+            List<String> params = dim.getValues();
             if (params.size() > 0) {
                 addedParam = true;
-                q.append(concept + "=");
+                sb.append(concept + "=");
                 for (int j = 0; j < params.size(); j++) {
-                    q.append(params.get(j));
+                    sb.append(params.get(j));
                     if (j < params.size() - 1) {
-                        q.append(",");
+                        sb.append(",");
                     }
                 }
             }
-            if (addedParam && i < structure.getDataStructureComponents().getDimensionList().size() - 1) {
-                q.append("&");
+            if (addedParam && i < q.size() - 1) {
+                sb.append("&");
             }
             addedParam = false;
         }
@@ -448,14 +388,85 @@ public class NOMISRESTServiceRegistry implements Registry, Repository, Queryable
         try {
             StructureType st = retrieve3(getServiceURL() + "/v01/dataset/" + id + "/time/def.sdmx.xml");
             CodelistType timesCL = st.getStructures().getCodelists().getCodelists().get(0);
-            String startTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getStart().toString();
-            String endTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getEnd().toString();
-            RegularTimePeriod rtpStart = TimeUtil.parseTime("", startTime);
-            RegularTimePeriod rtpEnd = TimeUtil.parseTime("", endTime);
+            Date startTime = q.getQueryTime().getStartTime();
+            Date endTime = q.getQueryTime().getEndTime();
             boolean comma = true;
             for (int i = 0; i < timesCL.size(); i++) {
                 RegularTimePeriod rtp = TimeUtil.parseTime("", timesCL.getCode(i).getId().toString());
-                if ((rtp.getStart().getTime() == rtpStart.getStart().getTime() || rtp.getStart().after(rtpStart.getStart())) && (rtp.getEnd().before(rtpEnd.getEnd()) || rtp.getEnd().getTime() == rtpEnd.getEnd().getTime())) {
+                if ((rtp.getStart().equals(startTime) || rtp.getStart().after(startTime)) && (rtp.getEnd().before(endTime) || rtp.getEnd().equals(endTime))) {
+                    if (!comma) {
+                        times.append(",");
+                    }
+                    times.append(timesCL.getCode(i).getId().toString());
+                    comma = false;
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            queryStream(getServiceURL() + "/v01/dataset/" + id + ".compact.sdmx.xml?" + q + "&time=" + times.toString() + 
+                    /*
+                       We don't want the geography string at all, because its name clashes with a dimension name
+                       this causes the nomis service to send each geography code in the message...
+                       we will just specify the codes we want... and not specify the geography type.
+                    */
+                    //geography_string 
+                    "&" + options,handler);
+        } catch (IOException ex) {
+            Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    @Override
+    public DataMessage query(Query q) {
+        if (SdmxIO.isDumpQuery()) {
+
+        }
+        String flowid = q.getFlowRef();
+        String agency = q.getProviderRef();
+        int geogIndex = flowid.lastIndexOf("_");;
+        String geog = flowid.substring(geogIndex+1,flowid.length());
+        String geography_string = "&geography="+geog;
+        if( "NOGEOG".equals(geog)){
+            geography_string="";
+        }
+        String id = flowid.substring(0,geogIndex);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < q.size(); i++) {
+            QueryDimension dim = q.getQueryDimension(i);
+            boolean addedParam = false;
+            String concept = dim.getConcept();
+            List<String> params = dim.getValues();
+            if (params.size() > 0) {
+                addedParam = true;
+                sb.append(concept + "=");
+                for (int j = 0; j < params.size(); j++) {
+                    sb.append(params.get(j));
+                    if (j < params.size() - 1) {
+                        sb.append(",");
+                    }
+                }
+            }
+            if (addedParam && i < q.size() - 1) {
+                sb.append("&");
+            }
+            addedParam = false;
+        }
+        StringBuilder times = new StringBuilder();
+        try {
+            StructureType st = retrieve3(getServiceURL() + "/v01/dataset/" + id + "/time/def.sdmx.xml");
+            CodelistType timesCL = st.getStructures().getCodelists().getCodelists().get(0);
+            Date startTime = q.getQueryTime().getStartTime();
+            Date endTime = q.getQueryTime().getEndTime();
+            boolean comma = true;
+            for (int i = 0; i < timesCL.size(); i++) {
+                RegularTimePeriod rtp = TimeUtil.parseTime("", timesCL.getCode(i).getId().toString());
+                if ((rtp.getStart().equals(startTime) || rtp.getStart().after(startTime)) && (rtp.getEnd().before(endTime) || rtp.getEnd().equals(endTime))) {
                     if (!comma) {
                         times.append(",");
                     }
@@ -471,7 +482,7 @@ public class NOMISRESTServiceRegistry implements Registry, Repository, Queryable
 
         DataMessage msg = null;
         try {
-            msg = query(pparams, getServiceURL() + "/v01/dataset/" + id + ".compact.sdmx.xml?" + q + "&time=" + times.toString() + 
+            msg = queryBatch(getServiceURL() + "/v01/dataset/" + id + ".compact.sdmx.xml?" + q + "&time=" + times.toString() + 
                     /*
                        We don't want the geography string at all, because its name clashes with a dimension name
                        this causes the nomis service to send each geography code in the message...
@@ -485,6 +496,44 @@ public class NOMISRESTServiceRegistry implements Registry, Repository, Queryable
             Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
         }
         return msg;
+    }
+    public DataMessage queryBatch(String urlString) throws MalformedURLException, IOException, ParseException {
+        Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Query:" + urlString);
+        HttpClient client = new DefaultHttpClient();
+        HttpGet get = new HttpGet(urlString);
+        get.addHeader("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
+        get.addHeader("User-Agent", "Sdmx-Sax");
+        HttpResponse response = client.execute(get);
+        InputStream in = response.getEntity().getContent();
+        if (SdmxIO.isSaveXml()) {
+            String name = System.currentTimeMillis() + ".xml";
+            FileOutputStream file = new FileOutputStream(name);
+            IOUtils.copy(in, file);
+            in = new FileInputStream(name);
+        }
+        DataMessage msg = SdmxIO.parseData(in);
+        if (msg == null) {
+            System.out.println("Data is null!");
+        }
+        return msg;
+    }
+    public void queryStream(String urlString,ParseDataCallbackHandler handler) throws MalformedURLException, IOException, ParseException {
+        ParseParams params = new ParseParams();
+        params.setCallbackHandler(handler);
+        Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Query:" + urlString);
+        HttpClient client = new DefaultHttpClient();
+        HttpGet get = new HttpGet(urlString);
+        get.addHeader("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
+        get.addHeader("User-Agent", "Sdmx-Sax");
+        HttpResponse response = client.execute(get);
+        InputStream in = response.getEntity().getContent();
+        if (SdmxIO.isSaveXml()) {
+            String name = System.currentTimeMillis() + ".xml";
+            FileOutputStream file = new FileOutputStream(name);
+            IOUtils.copy(in, file);
+            in = new FileInputStream(name);
+        }
+        SdmxIO.parseDataStream(handler, in);
     }
 
     @Override
@@ -549,7 +598,7 @@ public class NOMISRESTServiceRegistry implements Registry, Repository, Queryable
                 struct.setHeader(getBaseHeader());
                 local.load(struct);
                 ParseParams params = new ParseParams();
-                SdmxIO.write(params, "application/vnd.sdmx.structure+xml;version=2.1", struct, new FileOutputStream(new File(SdmxIO.getCacheDirectory(),"nomis.xml")));
+                SdmxIO.writeStructure("application/vnd.sdmx.structure+xml;version=2.1", struct, new FileOutputStream(new File(SdmxIO.getCacheDirectory(),"nomis.xml")));
             } catch (IOException ex) {
                 Logger.getLogger(NOMISRESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
                 return null;

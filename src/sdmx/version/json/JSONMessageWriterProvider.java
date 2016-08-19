@@ -60,7 +60,7 @@ public class JSONMessageWriterProvider implements SdmxWriterProvider {
         System.out.println("JSON Message Writer Provider");
         if ("application/json".equals(mime)) {
             try {
-                JSONStatWriter.write(message, params.getDataflow(), params.getRegistry(), params.getLocale(), out);
+                JSONStatWriter.write(message, params.getRegistry(), params.getLocale(), out);
             } catch (XMLStreamException ex) {
                 Logger.getLogger(JSONMessageWriterProvider.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {

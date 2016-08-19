@@ -63,10 +63,12 @@ public class DataProvider {
             LIST.add(new SDWDataProvider(14,"UKDS","https://stats.ukdataservice.ac.uk/sdmxws/sdmx.asmx","http://stats.oecd.org/OECDStatWS/SDMX/",              "Based on United Kingdom Data Service data","Based on United Kingdom Data Service data"));
             LIST.add(new NomisDataProvider(15,"NOMIS","http://www.nomisweb.co.uk/api","uid=0xad235cca367972d98bd642ef04ea259da5de264f","Based on NOMIS Data Service data","Based on NOMIS Data Service data"));
             LIST.add(new INSEERESTDataProvider(16,"FR1", "http://www.bdm.insee.fr/series/sdmx", "Based on INSEE.fr Data", "Based on INSEE.fr data"));
-            LIST.add(new CEPALDataProvider(17,"CEPAL", "http://interwp.cepal.org/sisgen/ws/cepalstat/","english", "CEPAL English", "CEPAL English"));
-            LIST.add(new CEPALDataProvider(18,"CEPAL", "http://interwp.cepal.org/sisgen/ws/cepalstat/","spanish", "CEPAL Spanish", "CEPAL Spanish"));
-            LIST.add(new ONSDataProvider(19,"ONS","http://data.ons.gov.uk/ons/api/data", "apikey=doFKbcgLtj","Based on ONS Data Service data","Based on ONS Data Service data"));
+            //LIST.add(new CEPALDataProvider(17,"CEPAL", "http://interwp.cepal.org/sisgen/ws/cepalstat/","english", "CEPAL English", "CEPAL English"));
+            //LIST.add(new CEPALDataProvider(18,"CEPAL", "http://interwp.cepal.org/sisgen/ws/cepalstat/","spanish", "CEPAL Spanish", "CEPAL Spanish"));
+            //LIST.add(new ONSDataProvider(19,"ONS","http://data.ons.gov.uk/ons/api/data", "apikey=doFKbcgLtj","Based on ONS Data Service data","Based on ONS Data Service data"));
             LIST.add(new SDWDataProvider(20,"ABS","http://govhack.abs.gov.au/sdmxws/sdmx.asmx","http://stats.oecd.org/OECDStatWS/SDMX/",                    "Based on Australian Bureau of Statistics data","Based on Australian Bureau of Statistics data"));
+            LIST.add(new NSIDataProvider(21,"UNDATA","http://data.un.org/ws/NSIStdV20Service.asmx","http://ec.europa.eu/eurostat/sri/service/2.0",    "Based on United Nations data","Based on United Nations data"));
+            
         } catch (MalformedURLException ex) {
             Logger.getLogger(DataProvider.class.getName()).log(Level.SEVERE, null, ex);
         }

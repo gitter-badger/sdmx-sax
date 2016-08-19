@@ -5,6 +5,7 @@
  */
 package sdmx.version.twopointzero;
 
+import java.io.IOException;
 import sdmx.version.twopointone.*;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -49,14 +50,13 @@ public class Sdmx20StreamWriterProvider implements SdmxStreamWriterProvider {
     }
 
     @Override
-    public ParseDataCallbackHandler openForWriting(String mime, OutputStream out,ParseParams params) {
+    public ParseDataCallbackHandler openForWriting(ParseParams params,String mime, OutputStream out) {
         if("application/vnd.sdmx.genericdata+xml;version=2.0".equals(mime)){
-            return new StreamingGenericDataWriter(out, params.getRegistry(), params.getDataflow());
+            return new StreamingGenericDataWriter(out, params.getRegistry());
         }
         if("application/vnd.sdmx.compactdata+xml;version=2.0".equals(mime)){
             StreamingCompactDataWriter sssdw = new StreamingCompactDataWriter(out);
             sssdw.setRegistry(params.getRegistry());
-            sssdw.setDataflow(params.getDataflow());
             return sssdw;
         }
         throw new RuntimeException("MIME type:"+mime+" not supported by "+getClass().getName());

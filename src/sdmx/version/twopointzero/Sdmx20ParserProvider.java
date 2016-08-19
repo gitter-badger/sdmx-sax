@@ -70,7 +70,8 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
             return true;
         } else if (header.indexOf("RegistryInterface") != -1) {
             return true;
-        } else if (header.indexOf("GenericData") != -1) {
+        } else if (header.indexOf("GenericData") != -1 && header.indexOf("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message") != -1) {
+            System.out.println("IsGenericData 2.0");
             return true;
         } else if (header.indexOf("CrossSectionalData") != -1) {
             return true;
@@ -81,6 +82,7 @@ public class Sdmx20ParserProvider implements SdmxParserProvider {
         } else if (header.indexOf("Structure") != -1 && header.indexOf("http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message") != -1) {
             return true;
         } else {
+            System.out.println("IsNot 2.0");
             return false;
         }
     }

@@ -18,6 +18,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -60,6 +61,10 @@ import sdmx.message.DataQueryMessage;
 import sdmx.message.DataStructureQueryMessage;
 import sdmx.message.StructureType;
 import sdmx.net.LocalRegistry;
+import sdmx.net.service.RESTQueryable;
+import static sdmx.net.service.RESTQueryable.displayFormat;
+import sdmx.querykey.Query;
+import sdmx.querykey.QueryDimension;
 import sdmx.structure.base.ItemSchemeType;
 import sdmx.structure.base.ItemType;
 import sdmx.structure.base.MaintainableType;
@@ -70,6 +75,7 @@ import sdmx.structure.concept.ConceptType;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionType;
+import sdmx.version.common.ParseDataCallbackHandler;
 import sdmx.version.common.ParseParams;
 import sdmx.version.common.SOAPStrippingInputStream;
 import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
@@ -95,7 +101,7 @@ import sdmx.version.twopointone.writer.Sdmx21StructureWriter;
  *
  * Copyright James Gardner 2014
  */
-public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
+public class ILORESTServiceRegistry implements Registry, Repository, Queryable {
 
     public static void main(String args[]) {
         ILORESTServiceRegistry registry = new ILORESTServiceRegistry("ILO", "http://www.ilo.org/ilostat/sdmx/ws/rest");
@@ -121,25 +127,28 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
     }
 
     public void load(StructureType struct) {
-        System.out.println("ILO Load:"+struct);
+        System.out.println("ILO Load:" + struct);
         local.load(struct);
     }
 
     public void unload(StructureType struct) {
         local.unload(struct);
     }
-   /*
+    /*
       This function ignores the version argument!!!
       ILO stat does not use version numbers.. simply take the latest
-    */
+     */
+
     public DataStructureType find(DataStructureReference ref) {
         DataStructureType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/datastructure/" + ref.getAgencyId() + "/" + ref.getMaintainableParentId().toString() + "/"+(ref.getVersion()==null?"latest":ref.getVersion().toString()));
+                StructureType st = retrieve(getServiceURL() + "/datastructure/" + ref.getAgencyId() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion() == null ? "latest" : ref.getVersion().toString()));
                 load(st);
                 DataStructureType dst2 = local.find(ref);
-                if( dst2 == null ) throw new RuntimeException("DST null");
+                if (dst2 == null) {
+                    throw new RuntimeException("DST null");
+                }
                 return local.find(ref);
             } catch (MalformedURLException ex) {
                 Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
@@ -159,7 +168,7 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
         ConceptSchemeType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/conceptscheme/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion()==null?"latest":ref.getVersion().toString()));
+                StructureType st = retrieve(getServiceURL() + "/conceptscheme/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion() == null ? "latest" : ref.getVersion().toString()));
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {
@@ -177,7 +186,7 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
         CodelistType dst = local.find(ref);
         if (dst == null) {
             try {
-                StructureType st = retrieve(getServiceURL() + "/codelist/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion()==null?"latest":ref.getVersion().toString()));
+                StructureType st = retrieve(getServiceURL() + "/codelist/" + ref.getAgencyId().toString() + "/" + ref.getMaintainableParentId().toString() + "/" + (ref.getVersion() == null ? "latest" : ref.getVersion().toString()));
                 load(st);
                 return local.find(ref);
             } catch (MalformedURLException ex) {
@@ -196,7 +205,7 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
     }
 
     private StructureType retrieve(String urlString) throws MalformedURLException, IOException, ParseException {
-        Logger.getLogger("sdmx").info("ILORestServiceRegistry: retrieve "+urlString);
+        Logger.getLogger("sdmx").info("ILORestServiceRegistry: retrieve " + urlString);
         URL url = new URL(urlString);
         HttpURLConnection conn
                 = (HttpURLConnection) url.openConnection();
@@ -220,18 +229,16 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
         StructureType st = SdmxIO.parseStructure(params, in);
         if (st == null) {
             System.out.println("St is null!");
-        } else {
-            if (SdmxIO.isSaveXml()) {
-                String name = System.currentTimeMillis() + "-21.xml";
-                FileOutputStream file = new FileOutputStream(name);
-                Sdmx21StructureWriter.write(st, file);
-            }
+        } else if (SdmxIO.isSaveXml()) {
+            String name = System.currentTimeMillis() + "-21.xml";
+            FileOutputStream file = new FileOutputStream(name);
+            Sdmx21StructureWriter.write(st, file);
         }
         return st;
     }
-
-    public DataMessage query(ParseParams params,String urlString) throws MalformedURLException, IOException, ParseException {
-        Logger.getLogger("sdmx").info("ILORestServiceRegistry: query "+urlString);
+/*
+    public DataMessage query(ParseParams params, String urlString) throws MalformedURLException, IOException, ParseException {
+        Logger.getLogger("sdmx").info("ILORestServiceRegistry: query " + urlString);
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(urlString);
         get.addHeader("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
@@ -250,7 +257,7 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
          conn.addRequestProperty("User-Agent", "Sdmx-Sax");
          conn.connect();
          InputStream in = conn.getInputStream();
-         */
+         *//*
         InputStream in = response.getEntity().getContent();
         if (SdmxIO.isSaveXml()) {
             String name = System.currentTimeMillis() + ".xml";
@@ -259,12 +266,12 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
             in = new FileInputStream(name);
         }
         System.out.println("Parsing!");
-        DataMessage msg = SdmxIO.parseData(params,in);
+        DataMessage msg = SdmxIO.parseData(in);
         if (msg == null) {
             System.out.println("Data is null!");
         }
         return msg;
-    }
+    }*/
     /*
      This function retrieves and uses the local registry 
      instead of this when we call SdmxIO.parse(registry,in)
@@ -273,7 +280,7 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
      */
 
     private StructureType retrieve2(String urlString) throws MalformedURLException, IOException, ParseException {
-        Logger.getLogger("sdmx").info("ILORestServiceRegistry: retrieve "+urlString);
+        Logger.getLogger("sdmx").info("ILORestServiceRegistry: retrieve " + urlString);
         URL url = new URL(urlString);
         HttpURLConnection conn
                 = (HttpURLConnection) url.openConnection();
@@ -299,13 +306,13 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
         }
         return st;
     }
-
+/*
     @Override
-    public DataMessage query(ParseParams pparams,DataQueryMessage message) {
+    public DataMessage query(ParseParams pparams, DataQueryMessage message) {
         IDType flowid = message.getQuery().getDataWhere().getAnd().get(0).getDataflow().get(0).getMaintainableParentId();
         NestedNCNameID agency = new NestedNCNameID(this.getAgencyId());
         DataStructureType dst = null;
-        if(dataflowList == null ) {
+        if (dataflowList == null) {
             listDataflows();
         }
         for (int i = 0; i < dataflowList.size(); i++) {
@@ -335,7 +342,7 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
         String endTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getEnd().toString();
         DataMessage msg = null;
         try {
-            msg = query(pparams,getServiceURL() + "/data/"+this.agency+"," + flowid + "/" + q.toString() + "?startPeriod=" + startTime + "&endPeriod=" + endTime);
+            msg = query(pparams, getServiceURL() + "/data/" + this.agency + "," + flowid + "/" + q.toString() + "?startPeriod=" + startTime + "&endPeriod=" + endTime);
         } catch (IOException ex) {
             Logger.getLogger(ILORESTServiceRegistry.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
@@ -343,23 +350,23 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
         }
         return msg;
     }
-
+*/
     @Override
     public List<DataflowType> listDataflows() {
         if (dataflowList != null) {
             return dataflowList;
         }
-        CodelistReference ref = CodelistReference.create(new NestedNCNameID(agency), new IDType("CL_COLLECTION"),null);
+        CodelistReference ref = CodelistReference.create(new NestedNCNameID(agency), new IDType("CL_COLLECTION"), null);
         this.classifications = find(ref);
         for (int i = 0; i < classifications.size(); i++) {
             CodeType code = classifications.getCode(i);
             String cod = code.getId().toString();
-            CodelistReference ref2 = CodelistReference.create(new NestedNCNameID(agency),new IDType("CL_INDICATOR_"+cod), null);
+            CodelistReference ref2 = CodelistReference.create(new NestedNCNameID(agency), new IDType("CL_INDICATOR_" + cod), null);
             CodelistType ind = find(ref2);
             if (ind != null) {
                 indicators.put(cod, ind);
-            }else {
-                System.out.println("Ind Is Null:"+cod);
+            } else {
+                System.out.println("Ind Is Null:" + cod);
             }
         }
         dataflowList = new ArrayList<DataflowType>();
@@ -373,12 +380,12 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
                     DataflowType dataflow = new DataflowType();
                     dataflow.setAgencyID(classifications.getAgencyID());
                     String indicid = indicator.getId().toString();
-                    dataflow.setId(new IDType("DF_"+con + "_ALL_" + indicid));
+                    dataflow.setId(new IDType("DF_" + con + "_ALL_" + indicid));
                     dataflow.setVersion(null);
-                    DataStructureReference reference = DataStructureReference.create(classifications.getAgencyID(), new IDType(con+"_ALL_"+indicid), null);
+                    DataStructureReference reference = DataStructureReference.create(classifications.getAgencyID(), new IDType(con + "_ALL_" + indicid), null);
                     dataflow.setStructure(reference);
                     List<Name> names = new ArrayList<Name>();
-                    Name name = new Name("en", coll.findName("en").toString()+" - "+indicator.findName("en").toString());
+                    Name name = new Name("en", coll.findName("en").toString() + " - " + indicator.findName("en").toString());
                     names.add(name);
                     dataflow.setNames(names);
                     dataflowList.add(dataflow);
@@ -455,20 +462,25 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
     public Repository getRepository() {
         return this;
     }
+
     @Override
     public ItemType find(ItemReference ref) {
         ConceptType concept = find(ConceptReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion(), ref.getId()));
-        if( concept!=null) return concept;
-        CodeType code = find(CodeReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion(), ref.getId()));
+        if (concept != null) {
+            return concept;
+        }
+        CodeType code = find(CodeReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion(), ref.getId()));
         return code;
-        
+
     }
 
     @Override
     public ItemSchemeType find(ItemSchemeReferenceBase ref) {
         ConceptSchemeType concept = find(ConceptSchemeReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion()));
-        if( concept!=null) return concept;
-        CodelistType code = find(CodelistReference.create(ref.getAgencyId(),ref.getMaintainableParentId(), ref.getVersion()));
+        if (concept != null) {
+            return concept;
+        }
+        CodelistType code = find(CodelistReference.create(ref.getAgencyId(), ref.getMaintainableParentId(), ref.getVersion()));
         return code;
     }
 
@@ -476,7 +488,10 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
     public void save(OutputStream out) throws IOException {
         local.save(out);
     }
-    public void merge(){}
+
+    public void merge() {
+    }
+
     @Override
     public List<DataStructureType> search(DataStructureReference ref) {
         return Collections.EMPTY_LIST;
@@ -516,7 +531,115 @@ public class ILORESTServiceRegistry implements Registry,Repository,Queryable {
     public List<ConceptSchemeType> search(ConceptSchemeReference ref) {
         return Collections.EMPTY_LIST;
     }
-    public List<StructureType> getCache(){
+
+    public List<StructureType> getCache() {
         return this.local.getCache();
+    }
+
+    public DataMessage queryBatch(String urlString) throws MalformedURLException, IOException, ParseException {
+        Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Query:" + urlString);
+        HttpClient client = new DefaultHttpClient();
+        HttpGet get = new HttpGet(urlString);
+        get.addHeader("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
+        get.addHeader("User-Agent", "Sdmx-Sax");
+        HttpResponse response = client.execute(get);
+        InputStream in = response.getEntity().getContent();
+        if (SdmxIO.isSaveXml()) {
+            String name = System.currentTimeMillis() + ".xml";
+            FileOutputStream file = new FileOutputStream(name);
+            IOUtils.copy(in, file);
+            in = new FileInputStream(name);
+        }
+        DataMessage msg = SdmxIO.parseData(in);
+        if (msg == null) {
+            System.out.println("Data is null!");
+        }
+        return msg;
+    }
+
+    public void queryStream(String urlString, ParseDataCallbackHandler handler) throws MalformedURLException, IOException, ParseException {
+        ParseParams params = new ParseParams();
+        params.setCallbackHandler(handler);
+        Logger.getLogger("sdmx").log(Level.INFO, "Rest Queryable Query:" + urlString);
+        HttpClient client = new DefaultHttpClient();
+        HttpGet get = new HttpGet(urlString);
+        get.addHeader("Accept", "application/vnd.sdmx.structurespecificdata+xml;version=2.1");
+        get.addHeader("User-Agent", "Sdmx-Sax");
+        HttpResponse response = client.execute(get);
+        InputStream in = response.getEntity().getContent();
+        if (SdmxIO.isSaveXml()) {
+            String name = System.currentTimeMillis() + ".xml";
+            FileOutputStream file = new FileOutputStream(name);
+            IOUtils.copy(in, file);
+            in = new FileInputStream(name);
+        }
+        SdmxIO.parseDataStream(handler, in);
+    }
+
+    public void query(Query q, ParseDataCallbackHandler handler) {
+        IDType flowid = new IDType(q.getFlowRef());
+        NestedNCNameID agency = new NestedNCNameID(q.getProviderRef());
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < q.size(); i++) {
+            QueryDimension dim = q.getQueryDimension(i);
+            String concept = dim.getConcept();
+            List<String> params = dim.getValues();
+            if (params.size() > 0) {
+                for (int j = 0; j < params.size(); j++) {
+                    sb.append(params.get(j));
+                    if (j < params.size() - 1) {
+                        sb.append("+");
+                    }
+                }
+            }
+            if (i < q.size()) {
+                sb.append(".");
+            }
+        }
+        Date startTime = q.getQueryTime().getStartTime();
+        Date endTime = q.getQueryTime().getEndTime();
+        try {
+            this.queryStream(this.getServiceURL() + "/data/" + flowid.toString() + "/" + sb.toString() + "?startPeriod=" + displayFormat.format(startTime) + "&endPeriod=" + displayFormat.format(endTime), handler);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            Logger.getLogger(RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+    }
+
+    public DataMessage query(Query q) {
+        IDType flowid = new IDType(q.getFlowRef());
+        NestedNCNameID agency = new NestedNCNameID(q.getProviderRef());
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < q.size(); i++) {
+            QueryDimension dim = q.getQueryDimension(i);
+            String concept = dim.getConcept();
+            List<String> params = dim.getValues();
+            if (params.size() > 0) {
+                for (int j = 0; j < params.size(); j++) {
+                    sb.append(params.get(j));
+                    if (j < params.size() - 1) {
+                        sb.append("+");
+                    }
+                }
+            }
+            if (i < q.size()) {
+                sb.append(".");
+            }
+        }
+        Date startTime = q.getQueryTime().getStartTime();
+        Date endTime = q.getQueryTime().getEndTime();
+        try {
+            this.queryBatch(this.getServiceURL() + "/data/" + flowid.toString() + "/" + sb.toString() + "?startPeriod=" + displayFormat.format(startTime) + "&endPeriod=" + displayFormat.format(endTime));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            Logger.getLogger(RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(RESTQueryable.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+        return null;
     }
 }

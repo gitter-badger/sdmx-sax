@@ -58,7 +58,7 @@ public class Sdmx21MessageWriterProvider implements SdmxWriterProvider {
             DataUtilities.writeTo(message, new StreamingStructureSpecificTimeSeriesWriter(out));
         }
         else if( "application/vnd.sdmx.genericdata+xml;version=2.1".equals(mime)) {
-            DataUtilities.writeTo(message, new StreamingGenericDataWriter(out,params.getRegistry(),params.getDataflow()));
+            DataUtilities.writeTo(message, new StreamingGenericDataWriter(out,params.getRegistry()));
         }else {
             throw new RuntimeException(mime+" not supported by "+getClass().getName());
         }

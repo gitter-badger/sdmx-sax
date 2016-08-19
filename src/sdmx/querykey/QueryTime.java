@@ -15,21 +15,9 @@ import sdmx.structure.datastructure.DataStructureType;
  *
  * @author James
  */
-public class QueryTime extends QueryDimension {
-    String concept = null;
-    Registry reg = null;
-    DataStructureType struct = null;
-    Date startTime = new Date();
-    Date endTime = new Date();
-    public QueryTime(String concept,DataStructureType struct,Registry reg){
-        super(concept,struct,reg);
-        this.concept=concept;
-        this.struct=struct;
-        this.reg=reg;
-        
-    }
-    public Date getStartTime() { return this.startTime; }
-    public void setStartTime(Date d) { this.startTime=d; }
-    public Date getEndTime() { return this.endTime; }
-    public void setEndTime(Date d) { this.endTime=d; }
+public interface QueryTime extends QueryDimension {
+    public Date getStartTime();
+    public void setStartTime(Date d);
+    public Date getEndTime();
+    public void setEndTime(Date d);
 }

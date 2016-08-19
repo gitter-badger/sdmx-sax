@@ -23,12 +23,14 @@ import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jfree.data.time.RegularTimePeriod;
+import sdmx.common.PayloadStructureType;
 import sdmx.footer.FooterType;
 import sdmx.message.BaseHeaderType;
 import sdmx.message.ContactType;
@@ -86,11 +88,8 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
     int obsAttsSize = 0;
     List<Integer> obsAttsKey = new ArrayList<Integer>();
 
-    public StreamingSdmxJSONWriter(OutputStream out, Registry reg, DataflowType flow) {
+    public StreamingSdmxJSONWriter(OutputStream out, Registry reg) {
         this.registry = reg;
-        this.flow = flow;
-        this.dsref = flow.getStructure();
-        this.struct = reg.find(dsref);
         writer = new JsonWriter(new OutputStreamWriter(out));
         try {
             writer.beginObject();
@@ -401,6 +400,13 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
             writer.name("type").value("application/json");
             writer.endObject();
             writer.name("dataSets").beginArray();
+            if (header.getStructures() != null && header.getStructures().size() > 0) {
+                for (Iterator<sdmx.common.PayloadStructureType> it = header.getStructures().iterator(); it.hasNext();) {
+                    PayloadStructureType st = (PayloadStructureType) it.next();
+                    this.dsref = (DataStructureReference) st.getStructure();
+                    this.struct = this.registry.find(dsref);
+                }
+            }
         } catch (IOException ex) {
             Logger.getLogger(StreamingSdmxJSONWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -459,7 +465,7 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
                             writer.name("id").value(item.getId().toString());
                             writer.name("name").value(NameableType.toString(item, this.locale));
                             writer.endObject();
-                        } 
+                        }
                     }
                 }
                 writer.endArray();
@@ -505,7 +511,7 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
                                 writer.name("id").value(item.getId().toString());
                                 writer.name("name").value(NameableType.toString(item, this.locale));
                                 writer.endObject();
-                            } 
+                            }
                         }
                     }
                     writer.endArray();
@@ -626,20 +632,20 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
                     List<String> vals = seriesAtts.get(seriesAttsArray[i]);
                     for (String s : vals) {
                         if (ComponentUtil.getRepresentation(registry, struct.findComponent(seriesAttsArray[i])).getEnumeration() == null) {
-                        if (struct.isTimeDimension(seriesAttsArray[i])) {
-                            RegularTimePeriod time = TimeUtil.parseTime(null, s);
-                            writer.beginObject();
-                            writer.name("id").value(s);
-                            writer.name("name").value(s);
-                            writer.name("start").value(DF.format(time.getStart()));
-                            writer.name("end").value(DF.format(time.getEnd()));
-                            writer.endObject();
-                        } else {
-                            writer.beginObject();
-                            writer.name("id").value(s);
-                            writer.name("name").value(s);
-                            writer.endObject();
-                        }
+                            if (struct.isTimeDimension(seriesAttsArray[i])) {
+                                RegularTimePeriod time = TimeUtil.parseTime(null, s);
+                                writer.beginObject();
+                                writer.name("id").value(s);
+                                writer.name("name").value(s);
+                                writer.name("start").value(DF.format(time.getStart()));
+                                writer.name("end").value(DF.format(time.getEnd()));
+                                writer.endObject();
+                            } else {
+                                writer.beginObject();
+                                writer.name("id").value(s);
+                                writer.name("name").value(s);
+                                writer.endObject();
+                            }
                         } else {
                             ItemType item = ValueTypeResolver.resolveCode(registry, struct, seriesAttsArray[i], s);
                             if (item != null) {
@@ -647,7 +653,7 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
                                 writer.name("id").value(item.getId().toString());
                                 writer.name("name").value(NameableType.toString(item, this.locale));
                                 writer.endObject();
-                            } 
+                            }
                         }
                     }
                     writer.endArray();
@@ -663,8 +669,8 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
                 Component c = struct.findComponent(obsAttsArray[i]);
                 ConceptType concept = registry.find(c.getConceptIdentity());
                 writer.name("name").value(NameableType.toString(concept));
-                if( concept == null ) {
-                    System.out.println("Null Concept="+obsAttsArray[i]);
+                if (concept == null) {
+                    System.out.println("Null Concept=" + obsAttsArray[i]);
                 }
                 if (concept.findDescription(locale.getLanguage()) != null) {
                     writer.name("description").value(concept.findDescription(locale.getLanguage()).getText());
@@ -847,17 +853,5 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
      */
     public void setStructureURI(String structureURI) {
         this.structureURI = structureURI;
-    }
-
-    @Override
-    public void setDataflow(DataflowType flow) {
-        this.flow=flow;
-        this.dsref=flow.getStructure();
-        this.struct=this.registry.find(dsref);
-    }
-
-    @Override
-    public DataflowType getDataflow() {
-        return flow;
     }
 }

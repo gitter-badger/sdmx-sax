@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.stream.XMLStreamException;
 import sdmx.SdmxIO;
+import sdmx.commonreferences.DataStructureReference;
 import sdmx.message.DataMessage;
 import sdmx.message.StructureType;
 import sdmx.util.DataUtilities;
@@ -60,7 +61,7 @@ public class Sdmx20MessageWriterProvider implements SdmxWriterProvider {
         }
         else if( "application/vnd.sdmx.genericdata+xml;version=2.1".equals(mime)) {
             try {
-                GenericDataWriter.write(message, out, params.getDataStructureRef(),params.getRegistry());
+                GenericDataWriter.write(message, out, DataUtilities.getDataStructureReference(message),params.getRegistry());
             } catch (XMLStreamException ex) {
                 Logger.getLogger(Sdmx20MessageWriterProvider.class.getName()).log(Level.SEVERE, null, ex);
             }

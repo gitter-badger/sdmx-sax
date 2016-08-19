@@ -5,6 +5,7 @@
  */
 package sdmx.util;
 
+import sdmx.commonreferences.DataStructureReference;
 import sdmx.data.DataSet;
 import sdmx.message.DataMessage;
 import sdmx.version.common.ParseDataCallbackHandler;
@@ -21,5 +22,8 @@ public class DataUtilities {
              d.writeTo(cbHandler.getDataSetWriter());
          }
          cbHandler.documentFinished();
+     }
+     public static DataStructureReference getDataStructureReference(DataMessage msg) {
+         return (DataStructureReference)msg.getHeader().getStructures().get(0).getStructure();
      }
 }

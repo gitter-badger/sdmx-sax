@@ -23,6 +23,7 @@ import sdmx.query.data.DataParametersType;
 import sdmx.query.data.DataQuery;
 import sdmx.query.data.DimensionValueType;
 import sdmx.query.data.TimeDimensionValueType;
+import sdmx.querykey.Query;
 import sdmx.structure.dataflow.DataflowType;
 import sdmx.structure.datastructure.DataStructureType;
 import sdmx.structure.datastructure.DimensionType;
@@ -33,10 +34,9 @@ import sdmx.version.common.ParseParams;
  * @author James
  */
 public class QueryStringUtils {
-
+/*
     public static String[] toQueryString(ParseParams pparams, DataQueryMessage message) {
         Registry reg = pparams.getRegistry();
-
         IDType flowid = null;
         NestedNCNameID agency = null;
         if (pparams.getDataflow() != null) {
@@ -84,7 +84,8 @@ public class QueryStringUtils {
         String endTime = message.getQuery().getDataWhere().getAnd().get(0).getTimeDimensionValue().get(0).getEnd().toString();
         return new String[]{flowid.toString(), q.toString() + "?startPeriod=" + startTime + "&endPeriod=" + endTime};
     }
-
+*/
+    /*
     public static DataQueryMessage toDataQueryMessage(ParseParams pparams, String query) {
         Registry reg = pparams.getRegistry();
         DataflowType df = pparams.getDataflow();
@@ -107,7 +108,6 @@ public class QueryStringUtils {
         DataParametersAndType dw = new DataParametersAndType();
         List<DataParametersOrType> ors = new ArrayList<DataParametersOrType>();
         dw.setDataflow(Collections.singletonList(df.asReference()));
-
         String quer = query;
         for (DimensionType d : struct.getDataStructureComponents().getDimensionList().getDimensions()) {
             //System.out.println("Quer="+quer);
@@ -143,4 +143,5 @@ public class QueryStringUtils {
         msg.setQuery(q);
         return msg;
     }
+    */
 }

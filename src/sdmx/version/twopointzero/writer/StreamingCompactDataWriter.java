@@ -25,6 +25,7 @@ import org.jdom.Namespace;
 import org.jdom.output.XMLOutputter;
 import sdmx.Registry;
 import sdmx.common.Name;
+import sdmx.common.PayloadStructureType;
 import sdmx.commonreferences.DataStructureReference;
 import sdmx.data.ColumnMapper;
 import sdmx.data.DataSet;
@@ -470,15 +471,5 @@ public class StreamingCompactDataWriter implements DataSetWriter, ParseDataCallb
     @Override
     public void setRegistry(Registry reg) {
         this.registry=reg;
-    }
-
-    @Override
-    public void setDataflow(DataflowType flow) {
-        this.flow=flow;
-    }
-
-    @Override
-    public DataflowType getDataflow() {
-        return flow;
     }
 }

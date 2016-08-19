@@ -145,6 +145,7 @@ public class Sdmx20StructureReaderTools {
         this.params = params;
         // Temporary Registry for loading structure into before loading into main registry.
         this.registry = params.getRegistry();
+        /*
         if (this.params.isUseDataflowName()) {
             DataflowType flow = params.getDataflow();
             if (flow == null) {
@@ -152,6 +153,7 @@ public class Sdmx20StructureReaderTools {
             }
             this.conceptSchemeName = flow.getId().toString() + "_CONCEPT_SCHEME";
         }
+        */
     }
     org.sdmx.resources.sdmxml.schemas.v20.message.StructureDocument structDoc = null;
     org.sdmx.resources.sdmxml.schemas.v20.message.RegistryInterfaceDocument regDoc = null;

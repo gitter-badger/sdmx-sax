@@ -70,9 +70,9 @@ import static sdmx.version.twopointzero.writer.GenericDataWriter.writeName;
  */
 public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCallbackHandler {
 
-    public static StreamingGeneric21DataWriter openWriter(OutputStream out, Registry reg, DataflowType flow) throws XMLStreamException {
+    public static StreamingGeneric21DataWriter openWriter(OutputStream out, Registry reg) throws XMLStreamException {
         //setup this like outputDocument
-        return new StreamingGeneric21DataWriter(out, reg, flow);
+        return new StreamingGeneric21DataWriter(out, reg);
     }
     OutputStream out = null;
     XMLStreamWriter writer = null;
@@ -83,18 +83,14 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
     private Registry registry = null;
     private DataStructureReference dataStructureReference = null;
     private DataStructureType struct = null;
-    private DataflowType flow = null;
 
     private boolean in_series_key = false;
     private boolean in_series_attributes = false;
     private boolean in_obs_attributes;
 
-    public StreamingGeneric21DataWriter(OutputStream out, Registry reg, DataflowType flow) {
+    public StreamingGeneric21DataWriter(OutputStream out, Registry reg) {
         try {
             this.registry = reg;
-            this.flow = flow;
-            this.dataStructureReference = flow.getStructure();
-            this.struct = reg.find(flow.getStructure());
             this.out = out;
             XMLOutputFactory factory = XMLOutputFactory.newInstance();
             this.writer = factory.createXMLStreamWriter(out);
@@ -202,6 +198,8 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
             for (Iterator<sdmx.common.PayloadStructureType> it = header.getStructures().iterator(); it.hasNext();) {
                 PayloadStructureType st = (PayloadStructureType) it.next();
                 writeStructure(st);
+                this.dataStructureReference=(DataStructureReference)st.getStructure();
+                this.struct=this.registry.find(dataStructureReference);
             }
         } else {
             PayloadStructureType payload = new PayloadStructureType();
@@ -602,17 +600,5 @@ public class StreamingGeneric21DataWriter implements DataSetWriter, ParseDataCal
         } catch (XMLStreamException ex) {
             Logger.getLogger(StreamingStructureSpecificDataWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    @Override
-    public void setDataflow(DataflowType flow) {
-        this.flow = flow;
-        this.struct = registry.find(flow.getStructure());
-        this.dataStructureReference = flow.getStructure();
-    }
-
-    @Override
-    public DataflowType getDataflow() {
-        return flow;
     }
 }
