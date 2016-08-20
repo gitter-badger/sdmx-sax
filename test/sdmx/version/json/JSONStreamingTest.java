@@ -58,13 +58,12 @@ public class JSONStreamingTest {
             FileOutputStream fos2 = new FileOutputStream("testOut/ecb_exr_ng_full-edited.xml");
             ParseParams params = new ParseParams();
             params.setRegistry(reg);
-            params.setDataflow(flow);
-            SdmxIO.write(params,"application/vnd.sdmx.structure+xml;version=2.1", struct, fos2);
+            SdmxIO.writeStructure("application/vnd.sdmx.structure+xml;version=2.1", struct, fos2);
 
             ParseDataCallbackHandler cbHandler = SdmxIO.openForStreamWriting("application/vnd.sdmx.data+json;version=1.0.0-wd", fos, params);
             params.setCallbackHandler(cbHandler);
             FileInputStream fin = new FileInputStream("test/resources/sdmx21-samples/exr/ecb_exr_ng/structured/ecb_exr_ng_ts.xml");
-            SdmxIO.parseData(params,fin);
+            SdmxIO.parseData(fin);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Sdmx21StreamingDataWriterTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -89,12 +88,10 @@ public class JSONStreamingTest {
         }
         InputStream dataIn = JSONStreamingTest.class.getResourceAsStream("/resources/uis-20/28b18979-129f-43bc-94ae-42f31add907a.xml");
         FileOutputStream fos = new FileOutputStream("testOut/uis-data.json");
-        params.setDataflow(uisStruct.getStructures().getDataStructures().getDataStructures().get(0).asDataflow());
         ParseDataCallbackHandler cbHandler = SdmxIO.openForStreamWriting("application/vnd.sdmx.data+json;version=1.0.0-wd", fos, params);
-        params.setCallbackHandler(cbHandler);
         long t1 = System.currentTimeMillis();
         try {
-            SdmxIO.parseData(params,dataIn);
+            SdmxIO.parseDataStream(cbHandler,dataIn);
             //data6.dump();
         } catch (ParseException ex) {
             Logger.getLogger(JSONStreamingTest.class.getName()).log(Level.SEVERE, null, ex);

@@ -62,7 +62,7 @@ public class Sdmx21StreamingDataWriterTest {
             ParseDataCallbackHandler cbHandler = SdmxIO.openForStreamWriting("application/vnd.sdmx.structurespecificdata+xml;version=2.1", fos, params);
             params.setCallbackHandler(cbHandler);
             FileInputStream fin = new FileInputStream("test/resources/sdmx21-samples/exr/ecb_exr_ng/structured/ecb_exr_ng_ts.xml");
-            SdmxIO.parseData(params,fin);
+            SdmxIO.parseData(fin);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Sdmx21StreamingDataWriterTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -81,12 +81,9 @@ public class Sdmx21StreamingDataWriterTest {
             DataflowType ref = struct.getStructures().getDataStructures().getDataStructures().get(0).asDataflow();
             FileOutputStream fos = new FileOutputStream("testOut/ecb_exr_ng_ts-streaming_generic_out.xml");
             ParseParams params = new ParseParams();
-            params.setRegistry(reg);
-            params.setDataflow(ref);
             ParseDataCallbackHandler cbHandler = SdmxIO.openForStreamWriting("application/vnd.sdmx.genericdata+xml;version=2.1", fos,params);
             FileInputStream fin = new FileInputStream("test/resources/sdmx21-samples/exr/ecb_exr_ng/generic/ecb_exr_ng_ts.xml");
-            params.setCallbackHandler(cbHandler);
-            SdmxIO.parseData(params,fin);
+            SdmxIO.parseData(fin);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Sdmx21StreamingDataWriterTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -116,9 +113,7 @@ public class Sdmx21StreamingDataWriterTest {
         params.setCallbackHandler(cbHandler);
         long t1 = System.currentTimeMillis();
         try {
-            SdmxIO.parseData(params,dataIn);
-            
-            //data6.dump();
+            SdmxIO.parseData(dataIn).dump();
         } catch (ParseException ex) {
             Logger.getLogger(JSONStreamingTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -145,9 +140,7 @@ public class Sdmx21StreamingDataWriterTest {
         params.setCallbackHandler(cbHandler);
         long t1 = System.currentTimeMillis();
         try {
-            SdmxIO.parseData(params,dataIn);
-            
-            //data6.dump();
+            SdmxIO.parseData(dataIn).dump();
         } catch (ParseException ex) {
             Logger.getLogger(JSONStreamingTest.class.getName()).log(Level.SEVERE, null, ex);
         }

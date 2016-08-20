@@ -266,7 +266,10 @@ public class SdmxIO {
         params.setCallbackHandler(cbHandler);
         prov.parseData(params,push);
     }*/
-    public static DataMessage parseDataStream(ParseDataCallbackHandler handler,InputStream in) throws IOException,ParseException {
+    public static void parseDataStream(ParseDataCallbackHandler handler,InputStream in) throws IOException,ParseException {
+        parseDataStream(handler, in,null);
+    }
+    public static void parseDataStream(ParseDataCallbackHandler handler,InputStream in,DataflowType flowHint) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackInputStream push = new PushbackInputStream(in,8192);
         String header = getHeader(push);
@@ -277,7 +280,8 @@ public class SdmxIO {
         ParseParams params = new ParseParams();
         params.setCallbackHandler(handler);
         params.setHeader(header);
-        return prov.parseData(params,push);
+        params.setDataflow(flowHint);
+        prov.parseData(params,push);
     }
     /*
     public static void parseData(Reader in,ParseDataCallbackHandler cbHandler) throws IOException,ParseException {
@@ -294,7 +298,10 @@ public class SdmxIO {
         prov.parseData(params,push);
     }
     */
-    public static DataMessage parseDataStream(ParseDataCallbackHandler handler,Reader in) throws IOException,ParseException {
+    public static void parseDataStream(ParseDataCallbackHandler handler,Reader in) throws IOException,ParseException {
+       parseDataStream(handler, in,null);
+    }
+    public static void parseDataStream(ParseDataCallbackHandler handler,Reader in,DataflowType flowHint) throws IOException,ParseException {
         if( in == null ) throw new IllegalArgumentException("Null Stream");
         PushbackReader push = new PushbackReader(in,8192);
         String header = getHeader(push);
@@ -305,7 +312,8 @@ public class SdmxIO {
         ParseParams params = new ParseParams();
         params.setCallbackHandler(handler);
         params.setHeader(header);
-        return prov.parseData(params,push);
+        params.setDataflow(flowHint);
+        prov.parseData(params,push);
     }
     
     public static SdmxParserProvider findParserProvider(String header) throws IOException {
@@ -368,7 +376,7 @@ public class SdmxIO {
         BufferedOutputStream out = new BufferedOutputStream(out1);
         return provider.openForWriting(params,mime, out);
     }
-    public static void write(ParseParams params,String mime,DataMessage message,OutputStream out) throws IOException {
+    public static void writeDataMessage(ParseParams params,String mime,DataMessage message,OutputStream out) throws IOException {
         SdmxWriterProvider writer = findWriterProvider(mime);
         if( writer==null) {
             throw new RuntimeException("Not Writer found for MIME type:"+mime);

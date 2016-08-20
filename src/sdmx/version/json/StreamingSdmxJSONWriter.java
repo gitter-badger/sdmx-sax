@@ -406,6 +406,8 @@ public class StreamingSdmxJSONWriter implements ParseDataCallbackHandler, DataSe
                     this.dsref = (DataStructureReference) st.getStructure();
                     this.struct = this.registry.find(dsref);
                 }
+            }else{
+                System.out.println("DataMessage does not have a Structure!!!");
             }
         } catch (IOException ex) {
             Logger.getLogger(StreamingSdmxJSONWriter.class.getName()).log(Level.SEVERE, null, ex);
