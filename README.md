@@ -1,6 +1,8 @@
 sdmx-sax
 ========
 
+[![Join the chat at https://gitter.im/sdmx-sax/Lobby](https://badges.gitter.im/sdmx-sax/Lobby.svg)](https://gitter.im/sdmx-sax/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Sdmx Sax Parser
 
 Hi!
